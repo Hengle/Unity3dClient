@@ -1,0 +1,96 @@
+import "Union.proto";
+
+package ProtoTable;
+message DungeonTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+required string Oldname = 3;
+required string TumbPath = 4;
+required string TumbChPath = 5;
+required string LoadingBgPath = 6;
+required string Description = 7;
+required string HardDescription = 8;
+required sint32 Level = 9;
+enum eType
+{
+	L_NORMAL = 0; // 普通地下城
+	L_STORY = 1; // 剧情地下城
+	L_ACTIVITY = 2; // 活动地下城
+	L_DEADTOWER = 3; // 死亡之塔
+}
+required eType Type = 10;
+enum eSubType
+{
+	S_NORMAL = 0; // 普通地下城
+	S_YUANGU = 1; // 远古地下城
+	S_NIUTOUGUAI = 2; // 牛头怪乐园
+	S_NANBUXIGU = 3; // 南部溪谷
+	S_SIWANGZHITA = 4; // 死亡之塔
+	S_NEWBIEGUIDE = 5; // 引导boss战斗
+	S_PK = 6; // pk战斗
+	S_JINBI = 7; // 金币地下城
+	S_HELL = 8; // 深渊
+	S_GUILDPK = 9; // 公会PVP
+	S_HELL_ENTRY = 10; // 深渊入口
+	S_TEAM_BOSS = 11; // 组队BOSS
+}
+required eSubType SubType = 11;
+enum eHard
+{
+	NORMAL = 0; // 普通
+	RISK = 1; // 冒险
+	WARRIOR = 2; // 勇士
+	KING = 3; // 王者
+}
+required eHard Hard = 12;
+required string RecommendLevel = 13;
+required sint32 HardAdaptType = 14;
+required sint32 MaxHardAdaptLevel = 15;
+required sint32 SingleBarValue = 16;
+repeated sint32 DropItems = 17;
+repeated sint32 HellDropItems = 18;
+required sint32 MinLevel = 19;
+required sint32 storyTaskID = 20;
+required sint32 PreTaskID = 21;
+repeated sint32 storyDungeonIDs = 22;
+repeated sint32 PreDungeonIDs = 23;
+required string DungeonLoadingConfig = 24;
+required string DungeonConfig = 25;
+required sint32 IsExpAdapt = 26;
+required sint32 ExpReward = 27;
+required UnionCell TimeSplitArg = 28;
+required UnionCell RebornSplitArg = 29;
+required UnionCell HitSplitArg = 30;
+required sint32 TimeArg = 31;
+required sint32 BackHitArg = 32;
+repeated sint32 NormalMonsterDrop = 33;
+repeated sint32 EliteMonsterDrop = 34;
+repeated sint32 BossMonsterDrop = 35;
+repeated sint32 DungeonDrop = 36;
+repeated sint32 DungeonFirstDrop = 37;
+repeated sint32 DestructionDrop = 38;
+repeated sint32 EasterEggDrop = 39;
+repeated sint32 TaskDrop = 40;
+required sint32 CostFatiguePerArea = 41;
+required sint32 TicketID = 42;
+required sint32 TicketNum = 43;
+required sint32 HellTicketNum = 44;
+required sint32 HellTask = 45;
+required sint32 HellDrop1 = 46;
+required sint32 HellDrop2 = 47;
+required sint32 RebornCount = 48;
+required string BGMPath = 49;
+required string HellHardBGMPath = 50;
+required string HellDamnHardBGMPath = 51;
+repeated sint32 RaceEndDropBaseMulti = 52;
+repeated string RaceEndDropMultiCost = 53;
+required sint32 ActivityID = 54;
+required sint32 DailyMaxTime = 55;
+repeated sint32 BuffDrugConfig = 56;
+required sint32 MostCostStamina = 57;
+required sint32 HellSplitLevel = 58;
+required sint32 HellSplitLevelWeight = 59;
+required sint32 OpenAutoFight = 60;
+required sint32 OnlyRaceEndProfit = 61;
+};

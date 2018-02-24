@@ -1,0 +1,41 @@
+package ProtoTable;
+message MallTypeTable
+{
+required sint32 ID = 1;
+required string MainTypeName = 2;
+enum eFuncType
+{
+	FT_NONE = 0; // 无
+	FT_GIFT = 9; // 礼包
+}
+required eFuncType FuncType = 3;
+enum eMoneyType
+{
+	MT_NONE = 0; // 无
+	MT_TICKET = 1; // 点券
+	MT_BIND_TICKET = 2; // 绑点
+}
+required eMoneyType MoneyType = 4;
+enum eMallType
+{
+	SN_HOT = 1; // 热门
+	SN_EQUIP = 2; // 装备
+	SN_COST = 3; // 消耗品
+	SN_FASHION = 4; // 时装
+	SN_GOLD = 5; // 金币
+	SN_GIFT = 6; // 礼包
+}
+required eMallType MallType = 5;
+enum eMallSubType
+{
+	MST_NONE = 0; // 无
+	MST_HEAD = 1; // 头饰
+	MST_UPWEAR = 2; // 上装
+	MST_CHEST = 3; // 胸饰
+	MST_DOWNWEAR = 4; // 下装
+	MST_BELT = 5; // 腰饰
+}
+repeated eMallSubType MallSubType = 6;
+required sint32 ScrollViewRootIndex = 7;
+required sint32 ClassifyJob = 8;
+};

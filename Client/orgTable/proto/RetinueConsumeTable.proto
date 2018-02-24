@@ -1,0 +1,7 @@
+package ProtoTable;
+message RetinueConsumeTable
+{
+required sint32 ID = 1;
+required sint32 ItemId = 2;
+required sint32 Consume = 3;
+};

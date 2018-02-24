@@ -1,0 +1,15 @@
+package ProtoTable;
+message RareItemTable
+{
+required sint32 ID = 1;
+required sint32 MinPay = 2;
+required sint32 TimeLimit = 3;
+required sint32 PersonalDailyNum = 4;
+required sint32 PersonalWeeklyNum = 5;
+required sint32 PersonalMonthlyNum = 6;
+required sint32 PersonalTotalNum = 7;
+required sint32 ServerDailyNum = 8;
+required sint32 ServerWeeklyNum = 9;
+required sint32 ServerMonthlyNum = 10;
+required sint32 ServerTotalNum = 11;
+};

@@ -1,0 +1,33 @@
+package ProtoTable;
+message SceneRegionTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+enum eType
+{
+	BUFF = 0;	//??
+	DOOR = 1;	//???
+	TOWNDOOR = 2;	//?????
+	TRAP = 3;	//??
+	LOOP = 4;	//??
+	RIDE = 5;	//????
+}
+required eType Type = 3;
+enum eDoorType
+{
+	DT_NONE = -1;	//?
+	LEFT = 0;	//?
+	TOP = 1;	//?
+	RIGHT = 2;	//?
+	BUTTOM = 3;	//?
+}
+required eDoorType DoorType = 4;
+required sint32 ResID = 5;
+required sint32 ReplaceResID = 6;
+repeated sint32 EffectID = 7;
+required sint32 RepeatTime = 8;
+required sint32 RepeatCount = 9;
+required sint32 FirstTimeToRepeat = 10;
+required string ActivedEffect = 11;
+required string Desc = 12;
+};

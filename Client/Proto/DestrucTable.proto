@@ -1,0 +1,35 @@
+import "Union.proto";
+
+package ProtoTable;
+message DestrucTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+required string Desc = 3;
+enum eCamp
+{
+	C_HERO = 0;	//??
+	C_ENEMY = 1;	//??
+	C_ENEMY2 = 2;	//??2
+}
+required eCamp Camp = 4;
+required sint32 Mode = 5;
+required sint32 Level = 6;
+required string Hurt = 7;
+required string DeadEffect = 8;
+required sint32 Exp = 9;
+required sint32 PrefixID = 10;
+required sint32 DropID = 11;
+required UnionCell IdleSplitCount = 12;
+required sint32 IdleCount = 13;
+required sint32 DestructHitCount = 14;
+enum eType
+{
+	NONE = 0;	//?
+	CANDESTORY = 1;	//???
+	CANNOTDESTORY = 2;	//????
+	HAVETODESTRORY = 3;	//????
+}
+required eType Type = 15;
+required bool IsDestruct = 16;
+};

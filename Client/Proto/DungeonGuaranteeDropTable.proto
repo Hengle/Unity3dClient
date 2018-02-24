@@ -1,0 +1,8 @@
+package ProtoTable;
+message DungeonGuaranteeDropTable
+{
+required sint32 ID = 1;
+required sint32 MinTimes = 2;
+required sint32 MaxTimes = 3;
+required sint32 DropSet = 4;
+};

@@ -1,0 +1,57 @@
+package ProtoTable;
+message FunctionUnLock
+{
+required sint32 ID = 1;
+required string Name = 2;
+enum eType
+{
+	Func = 1; // 功能解锁
+	Area = 2; // 区域解锁
+}
+required eType Type = 3;
+enum eFuncType
+{
+	None = 0; // 无
+	Forge = 3; // 锻冶
+	Achievement = 4; // 成就
+	Ranklist = 5; // 排行榜
+	Welfare = 6; // 福利
+	Duel = 7; // 决斗
+	Entourage = 8; // 随从解锁
+	EntourageLvUp = 9; // 随从升级
+	DailyTask = 10; // 每日任务
+	Title = 11; // 称号
+	DeathTower = 14; // 勇者之塔
+	BeatCow = 16; // 斗牛节
+	Enchant = 17; // 附魔
+	Auction = 18; // 拍卖行
+	Degenerator = 19; // 次元石
+	MagicMale = 20; // 魔晶矿脉
+	WashEntourage = 21; // 随从洗练
+	ArmorMastery = 25; // 护甲精通
+	Team = 30; // 组队
+	Friend = 31; // 好友
+	Shop = 35; // 商店
+	Mall = 37; // 商城
+	FashionMerge = 45; // 时装合成
+	FashionAttrSel = 54; // 时装属性选择
+	Fashion = 55; // 时装入口
+	AutoFight = 56; // 自动战斗
+	ActivityJar = 58; // 限时活动罐
+}
+required eFuncType FuncType = 4;
+required sint32 CommDescID = 5;
+required sint32 StartLevel = 6;
+required sint32 FinishLevel = 7;
+required bool IsOpen = 8;
+required sint32 StartTaskID = 9;
+required sint32 FinishTaskID = 10;
+required sint32 PosPriority = 11;
+required string TargetBtnPos = 12;
+required sint32 bPlayAnim = 13;
+required sint32 bShowBtn = 14;
+required string IconPath = 15;
+required sint32 AreaID = 16;
+required string Award = 17;
+required string Explanation = 18;
+};

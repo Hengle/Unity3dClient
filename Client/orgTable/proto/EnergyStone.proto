@@ -1,0 +1,19 @@
+package ProtoTable;
+message EnergyStone
+{
+required sint32 ID = 1;
+required string Name = 2;
+required sint32 EnergyValue = 3;
+enum eType
+{
+	RED = 1; // 红色
+	GREEN = 2; // 绿色
+	YELLOW = 3; // 黄色
+	BLUE = 4; // 蓝色
+	BLACK = 5; // 黑色
+	COLORLESS = 6; // 无色
+}
+required eType Type = 4;
+required sint32 ItemID = 5;
+required string Icon = 6;
+};

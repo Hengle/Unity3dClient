@@ -1,0 +1,6 @@
+package ProtoTable;
+message EqualItemTable
+{
+required sint32 ID = 1;
+repeated sint32 EqualItemIDs = 2;
+};

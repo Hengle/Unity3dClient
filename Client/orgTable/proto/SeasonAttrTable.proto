@@ -1,0 +1,7 @@
+package ProtoTable;
+message SeasonAttrTable
+{
+required sint32 ID = 1;
+repeated string Descs = 2;
+repeated sint32 BuffIDs = 3;
+};

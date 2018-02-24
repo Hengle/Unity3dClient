@@ -1,0 +1,23 @@
+import "Union.proto";
+
+package ProtoTable;
+message MechanismTable
+{
+required sint32 ID = 1;
+required string Description = 2;
+required sint32 Index = 3;
+required string DescriptionA = 4;
+repeated UnionCell ValueA = 5;
+required string DescriptionB = 6;
+repeated UnionCell ValueB = 7;
+required string DescriptionC = 8;
+repeated UnionCell ValueC = 9;
+required string DescriptionD = 10;
+repeated UnionCell ValueD = 11;
+required string DescriptionE = 12;
+repeated UnionCell ValueE = 13;
+required string DescriptionF = 14;
+repeated UnionCell ValueF = 15;
+required string DescriptionG = 16;
+repeated UnionCell ValueG = 17;
+};

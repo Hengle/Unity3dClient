@@ -1,0 +1,9 @@
+package ProtoTable;
+message SeasonTable
+{
+required sint32 ID = 1;
+required sint32 SeasonEventType = 2;
+required sint32 SeasonCyclesType = 3;
+required sint32 StartDay = 4;
+required sint32 StartTime = 5;
+};

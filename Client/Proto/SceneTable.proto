@@ -1,0 +1,7 @@
+package ProtoTable;
+message SceneTable
+{
+required sint32 ID = 1;
+required string Desc = 2;
+required sint32 ResID = 3;
+};

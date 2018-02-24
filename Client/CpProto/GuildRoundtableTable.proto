@@ -1,0 +1,15 @@
+package ProtoTable;
+message GuildRoundtableTable
+{
+required sint32 ID = 1;
+enum eType
+{
+	First = 0;	//??
+	Help = 1;	//??
+	FreeHelp = 2;	//????
+}
+required eType Type = 2;
+required sint32 TimesLimit = 3;
+repeated string GetItems = 4;
+required sint32 MailContentID = 5;
+};

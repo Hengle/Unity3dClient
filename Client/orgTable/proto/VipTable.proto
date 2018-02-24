@@ -1,0 +1,9 @@
+package ProtoTable;
+message VipTable
+{
+required sint32 ID = 1;
+required sint32 TotalRmb = 2;
+repeated string GiftItems = 3;
+required sint32 GiftPrePrice = 4;
+required sint32 GiftDiscountPrice = 5;
+};

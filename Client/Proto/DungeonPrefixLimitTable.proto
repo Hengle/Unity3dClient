@@ -1,0 +1,10 @@
+package ProtoTable;
+message DungeonPrefixLimitTable
+{
+required sint32 ID = 1;
+required string Level = 2;
+required sint32 Hard = 3;
+repeated sint32 TotalNum = 4;
+required sint32 SeniorPrefixNum = 5;
+required sint32 LowPrefixNum = 6;
+};

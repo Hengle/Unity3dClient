@@ -1,0 +1,34 @@
+package ProtoTable;
+message CitySceneTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+required string Desc = 3;
+required sint32 AreaID = 4;
+required sint32 BirthCity = 5;
+required sint32 TraditionSceneID = 6;
+required sint32 BudoSceneID = 7;
+required string ResPath = 8;
+enum eSceneType
+{
+	NORMAL = 1; // 普通地图
+	SINGLE = 9; // 个人场景
+	DUNGEON_ENTRY = 10; // 地下城选择场景
+	PK_PREPARE = 11; // 战斗准备场景
+	PK = 12; // 决斗场景
+	ACTIVITY = 13; // 活动场景
+}
+required eSceneType SceneType = 9;
+enum eSceneSubType
+{
+	NULL = 0; // 无
+	TRADITION = 1; // 传统决斗场
+	BUDO = 2; // 武道会
+	GuildBattle = 3; // 公会战
+}
+required eSceneSubType SceneSubType = 10;
+required sint32 SyncRange = 11;
+repeated string ChapterData = 12;
+required string BGMPath = 13;
+required sint32 LevelLimit = 14;
+};

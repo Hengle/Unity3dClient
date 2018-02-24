@@ -1,0 +1,10 @@
+package ProtoTable;
+message RetinueLevelTable
+{
+required sint32 ID = 1;
+required sint32 Level = 2;
+required sint32 Quality = 3;
+required sint32 ItemNum = 4;
+required string ConsumeItem = 5;
+required sint32 PlayerLevel = 6;
+};

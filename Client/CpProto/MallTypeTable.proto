@@ -1,0 +1,41 @@
+package ProtoTable;
+message MallTypeTable
+{
+required sint32 ID = 1;
+required string MainTypeName = 2;
+enum eFuncType
+{
+	FT_NONE = 0;	//?
+	FT_GIFT = 9;	//??
+}
+required eFuncType FuncType = 3;
+enum eMoneyType
+{
+	MT_NONE = 0;	//?
+	MT_TICKET = 1;	//??
+	MT_BIND_TICKET = 2;	//??
+}
+required eMoneyType MoneyType = 4;
+enum eMallType
+{
+	SN_HOT = 1;	//??
+	SN_EQUIP = 2;	//??
+	SN_COST = 3;	//???
+	SN_FASHION = 4;	//??
+	SN_GOLD = 5;	//??
+	SN_GIFT = 6;	//??
+}
+required eMallType MallType = 5;
+enum eMallSubType
+{
+	MST_NONE = 0;	//?
+	MST_HEAD = 1;	//??
+	MST_UPWEAR = 2;	//??
+	MST_CHEST = 3;	//??
+	MST_DOWNWEAR = 4;	//??
+	MST_BELT = 5;	//??
+}
+repeated eMallSubType MallSubType = 6;
+required sint32 ScrollViewRootIndex = 7;
+required sint32 ClassifyJob = 8;
+};

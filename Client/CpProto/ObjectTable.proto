@@ -1,0 +1,15 @@
+import "Union.proto";
+
+package ProtoTable;
+message ObjectTable
+{
+required sint32 ID = 1;
+required UnionCell Zscale = 2;
+required UnionCell PVPZscale = 3;
+required UnionCell Scale = 4;
+required UnionCell PVPScale = 5;
+required sint32 IsTouchGround = 6;
+required sint32 ShadowScaleX = 7;
+required sint32 ShadowScaleZ = 8;
+required string Name = 9;
+};

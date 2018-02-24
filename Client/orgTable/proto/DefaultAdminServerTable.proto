@@ -1,0 +1,10 @@
+package ProtoTable;
+message DefaultAdminServerTable
+{
+required sint32 ID = 1;
+required string ServerID = 2;
+required string ServerIP = 3;
+required string ServerName = 4;
+required sint32 ServerPort = 5;
+required sint32 ServerStaus = 6;
+};

@@ -1,0 +1,59 @@
+package ProtoTable;
+message ActivityDungeonTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+repeated sint32 ActivityID = 3;
+required string ImagePath = 4;
+required string OpenTime = 5;
+required bool ShowModeFlag = 6;
+required string ModeBoardPath = 7;
+required string ModeIconPath = 8;
+required string Mode = 9;
+enum eActivityType
+{
+	None = 0;	//???
+	TimeLimit = 1;	//????
+	Daily = 2;	//????
+	Reward = 3;	//????
+}
+required eActivityType ActivityType = 10;
+required string ActivityTypeDesc = 11;
+required string SingleTabIcon = 12;
+required sint32 DungeonID = 13;
+required string CollectDataPath = 14;
+required bool ShowCount = 15;
+required string ShowCountDesc = 16;
+enum eDropType
+{
+	DungeonDrop = 1;	//?????ID
+	CustomDrop = 2;	//?????
+}
+required eDropType DropType = 17;
+repeated sint32 DropItems = 18;
+required sint32 TabPriority = 19;
+required string TabName = 20;
+required sint32 SubPriority = 21;
+enum eSubItemOpenType
+{
+	DungeonFrame = 1;	//?????ID
+	CommonFrame = 2;	//??????
+}
+required eSubItemOpenType SubItemOpenType = 22;
+enum eSubNameType
+{
+	DungeonName = 1;	//?????ID
+	CustomName = 2;	//?????
+}
+required eSubNameType SubNameType = 23;
+required string SubName = 24;
+enum eDescriptionType
+{
+	DungeonDescription = 1;	//?????ID
+	CustomDescription = 2;	//?????
+}
+required eDescriptionType DescriptionType = 25;
+required string Description = 26;
+required string ExtraDescription = 27;
+required string PlayDescription = 28;
+};

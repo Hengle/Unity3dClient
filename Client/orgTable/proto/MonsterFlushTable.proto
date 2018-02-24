@@ -1,0 +1,14 @@
+package ProtoTable;
+message MonsterFlushTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+enum eType
+{
+	REPEATED = 0; // 无损库
+	UNIQUE = 1; // 有损库
+}
+required eType Type = 3;
+repeated sint32 MonsterList = 4;
+repeated sint32 MonsterWeight = 5;
+};

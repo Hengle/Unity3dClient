@@ -1,0 +1,43 @@
+package ProtoTable;
+message EquipTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+required bool Type = 3;
+required sint32 MainOccu = 4;
+required sint32 SubOccu = 5;
+enum eColor
+{
+	WHITE = 1; // 白色
+	BLUE = 2; // 蓝色
+	PURPLE = 3; // 紫色
+	PINK = 4; // 粉色
+	YELLOW = 5; // 黄色
+	GREEN = 6; // 绿色
+}
+required eColor Color = 6;
+required sint32 Level = 7;
+required sint32 Atk = 8;
+required sint32 MagicAtk = 9;
+required sint32 Def = 10;
+required sint32 MagicDef = 11;
+required sint32 Strenth = 12;
+required sint32 Intellect = 13;
+required sint32 Spirit = 14;
+required sint32 Stamina = 15;
+required sint32 AtkSpd = 16;
+required sint32 MpCost = 17;
+required sint32 Cd = 18;
+required bool CanTrade = 19;
+enum eOwner
+{
+	NOTBIND = 1; // 非绑定
+	ROLEBIND = 2; // 角色绑定
+	ACCBIND = 3; // 账号绑定
+}
+required eOwner Owner = 20;
+required sint32 Price = 21;
+required sint32 Time = 22;
+required string Description = 23;
+required string Icon = 24;
+};

@@ -1,0 +1,20 @@
+package ProtoTable;
+message JarItemPool
+{
+required sint32 ID = 1;
+required sint32 JarType = 2;
+required sint32 ItemID = 3;
+repeated sint32 Strength = 4;
+repeated sint32 Occu = 5;
+required sint32 ItemNum = 6;
+required sint32 ItemWeight = 7;
+required sint32 fix1 = 8;
+required sint32 fix2 = 9;
+required sint32 fix2Num = 10;
+required sint32 fixMax = 11;
+required sint32 fixMin = 12;
+required sint32 OpneCondition = 13;
+required sint32 Charge = 14;
+required sint32 GetNumLimite = 15;
+required sint32 NeedAnounce = 16;
+};

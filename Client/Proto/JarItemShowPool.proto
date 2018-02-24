@@ -1,0 +1,8 @@
+package ProtoTable;
+message JarItemShowPool
+{
+required sint32 ID = 1;
+required sint32 JarType = 2;
+required sint32 ItemID = 3;
+required sint32 ItemNum = 4;
+};

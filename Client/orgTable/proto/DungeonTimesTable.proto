@@ -1,0 +1,12 @@
+package ProtoTable;
+message DungeonTimesTable
+{
+required sint32 ID = 1;
+required sint32 BaseTimes = 2;
+required sint32 BaseBuyTimes = 3;
+required sint32 BuyTimesVipPrivilege = 4;
+required sint32 BuyTimesCostItemID = 5;
+repeated sint32 BuyTimesCost = 6;
+required string UsedTimesCounter = 7;
+required string BuyTimesCounter = 8;
+};

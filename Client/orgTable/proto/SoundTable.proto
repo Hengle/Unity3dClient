@@ -1,0 +1,9 @@
+package ProtoTable;
+message SoundTable
+{
+required sint32 ID = 1;
+required string Descrip = 2;
+repeated string Path = 3;
+required sint32 IsRandom = 4;
+required sint32 Type = 5;
+};

@@ -1,0 +1,53 @@
+                    if (bCrazyMode)
+                    {
+                        if(!bStart || iCurQuality > iOrgQuality)
+                        {
+                            if(iCurQuality > iOrgQuality)
+                            {
+                                m_eStopReason = StopReason.SR_CRAZY_END;
+                                Logger.LogErrorFormat("stop reach to target !");
+                            }
+                            else
+                            {
+                                Logger.LogErrorFormat("stop by hand !");
+                            }
+
+                            if(!bStart)
+                            {
+                                StopEffect();
+                            }
+                            _EndAdjust(a_item, false);
+                        }
+                        else
+                        {
+                            InvokeMethod.RemoveInvokeCall(this);
+                            InvokeMethod.Invoke(this, Global.Settings.qualityAdjust.fInterval, () =>
+                              {
+                                  if(!bStart)
+                                  {
+                                      m_eStopReason = StopReason.SR_CRAZY_CONTINUE;
+                                      StopEffect();
+                                      _EndAdjust(a_item,false);
+                                      Logger.LogErrorFormat("stop by hand !");
+                                      return;
+                                  }
+
+                                  CheckAdjust(() =>
+                                  {
+                                      Locked = true;
+                                      _NetSyncChangeQuality(this.itemData, _CheckNeedUsePoint());
+                                  },
+                                  ()=>
+                                  {
+                                      m_eStopReason = StopReason.SR_CRAZY_CONTINUE;
+                                      _EndAdjust(a_item,false);
+                                      Logger.LogErrorFormat("stop crazy failed!");
+                                  });
+                              });
+                        }
+                    }
+                    else
+                    {
+                        m_eStopReason = StopReason.SR_NORMAL_END;
+                        _EndAdjust(a_item,false);
+                    }

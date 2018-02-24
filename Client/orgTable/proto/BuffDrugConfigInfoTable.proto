@@ -1,0 +1,13 @@
+package ProtoTable;
+message BuffDrugConfigInfoTable
+{
+required sint32 ID = 1;
+required string Filed = 2;
+enum eValueType
+{
+	Value = 0; // 值
+	Rate100 = 1; // 百分比
+	Rate1000 = 2; // 千分比
+}
+required eValueType ValueType = 3;
+};

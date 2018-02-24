@@ -1,0 +1,13 @@
+package ProtoTable;
+message MagicCardTable
+{
+required sint32 ID = 1;
+required sint32 Color = 2;
+repeated sint32 Parts = 3;
+repeated sint32 PropType = 4;
+repeated sint32 PropValue = 5;
+repeated sint32 BuffID = 6;
+required sint32 Weight = 7;
+required sint32 Rate = 8;
+required string SkillAttributes = 9;
+};

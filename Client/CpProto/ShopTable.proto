@@ -1,0 +1,66 @@
+package ProtoTable;
+message ShopTable
+{
+required sint32 ID = 1;
+required string ShopName = 2;
+required string ShopNamePath = 3;
+required string ShopMallIcon = 4;
+required string Link = 5;
+enum eShopKind
+{
+	SK_Ancient = 0;	//????
+	SK_Mystery = 1;	//????
+	SK_Forge = 2;	//????
+	SK_Brave = 3;	//????
+	SK_Fight = 4;	//????
+	SK_Guild = 5;	//????
+	SK_Magic = 6;	//????
+	SK_Gold = 7;	//????
+	SK_Abyss = 8;	//????
+}
+required eShopKind ShopKind = 6;
+required sint32 HelpID = 7;
+required sint32 IsGuildShop = 8;
+required sint32 OccuFilter = 9;
+enum eSubType
+{
+	ST_NONE = 0;	//?
+	ST_MATERIAL = 1;	//??
+	ST_WEAPON = 2;	//??
+	ST_ARMOR = 3;	//??
+	ST_JEWELRY = 4;	//??
+	ST_COST = 5;	//???
+	ST_VALUABLE = 6;	//??
+	ST_RETINUE = 7;	//??
+	ST_TITLE = 8;	//??
+	ST_ENERGY = 9;	//???
+	ST_FASHION = 10;	//??
+	ST_ORDINARY = 11;	//??
+	ST_DAILY = 12;	//??
+	ST_GOODS = 13;	//??
+	ST_EQUIP = 14;	//??
+}
+repeated eSubType SubType = 10;
+required string ExtraShowMoneys = 11;
+repeated sint32 NeedRefreshTabs = 12;
+required sint32 Refresh = 13;
+required sint32 OpenLevel = 14;
+repeated sint32 RefreshCost = 15;
+repeated sint32 RefreshTime = 16;
+required sint32 OnSaleNum = 17;
+enum eSubTypeOrder
+{
+	STO_NONE = 0;	//?
+	STO_EQUIP = 1;	//??
+	STO_EXPENDABLE = 2;	//??
+	STO_MATERIAL = 3;	//??
+	STO_TASK = 4;	//??
+	STO_FASHION = 5;	//??
+}
+repeated eSubTypeOrder SubTypeOrder = 18;
+required sint32 LimitGood1 = 19;
+required sint32 LimitGood2 = 20;
+repeated sint32 VIPLv = 21;
+repeated sint32 VIPDiscount = 22;
+required sint32 Version = 23;
+};

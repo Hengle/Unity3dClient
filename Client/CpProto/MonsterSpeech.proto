@@ -1,0 +1,6 @@
+package ProtoTable;
+message MonsterSpeech
+{
+required sint32 ID = 1;
+required string Speech = 2;
+};

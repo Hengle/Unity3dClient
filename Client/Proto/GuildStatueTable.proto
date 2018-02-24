@@ -1,0 +1,17 @@
+package ProtoTable;
+message GuildStatueTable
+{
+required sint32 ID = 1;
+enum eWorship
+{
+	Normal = 0;	//??
+	Middle = 1;	//??
+	High = 2;	//??
+}
+required eWorship Worship = 2;
+required sint32 CostItemID = 3;
+required sint32 CostItemCount = 4;
+required sint32 GetItemID = 5;
+required sint32 GetItemCount = 6;
+required sint32 GetBuffID = 7;
+};

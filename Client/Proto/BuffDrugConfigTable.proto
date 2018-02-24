@@ -1,0 +1,8 @@
+package ProtoTable;
+message BuffDrugConfigTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+required string Description = 3;
+required sint32 FreeUseLevel = 4;
+};

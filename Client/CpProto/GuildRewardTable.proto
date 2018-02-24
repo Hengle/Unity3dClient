@@ -1,0 +1,7 @@
+package ProtoTable;
+message GuildRewardTable
+{
+required sint32 ID = 1;
+required sint32 TargetScore = 2;
+repeated string ItemReward = 3;
+};

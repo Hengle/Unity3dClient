@@ -1,0 +1,14 @@
+package ProtoTable;
+message CurrencyConfigureTable
+{
+required sint32 ID = 1;
+required string Des = 2;
+enum eType
+{
+	CCT_NONE = 0; // 无效
+	CCT_AUCTION_REFRESH = 1; // 拍卖行刷新
+}
+required eType Type = 3;
+required sint32 CostItemID = 4;
+required sint32 Num = 5;
+};

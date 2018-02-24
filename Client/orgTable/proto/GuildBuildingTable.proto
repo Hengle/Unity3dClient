@@ -1,0 +1,14 @@
+package ProtoTable;
+message GuildBuildingTable
+{
+required sint32 ID = 1;
+required sint32 MainCost = 2;
+required sint32 ShopCost = 3;
+required sint32 TableCost = 4;
+required sint32 DungeonCost = 5;
+required sint32 StatueCost = 6;
+required sint32 BattleCost = 7;
+required sint32 WelfareCost = 8;
+required sint32 ShopId = 9;
+required sint32 WelfareGiftId = 10;
+};

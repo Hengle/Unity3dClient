@@ -1,0 +1,8 @@
+package ProtoTable;
+message MonsterPrefixTable
+{
+required sint32 ID = 1;
+required sint32 type = 2;
+required string Name = 3;
+repeated sint32 BufferInfoID = 4;
+};

@@ -1,0 +1,7 @@
+package ProtoTable;
+message SeasonDailyTable
+{
+required sint32 ID = 1;
+repeated sint32 MatchScore = 2;
+repeated string Rewards = 3;
+};

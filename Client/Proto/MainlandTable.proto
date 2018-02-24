@@ -1,0 +1,7 @@
+package ProtoTable;
+message MainlandTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+repeated sint32 AreaIDs = 3;
+};

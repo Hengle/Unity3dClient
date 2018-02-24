@@ -1,0 +1,12 @@
+package ProtoTable;
+message FaceTable
+{
+required sint32 ID = 1;
+enum eGroup
+{
+	Team = 0; // 组队
+	Normal = 1; // 普通
+}
+required eGroup Group = 2;
+required string Path = 3;
+};

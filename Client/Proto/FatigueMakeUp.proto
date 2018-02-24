@@ -1,0 +1,11 @@
+package ProtoTable;
+message FatigueMakeUp
+{
+required sint32 ID = 1;
+required sint32 FreeEXP = 2;
+required sint32 CostEXP = 3;
+required sint32 CostRate = 4;
+required sint32 FatigueMax = 5;
+required sint32 VipFatigueMax = 6;
+required sint32 VipLevel = 7;
+};

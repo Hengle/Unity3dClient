@@ -1,0 +1,8 @@
+package ProtoTable;
+message FashionAttributesTable
+{
+required sint32 ID = 1;
+repeated sint32 PropType = 2;
+repeated sint32 PropValue = 3;
+repeated sint32 BuffID = 4;
+};

@@ -1,0 +1,27 @@
+package ProtoTable;
+message FollowPetTable
+{
+required sint32 ID = 1;
+required sint32 MonsterID = 2;
+required sint32 GroupId = 3;
+required string Name = 4;
+required string Desc = 5;
+enum eQuality
+{
+	BLUE = 0;	//??
+	PURPLE = 1;	//??
+	PINK = 2;	//??
+	ORANGE = 3;	//??
+}
+required eQuality Quality = 6;
+required sint32 TakeLevel = 7;
+required sint32 MaxStarLevel = 8;
+repeated sint32 Skills = 9;
+required sint32 ItemID = 10;
+required string StarUpCondition = 11;
+required string ChangeSkillConsume = 12;
+required sint32 NotUnlockSkillCount = 13;
+required sint32 ChangeSkillUnlock = 14;
+required sint32 RelationID = 15;
+required string StarsUpUnlockSkills = 16;
+};

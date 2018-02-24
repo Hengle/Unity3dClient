@@ -1,0 +1,6 @@
+package ProtoTable;
+message coolname
+{
+required sint32 ID = 1;
+required sint32 Char = 2;
+};

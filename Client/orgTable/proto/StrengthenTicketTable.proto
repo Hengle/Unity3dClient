@@ -1,0 +1,8 @@
+package ProtoTable;
+message StrengthenTicketTable
+{
+required sint32 ID = 1;
+required sint32 Probility = 2;
+required sint32 Level = 3;
+required string desc = 4;
+};

@@ -1,0 +1,6 @@
+package ProtoTable;
+message TestFunctionConfigTable
+{
+required sint32 ID = 1;
+required bool Open = 2;
+};

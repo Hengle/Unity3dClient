@@ -1,0 +1,6 @@
+package ProtoTable;
+message ResConfigTable
+{
+required sint32 ID = 1;
+required string Path = 2;
+};

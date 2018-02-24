@@ -1,0 +1,12 @@
+package ProtoTable;
+message GuildTable
+{
+required sint32 ID = 1;
+required sint32 MemberNum = 2;
+required sint32 ShopLevel = 3;
+required sint32 TableLevel = 4;
+required sint32 DungeonLevel = 5;
+required sint32 StatueLevel = 6;
+required sint32 BattleLevel = 7;
+required sint32 WelfareLevel = 8;
+};

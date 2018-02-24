@@ -1,0 +1,13 @@
+package ProtoTable;
+message AIConfigTable
+{
+required sint32 ID = 1;
+required sint32 JobID = 2;
+required sint32 AIType = 3;
+required sint32 AIAttackDelay = 4;
+required sint32 AIDestinationChangeTerm = 5;
+required sint32 AIThinkTargetTerm = 6;
+required string AIActionPath = 7;
+required string AIDestinationSelectPath = 8;
+required string AIEventPath = 9;
+};

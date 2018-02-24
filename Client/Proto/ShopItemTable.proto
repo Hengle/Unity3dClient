@@ -1,0 +1,38 @@
+package ProtoTable;
+message ShopItemTable
+{
+required sint32 ID = 1;
+required string CommodityName = 2;
+required sint32 ShopID = 3;
+required sint32 ItemID = 4;
+required sint32 SortID = 5;
+enum eSubType
+{
+	ST_NONE = 0;	//?
+	ST_MATERIAL = 1;	//??
+	ST_WEAPON = 2;	//??
+	ST_ARMOR = 3;	//??
+	ST_JEWELRY = 4;	//??
+	ST_COST = 5;	//???
+	ST_VALUABLE = 6;	//??
+	ST_RETINUE = 7;	//??
+	ST_TITLE = 8;	//??
+	ST_ENERGY = 9;	//???
+	ST_FASHION = 10;	//??
+	ST_ORDINARY = 11;	//??
+	ST_DAILY = 12;	//??
+	ST_GOODS = 13;	//??
+	ST_EQUIP = 14;	//??
+}
+required eSubType SubType = 6;
+required sint32 CostItemID = 7;
+required sint32 CostNum = 8;
+required sint32 VIP = 9;
+required sint32 VIPLimite = 10;
+required sint32 NumLimite = 11;
+required sint32 LimiteOnce = 12;
+required sint32 GroupNum = 13;
+required sint32 Weight = 14;
+required sint32 ExLimite = 15;
+required sint32 ExValue = 16;
+};

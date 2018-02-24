@@ -1,0 +1,6 @@
+package ProtoTable;
+message TeamNameTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+};

@@ -1,0 +1,21 @@
+import "Union.proto";
+
+package ProtoTable;
+message ItemCollectionTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+required string Icon = 3;
+required string Level = 4;
+repeated sint32 Color = 5;
+enum eTipsType
+{
+	SINGLE = 1; // 单个
+	COLLECTION = 2; // 集合
+}
+required eTipsType TipsType = 6;
+required sint32 ItemID = 7;
+required string Desc = 8;
+repeated UnionCell TipsContent = 9;
+repeated string Items = 10;
+};

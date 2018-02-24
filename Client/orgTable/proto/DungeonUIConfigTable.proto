@@ -1,0 +1,22 @@
+package ProtoTable;
+message DungeonUIConfigTable
+{
+required sint32 ID = 1;
+enum eCommon
+{
+	NONE = 0; // 无
+	GOLD = 1; // 金币
+	FATIGUE = 2; // 疲劳
+	TICKET = 3; // 点券
+	DEADCOIN = 4; // 死亡币
+	HELLTICKET = 5; // 深渊票
+}
+repeated eCommon Common = 2;
+required string ClassName = 3;
+required string BackgroundPath = 4;
+required string LeftPannelConfig = 5;
+required string RightPannelConfig = 6;
+repeated string AreaDialog = 7;
+required string CharactorConfig = 8;
+repeated string AreaAfterDialog = 9;
+};

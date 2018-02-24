@@ -1,0 +1,11 @@
+package ProtoTable;
+message GuidanceMainItemTable
+{
+required sint32 ID = 1;
+required string Icon = 2;
+required string Desc = 3;
+required sint32 FunctionId = 4;
+required sint32 recommandLv = 5;
+required string LinkInfo = 6;
+required sint32 bCloseFrame = 7;
+};

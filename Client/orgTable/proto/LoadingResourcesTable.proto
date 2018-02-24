@@ -1,0 +1,16 @@
+package ProtoTable;
+message LoadingResourcesTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+enum eType
+{
+	AT_NONE = 0; // 通用
+	AT_EQUIP = 1; // 城镇
+	AT_DEFENCE = 2; // 地下城
+}
+required eType Type = 3;
+required sint32 Level = 4;
+required string Resources = 5;
+required string Text = 6;
+};

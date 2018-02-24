@@ -1,0 +1,21 @@
+package ProtoTable;
+message EquipQLValueTable
+{
+required sint32 ID = 1;
+enum ePart
+{
+	NONE = 0; // 没有
+	WEAPON = 1; // 武器
+	CLOTH = 2; // 布甲
+	LEATHER = 3; // 皮甲
+	HEAVY = 4; // 重甲
+	PLATE = 5; // 板甲
+	LIGHT = 6; // 轻甲
+	JEWELRY = 7; // 首饰
+}
+required ePart Part = 2;
+required sint32 AtkDef = 3;
+required sint32 FourDimensional = 4;
+required sint32 PerfectAtkDef = 5;
+required sint32 PerfectFourDimensional = 6;
+};

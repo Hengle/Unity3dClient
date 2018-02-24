@@ -1,0 +1,7 @@
+package ProtoTable;
+message PkHPLevelAdjustTable
+{
+required sint32 ID = 1;
+required sint32 factor = 2;
+required sint32 Attackfactor = 3;
+};

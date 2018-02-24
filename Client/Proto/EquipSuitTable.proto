@@ -1,0 +1,14 @@
+package ProtoTable;
+message EquipSuitTable
+{
+required sint32 ID = 1;
+required string Name = 2;
+repeated sint32 EquipIDs = 3;
+required sint32 TwoEquipsAttrID = 4;
+required sint32 ThreeEquipsAttrID = 5;
+required sint32 FourEquipsAttrID = 6;
+required sint32 FiveEquipsAttrID = 7;
+required sint32 SixEquipsAttrID = 8;
+required sint32 EightEquipsAttrID = 9;
+required string Description = 10;
+};

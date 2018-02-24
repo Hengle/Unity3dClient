@@ -1,0 +1,11 @@
+package ProtoTable;
+message AnnounceTable
+{
+required sint32 ID = 1;
+required string NoticeText = 2;
+required sint32 Interval = 3;
+required sint32 Times = 4;
+required sint32 Priority = 5;
+required sint32 Parameter = 6;
+required string Effect = 7;
+};

@@ -1,0 +1,7 @@
+package ProtoTable;
+message GuildInspireTable
+{
+required sint32 ID = 1;
+required sint32 NeedGuildLevel = 2;
+repeated string ConsumeItem = 3;
+};
