@@ -1,7 +1,0 @@
-package ProtoTable;
-message SeasonRewardTable
-{
-required sint32 ID = 1;
-repeated sint32 RankRange = 2;
-repeated string Rewards = 3;
-};

@@ -1,8 +1,0 @@
-package ProtoTable;
-message GuidanceMainTable
-{
-required sint32 ID = 1;
-required string Desc = 2;
-repeated sint32 LinkItems = 3;
-required sint32 UnLockLevel = 4;
-};

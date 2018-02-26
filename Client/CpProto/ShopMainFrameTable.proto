@@ -1,8 +1,0 @@
-package ProtoTable;
-message ShopMainFrameTable
-{
-required sint32 ID = 1;
-required string ShopName = 2;
-required sint32 HelpID = 3;
-repeated sint32 Children = 4;
-};

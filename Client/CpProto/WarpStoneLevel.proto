@@ -1,6 +1,0 @@
-package ProtoTable;
-message WarpStoneLevel
-{
-required sint32 ID = 1;
-required sint32 TotalExp = 2;
-};

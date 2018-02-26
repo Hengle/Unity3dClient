@@ -1,9 +1,0 @@
-package ProtoTable;
-message RandBaseTable
-{
-required sint32 ID = 1;
-required sint32 BaseRatio = 2;
-repeated sint32 QLP = 3;
-repeated sint32 QLOMin = 4;
-repeated sint32 QLOMax = 5;
-};

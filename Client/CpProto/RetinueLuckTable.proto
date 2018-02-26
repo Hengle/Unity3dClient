@@ -1,8 +1,0 @@
-package ProtoTable;
-message RetinueLuckTable
-{
-required sint32 ID = 1;
-required sint32 IncExp = 2;
-required sint32 Exp = 3;
-required sint32 UpPreLvNeedExp = 4;
-};

@@ -1,7 +1,0 @@
-package ProtoTable;
-message NameTable
-{
-required sint32 ID = 1;
-required sint32 NameType = 2;
-required string NameText = 3;
-};

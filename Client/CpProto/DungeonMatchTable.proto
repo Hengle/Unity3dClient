@@ -1,6 +1,0 @@
-package ProtoTable;
-message DungeonMatchTable
-{
-required sint32 ID = 1;
-required sint32 MatchPlayerNum = 2;
-};

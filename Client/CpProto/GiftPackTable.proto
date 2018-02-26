@@ -1,6 +1,0 @@
-package ProtoTable;
-message GiftPackTable
-{
-required sint32 ID = 1;
-repeated string Items = 2;
-};

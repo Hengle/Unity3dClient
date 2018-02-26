@@ -19,12 +19,12 @@ namespace GameClient
 
 		private Scene _CreateScene(int iSceneId)
 		{
-			var sceneItem = TableManager.Instance ().GetTableItem<ProtoTable.SceneTable> (iSceneId);
-			if (null == sceneItem) 
-			{
-				Debug.LogErrorFormat ("can not find scene resource for sceneid = {0}", iSceneId);
-				return null;
-			}
+			//var sceneItem = TableManager.Instance ().GetTableItem<ProtoTable.SceneTable> (iSceneId);
+			//if (null == sceneItem) 
+			//{
+			//	Debug.LogErrorFormat ("can not find scene resource for sceneid = {0}", iSceneId);
+			//	return null;
+			//}
 
 			Scene scene = new Scene ();
 			//scene.Create (sceneItem,m_environment);

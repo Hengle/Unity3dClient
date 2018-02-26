@@ -1,6 +1,0 @@
-package ProtoTable;
-message GuidanceLevelTable
-{
-required sint32 ID = 1;
-repeated sint32 RelationIds = 2;
-};

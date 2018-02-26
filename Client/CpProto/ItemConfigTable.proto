@@ -1,6 +1,0 @@
-package ProtoTable;
-message ItemConfigTable
-{
-required sint32 ID = 1;
-required sint32 ItemID = 2;
-};

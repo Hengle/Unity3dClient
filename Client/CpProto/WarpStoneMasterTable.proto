@@ -1,7 +1,0 @@
-package ProtoTable;
-message WarpStoneMasterTable
-{
-required sint32 ID = 1;
-required sint32 TotalLevel = 2;
-required sint32 BufferID = 3;
-};

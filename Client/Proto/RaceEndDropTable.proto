@@ -1,8 +1,0 @@
-package ProtoTable;
-message RaceEndDropTable
-{
-required sint32 ID = 1;
-required sint32 DungeonID = 2;
-required sint32 LevelRange = 3;
-required string DropSets = 4;
-};

@@ -1,8 +1,0 @@
-package ProtoTable;
-message RobotConfigTable
-{
-required sint32 ID = 1;
-required sint32 Level = 2;
-required sint32 Occu = 3;
-repeated string Skills = 4;
-};

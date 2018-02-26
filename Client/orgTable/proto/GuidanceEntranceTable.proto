@@ -1,9 +1,0 @@
-package ProtoTable;
-message GuidanceEntranceTable
-{
-required sint32 ID = 1;
-required string Name = 2;
-required sint32 FunctionId = 3;
-required string Icon = 4;
-required string LinkInfo = 5;
-};

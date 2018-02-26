@@ -1,6 +1,0 @@
-package ProtoTable;
-message InternationalTable
-{
-required sint32 ID = 1;
-required string Descs = 2;
-};

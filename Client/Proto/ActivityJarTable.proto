@@ -1,8 +1,0 @@
-package ProtoTable;
-message ActivityJarTable
-{
-required sint32 ID = 1;
-required sint32 JarID = 2;
-required string ActivityBG = 3;
-required string ActivityRule = 4;
-};

@@ -1,8 +1,0 @@
-package ProtoTable;
-message DungeonHellTable
-{
-required sint32 ID = 1;
-required sint32 HardType = 2;
-repeated sint32 MonsterGroups = 3;
-required sint32 Prob = 4;
-};

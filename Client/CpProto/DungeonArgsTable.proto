@@ -1,9 +1,0 @@
-package ProtoTable;
-message DungeonArgsTable
-{
-required sint32 ID = 1;
-required sint32 TimeScore = 2;
-required sint32 BackHitScore = 3;
-required sint32 CombScore = 4;
-required sint32 ComboArg = 5;
-};

@@ -26,33 +26,33 @@ namespace GameClient
 			}
 		}
 
-		public T LoadResource<T>(int iHandleID) where T : UnityEngine.Object,new()
-		{
-			if (iHandleID < 0 || iHandleID >= MAX_RESOURCE_LENGTH) 
-			{
-				Debug.LogErrorFormat ("iHandleID = {0} is out of resource handles", iHandleID);
-				return null;
-			}
+		//public T LoadResource<T>(int iHandleID) where T : UnityEngine.Object,new()
+		//{
+		//	if (iHandleID < 0 || iHandleID >= MAX_RESOURCE_LENGTH) 
+		//	{
+		//		Debug.LogErrorFormat ("iHandleID = {0} is out of resource handles", iHandleID);
+		//		return null;
+		//	}
 
-			var resource = TableManager.Instance ().GetTableItem<ProtoTable.ResConfigTable> (iHandleID);
-			if (null == resource) 
-			{
-				Debug.LogErrorFormat ("can not find resource with handleid = {0}", iHandleID);
-				return null;
-			}
+		//	//var resource = TableManager.Instance ().GetTableItem<ProtoTable.ResConfigTable> (iHandleID);
+		//	//if (null == resource) 
+		//	//{
+		//	//	Debug.LogErrorFormat ("can not find resource with handleid = {0}", iHandleID);
+		//	//	return null;
+		//	//}
 
-			if (memoryHandle [iHandleID] == null) 
-			{
-				memoryHandle [iHandleID] = Resources.Load (resource.Path, typeof(T)) as T;
-				if (null == memoryHandle [iHandleID]) 
-				{
-					Debug.LogErrorFormat ("load resource failed : type = {0} path={1}", typeof(T), resource.Path);
-					return null;
-				}
-			}
+		//	if (memoryHandle [iHandleID] == null) 
+		//	{
+		//		memoryHandle [iHandleID] = Resources.Load (resource.Path, typeof(T)) as T;
+		//		if (null == memoryHandle [iHandleID]) 
+		//		{
+		//			Debug.LogErrorFormat ("load resource failed : type = {0} path={1}", typeof(T), resource.Path);
+		//			return null;
+		//		}
+		//	}
 
-			return GameObject.Instantiate (memoryHandle [iHandleID]) as T;
-		}
+		//	return GameObject.Instantiate (memoryHandle [iHandleID]) as T;
+		//}
 
 		public string GetTablePath(Type type)
 		{

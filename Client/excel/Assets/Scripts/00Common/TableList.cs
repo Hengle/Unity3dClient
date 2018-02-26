@@ -5,9 +5,8 @@ namespace GameClient
 {
 	class TableList
 	{
-		protected static Type[] ms_table_types = new Type[1]
+		protected static Type[] ms_table_types = new Type[0]
 		{
-			typeof(WarpStone),
 		};
 		public static Type[] Values
 		{

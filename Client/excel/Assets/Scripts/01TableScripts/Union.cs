@@ -8,27 +8,49 @@
 //------------------------------------------------------------------------------
 
 // Generated from: Union.proto
+#if !UNITY_EDITOR
 namespace ProtoTable
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"EveryValue")]
-  public partial class EveryValue : global::ProtoBuf.IExtensible
+  public partial class EveryValue : global::ProtoBuf.IExtensible,global::ProtoBuf.IParseable
   {
     public EveryValue() {}
     
-    private readonly global::System.Collections.Generic.List<int> _everyValues = new global::System.Collections.Generic.List<int>();
+		private readonly global::System.Collections.Generic.List<CrypticInt32> _everyValues = new global::System.Collections.Generic.List<CrypticInt32>();
     [global::ProtoBuf.ProtoMember(1, Name=@"everyValues", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public global::System.Collections.Generic.List<int> everyValues
+	public global::System.Collections.Generic.List<CrypticInt32> everyValues
     {
       get { return _everyValues; }
     }
   
+    public void Parse(ProtoBuf.ProtoReader source){
+        int fieldNumber = 0;
+        while ((fieldNumber = source.ReadFieldHeader()) > 0)
+        {
+            switch (fieldNumber)
+            {
+                default:
+                    source.SkipField();
+                    break;
+            
+    
+            case 1:   //everyValues LABEL_REPEATED TYPE_INT32  TwosComplement
+                    int everyValuesfield = source.FieldNumber;
+                    do{
+                        everyValues.Add(source.ReadInt32());
+                    } while(source.TryReadFieldHeader(everyValuesfield));
+                    break;
+                    
+            }
+        }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"UnionCell")]
-  public partial class UnionCell : global::ProtoBuf.IExtensible
+  public partial class UnionCell : global::ProtoBuf.IExtensible,global::ProtoBuf.IParseable
   {
     public UnionCell() {}
     
@@ -47,7 +69,7 @@ namespace ProtoTable
       get { return _eValues; }
       set { _eValues = value; }
     }
-    private int _fixValue = default(int);
+		private CrypticInt32 _fixValue = default(int);
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"fixValue", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
     public int fixValue
@@ -55,21 +77,58 @@ namespace ProtoTable
       get { return _fixValue; }
       set { _fixValue = value; }
     }
-    private int _fixInitValue = default(int);
+		private CrypticInt32 _fixInitValue = default(int);
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"fixInitValue", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
-    public int fixInitValue
+		public int fixInitValue
     {
       get { return _fixInitValue; }
       set { _fixInitValue = value; }
     }
-    private int _fixLevelGrow = default(int);
+		private CrypticInt32 _fixLevelGrow = default(int);
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"fixLevelGrow", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
-    public int fixLevelGrow
+		public int fixLevelGrow
     {
       get { return _fixLevelGrow; }
       set { _fixLevelGrow = value; }
+    }
+    public void Parse(ProtoBuf.ProtoReader source){
+        int fieldNumber = 0;
+        while ((fieldNumber = source.ReadFieldHeader()) > 0)
+        {
+            switch (fieldNumber)
+            {
+                default:
+                    source.SkipField();
+                    break;
+            
+    
+            case 1:   //valueType LABEL_REQUIRED TYPE_ENUM .ProtoTable.UnionCellType TwosComplement
+                    valueType = (ProtoTable.UnionCellType)source.ReadInt32();
+                    break;
+                    
+            case 2:   //eValues LABEL_OPTIONAL TYPE_MESSAGE .ProtoTable.EveryValue TwosComplement
+                    eValues = new ProtoTable.EveryValue();
+                    ProtoBuf.SubItemToken eValuestoken = ProtoBuf.ProtoReader.StartSubItem(source); 
+                    eValues.Parse(source);
+                    ProtoBuf.ProtoReader.EndSubItem(eValuestoken, source);
+                    break;
+                    
+            case 3:   //fixValue LABEL_OPTIONAL TYPE_INT32  TwosComplement
+                    fixValue = source.ReadInt32();
+                    break;
+                    
+            case 4:   //fixInitValue LABEL_OPTIONAL TYPE_INT32  TwosComplement
+                    fixInitValue = source.ReadInt32();
+                    break;
+                    
+            case 5:   //fixLevelGrow LABEL_OPTIONAL TYPE_INT32  TwosComplement
+                    fixLevelGrow = source.ReadInt32();
+                    break;
+                    
+            }
+        }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -91,3 +150,4 @@ namespace ProtoTable
     }
   
 }
+#endif

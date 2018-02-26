@@ -1,8 +1,0 @@
-package ProtoTable;
-message NotificationTable
-{
-required sint32 ID = 1;
-required string Content = 2;
-required sint32 hour = 3;
-required sint32 NeedClose = 4;
-};

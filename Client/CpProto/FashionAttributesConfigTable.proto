@@ -1,8 +1,0 @@
-package ProtoTable;
-message FashionAttributesConfigTable
-{
-required sint32 ID = 1;
-repeated sint32 Attributes = 2;
-required sint32 DefaultAttribute = 3;
-required sint32 FreeSelecteTimes = 4;
-};

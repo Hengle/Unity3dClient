@@ -1,6 +1,0 @@
-package ProtoTable;
-message TipsTable
-{
-required sint32 ID = 1;
-required string ObjectName = 2;
-};
