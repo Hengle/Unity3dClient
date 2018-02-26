@@ -1,0 +1,42 @@
+import "Union.proto";
+
+package ProtoTable;
+message BuffInfoTable
+{
+required sint32 ID = 1;
+repeated string Name = 2;
+required string Icon = 3;
+repeated string Description = 4;
+enum eDescType
+{
+	Common = 0; // 通用
+	SkillLevel = 1; // 技能等级加成
+}
+required eDescType DescType = 5;
+repeated string DetailDescription = 6;
+required sint32 SortID = 7;
+enum eBufferType
+{
+	BTR_LV = 0; // 等级类型加成
+	BTR_ATTR = 1; // 属性类型加成
+}
+required eBufferType BufferType = 8;
+required sint32 NeedHint = 9;
+required sint32 BuffID = 10;
+repeated UnionCell MonsterTypeMap = 11;
+required UnionCell BuffLevel = 12;
+required sint32 BuffTarget = 13;
+required sint32 BuffTargetRadius = 14;
+repeated sint32 SkillID = 15;
+required UnionCell AttachBuffRate = 16;
+required UnionCell AttachBuffTime = 17;
+required UnionCell BuffInfoCD = 18;
+required UnionCell BuffAttack = 19;
+required sint32 BuffCondition = 20;
+required sint32 BuffDelay = 21;
+required UnionCell BuffRangeRadius = 22;
+required sint32 BuffRangeCheckInterval = 23;
+repeated sint32 ConditionSkillID = 24;
+required string EffectName = 25;
+required string EffectLocateName = 26;
+};
