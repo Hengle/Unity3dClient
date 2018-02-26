@@ -10,10 +10,6 @@ namespace GameClient
 
 		public bool Initialize()
 		{
-			if (!TableManager.Instance ().Initialize ()) 
-			{
-				return false;
-			}
 			return true;
 		}
 

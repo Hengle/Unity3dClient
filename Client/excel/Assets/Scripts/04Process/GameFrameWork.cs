@@ -9,13 +9,16 @@ namespace GameClient
 		void Start() 
 		{
 			GameObject.DontDestroyOnLoad (this);
-			//initialize data here , for table data ,net work, and so on ...
-			SceneManager.Instance ().Initialize ();
-		}
+            //initialize data here , for table data ,net work, and so on ...
+            if(!TableManager.Instance().Initialize())
+            {
+                return;
+            }
+        }
 
 		void OnDestroy()
 		{
-			SceneManager.Instance ().UnInitialize ();
+
 		}
 	}
 }
