@@ -15,13 +15,9 @@ namespace GameClient
 			var begin = System.DateTime.Now.Ticks;
 			if (!AssetManager.Instance ().LoadAllTables (ref mTableDic)) 
 			{
-                LogManager.Instance().LogProcessFormat(8000, "<color=#ff0000>load tables failed !</color>");
                 return false;
 			}
 			var delta = System.DateTime.Now.Ticks - begin;
-
-            LogManager.Instance().LogProcessFormat(8000,"<color=#00ff00>load tables takes {0} ms</color>", delta / 10000);
-
 			return true;
 		}        
 
