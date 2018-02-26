@@ -10,7 +10,7 @@ namespace npoi
 {
 	class ExcelConvertEditorWindow : EditorWindow 
 	{
-		[MenuItem ("GameNative/TableConvert/Window")]
+		[MenuItem ("GameClient/TableConvert/Window")]
 		static void AddWindow ()
 		{       
 			//创建窗口

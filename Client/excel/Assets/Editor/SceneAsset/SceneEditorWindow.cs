@@ -10,7 +10,7 @@ namespace SceneEditor
 {
 	class SceneEditorWindow : EditorWindow 
 	{
-		[MenuItem ("GameNative/SceneEdit/Window")]
+		[MenuItem ("GameClient/SceneEdit/Window")]
 		static void AddWindow ()
 		{       
 			//创建窗口

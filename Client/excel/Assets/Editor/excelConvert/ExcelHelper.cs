@@ -13,19 +13,19 @@ namespace npoi
 {
     class ExcelHelper
     {
-        [MenuItem("GameNative/TableConvert/Xlsx2Proto")]
+		[MenuItem("GameClient/TableConvert/Xlsx2Proto")]
         public static void ConvertProtoFile()
         {
 			_ConvertAll(ConvertType.CT_PROTO);
         }
 
-		[MenuItem("GameNative/TableConvert/Xlsx2Txt")]
+		[MenuItem("GameClient/TableConvert/Xlsx2Txt")]
 		public static void ConvertText()
 		{
 			_ConvertAll(ConvertType.CT_TXT);
 		}
 
-		[MenuItem("GameNative/TableConvert/Txt2Asset")]
+		[MenuItem("GameClient/TableConvert/Txt2Asset")]
 		public static void ConvertAsset()
 		{
 			ConvertAsset ("*.txt");
@@ -68,7 +68,7 @@ namespace npoi
 			return false;
 		}
 
-		[MenuItem("GameNative/TableConvert/LoadTableList")]
+		[MenuItem("GameClient/TableConvert/LoadTableList")]
 		public static void ConvertTableListScriptCS()
 		{
 			var name = "TableList.cs";
@@ -92,7 +92,7 @@ namespace npoi
 			kBuilder.Append("using ProtoTable;\n");
 			kBuilder.Append("\n");
 
-			kBuilder.AppendFormat ("namespace GameNative\n");
+			kBuilder.AppendFormat ("namespace GameClient\n");
 			kBuilder.AppendFormat ("{0}{{\n", Tabs (autoTab));
 			++autoTab;
 			kBuilder.AppendFormat ("{0}class TableList\n", Tabs (autoTab));
