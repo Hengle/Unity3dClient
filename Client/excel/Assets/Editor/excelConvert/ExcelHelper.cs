@@ -34,6 +34,10 @@ namespace npoi
 		public static bool ConvertAsset(string filter)
 		{
 			var dir = Path.GetFullPath (Application.dataPath + ExcelConfig.TXT_SAVE_PATH);
+			if (!Directory.Exists (dir)) 
+			{
+				Directory.CreateDirectory (dir);
+			}
 			var save_dir = ExcelConfig.TXT_ASSET_PATH;
 			string[] strList = Directory.GetFiles (dir, filter, SearchOption.TopDirectoryOnly);
 			for (int i = 0; i < strList.Length; ++i) 

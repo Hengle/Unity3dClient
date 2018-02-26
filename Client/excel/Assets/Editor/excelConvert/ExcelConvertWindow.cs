@@ -136,37 +136,11 @@ namespace npoi
 						excelUnit.Init ();
 						if (excelUnit.succeed) 
 						{
-                            if(Application.platform == RuntimePlatform.OSXEditor)
-                            {
-                                /*
-                                string proto_path = Path.GetFullPath(Application.dataPath + ExcelConfig.PROTO_PATH);
-                                string out_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_PATH);
-                                string argv = string.Format(Application.dataPath + ExcelConfig.SHELL_CMD_PATH + "proto.sh {0} {1} {2}", excelUnit.SheetName, proto_path,out_path);
-                                argv = Path.GetFullPath(argv);
-                                _LoadShellCmd("bash", argv);
-                                */
-                                string proto_path = Path.GetFullPath(Application.dataPath + ExcelConfig.PROTO_PATH + excelUnit.SheetName + ".proto");
-                                string out_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_PATH + excelUnit.SheetName + ".cs");
-                                string ccode_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_CCODE_PATH + excelUnit.SheetName + ".cc");
+							string proto_path = Path.GetFullPath(Application.dataPath + ExcelConfig.PROTO_PATH + excelUnit.SheetName + ".proto");
+							string out_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_PATH + excelUnit.SheetName + ".cs");
+							string ccode_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_CCODE_PATH + excelUnit.SheetName + ".cc");
 
-                                ProtoBuf.CodeGenerator.CommandLineOptions.BuildXsxl2Cs(proto_path, out_path, ccode_path);
-                            }
-                            else if(Application.platform == RuntimePlatform.WindowsEditor)
-                            {
-                                string proto_path = Path.GetFullPath(Application.dataPath + ExcelConfig.PROTO_PATH + excelUnit.SheetName + ".proto");
-                                string out_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_PATH + excelUnit.SheetName + ".cs");
-                                string ccode_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_CCODE_PATH + excelUnit.SheetName + ".cc");
-                                /*
-                                string argv = string.Format(Application.dataPath + ExcelConfig.SHELL_CMD_PATH + "proto.sh {0} {1} {2}", excelUnit.SheetName, proto_path, out_path);
-                                UnityEngine.Debug.LogErrorFormat("platform = {0}", Application.platform);
-                                _LoadShellCmd("cmd.exe", argv);
-                                */
-                                ProtoBuf.CodeGenerator.CommandLineOptions.BuildXsxl2Cs(proto_path, out_path, ccode_path);
-                            }
-                            else
-                            {
-                                UnityEngine.Debug.LogErrorFormat("unsupported platform for table_convert ! platform = {0}", Application.platform);
-                            }
+							ProtoBuf.CodeGenerator.CommandLineOptions.BuildXsxl2Cs(proto_path, out_path, ccode_path);
 						}
 						else 
 						{

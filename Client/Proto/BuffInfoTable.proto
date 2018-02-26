@@ -9,16 +9,16 @@ required string Icon = 3;
 repeated string Description = 4;
 enum eDescType
 {
-	Common = 0; // 通用
-	SkillLevel = 1; // 技能等级加成
+	Common = 0;	//??
+	SkillLevel = 1;	//??????
 }
 required eDescType DescType = 5;
 repeated string DetailDescription = 6;
 required sint32 SortID = 7;
 enum eBufferType
 {
-	BTR_LV = 0; // 等级类型加成
-	BTR_ATTR = 1; // 属性类型加成
+	BTR_LV = 0;	//??????
+	BTR_ATTR = 1;	//??????
 }
 required eBufferType BufferType = 8;
 required sint32 NeedHint = 9;
@@ -34,7 +34,7 @@ required UnionCell BuffInfoCD = 18;
 required UnionCell BuffAttack = 19;
 required sint32 BuffCondition = 20;
 required sint32 BuffDelay = 21;
-required UnionCell BuffRangeRadius = 22;
+required sint32 BuffRangeRadius = 22;
 required sint32 BuffRangeCheckInterval = 23;
 repeated sint32 ConditionSkillID = 24;
 required string EffectName = 25;
