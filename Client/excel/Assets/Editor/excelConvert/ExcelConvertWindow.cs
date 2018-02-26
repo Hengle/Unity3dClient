@@ -77,9 +77,11 @@ namespace npoi
 			{
 				UnityEngine.Debug.LogFormat ("<color=#ff0000>{0}</color>",strRst);
 			}
-		}
+            process.WaitForExit();
+            process.Close();
+        }
 
-		protected void OnGUI()
+        protected void OnGUI()
 		{
 			EditorGUILayout.BeginHorizontal ();
 			EditorGUILayout.LabelField ("过滤器",GUILayout.Width(100));
@@ -136,15 +138,30 @@ namespace npoi
 						{
                             if(Application.platform == RuntimePlatform.OSXEditor)
                             {
+                                /*
                                 string proto_path = Path.GetFullPath(Application.dataPath + ExcelConfig.PROTO_PATH);
                                 string out_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_PATH);
                                 string argv = string.Format(Application.dataPath + ExcelConfig.SHELL_CMD_PATH + "proto.sh {0} {1} {2}", excelUnit.SheetName, proto_path,out_path);
                                 argv = Path.GetFullPath(argv);
                                 _LoadShellCmd("bash", argv);
+                                */
+                                string proto_path = Path.GetFullPath(Application.dataPath + ExcelConfig.PROTO_PATH + excelUnit.SheetName + ".proto");
+                                string out_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_PATH + excelUnit.SheetName + ".cs");
+                                string ccode_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_CCODE_PATH + excelUnit.SheetName + ".cc");
+
+                                ProtoBuf.CodeGenerator.CommandLineOptions.BuildXsxl2Cs(proto_path, out_path, ccode_path);
                             }
                             else if(Application.platform == RuntimePlatform.WindowsEditor)
                             {
+                                string proto_path = Path.GetFullPath(Application.dataPath + ExcelConfig.PROTO_PATH + excelUnit.SheetName + ".proto");
+                                string out_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_PATH + excelUnit.SheetName + ".cs");
+                                string ccode_path = Path.GetFullPath(Application.dataPath + ExcelConfig.TABLE_SCRIPTS_CCODE_PATH + excelUnit.SheetName + ".cc");
+                                /*
+                                string argv = string.Format(Application.dataPath + ExcelConfig.SHELL_CMD_PATH + "proto.sh {0} {1} {2}", excelUnit.SheetName, proto_path, out_path);
                                 UnityEngine.Debug.LogErrorFormat("platform = {0}", Application.platform);
+                                _LoadShellCmd("cmd.exe", argv);
+                                */
+                                ProtoBuf.CodeGenerator.CommandLineOptions.BuildXsxl2Cs(proto_path, out_path, ccode_path);
                             }
                             else
                             {

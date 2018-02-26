@@ -19,6 +19,7 @@ namespace npoi
 		public static string TXT_ASSET_PATH = "Assets/Resources/Data/Table/";
         public static string SHELL_CMD_PATH = "/../../shell_cmd/";
         public static string TABLE_SCRIPTS_PATH = "/Scripts/01TableScripts/";
+        public static string TABLE_SCRIPTS_CCODE_PATH = "/../../CCode/";
     }
 
     enum FileExtensionType
