@@ -16,6 +16,13 @@ namespace GameClient
             }
 
             RegisterEvent(ClientEvent.CE_LOGIN_TEST, _OnLoginTest);
+
+            InvokeManager.Instance().Invoke(this, 5.0f, _OnInvokeCall);
+        }
+
+        void _OnInvokeCall()
+        {
+            LogManager.Instance().LogErrorFormat("_OnInvokeCall CALLED !!!");
         }
 
         protected void _OnLoginTest(object param)
@@ -30,7 +37,7 @@ namespace GameClient
 
         protected override void _OnCloseFrame()
         {
-
+            InvokeManager.Instance().RemoveInvoke(this, _OnInvokeCall);
         }
     }
 }

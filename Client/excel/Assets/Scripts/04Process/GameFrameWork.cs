@@ -30,7 +30,12 @@ namespace GameClient
             EventManager.Instance().SendEvent(ClientEvent.CE_LOGIN_TEST);
         }
 
-		void OnDestroy()
+        private void Update()
+        {
+            InvokeManager.Instance().Update();
+        }
+
+        void OnDestroy()
 		{
 
 		}
