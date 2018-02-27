@@ -1,7 +1,7 @@
 .classpath
 .project
 .settings      
-##filter databfile¡¢sln file##
+##filter databfileï¿½ï¿½sln file##
 *.mdb  
 *.ldb  
 *.sln    
@@ -33,4 +33,6 @@
 Icon?  
 ehthumbs.db  
 Thumbs.db
-/Client\excel\Library/
+/Client/excel/Library/
+/Client/excel/Temp/
+/Client/excel/obj/
