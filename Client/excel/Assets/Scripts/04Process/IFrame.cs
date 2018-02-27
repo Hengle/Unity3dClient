@@ -10,6 +10,7 @@ namespace GameClient
         FrameTypeID getFrameTypeId();
         int getFrameHashCode();
         void openFrame(int iId, FrameTypeID type,object userData);
-        void closeFrame(int iHashCode);
+        void closeFrame();
+        FrameLayer getLayer();
     }
 }

@@ -54,5 +54,14 @@ namespace GameClient
 
 			return null;
 		}
-	}
+
+        public static void AttachTo(GameObject child,GameObject parent)
+        {
+            if(null != child && null != parent)
+            {
+                child.transform.SetParent(parent.transform,false);
+            }
+        }
+
+    }
 }

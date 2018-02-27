@@ -1,0 +1,8 @@
+package ProtoTable;
+message FrameTypeTable
+{
+required sint32 ID = 1;
+required string Desc = 2;
+required sint32 Layer = 3;
+required string Prefab = 4;
+};

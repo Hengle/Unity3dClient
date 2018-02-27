@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace GameClient
 {
-    public enum UILayer
+    public enum FrameLayer
     {
-        UL_BOTTOM = 0,
-        UL_MIDDLE,
-        UL_HIGH,
-        UI_TOP,
-        UI_COUNT,
+        BOTTOM = 0,
+        MIDDLE,
+        HIGH,
+        TOP,
+        COUNT,
     }
 
     public class ComUIConfig : MonoBehaviour
     {
-        public GameObject[] goLayers = new GameObject[(int)UILayer.UI_COUNT];
+        public GameObject[] goLayers = new GameObject[(int)FrameLayer.COUNT];
     }
 }

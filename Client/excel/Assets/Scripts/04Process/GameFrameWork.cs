@@ -24,6 +24,8 @@ namespace GameClient
                 return;
             }
             LogManager.Instance().LogProcessFormat(8001, "<color=#00ff00>load tables succeed !</color>");
+
+            UIManager.Instance().OpenFrame<LoginFrame>(FrameTypeID.FTID_LOGIN);
         }
 
 		void OnDestroy()
