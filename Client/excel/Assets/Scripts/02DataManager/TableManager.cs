@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 namespace GameClient
 {
-	class TableManager : Singleton<TableManager> 
+	public class TableManager : Singleton<TableManager> 
 	{
 		Dictionary<Type,Dictionary<int,object>> mTableDic = new Dictionary<Type,Dictionary<int,object>>();
 

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace GameClient
 {
-	class AssetManager : Singleton<AssetManager> 
+	public class AssetManager : Singleton<AssetManager> 
 	{
 		private const string RES_CONFIG_TABLE_DATA_PATH = "Data/Table/";
         Dictionary<int, UnityEngine.Object> memoryHandles = new Dictionary<int, UnityEngine.Object>();
@@ -52,27 +52,52 @@ namespace GameClient
 			for (int i = 0; i < TableList.Values.Length; ++i) 
 			{
 				var type = TableList.Values[i];
-				var path = GetTablePath (type);
-				AssetBinary res = Resources.Load (path, typeof(AssetBinary)) as AssetBinary;
-				if (null == res) 
-				{
-					Debug.LogErrorFormat ("can not find textasset type = {0}", type.Name);
-					return false;
-				}
+                Dictionary<int, object> table = null;
 
-				Dictionary<int,object> table = _ConvertTableObject (res, type) as Dictionary<int,object>;
-				if (null == table) 
-				{
-					Debug.LogErrorFormat ("table load failed name = {0}", type.Name);
-					return false;
-				}
+                if (!_LoadTable(type, ref table))
+                {
+                    return false;
+                }
 
-				tableDic.Add (type, table);
+                tableDic.Add (type, table);
 			}
 			return true;
 		}
 
-		public object _ConvertTableObject(AssetBinary asset,Type type)
+        bool _LoadTable(Type type,ref Dictionary<int, object> table)
+        {
+            table = null;
+
+            var path = GetTablePath(type);
+            AssetBinary res = Resources.Load(path, typeof(AssetBinary)) as AssetBinary;
+            if (null == res)
+            {
+                Debug.LogErrorFormat("can not find textasset type = {0}", type.Name);
+                return false;
+            }
+
+            table = _ConvertTableObject(res, type) as Dictionary<int, object>;
+            if (null == table)
+            {
+                Debug.LogErrorFormat("table load failed name = {0}", type.Name);
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool LoadTable(Type type, ref Dictionary<int, object> table)
+        {
+            if(!_LoadTable(type,ref table))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        public object _ConvertTableObject(AssetBinary asset,Type type)
 		{
 			if (asset == null || null == type)
 			{
