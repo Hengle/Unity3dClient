@@ -1,4 +1,4 @@
-.classpath
+﻿.classpath
 .project
 .settings      
 ##filter databfile��sln file##
@@ -38,3 +38,4 @@ Thumbs.db
 /Client/excel/obj/
 /Client/excel/.vs/
 *.sln
+*.csproj
