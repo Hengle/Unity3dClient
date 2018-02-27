@@ -36,3 +36,5 @@ Thumbs.db
 /Client/excel/Library/
 /Client/excel/Temp/
 /Client/excel/obj/
+/Client/excel/.vs/
+*.sln

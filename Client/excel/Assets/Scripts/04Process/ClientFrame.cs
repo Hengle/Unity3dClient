@@ -83,10 +83,10 @@ namespace GameClient
             LogManager.Instance().LogProcessFormat(9000, "close frame {0} !", frameTypeId);
 
             _OnCloseFrame();
+            _AutoUnRegisterAllEvents();
 
-            if(null != root)
+            if (null != root)
             {
-                root.transform.SetParent(null);
                 GameObject.Destroy(root);
                 root = null;
             }
@@ -103,6 +103,32 @@ namespace GameClient
         {
 
         }
+
+        protected void RegisterEvent(ClientEvent e, System.Action<object> handler)
+        {
+            EventManager.Instance().RegisterEvent(e, handler);
+            mCachedEvents.Add(new EventBody
+            {
+                e = e,
+                handler = handler,
+            });
+        }
+
+        private void _AutoUnRegisterAllEvents()
+        {
+            for(int i = 0; i < mCachedEvents.Count; ++i)
+            {
+                EventManager.Instance().UnRegisterEvent(mCachedEvents[i].e, mCachedEvents[i].handler);
+            }
+            mCachedEvents.Clear();
+        }
+
+        struct EventBody
+        {
+            public ClientEvent e;
+            public System.Action<object> handler;
+        };
+        List<EventBody> mCachedEvents = new List<EventBody>(8);
 
         int frameId = -1;
         FrameTypeID frameTypeId = FrameTypeID.FTID_INVALID;

@@ -18,7 +18,7 @@ namespace GameClient
             eventRouter.RemoveEventHandler(ce, handler);
         }
 
-        public void SendEvent(ClientEvent ce,object param)
+        public void SendEvent(ClientEvent ce,object param = null)
         {
             eventRouter.BroadCastEvent(ce, param);
         }

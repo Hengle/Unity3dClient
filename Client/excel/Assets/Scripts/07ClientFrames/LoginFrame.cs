@@ -14,6 +14,13 @@ namespace GameClient
             {
                 btnClose.onClick.AddListener(_OnClickCloseFrame);
             }
+
+            RegisterEvent(ClientEvent.CE_LOGIN_TEST, _OnLoginTest);
+        }
+
+        protected void _OnLoginTest(object param)
+        {
+            LogManager.Instance().LogErrorFormat("On Recv Login Test Event !!!");
         }
 
         protected void _OnClickCloseFrame()
