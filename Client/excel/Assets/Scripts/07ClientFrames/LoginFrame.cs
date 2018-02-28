@@ -11,7 +11,13 @@ namespace GameClient
         const int Invoke_Fly = 1000;
         const int Invoke_Fly_Repeated = 1001;
         List<string> mValue = new List<string>();
-        ComUIListScript comItemList;
+
+        Scripts.UI.ComUIListScript mItemListScript;
+
+        protected override void _InitScriptBinder()
+        {
+            mItemListScript = mScriptBinder.GetObject("ItemListScript") as Scripts.UI.ComUIListScript;
+        }
 
         protected override void _OnOpenFrame()
         {
@@ -25,18 +31,20 @@ namespace GameClient
 
             _InitItemListScript();
             _UpdateItems();
+
+            mScriptBinder.SetAction("lose");
         }
 
         void _InitItemListScript()
         {
-            if (null != scriptBinder)
+            if (null != mScriptBinder)
             {
-                comItemList = scriptBinder.GetScript<ComUIListScript>((int)ProtoTable.FrameInfoBinderTable.eFrameBinderLabel.LOGIN_LG_ItemListScript);
-                if (null != comItemList)
+                mItemListScript = mScriptBinder.GetObject("ItemListScript") as Scripts.UI.ComUIListScript;
+                if (null != mItemListScript)
                 {
-                    comItemList.Initialize();
+                    mItemListScript.Initialize();
 
-                    comItemList.onBindItem = (GameObject go) =>
+                    mItemListScript.onBindItem = (GameObject go) =>
                     {
                         if (null != go)
                         {
@@ -45,7 +53,7 @@ namespace GameClient
                         return null;
                     };
 
-                    comItemList.onItemVisiable = (ComUIListElementScript element) =>
+                    mItemListScript.onItemVisiable = (ComUIListElementScript element) =>
                     {
                         if (null != element && element.m_index >= 0 && element.m_index <= mValue.Count)
                         {
@@ -70,9 +78,9 @@ namespace GameClient
                 mValue.Add("Mother" + i);
             }
 
-            if(null != comItemList)
+            if(null != mItemListScript)
             {
-                comItemList.SetElementAmount(mValue.Count);
+                mItemListScript.SetElementAmount(mValue.Count);
             }
         }
 
@@ -88,11 +96,11 @@ namespace GameClient
 
         protected override void _OnCloseFrame()
         {
-            if(null != comItemList)
+            if(null != mItemListScript)
             {
-                comItemList.onBindItem = null;
-                comItemList.onItemVisiable = null;
-                comItemList = null;
+                mItemListScript.onBindItem = null;
+                mItemListScript.onItemVisiable = null;
+                mItemListScript = null;
             }
         }
     }

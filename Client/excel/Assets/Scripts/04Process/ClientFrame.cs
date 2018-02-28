@@ -74,7 +74,8 @@ namespace GameClient
 
             Utility.AttachTo(root, GlobalDataManager.Instance().uiConfig.goLayers[(int)getLayer()]);
 
-            scriptBinder = root.GetComponent<ComScriptBinder>();
+            mScriptBinder = root.GetComponent<ComScriptBinder>();
+            _InitScriptBinder();
 
             LogManager.Instance().LogProcessFormat(9000, "open {0} frame succeed !", frameItem.Desc);
 
@@ -88,7 +89,7 @@ namespace GameClient
             _OnCloseFrame();
             _AutoUnRegisterAllEvents();
             _CancelAllInvokes();
-            scriptBinder = null;
+            mScriptBinder = null;
             if (null != root)
             {
                 GameObject.Destroy(root);
@@ -96,6 +97,11 @@ namespace GameClient
             }
             userData = null;
             frameItem = null;
+        }
+
+        protected virtual void _InitScriptBinder()
+        {
+
         }
 
         protected virtual void _OnOpenFrame()
@@ -194,7 +200,7 @@ namespace GameClient
         protected object userData = null;
         protected GameObject root = null;
         protected ProtoTable.FrameTypeTable frameItem = null;
-        protected ComScriptBinder scriptBinder = null;
+        protected ComScriptBinder mScriptBinder = null;
 
         public int FrameID
         {

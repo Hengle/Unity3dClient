@@ -18,6 +18,7 @@ namespace GameClient
                 return false;
 			}
 			var delta = System.DateTime.Now.Ticks - begin;
+            LogManager.Instance().LogErrorFormat("load table cost {0} ms", delta / 10000);
 			return true;
 		}        
 

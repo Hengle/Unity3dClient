@@ -74,6 +74,14 @@ public static class Utility
         }
     }
 
+    public static void SetAction(this GameClient.ComScriptBinder script,string action)
+    {
+        if(null != script)
+        {
+            script._SetAction(action);
+        }
+    }
+
     public static void CustomActive(this GameObject gameObject, bool bActive)
     {
         if (gameObject == null)

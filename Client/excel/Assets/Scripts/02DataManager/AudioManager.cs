@@ -376,6 +376,7 @@ public class AudioManager : Singleton<AudioManager>
 
         protected void _UpdateAsync()
         {
+            /*
             for (int i = 0, icnt = m_AsyncPlayCommandList.Count; i < icnt; ++i)
             {
                 AsyncPlayCommand curPlayCommand = m_AsyncPlayCommandList[i];
@@ -419,6 +420,7 @@ public class AudioManager : Singleton<AudioManager>
                 m_AsyncPlayCommandList.RemoveAt(i);
                 break;
             }
+            */
         }
 
         public void Clear()
