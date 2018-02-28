@@ -325,10 +325,11 @@ public class AudioManager : Singleton<AudioManager>
 
         #region 方法
 
-        public void Initialize()
+        public bool Initialize()
         {
             Clear();
             _Reinit();
+            return true;
         }
 
         public void Update()

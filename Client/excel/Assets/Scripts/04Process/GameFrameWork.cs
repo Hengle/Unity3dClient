@@ -9,11 +9,24 @@ namespace GameClient
 		void Start() 
 		{
 			GameObject.DontDestroyOnLoad (this);
+
+            if(!Initialize())
+            {
+                return;
+            }
+
+            UIManager.Instance().OpenFrame<LoginFrame>(FrameTypeID.FTID_LOGIN);
+
+            EventManager.Instance().SendEvent(ClientEvent.CE_LOGIN_TEST);
+        }
+
+        private bool Initialize()
+        {
             //initialize global data
-            if(!GlobalDataManager.Instance().Initialize(this))
+            if (!GlobalDataManager.Instance().Initialize(this))
             {
                 LogManager.Instance().LogProcessFormat(8000, "<color=#ff0000>GlobalDataManager Initialized !</color>");
-                return;
+                return false;
             }
             LogManager.Instance().LogProcessFormat(8000, "<color=#00ff00>GlobalDataManager Initialized !</color>");
 
@@ -21,15 +34,18 @@ namespace GameClient
             if (!TableManager.Instance().Initialize())
             {
                 LogManager.Instance().LogProcessFormat(8001, "<color=#ff0000>load tables failed !</color>");
-                return;
+                return false;
             }
             LogManager.Instance().LogProcessFormat(8001, "<color=#00ff00>load tables succeed !</color>");
 
-            AudioManager.Instance().Initialize();
+            if(!AudioManager.Instance().Initialize())
+            {
+                LogManager.Instance().LogProcessFormat(8002, "<color=#ff0000>AudioManager  Initialize failed !</color>");
+                return false;
+            }
+            LogManager.Instance().LogProcessFormat(8002, "<color=#00ff00>AudioManager  Initialize succeed !</color>");
 
-            UIManager.Instance().OpenFrame<LoginFrame>(FrameTypeID.FTID_LOGIN);
-
-            EventManager.Instance().SendEvent(ClientEvent.CE_LOGIN_TEST);
+            return true;
         }
 
         private void Update()
