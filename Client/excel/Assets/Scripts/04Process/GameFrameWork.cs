@@ -25,6 +25,8 @@ namespace GameClient
             }
             LogManager.Instance().LogProcessFormat(8001, "<color=#00ff00>load tables succeed !</color>");
 
+            AudioManager.Instance().Initialize();
+
             UIManager.Instance().OpenFrame<LoginFrame>(FrameTypeID.FTID_LOGIN);
 
             EventManager.Instance().SendEvent(ClientEvent.CE_LOGIN_TEST);
@@ -33,11 +35,12 @@ namespace GameClient
         private void Update()
         {
             InvokeManager.Instance().Update();
+            AudioManager.Instance().Update();
         }
 
         void OnDestroy()
 		{
-
-		}
+            AudioManager.Instance().Clear();
+        }
 	}
 }

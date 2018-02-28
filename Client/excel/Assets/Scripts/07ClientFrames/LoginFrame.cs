@@ -19,20 +19,6 @@ namespace GameClient
             }
 
             RegisterEvent(ClientEvent.CE_LOGIN_TEST, _OnLoginTest);
-
-            Invoke(Invoke_Fly, 1.0f, () => { LogManager.Instance().LogErrorFormat("start fly !"); });
-            InvokeRepeate(Invoke_Fly_Repeated, 0.0f, 6, 0.50f, () =>
-                {
-                    LogManager.Instance().LogErrorFormat("repeat start !");
-                },
-            () =>
-            {
-                LogManager.Instance().LogErrorFormat("repeat update !");
-            },
-            () =>
-            {
-                LogManager.Instance().LogErrorFormat("repeat end !");
-            });
         }
 
         protected void _OnLoginTest(object param)
@@ -42,7 +28,8 @@ namespace GameClient
 
         protected void _OnClickCloseFrame()
         {
-            UIManager.Instance().CloseFrame(this);
+            //UIManager.Instance().CloseFrame(this);
+            AudioManager.Instance().PlaySound(1001);
         }
 
         protected override void _OnCloseFrame()

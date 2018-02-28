@@ -34,6 +34,11 @@ namespace GameClient
                 handle = memoryHandles[iHandleID] as T;
             }
 
+            if (typeof(T) == typeof(AudioClip))
+            {
+                return handle;
+            }
+
             return GameObject.Instantiate(handle) as T;
         }
 
