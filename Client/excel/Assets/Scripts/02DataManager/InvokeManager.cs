@@ -198,5 +198,18 @@ namespace GameClient
                 }
             }
         }
+
+        public bool Initialize()
+        {
+            Clear();
+            return true;
+        }
+
+        public void Clear()
+        {
+            mCachedInvokeItems.Clear();
+            mActivedInvokeItems.Clear();
+            mHandleID = -1;
+        }
     }
 }

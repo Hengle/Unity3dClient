@@ -49,32 +49,32 @@ namespace GameClient
             frameItem = TableManager.Instance().GetTableItem<ProtoTable.FrameTypeTable>((int)type);
             if(null == frameItem)
             {
-                LogManager.Instance().LogProcessFormat(9100, "can not find frametype with type id = {0}", type);
+                LogManager.Instance().LogProcessFormat(9000, "can not find frametype with type id = {0}", type);
                 return;
             }
 
             if (frameItem.Layer < (int)FrameLayer.BOTTOM || frameItem.Layer >= (int)FrameLayer.COUNT)
             {
-                LogManager.Instance().LogProcessFormat(9101, "layer = {0} is invlalid with type id = {1}", frameItem.Layer, type);
+                LogManager.Instance().LogProcessFormat(9000, "layer = {0} is invlalid with type id = {1}", frameItem.Layer, type);
                 return;
             }
 
             root = AssetManager.Instance().LoadResource<GameObject>(frameItem.Prefab);
             if(null == root)
             {
-                LogManager.Instance().LogProcessFormat(9102, "load frame prefab failed : path = {0} typeid = {1}", frameItem.Prefab, type);
+                LogManager.Instance().LogProcessFormat(9000, "load frame prefab failed : path = {0} typeid = {1}", frameItem.Prefab, type);
                 return;
             }
 
             if(null == GlobalDataManager.Instance().uiConfig)
             {
-                LogManager.Instance().LogProcessFormat(9103, "uiConfig is null , can not attach frame to parent ! typeid = {0}", type);
+                LogManager.Instance().LogProcessFormat(9000, "uiConfig is null , can not attach frame to parent ! typeid = {0}", type);
                 return;
             }
 
             Utility.AttachTo(root, GlobalDataManager.Instance().uiConfig.goLayers[(int)getLayer()]);
 
-            LogManager.Instance().LogProcessFormat(9001, "open {0} frame succeed !", frameItem.Desc);
+            LogManager.Instance().LogProcessFormat(9000, "open {0} frame succeed !", frameItem.Desc);
 
             _OnOpenFrame();
         }
