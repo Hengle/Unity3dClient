@@ -7,6 +7,9 @@ namespace GameClient
 {
     public class LoginFrame : ClientFrame
     {
+        const int Invoke_Fly = 1000;
+        const int Invoke_Fly_Repeated = 1001;
+
         protected override void _OnOpenFrame()
         {
             Button btnClose = Utility.FindComponent<Button>(root, "Close");
@@ -17,12 +20,19 @@ namespace GameClient
 
             RegisterEvent(ClientEvent.CE_LOGIN_TEST, _OnLoginTest);
 
-            InvokeManager.Instance().Invoke(this, 5.0f, _OnInvokeCall);
-        }
-
-        void _OnInvokeCall()
-        {
-            LogManager.Instance().LogErrorFormat("_OnInvokeCall CALLED !!!");
+            Invoke(Invoke_Fly, 1.0f, () => { LogManager.Instance().LogErrorFormat("start fly !"); });
+            InvokeRepeate(Invoke_Fly_Repeated, 0.0f, 6, 0.50f, () =>
+                {
+                    LogManager.Instance().LogErrorFormat("repeat start !");
+                },
+            () =>
+            {
+                LogManager.Instance().LogErrorFormat("repeat update !");
+            },
+            () =>
+            {
+                LogManager.Instance().LogErrorFormat("repeat end !");
+            });
         }
 
         protected void _OnLoginTest(object param)
@@ -37,7 +47,7 @@ namespace GameClient
 
         protected override void _OnCloseFrame()
         {
-            InvokeManager.Instance().RemoveInvoke(this, _OnInvokeCall);
+
         }
     }
 }

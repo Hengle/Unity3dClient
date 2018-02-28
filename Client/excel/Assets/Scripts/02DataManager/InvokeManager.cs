@@ -10,10 +10,15 @@ namespace GameClient
         const int InvokeOnce = (1 << 0);
         const int InvokeRepeated = (1 << 1);
 
+        int mHandleID = -1;
+
         class InvokeItem
         {
             public object target = null;
+            public int iHandleId = 0;
             public int flag = 0;
+            public int times = 0;
+            public int repeate = 0;
             public float delay = 0.0f;
             public float interval = 0.0f;
             public float start = 0.0f;
@@ -24,7 +29,10 @@ namespace GameClient
             public void Reset()
             {
                 target = null;
+                iHandleId = 0;
                 flag = 0;
+                times = 0;
+                repeate = 0;
                 delay = 0.0f;
                 interval = 0.0f;
                 start = 0.0f;
@@ -37,51 +45,64 @@ namespace GameClient
         List<InvokeItem> mCachedInvokeItems = new List<InvokeItem>(16);
         List<InvokeItem> mActivedInvokeItems = new List<InvokeItem>(16);
 
-        public void Invoke(object target, float delay, UnityAction callback)
+        public int Invoke(object target, float delay, UnityAction callback)
         {
-            int iFindIndex = -1;
-            for (int i = 0; i < mActivedInvokeItems.Count; ++i)
-            {
-                if (mActivedInvokeItems[i].target == target && callback == mActivedInvokeItems[i].onStart)
-                {
-                    iFindIndex = i;
-                    break;
-                }
-            }
-
             InvokeItem invokeItem = null;
-            if (-1 != iFindIndex)
+            if (mCachedInvokeItems.Count > 0)
             {
-                invokeItem = mActivedInvokeItems[iFindIndex];
-                invokeItem.Reset();
+                invokeItem = mCachedInvokeItems[0];
+                mCachedInvokeItems.RemoveAt(0);
             }
             else
             {
-                if(mCachedInvokeItems.Count > 0)
-                {
-                    invokeItem = mCachedInvokeItems[0];
-                    mCachedInvokeItems.RemoveAt(0);
-                }
-                else
-                {
-                    invokeItem = new InvokeItem();
-                }
-                mActivedInvokeItems.Add(invokeItem);
+                invokeItem = new InvokeItem();
             }
+            mActivedInvokeItems.Add(invokeItem);
 
             invokeItem.target = target;
             invokeItem.delay = delay;
             invokeItem.onStart = callback;
             invokeItem.flag |= InvokeOnce;
             invokeItem.start = Time.time;
+            invokeItem.iHandleId = ++mHandleID;
+
+            return invokeItem.iHandleId;
         }
 
-        public void RemoveInvoke(object target,UnityAction callback)
+        public int InvokeRepeate(object target,float delay,int repeat,float interval,UnityAction onStart,UnityAction onUpdate,UnityAction onEnd)
+        {
+            InvokeItem invokeItem = null;
+            if (mCachedInvokeItems.Count > 0)
+            {
+                invokeItem = mCachedInvokeItems[0];
+                mCachedInvokeItems.RemoveAt(0);
+            }
+            else
+            {
+                invokeItem = new InvokeItem();
+            }
+            mActivedInvokeItems.Add(invokeItem);
+
+            invokeItem.target = target;
+            invokeItem.delay = delay;
+            invokeItem.onStart = onStart;
+            invokeItem.onUpdate = onUpdate;
+            invokeItem.onEnd = onEnd;
+            invokeItem.flag |= InvokeRepeated;
+            invokeItem.repeate = repeat;
+            invokeItem.interval = interval;
+            invokeItem.start = Time.time;
+            invokeItem.iHandleId = ++mHandleID;
+
+            return invokeItem.iHandleId;
+        }
+
+        public void RemoveInvoke(int iHandleId)
         {
             int iFindIndex = -1;
             for (int i = 0; i < mActivedInvokeItems.Count; ++i)
             {
-                if (mActivedInvokeItems[i].target == target && callback == mActivedInvokeItems[i].onStart)
+                if (mActivedInvokeItems[i].iHandleId == iHandleId)
                 {
                     iFindIndex = i;
                     break;
@@ -124,6 +145,45 @@ namespace GameClient
                             invokeItem.onStart();
                         }
                         invokeItem.flag = 0;
+                    }
+                }
+                else if((InvokeRepeated) == (invokeItem.flag & InvokeRepeated))
+                {
+                    if(invokeItem.times == 0)
+                    {
+                        if (invokeItem.start + invokeItem.delay <= Time.time)
+                        {
+                            invokeItem.start = Time.time;
+                            invokeItem.times += 1;
+                            if (null != invokeItem.onStart)
+                            {
+                                invokeItem.onStart();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (invokeItem.repeate > 0)
+                        {
+                            if (invokeItem.start + invokeItem.interval <= Time.time)
+                            {
+                                invokeItem.start = Time.time;
+                                invokeItem.repeate -= 1;
+                                if (null != invokeItem.onUpdate)
+                                {
+                                    invokeItem.onUpdate();
+                                }
+                            }
+                        }
+
+                        if(invokeItem.repeate == 0)
+                        {
+                            if(null != invokeItem.onEnd)
+                            {
+                                invokeItem.onEnd();
+                            }
+                            invokeItem.flag = 0;
+                        }
                     }
                 }
             }
