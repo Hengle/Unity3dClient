@@ -48,7 +48,7 @@ namespace SceneEditor
 			{
 				if (null != goEnvironment) 
 				{
-					var goCamera = GameClient.Utility.FindChild (goEnvironment, "FollowPlayer/Main Camera");
+					var goCamera = Utility.FindChild (goEnvironment, "FollowPlayer/Main Camera");
 					if (null != goCamera) {
 						camera3D = goCamera.GetComponent<Camera> ();
 					}

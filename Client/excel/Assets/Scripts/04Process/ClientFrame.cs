@@ -59,6 +59,12 @@ namespace GameClient
                 return;
             }
 
+            if (null == GlobalDataManager.Instance().uiConfig)
+            {
+                LogManager.Instance().LogProcessFormat(9000, "uiConfig is null , can not attach frame to parent ! typeid = {0}", type);
+                return;
+            }
+
             root = AssetManager.Instance().LoadResource<GameObject>(frameItem.Prefab);
             if(null == root)
             {
@@ -66,13 +72,9 @@ namespace GameClient
                 return;
             }
 
-            if(null == GlobalDataManager.Instance().uiConfig)
-            {
-                LogManager.Instance().LogProcessFormat(9000, "uiConfig is null , can not attach frame to parent ! typeid = {0}", type);
-                return;
-            }
-
             Utility.AttachTo(root, GlobalDataManager.Instance().uiConfig.goLayers[(int)getLayer()]);
+
+            scriptBinder = root.GetComponent<ComScriptBinder>();
 
             LogManager.Instance().LogProcessFormat(9000, "open {0} frame succeed !", frameItem.Desc);
 
@@ -86,7 +88,7 @@ namespace GameClient
             _OnCloseFrame();
             _AutoUnRegisterAllEvents();
             _CancelAllInvokes();
-
+            scriptBinder = null;
             if (null != root)
             {
                 GameObject.Destroy(root);
@@ -192,6 +194,7 @@ namespace GameClient
         protected object userData = null;
         protected GameObject root = null;
         protected ProtoTable.FrameTypeTable frameItem = null;
+        protected ComScriptBinder scriptBinder = null;
 
         public int FrameID
         {

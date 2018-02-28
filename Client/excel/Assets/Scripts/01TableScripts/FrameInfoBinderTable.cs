@@ -70,14 +70,17 @@ namespace ProtoTable
       [global::ProtoBuf.ProtoEnum(Name=@"LOGIN_LG_Status_Lose", Value=1002)]
       LOGIN_LG_Status_Lose = 1002,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"RESULT_Status_WinScore", Value=1003)]
-      RESULT_Status_WinScore = 1003,
+      [global::ProtoBuf.ProtoEnum(Name=@"LOGIN_LG_ItemListScript", Value=1003)]
+      LOGIN_LG_ItemListScript = 1003,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"RESULT_Status_Failed", Value=1004)]
-      RESULT_Status_Failed = 1004,
+      [global::ProtoBuf.ProtoEnum(Name=@"RESULT_Status_WinScore", Value=2001)]
+      RESULT_Status_WinScore = 2001,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"RESULT_Status_Succeed", Value=1005)]
-      RESULT_Status_Succeed = 1005
+      [global::ProtoBuf.ProtoEnum(Name=@"RESULT_Status_Failed", Value=2002)]
+      RESULT_Status_Failed = 2002,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"RESULT_Status_Succeed", Value=2003)]
+      RESULT_Status_Succeed = 2003
     }
   
     public void Parse(ProtoBuf.ProtoReader source){
