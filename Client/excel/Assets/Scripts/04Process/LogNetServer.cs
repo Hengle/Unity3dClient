@@ -34,21 +34,27 @@ namespace GameClient
 
         void Accept(System.IAsyncResult iar)
         {
-            //还原传入的原始套接字
-            Socket MyServer = (Socket)iar.AsyncState;
-            //在原始套接字上调用EndAccept方法，返回新的套接字
-            Socket service = MyServer.EndAccept(iar);
-            
-            int recv = service.Receive(mBuffer);
-            var content = System.Text.Encoding.ASCII.GetString(mBuffer, 0, recv);
-            UnityEngine.Debug.LogFormat("<color=#00ff00>{0}</color>",content);
+            try
+            {
+                //还原传入的原始套接字
+                Socket MyServer = (Socket)iar.AsyncState;
+                //在原始套接字上调用EndAccept方法，返回新的套接字
+                Socket service = MyServer.EndAccept(iar);
+
+                int recv = service.Receive(mBuffer);
+                var content = System.Text.Encoding.ASCII.GetString(mBuffer, 0, recv);
+                UnityEngine.Debug.LogFormat("<color=#00ff00>{0}</color>", content);
+            }
+            catch (System.Exception e)
+            {
+                UnityEngine.Debug.LogErrorFormat(e.ToString());
+            }
         }
 
         private void OnDestroy()
         {
             if(null != socket)
             {
-                socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
             }
         }

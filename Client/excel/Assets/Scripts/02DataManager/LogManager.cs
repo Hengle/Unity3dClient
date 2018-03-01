@@ -112,7 +112,7 @@ namespace GameClient
 #if UNITY_EDITOR
             UnityEngine.Debug.LogWarningFormat("<color=#00ff00>[PID={0}]</color>:{1}",Id,value);
 #else
-            PushLogToFile(LogType.LT_PROCESS, id, value);
+            PushLogToFile(LogType.LT_PROCESS, Id, value);
 #endif
         }
 
@@ -121,7 +121,7 @@ namespace GameClient
 #if UNITY_EDITOR
             UnityEngine.Debug.LogWarningFormat("<color=#00ff00>[PID={0}]</color>:{1}", Id, format);
 #else
-            PushLogToFile(LogType.LT_PROCESS, id, format);
+            PushLogToFile(LogType.LT_PROCESS, Id, format);
 #endif
         }
 
