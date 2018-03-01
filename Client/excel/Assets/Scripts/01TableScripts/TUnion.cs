@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 // Generated from: Union.proto
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 namespace ProtoTable
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"EveryValue")]
@@ -150,4 +150,4 @@ namespace ProtoTable
     }
   
 }
-#endif
+//#endif
