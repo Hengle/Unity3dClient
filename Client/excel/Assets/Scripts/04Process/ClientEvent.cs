@@ -9,6 +9,8 @@ namespace GameClient
     {
         CE_INVALID = -1,
         CE_LOGIN_TEST,
+        CE_LOG_TO_SCREEN,
+        CE_ON_LOGIN_FRAME_OPENED,
         CE_FIXED_END = 128,
         CE_COUNT = 256,
     }

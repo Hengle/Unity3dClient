@@ -28,7 +28,7 @@ namespace GameClient
 
             public string ToLogValue()
             {
-                return logValue;
+                return string.Format("{0}|{1}|{2}", eLogType, logId, logValue);
             }
         }
         const int LogLimit = 256;

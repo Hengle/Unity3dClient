@@ -121,18 +121,18 @@ namespace LoggerServer
     {
         static void Main(string[] args)
         {
-            string ip = "192.168.64.1";
+            string ip = "192.168.2.27";
             short port = 8864;
 
             LogNetServer mServer = new LogNetServer();
 
             var lines = System.IO.File.ReadAllLines("../../ipconfig.cfg");
-            if(lines.Length == 2)
+            if (lines.Length == 2)
             {
-                for(int i = 0; i < lines.Length; ++i)
+                for (int i = 0; i < lines.Length; ++i)
                 {
                     int iFindIndex = lines[i].IndexOf("=");
-                    if(iFindIndex >= 0 && iFindIndex < lines[i].Length)
+                    if (iFindIndex >= 0 && iFindIndex < lines[i].Length)
                     {
                         lines[i] = lines[i].Substring(iFindIndex + 1, lines[i].Length - (iFindIndex + 1));
                     }

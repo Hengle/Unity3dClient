@@ -10,24 +10,51 @@ namespace GameClient
     {
         const int Invoke_Fly = 1000;
         const int Invoke_Fly_Repeated = 1001;
-        List<string> mValue = new List<string>();
-
+        List<string> mValues = new List<string>(32);
         Scripts.UI.ComUIListScript mItemListScript;
+        UnityEngine.UI.Button mbtnClose;
+        UnityEngine.UI.Button mPlaySound;
+        UnityEngine.UI.Button mBtnConnectLog;
+        UnityEngine.UI.InputField mInputFiled;
 
         protected override void _InitScriptBinder()
         {
             mItemListScript = mScriptBinder.GetObject("ItemListScript") as Scripts.UI.ComUIListScript;
+            mbtnClose = mScriptBinder.GetObject("btnClose") as UnityEngine.UI.Button;
+            mPlaySound = mScriptBinder.GetObject("PlaySound") as UnityEngine.UI.Button;
+            mBtnConnectLog = mScriptBinder.GetObject("BtnConnectLog") as UnityEngine.UI.Button;
+            mInputFiled = mScriptBinder.GetObject("InputFiled") as UnityEngine.UI.InputField;
         }
+
+
 
         protected override void _OnOpenFrame()
         {
-            Button btnClose = Utility.FindComponent<Button>(root, "Close");
-            if(null != btnClose)
+            if(null != mPlaySound)
             {
-                btnClose.onClick.AddListener(_OnClickCloseFrame);
+                mPlaySound.onClick.AddListener(_OnClickPlaySound);
+            }
+
+            if(null != mbtnClose)
+            {
+                mbtnClose.onClick.AddListener(_OnClickCloseFrame);
+            }
+
+            if(null != mBtnConnectLog)
+            {
+                mBtnConnectLog.onClick.AddListener(() =>
+                {
+                    string value = string.Empty;
+                    if(null != mInputFiled)
+                    {
+                        value = mInputFiled.text;
+                    }
+                    EventManager.Instance().SendEvent(ClientEvent.CE_ON_LOGIN_FRAME_OPENED,value);
+                });
             }
 
             RegisterEvent(ClientEvent.CE_LOGIN_TEST, _OnLoginTest);
+            RegisterEvent(ClientEvent.CE_LOG_TO_SCREEN, _OnLogEvent);
 
             _InitItemListScript();
             _UpdateItems();
@@ -55,12 +82,12 @@ namespace GameClient
 
                     mItemListScript.onItemVisiable = (ComUIListElementScript element) =>
                     {
-                        if (null != element && element.m_index >= 0 && element.m_index <= mValue.Count)
+                        if (null != element && element.m_index >= 0 && element.m_index < mValues.Count)
                         {
                             var script = element.gameObjectBindScript as ComItem;
                             if (null != script)
                             {
-                                script.OnItemVisible(mValue[element.m_index]);
+                                script.OnItemVisible(mValues[element.m_index]);
                             }
                         }
                     };
@@ -70,17 +97,9 @@ namespace GameClient
 
         void _UpdateItems()
         {
-            mValue.Clear();
-            for(int i = 0; i < 15; ++i)
-            {
-                mValue.Add("Fuck" + i);
-                mValue.Add("Your" + i);
-                mValue.Add("Mother" + i);
-            }
-
             if(null != mItemListScript)
             {
-                mItemListScript.SetElementAmount(mValue.Count);
+                mItemListScript.SetElementAmount(mValues.Count);
             }
         }
 
@@ -89,7 +108,19 @@ namespace GameClient
             LogManager.Instance().LogFormat("on recv loginTest !!!");
         }
 
+        protected void _OnLogEvent(object param)
+        {
+            mValues.Add(param as string);
+            _UpdateItems();
+        }
+
         protected void _OnClickCloseFrame()
+        {
+            UIManager.Instance().CloseFrame(this);
+            Application.Quit();
+        }
+
+        protected void _OnClickPlaySound()
         {
             AudioManager.Instance().PlaySound(1001);
         }
