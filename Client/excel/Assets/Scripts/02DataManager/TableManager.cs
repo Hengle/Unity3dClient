@@ -18,9 +18,9 @@ namespace GameClient
                 return false;
 			}
 			var delta = System.DateTime.Now.Ticks - begin;
-            LogManager.Instance().LogErrorFormat("load table cost {0} ms", delta / 10000);
+            LogManager.Instance().LogFormat("<color=#00ff00>load table cost {0} ms</color>", delta / 10000);
 			return true;
-		}        
+		}
 
 		public T GetTableItem<T> (int id) where T : class,new()
 		{

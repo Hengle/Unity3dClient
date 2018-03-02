@@ -134,7 +134,7 @@ namespace GameClient
                     this.onConnectSucceed = null;
                     this.onConnectFailed = null;
 
-                    UnityEngine.Debug.LogErrorFormat("connect succeed !!");
+                    UnityEngine.Debug.LogFormat("<color=#00ff00>connect logserver succeed !!</color>");
                 }
                 catch (System.Exception e)
                 {

@@ -147,6 +147,10 @@ namespace GameClient
                 mLogItems.RemoveAt(0);
                 logItem.Reset();
             }
+
+            logItem.eLogType = eLogType;
+            logItem.logId = id;
+            logItem.logValue = value;
             mLogItems.Add(logItem);
         }
     }

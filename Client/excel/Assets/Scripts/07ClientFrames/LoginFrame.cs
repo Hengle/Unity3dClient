@@ -86,7 +86,7 @@ namespace GameClient
 
         protected void _OnLoginTest(object param)
         {
-            LogManager.Instance().LogErrorFormat("On Recv Login Test Event !!!");
+            LogManager.Instance().LogFormat("on recv loginTest !!!");
         }
 
         protected void _OnClickCloseFrame()

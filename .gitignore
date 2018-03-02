@@ -17,6 +17,8 @@
 
 /Client/excel/.vs/
 /Client/excel/Library/
+/Tools/LoggerServer/LoggerServer/bin/
+/Tools/LoggerServer/LoggerServer/obj/
 
 .DS_Store
 
