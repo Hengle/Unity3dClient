@@ -52,11 +52,6 @@ namespace GameClient
             }
             LogManager.Instance().LogProcessFormat(8003, "<color=#00ff00>InvokeManager  Initialize succeed !</color>");
 
-            InvokeManager.Instance().InvokeRepeate(this, 0.0f, 999, 1.0f, null, () =>
-            {
-                LogManager.Instance().LogFormat("LogSocket value !!!");
-            }, null);
-
             return true;
         }
 

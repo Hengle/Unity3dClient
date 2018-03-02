@@ -26,8 +26,6 @@ namespace GameClient
             mInputFiled = mScriptBinder.GetObject("InputFiled") as UnityEngine.UI.InputField;
         }
 
-
-
         protected override void _OnOpenFrame()
         {
             if(null != mPlaySound)

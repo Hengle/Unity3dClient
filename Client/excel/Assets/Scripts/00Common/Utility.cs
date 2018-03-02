@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameClient;
 
 public static class Utility
 {
@@ -92,6 +93,15 @@ public static class Utility
         if (gameObject.activeSelf != bActive)
         {
             gameObject.SetActive(bActive);
+        }
+    }
+
+    public static void LogToScreen(string fmt, params object[] argvs)
+    {
+        string value = string.Format(fmt, argvs);
+        if (!string.IsNullOrEmpty(value))
+        {
+            EventManager.Instance().SendEvent(ClientEvent.CE_LOG_TO_SCREEN, value);
         }
     }
 }
