@@ -121,17 +121,27 @@ namespace LoggerServer
     {
         static void Main(string[] args)
         {
-            string ip = "127.0.0.1";
+            string ip = "192.168.64.1";
             short port = 8864;
 
             LogNetServer mServer = new LogNetServer();
-            if (args.Length == 2)
+
+            var lines = System.IO.File.ReadAllLines("../../ipconfig.cfg");
+            if(lines.Length == 2)
             {
-                ip = args[0];
-                port = 0;
-                if(!short.TryParse(args[1],out port))
+                for(int i = 0; i < lines.Length; ++i)
                 {
-                    Console.WriteLine("format like : 127.0.0.1 8888 !");
+                    int iFindIndex = lines[i].IndexOf("=");
+                    if(iFindIndex >= 0 && iFindIndex < lines[i].Length)
+                    {
+                        lines[i] = lines[i].Substring(iFindIndex + 1, lines[i].Length - (iFindIndex + 1));
+                    }
+                }
+                ip = lines[0];
+                port = 0;
+                if (!short.TryParse(lines[1], out port))
+                {
+                    Console.WriteLine("port error!");
                     return;
                 }
             }
