@@ -69,6 +69,18 @@ namespace GameClient
         private void OnDestroy()
         {
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_SEND_MSG_TO_NORMAL_SOCKET, OnHandleNetEvent);
+            if(null != onConnectedSucceed)
+            {
+                onConnectedSucceed.RemoveAllListeners();
+            }
+            if(null != onConnectedFailed)
+            {
+                onConnectedFailed.RemoveAllListeners();
+            }
+            if(null != onReconnectedSucceed)
+            {
+                onReconnectedSucceed.RemoveAllListeners();
+            }
             if (null != mSocket)
             {
                 mSocket.Close();

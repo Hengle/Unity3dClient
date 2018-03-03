@@ -8,6 +8,7 @@ namespace GameClient
     {
         FTID_INVALID = -1,
         FTID_LOGIN = 1,
+        FTID_HOTFIX = 2,
     }
 
     class UIManager : Singleton<UIManager>

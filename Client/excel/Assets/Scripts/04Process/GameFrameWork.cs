@@ -15,9 +15,17 @@ namespace GameClient
                 return;
             }
 
-            UIManager.Instance().OpenFrame<LoginFrame>(FrameTypeID.FTID_LOGIN);
+            bool bNeedHotFix = true;
 
-            EventManager.Instance().SendEvent(ClientEvent.CE_LOGIN_TEST);
+            if(!bNeedHotFix)
+            {
+                UIManager.Instance().OpenFrame<LoginFrame>(FrameTypeID.FTID_LOGIN);
+                EventManager.Instance().SendEvent(ClientEvent.CE_LOGIN_TEST);
+            }
+            else
+            {
+                UIManager.Instance().OpenFrame<HotFixFrame>(FrameTypeID.FTID_HOTFIX);
+            }
         }
 
         private bool Initialize()

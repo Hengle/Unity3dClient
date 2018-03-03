@@ -89,6 +89,10 @@ namespace GameClient
             _OnCloseFrame();
             _AutoUnRegisterAllEvents();
             _CancelAllInvokes();
+            if(null != mScriptBinder)
+            {
+                mScriptBinder.StopAllCoroutines();
+            }
             mScriptBinder = null;
             if (null != root)
             {
@@ -192,6 +196,25 @@ namespace GameClient
             public int iFlag;
         }
         List<InvokeBody> mInvokeHandles = new List<InvokeBody>(8);
+        #endregion
+        #region coroutine_wrapp
+        protected Coroutine StartCoroutine(IEnumerator routine)
+        {
+            if(null != mScriptBinder)
+            {
+                return mScriptBinder.StartCoroutine(routine);
+            }
+
+            LogManager.Instance().LogErrorFormat("mScriptBinder is null !!!");
+            return null;
+        }
+        protected void StopCoroutine(IEnumerator routine)
+        {
+            if(null != mScriptBinder)
+            {
+                mScriptBinder.StartCoroutine(routine);
+            }
+        }
         #endregion
 
         int frameId = -1;
