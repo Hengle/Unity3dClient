@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace LoggerServer
 {
@@ -119,6 +120,60 @@ namespace LoggerServer
 
     class Program
     {
+        /// <summary>  
+        /// 获取客户端内网IPv4地址  
+        /// </summary>  
+        /// <returns>客户端内网IPv4地址</returns>  
+        public static string GetClientLocalIPv4Address()
+        {
+            string strLocalIP = string.Empty;
+            try
+            {
+                IPHostEntry ipHost = Dns.Resolve(Dns.GetHostName());
+                IPAddress ipAddress = ipHost.AddressList[0];
+                strLocalIP = ipAddress.ToString();
+                return strLocalIP;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        /// <summary>  
+        /// 获取客户端内网IPv6地址  
+        /// </summary>  
+        /// <returns>客户端内网IPv6地址</returns>  
+        public static string GetClientLocalIPv6Address()
+        {
+            string strLocalIP = string.Empty;
+            try
+            {
+                IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
+                IPAddress ipAddress = ipHost.AddressList[0];
+                strLocalIP = ipAddress.ToString();
+                return strLocalIP;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        static void HandleIPAuto(ref string ip)
+        {
+            string ipAddress = GetClientLocalIPv4Address();
+            if (!string.IsNullOrEmpty(ipAddress))
+            {
+                ip = ipAddress;
+                Console.WriteLine("get ip by GetClientLocalIPv4Address :" + ip);
+            }
+            else
+            {
+                Console.WriteLine("get ip by default :" + ip);
+            }
+        }
+
         static void Main(string[] args)
         {
             string ip = "192.168.2.27";
@@ -126,24 +181,37 @@ namespace LoggerServer
 
             LogNetServer mServer = new LogNetServer();
 
-            var lines = System.IO.File.ReadAllLines("../../ipconfig.cfg");
-            if (lines.Length == 2)
+            try
             {
-                for (int i = 0; i < lines.Length; ++i)
+                var lines = System.IO.File.ReadAllLines("../../ipconfig.cfg");
+                if (lines.Length == 2)
                 {
-                    int iFindIndex = lines[i].IndexOf("=");
-                    if (iFindIndex >= 0 && iFindIndex < lines[i].Length)
+                    for (int i = 0; i < lines.Length; ++i)
                     {
-                        lines[i] = lines[i].Substring(iFindIndex + 1, lines[i].Length - (iFindIndex + 1));
+                        int iFindIndex = lines[i].IndexOf("=");
+                        if (iFindIndex >= 0 && iFindIndex < lines[i].Length)
+                        {
+                            lines[i] = lines[i].Substring(iFindIndex + 1, lines[i].Length - (iFindIndex + 1));
+                        }
                     }
+                    ip = lines[0];
+                    port = 0;
+                    if (!short.TryParse(lines[1], out port))
+                    {
+                        Console.WriteLine("port error!");
+                        return;
+                    }
+
+                    Console.WriteLine("get ip from ipconfig.cfg:" + ip);
                 }
-                ip = lines[0];
-                port = 0;
-                if (!short.TryParse(lines[1], out port))
+                else
                 {
-                    Console.WriteLine("port error!");
-                    return;
+                    HandleIPAuto(ref ip);
                 }
+            }
+            catch
+            {
+                HandleIPAuto(ref ip);
             }
 
             Console.BackgroundColor = ConsoleColor.DarkCyan;
