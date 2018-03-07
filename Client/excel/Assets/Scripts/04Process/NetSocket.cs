@@ -7,6 +7,7 @@ namespace NetWork
     delegate void OnConnectedSucceed(object param);
     delegate void OnConnectedFailed(object param);
     delegate void OnReconnectedSucceed(object param);
+    delegate void OnSocketLogOut(string log);
     delegate void ThreadCallback();
 
     class NetSocket
@@ -18,13 +19,15 @@ namespace NetWork
         public OnConnectedSucceed onConnecteSucceed;
         public OnConnectedFailed onConnecteFailed;
         public OnReconnectedSucceed onReconnectedSucceed;
+        public OnSocketLogOut onSocketLogOut;
         public object param = null;
 
         public NetSocket(string targetName, string ip, short port,
             int maxReconnectTimes = 5,
             OnConnectedSucceed onConnecteSucceed = null,
             OnConnectedFailed onConnecteFailed = null,
-            OnReconnectedSucceed onReconnectedSucceed = null)
+            OnReconnectedSucceed onReconnectedSucceed = null,
+            OnSocketLogOut onSocketLogOut = null)
         {
             this.targetName = targetName;
             this.ip = ip;
@@ -32,6 +35,7 @@ namespace NetWork
             this.onConnecteSucceed = onConnecteSucceed;
             this.onConnecteFailed = onConnecteFailed;
             this.onReconnectedSucceed = onReconnectedSucceed;
+            this.onSocketLogOut = onSocketLogOut;
         }
 
         const float delay = 5.0f;
@@ -100,13 +104,14 @@ namespace NetWork
                     socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 }
                 EStatus = SocketStatus.SS_CONNECTING;
-
-                Utility.LogToScreen("{0} BeginConnect {1} {2}", targetName, ip, port);
                 socket.BeginConnect(ip_end_point, new System.AsyncCallback(OnThreadConnected), socket);
+
+                LogPrint("{0} BeginConnect {1} {2}", targetName, ip, port);
             }
             catch (System.Exception e)
             {
-                Utility.LogToScreen(targetName + e.ToString());
+                LogPrint(targetName + e.ToString());
+
                 EStatus = SocketStatus.SS_TRYCONNECT;
             }
             return true;
@@ -120,7 +125,7 @@ namespace NetWork
                 EStatus = SocketStatus.SS_RECONNECT;
                 time = Time.time + delay;
 
-                Utility.LogToScreen("{0} TryReconnect reconnectTimes = {1}", targetName, reconnectTimes);
+                LogPrint("{0} TryReconnect reconnectTimes = {1}", targetName, reconnectTimes);
             }
             else
             {
@@ -135,7 +140,7 @@ namespace NetWork
                 time = -1.0f;
                 socket.Close();
 
-                Utility.LogToScreen("{0} socket closed!!!", targetName,reconnectTimes);
+                LogPrint("{0} socket closed!!!", targetName, reconnectTimes);
             }
         }
 
@@ -157,9 +162,18 @@ namespace NetWork
             }
         }
 
+        void LogPrint(string format,params object[] argv)
+        {
+            if (null != onSocketLogOut)
+            {
+                string log = string.Format(format, argv);
+                onSocketLogOut.Invoke(log);
+            }
+        }
+
         public void OnConnected()
         {
-            Utility.LogToScreen("{0} socket connect server succeed !!", targetName);
+            LogPrint("{0} socket connect server succeed !!", targetName);
             EStatus = SocketStatus.SS_CONNECTED;
             reconnectTimes = 0;
             if(reconnectTimes == maxReconnectTimes)
@@ -204,7 +218,7 @@ namespace NetWork
                 byte[] byteData = System.Text.Encoding.ASCII.GetBytes(data);
                 // ansy send data to server
                 socket.BeginSend(byteData, 0, byteData.Length, 0, new System.AsyncCallback(OnThreadSendSucceed), new object[] { ok, failed });
-                Utility.LogToScreen("{0} socket BeginSend data !!", targetName);
+                LogPrint("{0} socket BeginSend data !!", targetName);
             }
             else
             {

@@ -3,5 +3,5 @@ message HotFixTable
 {
 required sint32 ID = 1;
 required string Descrip = 2;
-repeated string ResourceName = 3;
+required string ResourceName = 3;
 };

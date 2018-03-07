@@ -6,11 +6,17 @@ using NetWork;
 
 namespace GameClient
 {
+    class StringUnityEvent : UnityEvent<string>
+    {
+
+    }
+
     class ComClientSocket : MonoBehaviour
     {
         public UnityEvent onConnectedSucceed;
         public UnityEvent onConnectedFailed;
         public UnityEvent onReconnectedSucceed;
+        public StringUnityEvent onSocketLogOut;
         public string SocketName = string.Empty;
         public string ServerIp = string.Empty;
         public short ServerPort = 8864;
@@ -30,7 +36,7 @@ namespace GameClient
         // Use this for initialization
         void Start()
         {
-            mSocket = new NetSocket(SocketName, ServerIp, ServerPort, maxReconnectTimes, _OnConnectedSucceed, _OnConnectedFailed, _OnReConnectedSucceed);
+            mSocket = new NetSocket(SocketName, ServerIp, ServerPort, maxReconnectTimes, _OnConnectedSucceed, _OnConnectedFailed, _OnReConnectedSucceed, _OnSocketLogOut);
         }
 
         void _OnConnectedSucceed(object argv)
@@ -57,6 +63,14 @@ namespace GameClient
             }
         }
 
+        public void _OnSocketLogOut(string log)
+        {
+            if(null != onSocketLogOut)
+            {
+                onSocketLogOut.Invoke(log);
+            }
+        }
+
         // Update is called once per frame
         void Update()
         {
@@ -80,6 +94,10 @@ namespace GameClient
             if(null != onReconnectedSucceed)
             {
                 onReconnectedSucceed.RemoveAllListeners();
+            }
+            if(null != onSocketLogOut)
+            {
+                onSocketLogOut.RemoveAllListeners();
             }
             if (null != mSocket)
             {

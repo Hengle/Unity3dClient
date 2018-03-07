@@ -29,13 +29,13 @@ namespace ProtoTable
       get { return _Descrip; }
       set { _Descrip = value; }
     }
-    private readonly global::System.Collections.Generic.List<string> _ResourceName = new global::System.Collections.Generic.List<string>();
-    [global::ProtoBuf.ProtoMember(3, Name=@"ResourceName", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<string> ResourceName
+    private string _ResourceName;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"ResourceName", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string ResourceName
     {
       get { return _ResourceName; }
+      set { _ResourceName = value; }
     }
-  
     public void Parse(ProtoBuf.ProtoReader source){
         int fieldNumber = 0;
         while ((fieldNumber = source.ReadFieldHeader()) > 0)
@@ -56,11 +56,8 @@ namespace ProtoTable
                     Descrip = source.ReadString();
                     break;
                     
-            case 3:   //ResourceName LABEL_REPEATED TYPE_STRING  TwosComplement
-                    int ResourceNamefield = source.FieldNumber;
-                    do{
-                        ResourceName.Add(source.ReadString());
-                    } while(source.TryReadFieldHeader(ResourceNamefield));
+            case 3:   //ResourceName LABEL_REQUIRED TYPE_STRING  TwosComplement
+                    ResourceName = source.ReadString();
                     break;
                     
             }

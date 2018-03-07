@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Scripts.UI;
+using UnityEngine.Networking;
+using ProtoBuf;
+using ProtoBuf.Meta;
+using System.IO;
+using System.Collections.Generic;
 
 namespace GameClient
 {
@@ -16,78 +21,84 @@ namespace GameClient
 
         protected override void _OnOpenFrame()
         {
+            LogManager.Instance().LogErrorFormat("pd = {0}", Application.persistentDataPath);
             StartCoroutine(HotFixProcess());
         }
 
         enum HotFixStatus
         {
             HFS_INVALID = -1,
-            HFS_CONNTING_SERVER,
-            HFS_CONNECTED_SERVER_SUCCEED,
-            HFS_DOLOAD_RESOURCES_FILE,
-            HFS_FAILED,
+
+            HFS_DOWNLOAD_RESOURCES_FILE,
+            HFS_DOWNLOAD_SUCCEED,
+            HFS_DOWNLOAD_FAILED,
         }
+
         HotFixStatus mHotFixStatus = HotFixStatus.HFS_INVALID;
 
         IEnumerator HotFixProcess()
         {
-            mHotFixStatus = HotFixStatus.HFS_INVALID;
+            mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_RESOURCES_FILE;
 
-            _LogProcessFormat(6000,"start hot fix !!");
-            yield return new WaitForSecondsRealtime(1.0f);
+            yield return GetAssetBundle();
 
-            _LogProcessFormat(6000, "ready fetch resourceinfo.txt!!");
-            yield return new WaitForSecondsRealtime(1.0f);
-
-            GameObject hotFixObject = new GameObject("hotfix");
-            Utility.AttachTo(hotFixObject, root);
-            ComClientSocket hotFixSocket = hotFixObject.AddComponent<ComClientSocket>();
-            hotFixSocket.SocketName = "HotFix Server";
-            hotFixSocket.ServerIp = "192.168.2.27";
-            hotFixSocket.ServerPort = 8864;
-            hotFixSocket.onConnectedSucceed = new UnityEngine.Events.UnityEvent();
-            hotFixSocket.onConnectedSucceed.AddListener(_OnConnectedSucceed);
-            hotFixSocket.onConnectedFailed = new UnityEngine.Events.UnityEvent();
-            hotFixSocket.onConnectedFailed.AddListener(_OnConnectedFailed);
-            hotFixSocket.onReconnectedSucceed = new UnityEngine.Events.UnityEvent();
-            hotFixSocket.onReconnectedSucceed.AddListener(_OnReconnectedSucceed);
-
-            _LogProcessFormat(6000, "正在连接热更新服务器 ... !!");
-            mHotFixStatus = HotFixStatus.HFS_CONNTING_SERVER;
-
-            if(mHotFixStatus == HotFixStatus.HFS_FAILED)
+            if(mHotFixStatus != HotFixStatus.HFS_DOWNLOAD_SUCCEED)
             {
-                _LogProcessFormat(6000, "hot fix Coroutine failed !!!");
                 yield break;
             }
 
-            while(mHotFixStatus != HotFixStatus.HFS_CONNECTED_SERVER_SUCCEED)
+            yield return new WaitForSeconds(1.0f);
+        }
+
+        IEnumerator GetAssetBundle()
+        {
+            _LogProcessFormat(8500, "HotFix Start DownLoad hotfixdata ...");
+
+            UnityWebRequest www = new UnityWebRequest("C:/AssetBundles/hotfixdata");
+            DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(www.url, 4215391504);
+            www.downloadHandler = handler;
+            yield return www.Send();
+
+            if (www.isError)
             {
-                yield return new WaitForSecondsRealtime(0.20f);
+                LogManager.Instance().LogErrorFormat(www.error);
+                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_FAILED;
+                _LogProcessFormat(8500, "HotFix DownLoad hotfixdata File Failed !!!");
             }
+            else
+            {
+                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_SUCCEED;
+                _LogProcessFormat(8500, "HotFix DownLoad hotfixdata File Succeed !!!");
+                LogManager.Instance().LogErrorFormat("GetAssetBundle SUCCEED !!");
+                // Extracts AssetBundle
+                if(null != handler)
+                {
+                    LogManager.Instance().LogErrorFormat("GetAssetBundle handler SUCCEED !!");
+                    AssetBundle bundle = handler.assetBundle;
+                    //Object obj0 = bundle.LoadAsset("hotfixdata");
+                    AssetBinary hotFixData = bundle.LoadAsset("HotFixTable") as AssetBinary;
+                    if (null != hotFixData)
+                    {
+                        LogManager.Instance().LogErrorFormat("Load HotFixTable AssetBinary SUCCEED !!");
 
-            mHotFixStatus = HotFixStatus.HFS_DOLOAD_RESOURCES_FILE;
-            _LogProcessFormat(6000, "start down load resourceinfo.txt!!!");
+                        var table = AssetManager.Instance()._ConvertTableObject(hotFixData, typeof(ProtoTable.HotFixTable)) as Dictionary<int, object>;
+                        if (null != table)
+                        {
+                            _LogProcessFormat(8500,"Load HotFixTable TableData SUCCEED !!");
 
-            _LogProcessFormat(6000, "hot fix Coroutine finished !!!");
-        }
-
-        void _OnConnectedSucceed()
-        {
-            _LogProcessFormat(6000, "热更新服务器连接成功!!");
-            mHotFixStatus = HotFixStatus.HFS_CONNECTED_SERVER_SUCCEED;
-        }
-
-        void _OnConnectedFailed()
-        {
-            _LogProcessFormat(6000, "热更新服务器连接失败!!");
-            mHotFixStatus = HotFixStatus.HFS_FAILED;
-        }
-
-        void _OnReconnectedSucceed()
-        {
-            _LogProcessFormat(6000, "重连热更新服务器成功!!");
-            mHotFixStatus = HotFixStatus.HFS_CONNECTED_SERVER_SUCCEED;
+                            var enumerator = table.GetEnumerator();
+                            while(enumerator.MoveNext())
+                            {
+                                ProtoTable.HotFixTable hotFixItem = enumerator.Current.Value as ProtoTable.HotFixTable;
+                                if(null != hotFixItem)
+                                {
+                                    LogManager.Instance().LogErrorFormat("[ITEM] ID = [{0}] Desc = {1} ResName = {2}", hotFixItem.ID,hotFixItem.Descrip,hotFixItem.ResourceName);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         void _LogProcessFormat(int Id, string format, params object[] argvs)
