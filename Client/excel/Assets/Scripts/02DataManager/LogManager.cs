@@ -109,7 +109,7 @@ namespace GameClient
         public void LogProcessFormat(int Id, string format, params object[] argvs)
         {
             var value = string.Format(format, argvs);
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
             UnityEngine.Debug.LogWarningFormat("<color=#00ff00>[PID={0}]</color>:{1}",Id,value);
 #else
             PushLogToFile(LogType.LT_PROCESS, Id, value);

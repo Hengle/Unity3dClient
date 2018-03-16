@@ -7,7 +7,6 @@ using UnityEngine.Networking;
 using ProtoBuf;
 using ProtoBuf.Meta;
 using System.IO;
-using System.Collections.Generic;
 
 namespace GameClient
 {

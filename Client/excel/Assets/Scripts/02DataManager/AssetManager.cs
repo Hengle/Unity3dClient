@@ -54,7 +54,7 @@ namespace GameClient
 		public bool LoadAllTables(ref Dictionary<Type,Dictionary<int,object>> tableDic)
 		{
 			tableDic.Clear ();
-			for (int i = 0; i < TableList.Values.Length; ++i) 
+            for (int i = 0; i < TableList.Values.Length; ++i) 
 			{
 				var type = TableList.Values[i];
                 Dictionary<int, object> table = null;
@@ -101,7 +101,6 @@ namespace GameClient
             return true;
         }
 
-
         public object _ConvertTableObject(AssetBinary asset,Type type)
 		{
 			if (asset == null || null == type)
@@ -116,10 +115,10 @@ namespace GameClient
 			}
 
 			Dictionary<int,object> table = new Dictionary<int, object> ();
-
-			bool bCanParse = Serializer.CanParse(type);
+            bool bCanParse = Serializer.CanParse(type);
 			byte[] data = asset.bytes;
-			for (int i = 0; i < data.Length;)
+            
+            for (int i = 0; i < data.Length;)
 			{
 				int len = 0;
 				for (int j = i; j < i + 8; ++j)
@@ -129,18 +128,20 @@ namespace GameClient
 				}
 
 				i += 8;
-				MemoryStream stream = new MemoryStream(data, i, len);
-				try
+
+                MemoryStream mDataStream = new MemoryStream(data, i, len);
+
+                try
 				{
 					object tableData = null;
 
 					if(bCanParse) 
 					{
-						tableData = Serializer.ParseEx(type,stream);
+						tableData = Serializer.ParseEx(type, mDataStream);
 					}
 					else
 					{
-						tableData = Serializer.DeserializeEx(type, stream);
+						tableData = Serializer.DeserializeEx(type, mDataStream);
 					}
 
 					if (tableData == null)

@@ -4,6 +4,8 @@ using UnityEngine;
 using System.IO;
 using Protocol;
 using System;
+using System.Net;
+using System.Net.Sockets;
 
 namespace NetWork
 {
@@ -45,6 +47,15 @@ namespace NetWork
             {
                 Debug.LogErrorFormat("DeSerialize {0} Failed: {1}", typeof(T), ex.ToString());
                 return default(T);
+            }
+        }
+
+        public void Send<T>(T msg,NetSocket socket) where T : global::ProtoBuf.IExtensible
+        {
+            byte[] bytes = Serialize(msg);
+            if(null != socket && bytes.Length > 0)
+            {
+                socket.Send(bytes);
             }
         }
     }

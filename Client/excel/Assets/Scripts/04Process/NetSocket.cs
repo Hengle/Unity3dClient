@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
+using System.Collections.Generic;
 
 namespace NetWork
 {
@@ -8,7 +9,7 @@ namespace NetWork
     delegate void OnConnectedFailed(object param);
     delegate void OnReconnectedSucceed(object param);
     delegate void OnSocketLogOut(string log);
-    delegate void ThreadCallback();
+    delegate void SendCallBack();
 
     class NetSocket
     {
@@ -55,6 +56,7 @@ namespace NetWork
             }
         }
         Socket socket;
+        List<SendCallBack> mSendCB = new List<SendCallBack>(16);
         
         int reconnectTimes = -1;
         float time = -1.0f;
@@ -99,10 +101,12 @@ namespace NetWork
                 }
                 IPAddress ipAddr = IPAddress.Parse(ip);
                 IPEndPoint ip_end_point = new IPEndPoint(ipAddr, port);
-                if (null == socket)
+                if (null != socket)
                 {
-                    socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    socket.Close();
                 }
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
                 EStatus = SocketStatus.SS_CONNECTING;
                 socket.BeginConnect(ip_end_point, new System.AsyncCallback(OnThreadConnected), socket);
 
@@ -117,6 +121,7 @@ namespace NetWork
             return true;
         }
 
+        int mInvokeHandle = -1;
         public void TryReconnect()
         {
             if (reconnectTimes > 0)
@@ -126,6 +131,19 @@ namespace NetWork
                 time = Time.time + delay;
 
                 LogPrint("{0} TryReconnect reconnectTimes = {1}", targetName, reconnectTimes);
+                if(-1 != mInvokeHandle)
+                {
+                    GameClient.InvokeManager.Instance().RemoveInvoke(mInvokeHandle);
+                    mInvokeHandle = -1;
+                }
+                mInvokeHandle = GameClient.InvokeManager.Instance().InvokeRepeate(this, 0.0f, (int)((0.50f + delay) / 0.950f), 0.950f,
+                    null,
+                    () =>
+                    {
+                        float delta = Mathf.Clamp(time - Time.time, 0, delay);
+                        LogPrint("{0} TryReconnect will start after {1} seconds !!!", targetName, (int)(0.50f + delta));
+                    },
+                    null);
             }
             else
             {
@@ -175,7 +193,6 @@ namespace NetWork
         {
             LogPrint("{0} socket connect server succeed !!", targetName);
             EStatus = SocketStatus.SS_CONNECTED;
-            reconnectTimes = 0;
             if(reconnectTimes == maxReconnectTimes)
             {
                 if (null != this.onConnecteSucceed)
@@ -190,6 +207,7 @@ namespace NetWork
                     this.onReconnectedSucceed(this.param);
                 }
             }
+            reconnectTimes = maxReconnectTimes;
         }
 
         public void Close()
@@ -208,17 +226,18 @@ namespace NetWork
             {
                 socket.Close();
             }
+            if (-1 != mInvokeHandle)
+            {
+                GameClient.InvokeManager.Instance().RemoveInvoke(mInvokeHandle);
+                mInvokeHandle = -1;
+            }
         }
 
-        public void Send(string data, ThreadCallback ok, ThreadCallback failed)
+        public void Send(byte[] bytes, SendCallBack ok = null, SendCallBack failed = null)
         {
             if (null != socket && socket.Connected)
             {
-                // Convert the string data to byte data using ASCII encoding.     
-                byte[] byteData = System.Text.Encoding.ASCII.GetBytes(data);
-                // ansy send data to server
-                socket.BeginSend(byteData, 0, byteData.Length, 0, new System.AsyncCallback(OnThreadSendSucceed), new object[] { ok, failed });
-                LogPrint("{0} socket BeginSend data !!", targetName);
+                socket.BeginSend(bytes, 0, bytes.Length, 0, new System.AsyncCallback(OnThreadSendSucceed), new object[] { ok, failed });
             }
             else
             {
@@ -232,8 +251,8 @@ namespace NetWork
         void OnThreadSendSucceed(System.IAsyncResult ar)
         {
             object[] callbacks = (object[])ar.AsyncState;
-            var ok = callbacks[0] as ThreadCallback;
-            var failed = callbacks[1] as ThreadCallback;
+            var ok = callbacks[0] as SendCallBack;
+            var failed = callbacks[1] as SendCallBack;
 
             try
             {
@@ -241,7 +260,10 @@ namespace NetWork
                 int bytesSent = socket.EndSend(ar);
                 if (null != ok)
                 {
-                    ok.Invoke();
+                    lock(mSendCB)
+                    {
+                        mSendCB.Add(ok);
+                    }
                 }
             }
             catch (System.Exception e)
@@ -257,13 +279,28 @@ namespace NetWork
 
                 if (null != failed)
                 {
-                    failed.Invoke();
+                    lock (mSendCB)
+                    {
+                        mSendCB.Add(failed);
+                    }
                 }
             }
         }
 
         public void Update()
         {
+            lock (mSendCB)
+            {
+                for(int i = 0; i < mSendCB.Count; ++i)
+                {
+                    if(null != mSendCB[i])
+                    {
+                        mSendCB[i].Invoke();
+                    }
+                }
+                mSendCB.Clear();
+            }
+
             if (EStatus == SocketStatus.SS_DISCONNECTED)
             {
                 return;
@@ -281,6 +318,11 @@ namespace NetWork
             {
                 if (Time.time > nextReconnectTime)
                 {
+                    if (-1 != mInvokeHandle)
+                    {
+                        GameClient.InvokeManager.Instance().RemoveInvoke(mInvokeHandle);
+                        mInvokeHandle = -1;
+                    }
                     Connect(ip, port);
                 }
             }

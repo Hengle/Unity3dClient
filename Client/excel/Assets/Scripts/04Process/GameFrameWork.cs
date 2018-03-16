@@ -15,7 +15,7 @@ namespace GameClient
                 return;
             }
 
-            bool bNeedHotFix = true;
+            bool bNeedHotFix = false;
 
             if(!bNeedHotFix)
             {

@@ -11,12 +11,17 @@ namespace GameClient
         public short port;
         public bool bStart = false;
 
-        NetSocket socket = new NetSocket("LogSocket", "127.0.0.1",8864);
+        NetSocket socket = new NetSocket("LogSocket", "127.0.0.1",8864,5,null,null,null,null);
 
         bool locked = false;
-        Object printLogLock = new Object();
         int recycleCount = 0;
         Object ansyRecycleLogItemLock = new Object();
+
+        void _OnSocketLogOut(string log)
+        {
+            LogManager.Instance().LogProcessFormat(9850, log);
+            UnityEngine.Debug.LogErrorFormat("<color=#00ff00>{0}:{1}</color>", 9850, log);
+        }
 
         void _PrintLogItems()
         {
@@ -26,35 +31,13 @@ namespace GameClient
                 return;
             }
 
-            lock (printLogLock)
-            {
-                locked = true;
-            }
+            locked = true;
             var content = logItems[0].ToLogValue();
-            socket.Send(content, _OnPrintOK, _OnPrintFailed);
+            var bytes = System.Text.Encoding.ASCII.GetBytes(content);
+
+            socket.Send(bytes, () => { ++recycleCount; locked = false; }, ()=> { locked = false; });
 
             Utility.LogToScreen("_PrintLogItems send {0}", content);
-        }
-
-        void _OnPrintOK()
-        {
-            lock (printLogLock)
-            {
-                locked = false;
-            }
-
-            lock(ansyRecycleLogItemLock)
-            {
-                ++recycleCount;
-            }
-        }
-
-        void _OnPrintFailed()
-        {
-            lock (printLogLock)
-            {
-                locked = false;
-            }
         }
 
         void Awake()
@@ -69,6 +52,7 @@ namespace GameClient
             {
                 socket.ip = this.ip;
                 socket.port = this.port;
+                socket.onSocketLogOut = _OnSocketLogOut;
 
                 socket.Update();
 
@@ -78,16 +62,10 @@ namespace GameClient
                 }
             }
 
-            if(recycleCount > 0)
+            while (recycleCount > 0)
             {
-                lock(ansyRecycleLogItemLock)
-                {
-                    while(recycleCount > 0)
-                    {
-                        LogManager.Instance().RecycleFirstLogItem();
-                        --recycleCount;
-                    }
-                }
+                LogManager.Instance().RecycleFirstLogItem();
+                --recycleCount;
             }
         }
 
@@ -104,6 +82,7 @@ namespace GameClient
         {
             this.ip = argv as string;
             UnityEngine.Debug.LogFormat("<color=#00ff00>_OnLoginFrameOpened !!</color>");
+            socket.Send(System.Text.Encoding.ASCII.GetBytes("Fuck your mother"), null,null);
             bStart = true;
         }
     }
