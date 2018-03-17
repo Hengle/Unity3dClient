@@ -22,6 +22,13 @@ namespace GameClient
         public short ServerPort = 8864;
         public int maxReconnectTimes = 5;
         NetSocket mSocket = null;
+        public NetSocket Handle
+        {
+            get
+            {
+                return mSocket;
+            }
+        }
 
         void Awake()
         {
