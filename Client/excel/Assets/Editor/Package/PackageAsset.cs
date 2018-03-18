@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
+using System.Reflection;
 
 public class PackageAsset{
 
@@ -13,5 +15,19 @@ public class PackageAsset{
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
         Debug.LogErrorFormat(string.Format("<color>{0}</color>","打包成功"));
+    }
+
+    [MenuItem("Tools/MonoVersion")]
+    static void DispalyMonoVersion()
+    {
+        Type type = Type.GetType("Mono.Runtime");
+        if (type != null)
+        {
+            MethodInfo displayName = type.GetMethod("GetDisplayName", BindingFlags.NonPublic | BindingFlags.Static);
+            if (displayName != null)
+            {
+                UnityEngine.Debug.LogFormat("<color=#00ff00>{0}</color>",displayName.Invoke(null, null));
+            }
+        }
     }
 }
