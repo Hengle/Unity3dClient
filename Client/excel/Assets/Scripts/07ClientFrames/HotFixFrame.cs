@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using ProtoBuf;
 using ProtoBuf.Meta;
 using System.IO;
+using System;
 
 namespace GameClient
 {
@@ -34,30 +35,206 @@ namespace GameClient
         }
 
         HotFixStatus mHotFixStatus = HotFixStatus.HFS_INVALID;
+        string _LocalVersion = @"1.0.0.0";
+        string _RemoteVersion = string.Empty;
 
         IEnumerator HotFixProcess()
         {
-            //mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_RESOURCES_FILE;
-
-            //yield return GetAssetBundle();
-
-            //if (mHotFixStatus != HotFixStatus.HFS_DOWNLOAD_SUCCEED)
-            //{
-            //    yield break;
-            //}
-
             mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_RESOURCES_FILE;
-            yield return GetAssemblyDllAssetBundle();
+            yield return DownLoadRemoteVersion();
             if (mHotFixStatus != HotFixStatus.HFS_DOWNLOAD_SUCCEED)
             {
                 yield break;
+            }
+
+            if (_LocalVersion != _RemoteVersion)
+            {
+                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_RESOURCES_FILE;
+                yield return GetAssemblyDll();
+                if (mHotFixStatus != HotFixStatus.HFS_DOWNLOAD_SUCCEED)
+                {
+                    yield break;
+                }
+            }
+        }
+
+        void SaveBytes(string path, string filename, byte[] bytes)
+        {
+            _LogProcessFormat(8500, "HotFix SaveBytes path = {0}", path);
+            _LogProcessFormat(8500, "HotFix SaveBytes name = {0}", path);
+            try
+            {
+                Directory.CreateDirectory(path);
+                FileInfo file = new FileInfo(path + filename);
+                if (file.Exists)
+                {
+                    file.Delete();
+                }
+                var sw = file.Create();
+                sw.Write(bytes, 0, bytes.Length);
+                sw.Close();
+                sw.Dispose();
+            }
+            catch(Exception e)
+            {
+                _LogProcessFormat(8500, "HotFix SaveBytes {0} failed", path + filename);
+                _LogProcessFormat(8500, "HotFix SaveBytes Error {0}",e.ToString());
+            }
+        }
+
+        void RestartApplication()
+        {
+            Debug.Log("restartApplication0");
+            AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject jo = jc.GetStatic <AndroidJavaObject> ("currentActivity");
+            _LogProcessFormat(8500,"restartApplication1");
+            jo.Call("restartApplication");
+            _LogProcessFormat(8500,"restartApplication2");
+        }
+
+        IEnumerator DownLoadRemoteVersion()
+        {
+            _RemoteVersion = string.Empty;
+            _LogProcessFormat(8500, "HotFix Start DownLoad RemoteVersion ... LocalVersion = {0}",_LocalVersion);
+            string _url = @"http://192.168.3.102:8080/AssetBundles/version.txt";
+            UnityWebRequest www = new UnityWebRequest(_url);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            yield return www.Send();
+
+            if (www.isError)
+            {
+                LogManager.Instance().LogErrorFormat(www.error);
+                _LogProcessFormat(8500, "HotFix DownLoad RemoteVersion File Failed !!!");
+            }
+            else
+            {
+                // Or retrieve results as binary data
+                _RemoteVersion = www.downloadHandler.text;
+                _LogProcessFormat(8500, "HotFix DownLoad RemoteVersion File Succeed !!! version = {0} !", _RemoteVersion);
+                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_SUCCEED;
+            }
+        }
+
+        IEnumerator GetAssemblyDll()
+        {
+            _LogProcessFormat(8500, "HotFix Start DownLoad Assembly-DLL ...");
+            string _url = @"http://192.168.3.102:8080/AssetBundles/Assembly-CSharp.bytes";
+            UnityWebRequest www = new UnityWebRequest(_url);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            yield return www.Send();
+
+            if (www.isError)
+            {
+                LogManager.Instance().LogErrorFormat(www.error);
+                _LogProcessFormat(8500, "HotFix DownLoad Assembly-DLL File Failed !!!");
+            }
+            else
+            {
+                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_SUCCEED;
+                // Or retrieve results as binary data
+                byte[] results = www.downloadHandler.data;
+                _LogProcessFormat(8500, "HotFix DownLoad Assembly-DLL File Succeed !!! length = {0} bytes !",results.Length);
+                LogManager.Instance().LogErrorFormat("GetAssetBundle SUCCEED !! length = {0} bytes !", results.Length);
+
+                string path = string.Empty;
+
+                if(Application.platform == RuntimePlatform.Android)
+                {
+                    string datapath = Application.dataPath;
+                    int start = datapath.IndexOf("com.");
+                    int end = datapath.IndexOf("-");
+                    string packagename = datapath.Substring(start, end - start);
+                    path = "/data/data/" + packagename + "/files/";
+                }
+                else if(Application.platform == RuntimePlatform.WindowsEditor)
+                {
+                    path = Application.persistentDataPath + "/" + "Assembly-CSharp.dll";
+                }
+
+                if(!string.IsNullOrEmpty(path))
+                {
+                    _LogProcessFormat(8500, "ready save dll to {0}{1} !", path, "Assembly-CSharp.dll");
+                    SaveBytes(path, "Assembly-CSharp.dll", results);
+                }
+
+                if (Application.platform == RuntimePlatform.Android)
+                {
+                    yield return new WaitForEndOfFrame();
+                    RestartApplication();
+                }
+            }
+        }
+
+        void _LogProcessFormat(int Id, string format, params object[] argvs)
+        {
+            LogManager.Instance().LogProcessFormat(Id, format, argvs);
+            if(null != mHotFixStepInfo)
+            {
+                mHotFixStepInfo.text = string.Format(format, argvs);
+            }
+        }
+
+        protected override void _OnCloseFrame()
+        {
+
+        }
+
+        IEnumerator GetAssetBundle()
+        {
+            _LogProcessFormat(8500, "HotFix Start DownLoad hotfixdata ...");
+            string _url = @"C:\AssetBundles\hotfixdata";
+
+            UnityWebRequest www = new UnityWebRequest(_url);
+            DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(www.url, 4215391504);
+            www.downloadHandler = handler;
+            yield return www.Send();
+
+            if (www.isError)
+            {
+                LogManager.Instance().LogErrorFormat(www.error);
+                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_FAILED;
+                _LogProcessFormat(8500, "HotFix DownLoad hotfixdata File Failed !!!");
+            }
+            else
+            {
+                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_SUCCEED;
+                _LogProcessFormat(8500, "HotFix DownLoad hotfixdata File Succeed !!!");
+                LogManager.Instance().LogErrorFormat("GetAssetBundle SUCCEED !!");
+                // Extracts AssetBundle
+                if (null != handler)
+                {
+                    LogManager.Instance().LogErrorFormat("GetAssetBundle handler SUCCEED !!");
+                    AssetBundle bundle = handler.assetBundle;
+                    //Object obj0 = bundle.LoadAsset("hotfixdata");
+                    AssetBinary hotFixData = bundle.LoadAsset("HotFixTable") as AssetBinary;
+                    if (null != hotFixData)
+                    {
+                        LogManager.Instance().LogErrorFormat("Load HotFixTable AssetBinary SUCCEED !!");
+
+                        var table = AssetManager.Instance()._ConvertTableObject(hotFixData, typeof(ProtoTable.HotFixTable)) as Dictionary<int, object>;
+                        if (null != table)
+                        {
+                            _LogProcessFormat(8500, "Load HotFixTable TableData SUCCEED !!");
+
+                            var enumerator = table.GetEnumerator();
+                            while (enumerator.MoveNext())
+                            {
+                                ProtoTable.HotFixTable hotFixItem = enumerator.Current.Value as ProtoTable.HotFixTable;
+                                if (null != hotFixItem)
+                                {
+                                    LogManager.Instance().LogErrorFormat("[ITEM] ID = [{0}] Desc = {1} ResName = {2}", hotFixItem.ID, hotFixItem.Descrip, hotFixItem.ResourceName);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
         IEnumerator GetAssemblyDllAssetBundle()
         {
             _LogProcessFormat(8500, "HotFix Start DownLoad Assembly-DLL ...");
-            string _url = @"http://192.168.2.27:8080/ZZZHotFixTesting/AssetBundles/assembly_charpdll.pak";
+            string _url = @"http://192.168.3.102:8080/AssetBundles/assembly_charpdll.pak";
             UnityWebRequest www = new UnityWebRequest(_url);
             DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(www.url, 3411610002);
             www.downloadHandler = handler;
@@ -97,96 +274,6 @@ namespace GameClient
                 LogManager.Instance().LogErrorFormat("Load Assembly-CSharp.DLL  Assembly !! Succeed !!");
                 mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_SUCCEED;
             }
-        }
-
-
-        IEnumerator GetAssemblyDll()
-        {
-            _LogProcessFormat(8500, "HotFix Start DownLoad Assembly-DLL ...");
-            string _url = @"C:\AssetBundles\Assembly-CSharp.bytes";
-            UnityWebRequest www = new UnityWebRequest(_url);
-            www.downloadHandler = new DownloadHandlerBuffer();
-            yield return www.Send();
-
-            if (www.isError)
-            {
-                LogManager.Instance().LogErrorFormat(www.error);
-                _LogProcessFormat(8500, "HotFix DownLoad Assembly-DLL File Failed !!!");
-            }
-            else
-            {
-                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_SUCCEED;
-                // Or retrieve results as binary data
-                byte[] results = www.downloadHandler.data;
-                _LogProcessFormat(8500, "HotFix DownLoad Assembly-DLL File Succeed !!! length = {0} bytes !",results.Length);
-                LogManager.Instance().LogErrorFormat("GetAssetBundle SUCCEED !! length = {0} bytes !", results.Length);
-            }
-        }
-
-        IEnumerator GetAssetBundle()
-        {
-            _LogProcessFormat(8500, "HotFix Start DownLoad hotfixdata ...");
-			string _url = @"C:\AssetBundles\hotfixdata";
-
-			UnityWebRequest www = new UnityWebRequest(_url);
-            DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(www.url, 4215391504);
-            www.downloadHandler = handler;
-            yield return www.Send();
-
-            if (www.isError)
-            {
-                LogManager.Instance().LogErrorFormat(www.error);
-                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_FAILED;
-                _LogProcessFormat(8500, "HotFix DownLoad hotfixdata File Failed !!!");
-            }
-            else
-            {
-                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_SUCCEED;
-                _LogProcessFormat(8500, "HotFix DownLoad hotfixdata File Succeed !!!");
-                LogManager.Instance().LogErrorFormat("GetAssetBundle SUCCEED !!");
-                // Extracts AssetBundle
-                if(null != handler)
-                {
-                    LogManager.Instance().LogErrorFormat("GetAssetBundle handler SUCCEED !!");
-                    AssetBundle bundle = handler.assetBundle;
-                    //Object obj0 = bundle.LoadAsset("hotfixdata");
-                    AssetBinary hotFixData = bundle.LoadAsset("HotFixTable") as AssetBinary;
-                    if (null != hotFixData)
-                    {
-                        LogManager.Instance().LogErrorFormat("Load HotFixTable AssetBinary SUCCEED !!");
-
-                        var table = AssetManager.Instance()._ConvertTableObject(hotFixData, typeof(ProtoTable.HotFixTable)) as Dictionary<int, object>;
-                        if (null != table)
-                        {
-                            _LogProcessFormat(8500,"Load HotFixTable TableData SUCCEED !!");
-
-                            var enumerator = table.GetEnumerator();
-                            while(enumerator.MoveNext())
-                            {
-                                ProtoTable.HotFixTable hotFixItem = enumerator.Current.Value as ProtoTable.HotFixTable;
-                                if(null != hotFixItem)
-                                {
-                                    LogManager.Instance().LogErrorFormat("[ITEM] ID = [{0}] Desc = {1} ResName = {2}", hotFixItem.ID,hotFixItem.Descrip,hotFixItem.ResourceName);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        void _LogProcessFormat(int Id, string format, params object[] argvs)
-        {
-            LogManager.Instance().LogProcessFormat(Id, format, argvs);
-            if(null != mHotFixStepInfo)
-            {
-                mHotFixStepInfo.text = string.Format(format, argvs);
-            }
-        }
-
-        protected override void _OnCloseFrame()
-        {
-
         }
     }
 }
