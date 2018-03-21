@@ -111,6 +111,7 @@ namespace GameClient
             var value = string.Format(format, argvs);
 #if UNITY_EDITOR
             UnityEngine.Debug.LogWarningFormat("<color=#00ff00>[PID={0}]</color>:{1}",Id,value);
+            PushLogToFile(LogType.LT_PROCESS, Id, value);
 #else
             PushLogToFile(LogType.LT_PROCESS, Id, value);
 #endif

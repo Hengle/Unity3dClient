@@ -25,6 +25,8 @@ namespace GameClient
             else
             {
                 UIManager.Instance().OpenFrame<HotFixFrame>(FrameTypeID.FTID_HOTFIX);
+                UIManager.Instance().OpenFrame<LoginFrame>(FrameTypeID.FTID_LOGIN);
+                EventManager.Instance().SendEvent(ClientEvent.CE_LOGIN_TEST);
             }
         }
 
