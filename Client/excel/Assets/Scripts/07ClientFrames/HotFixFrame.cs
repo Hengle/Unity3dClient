@@ -52,8 +52,9 @@ namespace GameClient
         IEnumerator GetAssetBundle()
         {
             _LogProcessFormat(8500, "HotFix Start DownLoad hotfixdata ...");
+			string _url = "file:/Users/shenshaojun/HotFixDir";
 
-            UnityWebRequest www = new UnityWebRequest("C:/AssetBundles/hotfixdata");
+			UnityWebRequest www = new UnityWebRequest(_url);
             DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(www.url, 4215391504);
             www.downloadHandler = handler;
             yield return www.Send();
