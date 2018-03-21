@@ -104,4 +104,17 @@ public static class Utility
             EventManager.Instance().SendEvent(ClientEvent.CE_LOG_TO_SCREEN, value);
         }
     }
+
+    public static string GetAssetPath()
+    {
+        string url = string.Empty;
+#if UNITY_ANDROID   //Android
+        url = "jar:file://" + Application.dataPath + "!/assets/";
+#elif UNITY_IPHONE  //iPhone
+        url = Application.dataPath + "/Raw/";
+#elif UNITY_STANDALONE_WIN || UNITY_EDITOR
+        url = "file://" + Application.dataPath + "/StreamingAssets/";
+#endif
+        return url;
+    }
 }

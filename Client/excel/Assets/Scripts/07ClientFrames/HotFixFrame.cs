@@ -37,22 +37,96 @@ namespace GameClient
 
         IEnumerator HotFixProcess()
         {
+            //mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_RESOURCES_FILE;
+
+            //yield return GetAssetBundle();
+
+            //if (mHotFixStatus != HotFixStatus.HFS_DOWNLOAD_SUCCEED)
+            //{
+            //    yield break;
+            //}
+
             mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_RESOURCES_FILE;
-
-            yield return GetAssetBundle();
-
-            if(mHotFixStatus != HotFixStatus.HFS_DOWNLOAD_SUCCEED)
+            yield return GetAssemblyDllAssetBundle();
+            if (mHotFixStatus != HotFixStatus.HFS_DOWNLOAD_SUCCEED)
             {
                 yield break;
             }
+        }
 
-            yield return new WaitForSeconds(1.0f);
+        IEnumerator GetAssemblyDllAssetBundle()
+        {
+            _LogProcessFormat(8500, "HotFix Start DownLoad Assembly-DLL ...");
+            string _url = @"http://192.168.2.27:8080/ZZZHotFixTesting/AssetBundles/assembly_charpdll.pak";
+            UnityWebRequest www = new UnityWebRequest(_url);
+            DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(www.url, 3411610002);
+            www.downloadHandler = handler;
+            yield return www.Send();
+
+            if (www.isError)
+            {
+                LogManager.Instance().LogErrorFormat(www.error);
+                _LogProcessFormat(8500, "HotFix DownLoad Assembly-DLL File Failed !!!");
+            }
+            else
+            {
+                // Extracts AssetBundle
+                AssetBundle bundle = handler.assetBundle;
+                if (null == bundle)
+                {
+                    _LogProcessFormat(8500, "HotFix DownLoad Assembly-DLL File Failed !!!");
+                    yield break;
+                }
+
+                TextAsset asset = bundle.LoadAsset("Assembly-CSharp", typeof(TextAsset)) as TextAsset;
+                if(null == asset)
+                {
+                    _LogProcessFormat(8500, "bundle.LoadAsset Failed !!");
+                    yield break;
+                }
+
+                _LogProcessFormat(8500, "HotFix DownLoad Assembly-DLL File Succeed !!! length = {0} bytes !", asset.bytes.Length);
+                LogManager.Instance().LogErrorFormat("GetAssetBundle SUCCEED !! length = {0} bytes !", asset.bytes.Length);
+
+                var assembly = System.Reflection.Assembly.Load(asset.bytes);
+                if(null == assembly)
+                {
+                    yield break;
+                }
+
+                LogManager.Instance().LogErrorFormat("Load Assembly-CSharp.DLL  Assembly !! Succeed !!");
+                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_SUCCEED;
+            }
+        }
+
+
+        IEnumerator GetAssemblyDll()
+        {
+            _LogProcessFormat(8500, "HotFix Start DownLoad Assembly-DLL ...");
+            string _url = @"C:\AssetBundles\Assembly-CSharp.bytes";
+            UnityWebRequest www = new UnityWebRequest(_url);
+            www.downloadHandler = new DownloadHandlerBuffer();
+            yield return www.Send();
+
+            if (www.isError)
+            {
+                LogManager.Instance().LogErrorFormat(www.error);
+                _LogProcessFormat(8500, "HotFix DownLoad Assembly-DLL File Failed !!!");
+            }
+            else
+            {
+                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_SUCCEED;
+                // Or retrieve results as binary data
+                byte[] results = www.downloadHandler.data;
+                _LogProcessFormat(8500, "HotFix DownLoad Assembly-DLL File Succeed !!! length = {0} bytes !",results.Length);
+                LogManager.Instance().LogErrorFormat("GetAssetBundle SUCCEED !! length = {0} bytes !", results.Length);
+            }
         }
 
         IEnumerator GetAssetBundle()
         {
             _LogProcessFormat(8500, "HotFix Start DownLoad hotfixdata ...");
-			string _url = "file:/Users/shenshaojun/HotFixDir";
+			string _url = @"C:\AssetBundles\hotfixdata";
 
 			UnityWebRequest www = new UnityWebRequest(_url);
             DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(www.url, 4215391504);
