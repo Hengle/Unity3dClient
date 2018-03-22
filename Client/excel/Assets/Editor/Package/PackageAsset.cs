@@ -13,6 +13,9 @@ public class PackageAsset
     static protected string m_TempAssetPath = "Assets/PackAssetTemp/";
     static protected string m_OutputBundleExt = ".pck";
 
+	static protected string m_android_dll_path = "/../Library/ScriptAssemblies/Assembly-CSharp.dll";
+	static protected string m_android_dll_target_path = "/AssetBundles/Assembly-CSharp.bytes";
+
     //[MenuItem("Tools/Build AssetBundles")]
     //static void BuildAllAssetBundles()
     //{
@@ -26,12 +29,29 @@ public class PackageAsset
     [MenuItem("Tools/Build Android Dll")]
     static void BuildAnroidDll()
     {
-        AssetBundleBuild[] bundlePackageInfoBuild = new AssetBundleBuild[1];
-        bundlePackageInfoBuild[0].assetBundleName = "Assembly_CharpDll.pak";
-        bundlePackageInfoBuild[0].assetNames = new string[1] { "Assets/AssetBundles/Assembly-CSharp.bytes" };
-        bundlePackageInfoBuild[0].assetBundleVariant = string.Empty;
-        AssetBundleManifest assetManifestPackageInfo = BuildPipeline.BuildAssetBundles(m_OutputBundlePath, bundlePackageInfoBuild, BuildAssetBundleOptions.None,BuildTarget.Android);
-    }
+		try
+		{
+			var dataPath = Application.dataPath;
+			var dllPath = Path.GetFullPath (Application.dataPath + "/" + m_android_dll_path);
+			var targetPath = Path.GetFullPath(Application.dataPath + "/" + m_android_dll_target_path);
+			if (File.Exists (targetPath)) 
+			{
+				File.Delete (targetPath);
+			}
+			File.Copy (dllPath, targetPath);
+			AssetBundleBuild[] bundlePackageInfoBuild = new AssetBundleBuild[1];
+			bundlePackageInfoBuild[0].assetBundleName = "Assembly_CharpDll.pak";
+			bundlePackageInfoBuild[0].assetNames = new string[1] { "Assets/AssetBundles/Assembly-CSharp.bytes" };
+			bundlePackageInfoBuild[0].assetBundleVariant = string.Empty;
+			AssetBundleManifest assetManifestPackageInfo = BuildPipeline.BuildAssetBundles(m_OutputBundlePath, bundlePackageInfoBuild, BuildAssetBundleOptions.None,BuildTarget.Android);
+			UnityEngine.Debug.LogFormat("Build Android Dll succeed !!");
+		}
+		catch (Exception e) 
+		{
+			UnityEngine.Debug.LogErrorFormat ("Build Android Dll Failed !!");
+			UnityEngine.Debug.LogErrorFormat (e.ToString ());
+		}
+	}
 
     [MenuItem("Tools/MonoVersion")]
     static void DispalyMonoVersion()
