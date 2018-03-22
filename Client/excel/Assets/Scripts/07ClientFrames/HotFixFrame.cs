@@ -21,7 +21,6 @@ namespace GameClient
 
         protected override void _OnOpenFrame()
         {
-            LogManager.Instance().LogErrorFormat("pd = {0}", Application.persistentDataPath);
             StartCoroutine(HotFixProcess());
         }
 
@@ -87,19 +86,18 @@ namespace GameClient
 
         void RestartApplication()
         {
-            Debug.Log("restartApplication0");
             AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
             AndroidJavaObject jo = jc.GetStatic <AndroidJavaObject> ("currentActivity");
-            _LogProcessFormat(8500,"restartApplication1");
+            _LogProcessFormat(8500,"restartApplication [1]");
             jo.Call("restartApplication");
-            _LogProcessFormat(8500,"restartApplication2");
+            _LogProcessFormat(8500,"restartApplication [2]");
         }
 
         IEnumerator DownLoadRemoteVersion()
         {
             _RemoteVersion = string.Empty;
             _LogProcessFormat(8500, "HotFix Start DownLoad RemoteVersion ... LocalVersion = {0}",_LocalVersion);
-            string _url = @"http://192.168.2.27:8080/AssetBundles/version.txt";
+            string _url = @"http://192.168.3.110:8080/AssetBundles/version.txt";
             UnityWebRequest www = new UnityWebRequest(_url);
             www.downloadHandler = new DownloadHandlerBuffer();
             yield return www.Send();
@@ -121,7 +119,7 @@ namespace GameClient
         IEnumerator GetAssemblyDll()
         {
             _LogProcessFormat(8500, "HotFix Start DownLoad Assembly-DLL ...");
-            string _url = @"http://192.168.2.27:8080/AssetBundles/Assembly-CSharp.bytes";
+            string _url = @"http://192.168.3.110:8080/AssetBundles/Assembly-CSharp.bytes";
             UnityWebRequest www = new UnityWebRequest(_url);
             www.downloadHandler = new DownloadHandlerBuffer();
             yield return www.Send();
@@ -157,12 +155,23 @@ namespace GameClient
                 if(!string.IsNullOrEmpty(path))
                 {
                     _LogProcessFormat(8500, "ready save dll to {0}{1} !", path, "Assembly-CSharp.dll");
-                    SaveBytes(path, "Assembly-CSharp.dll", results);
+					try
+					{
+						SaveBytes(path, "Assembly-CSharp.dll", results);
+						_LogProcessFormat(8500, "save dll to {0}{1} succeed!", path, "Assembly-CSharp.dll");
+					}
+					catch (Exception e) 
+					{
+						_LogProcessFormat(8500, "save dll to {0}{1} failed!", path, "Assembly-CSharp.dll");
+						_LogProcessFormat(8500, e.ToString());
+						yield break;
+					}
                 }
 
                 if (Application.platform == RuntimePlatform.Android)
                 {
-                    yield return new WaitForEndOfFrame();
+					_LogProcessFormat(8500, "ready to restart application after 1 seconds !");
+					yield return new WaitForSecondsRealtime(1);
                     RestartApplication();
                 }
             }

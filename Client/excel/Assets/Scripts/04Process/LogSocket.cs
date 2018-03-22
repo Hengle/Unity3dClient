@@ -15,7 +15,6 @@ namespace GameClient
 
         bool locked = false;
         int recycleCount = 0;
-        Object ansyRecycleLogItemLock = new Object();
 
         void _OnSocketLogOut(string log)
         {
@@ -50,7 +49,7 @@ namespace GameClient
         {
             if(bStart)
             {
-                socket.ip = this.ip;
+				socket.ip = this.ip;
                 socket.port = this.port;
                 socket.onSocketLogOut = _OnSocketLogOut;
 
