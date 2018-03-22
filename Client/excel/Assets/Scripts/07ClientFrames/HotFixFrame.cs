@@ -47,14 +47,17 @@ namespace GameClient
                 yield break;
             }
 
-            if (_LocalVersion != _RemoteVersion)
+            if (_LocalVersion == _RemoteVersion)
             {
-                mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_RESOURCES_FILE;
-                yield return GetAssemblyDll();
-                if (mHotFixStatus != HotFixStatus.HFS_DOWNLOAD_SUCCEED)
-                {
-                    yield break;
-                }
+                _LogProcessFormat(8500, "Your Client is the New Version !!");
+                yield break;
+            }
+
+            mHotFixStatus = HotFixStatus.HFS_DOWNLOAD_RESOURCES_FILE;
+            yield return GetAssemblyDll();
+            if (mHotFixStatus != HotFixStatus.HFS_DOWNLOAD_SUCCEED)
+            {
+                yield break;
             }
         }
 
@@ -96,7 +99,7 @@ namespace GameClient
         {
             _RemoteVersion = string.Empty;
             _LogProcessFormat(8500, "HotFix Start DownLoad RemoteVersion ... LocalVersion = {0}",_LocalVersion);
-            string _url = @"http://192.168.3.102:8080/AssetBundles/version.txt";
+            string _url = @"http://192.168.2.27:8080/AssetBundles/version.txt";
             UnityWebRequest www = new UnityWebRequest(_url);
             www.downloadHandler = new DownloadHandlerBuffer();
             yield return www.Send();
@@ -118,7 +121,7 @@ namespace GameClient
         IEnumerator GetAssemblyDll()
         {
             _LogProcessFormat(8500, "HotFix Start DownLoad Assembly-DLL ...");
-            string _url = @"http://192.168.3.102:8080/AssetBundles/Assembly-CSharp.bytes";
+            string _url = @"http://192.168.2.27:8080/AssetBundles/Assembly-CSharp.bytes";
             UnityWebRequest www = new UnityWebRequest(_url);
             www.downloadHandler = new DownloadHandlerBuffer();
             yield return www.Send();
