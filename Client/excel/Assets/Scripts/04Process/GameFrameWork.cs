@@ -15,6 +15,17 @@ namespace GameClient
                 return;
             }
 
+            MusicSetting setting = LocalSettingManager.Instance().GetSetting<MusicSetting>(ProtoTable.LocalSettingTable.eSetting.MUSIC_SETTING);
+            LogManager.Instance().LogProcessFormat(88997, "name = {0}", setting.name);
+            LogManager.Instance().LogProcessFormat(88997, "age = {0}", setting.age);
+            LogManager.Instance().LogProcessFormat(88997, "music is on = {0}", setting.isOn);
+            setting.age = 25;
+            setting.name = "wangfang";
+            setting.isOn = true;
+            LocalSettingManager.Instance().SaveSettingToFile(ProtoTable.LocalSettingTable.eSetting.MUSIC_SETTING);
+
+            return;
+
 			bool bNeedHotFix = true;
 
             if(!bNeedHotFix)
