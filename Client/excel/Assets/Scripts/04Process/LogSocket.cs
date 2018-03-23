@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NetWork;
+using Protocol;
 
 namespace GameClient
 {
@@ -31,12 +32,19 @@ namespace GameClient
             }
 
             locked = true;
-            var content = logItems[0].ToLogValue();
-            var bytes = System.Text.Encoding.ASCII.GetBytes(content);
+            NetManager.Instance().Send(logItems[0], socket, _OnSendSucceed, _OnSendFailed);
+            Utility.LogToScreen("Log:{0}", logItems[0].logValue);
+        }
 
-            socket.Send(bytes, () => { ++recycleCount; locked = false; }, ()=> { locked = false; });
+        void _OnSendSucceed()
+        {
+            ++recycleCount;
+            locked = false;
+        }
 
-            Utility.LogToScreen("_PrintLogItems send {0}", content);
+        void _OnSendFailed()
+        {
+            locked = false;
         }
 
         void Awake()

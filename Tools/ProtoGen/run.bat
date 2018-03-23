@@ -1,27 +1,21 @@
+echo off
+set cur_dir=%~dp0
+set proto_path=%cur_dir%..\..\Share\Protocol\Proto\
+set cs_path=%cur_dir%..\..\Client\excel\Assets\Scripts\09Protocol\
+set cpp_path=%cur_dir%..\..\Share\Protocol\Server\protoc\
+pushd %proto_path%
+echo on
+%cur_dir%/protogen -i:MsgHead.proto -o:MsgHead.cs
+%cur_dir%/protogen -i:LogItem.proto -o:LogItem.cs
+%cur_dir%/protogen -i:Person.proto -o:Person.cs
+
+move *.cs %cs_path%
+del %cpp_path%*.h
+del %cpp_path%*.cc
+
+%cur_dir%/protoc --cpp_out=%cpp_path% MsgHead.proto
+%cur_dir%/protoc --cpp_out=%cpp_path% LogItem.proto
+%cur_dir%/protoc --cpp_out=%cpp_path% Person.proto
 @echo off
-echo "mkdir Protos"
-mkdir Protos
-echo "mkdir CS"
-mkdir CS
-echo "remove org proto files ..."
-del Protos\*.proto /f/s/q/a
-echo "remove org cs files ..."
-del CS\*.cs /f/s/q/a
-echo "start copy proto files ..."
-copy /y ..\..\Share\Protocol\Proto\*.proto Protos\
-echo "convert proto to cs ..."
-@echo on
-protogen -i:Protos/Person.proto -o:CS/Person.cs
-@echo off
-echo "move cs files to target ..."
-move /y CS\*.cs ..\..\Client\excel\Assets\Scripts\09Protocol\
-echo "remove org server cc ..."
-del ..\..\Share\Protocol\Server\protoc\Protos\*.cc
-echo "remove org server h ..."
-del ..\..\Share\Protocol\Server\protoc\Protos\*.h
-echo "convert proto to .cc .h ..."
-@echo on
-protoc --cpp_out=..\..\Share\Protocol\Server\protoc\ Protos\Person.proto
-@echo off
-echo "done !!!"
+popd
 pause

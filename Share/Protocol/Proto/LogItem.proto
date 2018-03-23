@@ -1,0 +1,19 @@
+import "MsgHead.proto";
+package Protocol;
+
+message LogItem 
+{
+	required Protocol.MsgHead head=1;
+	required sint32 logId=2;
+	required string logValue=3;
+
+	enum LogType
+	{
+		LT_NORMAL = 1;
+		LT_WARNING = 2;
+		LT_ERROR = 4;
+		LT_PROCESS = 8;
+	}
+
+	required LogType eLogType = 4;
+}

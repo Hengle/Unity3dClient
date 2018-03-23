@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: Protos/Person.proto
+// Generated from: Person.proto
 namespace Protocol
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Person")]

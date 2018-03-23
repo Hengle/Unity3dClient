@@ -50,12 +50,12 @@ namespace NetWork
             }
         }
 
-        public void Send<T>(T msg,NetSocket socket) where T : global::ProtoBuf.IExtensible
+        public void Send<T>(T msg,NetSocket socket, SendCallBack ok = null, SendCallBack failed = null) where T : global::ProtoBuf.IExtensible
         {
             byte[] bytes = Serialize(msg);
             if(null != socket && bytes.Length > 0)
             {
-                socket.Send(bytes);
+                socket.Send(bytes,ok,failed);
             }
         }
     }
