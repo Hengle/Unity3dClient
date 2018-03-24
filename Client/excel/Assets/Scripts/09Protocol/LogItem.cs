@@ -16,29 +16,37 @@ namespace Protocol
   {
     public LogItem() {}
     
-    private Protocol.MsgHead _head;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"head", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public Protocol.MsgHead head
+    private Protocol.MsgID _id = Protocol.MsgID.MID_LOG;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(Protocol.MsgID.MID_LOG)]
+    public Protocol.MsgID id
     {
-      get { return _head; }
-      set { _head = value; }
+      get { return _id; }
+      set { _id = value; }
+    }
+    private int _subId;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"subId", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
+    public int subId
+    {
+      get { return _subId; }
+      set { _subId = value; }
     }
     private int _logId;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"logId", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"logId", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
     public int logId
     {
       get { return _logId; }
       set { _logId = value; }
     }
     private string _logValue;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"logValue", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"logValue", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string logValue
     {
       get { return _logValue; }
       set { _logValue = value; }
     }
     private Protocol.LogItem.LogType _eLogType;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"eLogType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"eLogType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public Protocol.LogItem.LogType eLogType
     {
       get { return _eLogType; }

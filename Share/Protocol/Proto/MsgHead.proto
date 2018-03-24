@@ -1,8 +1,13 @@
 package Protocol;
 
+enum MsgID
+{
+	MID_LOG = 19550;
+}
+
 message MsgHead
 {
 	required sint32 size=1;
-	required sint32 id=2;
+	required MsgID id=2;
 	required sint32 subId=3;
 }

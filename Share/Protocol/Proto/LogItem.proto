@@ -3,9 +3,10 @@ package Protocol;
 
 message LogItem 
 {
-	required Protocol.MsgHead head=1;
-	required sint32 logId=2;
-	required string logValue=3;
+	optional MsgID id=1 [default=MID_LOG];
+	required sint32 subId=2;
+	required sint32 logId=3;
+	required string logValue=4;
 
 	enum LogType
 	{
@@ -15,5 +16,5 @@ message LogItem
 		LT_PROCESS = 8;
 	}
 
-	required LogType eLogType = 4;
+	required LogType eLogType = 5;
 }

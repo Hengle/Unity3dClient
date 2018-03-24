@@ -24,12 +24,27 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\LogItem.pb.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MsgHead.pb.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Person.pb.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Protobuf-ServerTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LogItem.pb.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MsgHead.pb.cc">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Person.pb.cc">

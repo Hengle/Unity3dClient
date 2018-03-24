@@ -22,9 +22,9 @@ namespace Protocol
       get { return _size; }
       set { _size = value; }
     }
-    private int _id;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
-    public int id
+    private Protocol.MsgID _id;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public Protocol.MsgID id
     {
       get { return _id; }
       set { _id = value; }
@@ -40,5 +40,13 @@ namespace Protocol
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"MsgID")]
+    public enum MsgID
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"MID_LOG", Value=19550)]
+      MID_LOG = 19550
+    }
   
 }

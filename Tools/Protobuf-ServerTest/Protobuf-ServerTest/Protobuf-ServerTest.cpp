@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include <WinSock2.h>
 #define  PORT 8880  
-#include "src/Protos/Person.pb.h"
+#include "LogItem.pb.h"
 
 bool InitNetEnv()
 {
@@ -44,11 +44,17 @@ DWORD WINAPI clientProc(
 			return -1;
 		}
 
-		Protocol::Person person;
-		person.ParseFromArray(buf, ret);
-		printf("id = %d\n", person.id());
-		printf("name = %s\n", person.name().c_str());
-		printf("email = %s\n", person.email().c_str());
+		Protocol::LogItem _LogItem;
+		if (_LogItem.ParseFromArray(buf, ret))
+		{
+			printf("id = %d\n", _LogItem.logid());
+			printf("type = %d\n", (int)_LogItem.elogtype());
+			printf("name = %s\n", _LogItem.logvalue());
+		}
+		else
+		{
+			printf("parse error!");
+		}
 		/*
 		// ·¢ËÍÊý¾Ý  
 		ret = send(sockClient, buf, strlen(buf), 0);
