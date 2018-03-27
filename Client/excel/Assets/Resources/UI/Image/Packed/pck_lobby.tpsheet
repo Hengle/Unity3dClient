@@ -1,0 +1,24 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_lobby.png (2048 x 1024)
+# $TexturePacker:SmartUpdate:095e494815985b73e63c64328b0faa38:fd863aaa736783032f0127f145066b8e:d9bf39731631a18da9f91ddb7f6efefd$
+#
+
+activity;1908;767;113;125;0.5;0.5
+btnBank;249;82;113;125;0.5;0.5
+btnSetting;364;82;113;125;0.5;0.5
+charge;249;209;161;161;0.5;0.5
+chargeeffect;1908;894;124;128;0.5;0.5
+game0;2;372;298;322;0.5;0.5
+game1;2;696;255;326;0.5;0.5
+game2;2;60;245;310;0.5;0.5
+game3;259;703;311;319;0.5;0.5
+point;302;643;28;28;0.5;0.5
+soundon;302;673;34;28;0.5;0.5
+title;572;913;1334;109;0.5;0.5
+xxts;2;18;550;40;0.5;0.5
+xxts2;572;802;1334;109;0.5;0.5

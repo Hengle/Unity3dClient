@@ -1,0 +1,27 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_common00.png (512 x 512)
+# $TexturePacker:SmartUpdate:d939fa35e8638f1648174eb4bb3c2819:b593f558d11181610955768a9c2f23ab:d3039948c2ab03eb5752c16702b5f999$
+#
+
+btn_return;113;163;90;90;0.5;0.5
+btncharge;436;363;42;42;0.5;0.5
+button_0;232;195;193;67;0.5;0.5
+button_1;113;352;242;86;0.5;0.5
+button_2;232;264;242;86;0.5;0.5
+check_0;357;352;77;53;0.5;0.5
+check_box_di;427;206;58;56;0.5;0.5
+head_icon;2;139;109;110;0.5;0.5
+head_mask;14;316;92;92;0.5;0.5
+scrollbar_v_0;493;407;10;103;0.5;0.5
+scrollbar_v_1;2;251;10;259;0.5;0.5
+shenyinshezhidi;427;163;50;41;0.5;0.5
+tab_bg_2;362;407;129;103;0.5;0.5
+tabbg_0;14;410;96;100;0.5;0.5
+tabbg_1;2;32;109;105;0.5;0.5
+yeqian_0;14;255;216;59;0.5;0.5
+yeqianxuanzhong_0;113;440;247;70;0.5;0.5

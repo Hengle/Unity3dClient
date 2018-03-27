@@ -1,6 +1,12 @@
 version: 2
 importPivots: 1
 tpsheetFileNames:
+- Assets/Resources/UI/Image/Packed/pck_lobby.tpsheet
+- Assets/Resources/UI/Image/Packed/pck_ui_common00.tpsheet
 textureFileNames:
+- Assets/Resources/UI/Image/Packed/pck_lobby.png
+- Assets/Resources/UI/Image/Packed/pck_ui_common00.png
 normalmapFileNames:
+- 
+- 
 enableDebugOutput: 0

@@ -6,12 +6,28 @@ namespace GameClient
 {
 	public sealed class LobbyFrame : ClientFrame 
 	{
-		protected override sealed void _OnOpenFrame()
+        UnityEngine.UI.Button mbtnReturn;
+
+        protected override void _InitScriptBinder()
+        {
+            mbtnReturn = mScriptBinder.GetObject("btnReturn") as UnityEngine.UI.Button;
+        }
+
+        protected override sealed void _OnOpenFrame()
 		{
-			
+			if(null != mbtnReturn)
+            {
+                mbtnReturn.onClick.AddListener(_OnClickClose);
+            }
 		}
 
-		protected override sealed void _OnCloseFrame()
+        void _OnClickClose()
+        {
+            UIManager.Instance().CloseFrame(this);
+            Application.Quit();
+        }
+
+        protected override sealed void _OnCloseFrame()
 		{
 			
 		}
