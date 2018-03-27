@@ -101,6 +101,7 @@ namespace GameClient
             }
             userData = null;
             frameItem = null;
+			Resources.UnloadUnusedAssets ();
         }
 
         protected virtual void _InitScriptBinder()

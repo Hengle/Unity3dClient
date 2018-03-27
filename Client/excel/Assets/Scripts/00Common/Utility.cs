@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using GameClient;
 
 public static class Utility
@@ -95,6 +96,14 @@ public static class Utility
             gameObject.SetActive(bActive);
         }
     }
+
+	public static void LoadSprite(ref Image img,Sprite sprite)
+	{
+		if (null != img) 
+		{
+			img.sprite = sprite;
+		}
+	}
 
     public static void LogToScreen(string fmt, params object[] argvs)
     {

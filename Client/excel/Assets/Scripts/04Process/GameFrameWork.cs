@@ -15,7 +15,7 @@ namespace GameClient
                 return;
             }
 
-
+			UIManager.Instance ().OpenFrame<LobbyFrame> (FrameTypeID.FTID_LOBBY);
         }
 
         private bool Initialize()
