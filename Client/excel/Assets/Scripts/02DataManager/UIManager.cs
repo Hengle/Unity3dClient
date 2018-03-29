@@ -10,6 +10,7 @@ namespace GameClient
         FTID_LOGIN = 1,
         FTID_HOTFIX = 2,
 		FTID_LOBBY = 3,
+		FTID_SETTING = 4,
     }
 
     class UIManager : Singleton<UIManager>
