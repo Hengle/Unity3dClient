@@ -6,12 +6,14 @@ namespace GameClient
 {
 	public sealed class LobbyFrame : ClientFrame 
 	{
-        UnityEngine.UI.Button mbtnReturn;
+		UnityEngine.UI.Button mbtnReturn;
+		UnityEngine.UI.Button mbtnSetting;
 
-        protected override void _InitScriptBinder()
-        {
-            mbtnReturn = mScriptBinder.GetObject("btnReturn") as UnityEngine.UI.Button;
-        }
+		protected override void _InitScriptBinder()
+		{
+			mbtnReturn = mScriptBinder.GetObject("btnReturn") as UnityEngine.UI.Button;
+			mbtnSetting = mScriptBinder.GetObject("btnSetting") as UnityEngine.UI.Button;
+		}
 
         protected override sealed void _OnOpenFrame()
 		{
@@ -19,6 +21,10 @@ namespace GameClient
             {
                 mbtnReturn.onClick.AddListener(_OnClickClose);
             }
+			if (null != mbtnSetting) 
+			{
+				mbtnSetting.onClick.AddListener (_OnClickSetting);
+			}
 		}
 
         void _OnClickClose()
@@ -26,6 +32,11 @@ namespace GameClient
             UIManager.Instance().CloseFrame(this);
             Application.Quit();
         }
+
+		void _OnClickSetting()
+		{
+			UIManager.Instance ().OpenFrame<SettingFrame> (FrameTypeID.FTID_SETTING);
+		}
 
         protected override sealed void _OnCloseFrame()
 		{
