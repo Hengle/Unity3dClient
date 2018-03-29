@@ -16,20 +16,14 @@ namespace GameClient
 	{
 		public Stage[] status = new Stage[0];
 		int key = 0;
-		bool _dirty = false;
-		string mInvokeName = "ApplyStatus";
 
 		public int Key
 		{
 			set 
 			{
 				key = value;
-				if (!_dirty) 
-				{
-					_dirty = true;
-					Invoke (mInvokeName,0.20f);
-				}
-			}
+                ApplyStatus();
+            }
 			get 
 			{
 				return key;
@@ -54,7 +48,6 @@ namespace GameClient
 					status [iCurrentPos].action.Invoke ();
 				}
 			}
-			_dirty = false;
 		}
 
 		public void next()
@@ -76,8 +69,8 @@ namespace GameClient
 				if (null != curStatus && null != curStatus.action) 
 				{
 					key = curStatus.key;
-					curStatus.action.Invoke ();
-					UnityEngine.Debug.LogFormat ("change status succeed !!!");
+                    ApplyStatus();
+                    UnityEngine.Debug.LogFormat ("<color=#00ff00>change status succeed !!!</color>");
 				}
 			}
 		}
