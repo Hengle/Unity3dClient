@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
+using XLua;
 
 namespace GameClient
 {
+    [LuaCallCSharp]
     public enum FrameTypeID
     {
         FTID_INVALID = -1,
@@ -42,6 +45,42 @@ namespace GameClient
             }
             frame.openFrame(frameId, frameTypeId, userData);
             return frame;
+        }
+
+        public IFrame OpenFrameLua(FrameTypeID frameTypeId, object userData = null, int frameId = -1)
+        {
+            int iKey = MakeFrameHashCode(frameId, frameTypeId);
+            IFrame frame = null;
+            if (mActiveFrames.ContainsKey(iKey))
+            {
+                frame = mActiveFrames[iKey];
+                frame.closeFrame();
+            }
+            else if (mCachedFrames.ContainsKey(iKey))
+            {
+                frame = mCachedFrames[iKey];
+                mCachedFrames.Remove(iKey);
+                mActiveFrames.Add(iKey, frame);
+            }
+            else
+            {
+                frame = new ClientFrame();
+                mActiveFrames.Add(iKey, frame);
+            }
+            frame.openFrame(frameId, frameTypeId, userData);
+            return frame;
+        }
+
+        public void CloseFrameLua(FrameTypeID frameTypeId, int frameId = -1)
+        {
+            int iHashCode = MakeFrameHashCode(frameId, frameTypeId);
+            if(mActiveFrames.ContainsKey(iHashCode))
+            {
+                IFrame frame = mActiveFrames[iHashCode];
+                mActiveFrames.Remove(iHashCode);
+                mCachedFrames.Add(iHashCode,frame);
+                frame.closeFrame();
+            }
         }
 
         public void CloseFrame<T>(T frame) where T : IFrame, new()

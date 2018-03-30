@@ -1575,6 +1575,7 @@ namespace CSObjectWrapEditor
             GenLuaRegister();
             callCustomGen();
             Debug.Log("finished! use " + (DateTime.Now - start).TotalMilliseconds + " ms");
+            Debug.LogFormat("path = {0} !!!", GeneratorConfig.common_path);
             AssetDatabase.Refresh();
         }
 

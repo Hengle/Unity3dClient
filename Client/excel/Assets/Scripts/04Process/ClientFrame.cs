@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using XLua;
 
 namespace GameClient
 {
+    [LuaCallCSharp]
     public class ClientFrame : IFrame
     {
         public int getFrameId()
@@ -37,7 +40,7 @@ namespace GameClient
             return (FrameLayer)frameItem.Layer;
         }
 
-        public void openFrame(int iId, FrameTypeID type, object userData)
+        public void openFrame(int iId = -1, FrameTypeID type = FrameTypeID.FTID_LOGIN, object userData = null)
         {
             LogManager.Instance().LogProcessFormat(9000, "try open frame {0}!", type);
 
@@ -66,7 +69,7 @@ namespace GameClient
             }
 
             root = AssetManager.Instance().LoadResource<GameObject>(frameItem.Prefab);
-            if(null == root)
+            if (null == root)
             {
                 LogManager.Instance().LogProcessFormat(9000, "load frame prefab failed : path = {0} typeid = {1}", frameItem.Prefab, type);
                 return;
@@ -102,6 +105,42 @@ namespace GameClient
             userData = null;
             frameItem = null;
 			Resources.UnloadUnusedAssets ();
+        }
+
+        public void SetObjectStatus(string objName, int status)
+        {
+            if (null != mScriptBinder)
+            {
+                ComStateMachine stateMachine = mScriptBinder.GetObject(objName) as ComStateMachine;
+                if (null != stateMachine)
+                {
+                    stateMachine.Key = status;
+                }
+            }
+        }
+
+        public void SetText(string objName, string value)
+        {
+            if (null != mScriptBinder)
+            {
+                Text text = mScriptBinder.GetObject(objName) as Text;
+                if (null != text)
+                {
+                    text.text = value;
+                }
+            }
+        }
+
+        public void SetImage(string objName, string path,string name)
+        {
+            if (null != mScriptBinder)
+            {
+                Image img = mScriptBinder.GetObject(objName) as Image;
+                if (null != img)
+                {
+                    img.sprite = AssetManager.Instance().LoadImage(path,name);
+                }
+            }
         }
 
         protected virtual void _InitScriptBinder()

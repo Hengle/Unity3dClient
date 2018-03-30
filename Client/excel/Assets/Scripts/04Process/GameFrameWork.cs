@@ -6,6 +6,7 @@ namespace GameClient
 {
 	class GameFrameWork : MonoBehaviour 
 	{
+        public TextAsset luaScript = null;
 		// Use this for initialization
 		void Start() 
 		{
@@ -16,11 +17,13 @@ namespace GameClient
                 return;
             }
 
-			UIManager.Instance ().OpenFrame<LobbyFrame> (FrameTypeID.FTID_LOBBY);
-
-            LuaEnv luaenv = new LuaEnv();
-            luaenv.DoString("CS.UnityEngine.Debug.Log('hello world')");
-            luaenv.Dispose();
+            if(null != luaScript)
+            {
+                LuaEnv luaEnv = new LuaEnv();
+                luaEnv.DoString(luaScript.text);
+                luaEnv.Dispose();
+            }
+			//UIManager.Instance ().OpenFrame<LobbyFrame> (FrameTypeID.FTID_LOBBY);
         }
 
         private bool Initialize()

@@ -5,6 +5,7 @@ using ProtoBuf;
 using ProtoBuf.Meta;
 using System.IO;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace GameClient
 {
@@ -12,6 +13,17 @@ namespace GameClient
 	{
 		private const string RES_CONFIG_TABLE_DATA_PATH = "Data/Table/";
         Dictionary<int, UnityEngine.Object> memoryHandles = new Dictionary<int, UnityEngine.Object>();
+
+        public Sprite LoadImage(string path,string name)
+        {
+            Texture2D texture = LoadResource<Texture>(path) as Texture2D;
+            if(null != texture)
+            {
+                return Sprite.Create(texture, new Rect(364, 82, 113, 125), new Vector2(0.5f,0.5f));
+            }
+
+            return null;
+        }
 
         public T LoadResource<T>(string path) where T : UnityEngine.Object, new()
         {
@@ -35,6 +47,10 @@ namespace GameClient
             }
 
             if (typeof(T) == typeof(AudioClip))
+            {
+                return handle;
+            }
+            else if(typeof(T) == typeof(Texture))
             {
                 return handle;
             }

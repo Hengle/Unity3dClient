@@ -1,8 +1,4 @@
-local btnReturn = nil
-
-function start()
-	print("lua start...")
-	print("injected object", returnObject)
-	btnReturn= returnObject:GetComponent(typeof(CS.UnityEngine.Button))
-	print("btnReturn",btnReturn);
-end
+local frame = CS.GameClient.UIFrameLua.OpenFrameLua(CS.GameClient.FrameTypeID.FTID_LOBBY)
+frame:SetObjectStatus('btnChargeStatus',0)
+frame:SetText('playerName','操逼大侠')
+frame:SetImage('playerHead','UI/Image/Packed/pck_lobby',"btnSetting")
