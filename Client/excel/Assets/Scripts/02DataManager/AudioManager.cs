@@ -383,9 +383,9 @@ public class AudioManager : Singleton<AudioManager>
 
                 if (null != curPlayCommand && INVILID_HANDLE != curPlayCommand.m_AsyncLoad)
                 {
-                    //if (!AssetLoader.instance.IsRequestDone(curPlayCommand.m_AsyncLoad)) continue;
+                    //if (!AssetLoader.Instance().IsRequestDone(curPlayCommand.m_AsyncLoad)) continue;
 
-                    //AudioClip audioClip = AssetLoader.instance.Extract(curPlayCommand.m_AsyncLoad).obj as AudioClip;
+                    //AudioClip audioClip = AssetLoader.Instance().Extract(curPlayCommand.m_AsyncLoad).obj as AudioClip;
                     AudioClip audioClip = null;
                     if (null != audioClip)
                     {
@@ -443,7 +443,7 @@ public class AudioManager : Singleton<AudioManager>
                 return;
 
             /*
-            CResPreloader.instance.AddRes(audioRes, false, 1, null, 0, null, CResPreloader.ResType.RES, typeof(AudioClip));
+            CResPreloader.Instance().AddRes(audioRes, false, 1, null, 0, null, CResPreloader.ResType.RES, typeof(AudioClip));
             */
         }
 

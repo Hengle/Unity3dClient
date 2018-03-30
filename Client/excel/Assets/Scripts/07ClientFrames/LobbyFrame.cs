@@ -35,7 +35,7 @@ namespace GameClient
 
 		void _OnClickSetting()
 		{
-			UIManager.Instance ().OpenFrame<SettingFrame> (FrameTypeID.FTID_SETTING);
+			UIManager.Instance ().OpenFrame<SettingFrame> (4);
 		}
 
         protected override sealed void _OnCloseFrame()

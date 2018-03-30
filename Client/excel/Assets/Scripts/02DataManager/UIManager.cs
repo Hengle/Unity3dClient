@@ -18,12 +18,12 @@ namespace GameClient
 
     class UIManager : Singleton<UIManager>
     {
-        public int MakeFrameHashCode(int frameId, FrameTypeID frameTypeId)
+        public int MakeFrameHashCode(int frameId, int frameTypeId)
         {
-            return (frameId & 0xFFFF) | (((int)frameTypeId & 0xFFFF) << 16);
+            return (frameId & 0xFFFF) | ((frameTypeId & 0xFFFF) << 16);
         }
 
-        public IFrame OpenFrame<T>(FrameTypeID frameTypeId,object userData = null,int frameId = -1) where T : IFrame , new()
+        public IFrame OpenFrame<T>(int frameTypeId,object userData = null,int frameId = -1) where T : IFrame , new()
         {
             int iKey = MakeFrameHashCode(frameId, frameTypeId);
             IFrame frame = null;
@@ -47,7 +47,7 @@ namespace GameClient
             return frame;
         }
 
-        public IFrame OpenFrameLua(FrameTypeID frameTypeId, object userData = null, int frameId = -1)
+        public IFrame OpenFrameLua(int frameTypeId, object userData = null, int frameId = -1)
         {
             int iKey = MakeFrameHashCode(frameId, frameTypeId);
             IFrame frame = null;
@@ -71,7 +71,7 @@ namespace GameClient
             return frame;
         }
 
-        public void CloseFrameLua(FrameTypeID frameTypeId, int frameId = -1)
+        public void CloseFrameLua(int frameTypeId, int frameId = -1)
         {
             int iHashCode = MakeFrameHashCode(frameId, frameTypeId);
             if(mActiveFrames.ContainsKey(iHashCode))

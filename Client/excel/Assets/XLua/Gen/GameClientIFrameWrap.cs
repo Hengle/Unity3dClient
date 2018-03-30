@@ -105,8 +105,8 @@ namespace XLua.CSObjectWrap
                 
                 {
                     
-                        GameClient.FrameTypeID __cl_gen_ret = __cl_gen_to_be_invoked.getFrameTypeId(  );
-                        translator.PushGameClientFrameTypeID(L, __cl_gen_ret);
+                        int __cl_gen_ret = __cl_gen_to_be_invoked.getFrameTypeId(  );
+                        LuaAPI.xlua_pushinteger(L, __cl_gen_ret);
                     
                     
                     
@@ -161,7 +161,7 @@ namespace XLua.CSObjectWrap
                 
                 {
                     int iId = LuaAPI.xlua_tointeger(L, 2);
-                    GameClient.FrameTypeID type;translator.Get(L, 3, out type);
+                    int type = LuaAPI.xlua_tointeger(L, 3);
                     object userData = translator.GetObject(L, 4, typeof(object));
                     
                     __cl_gen_to_be_invoked.openFrame( iId, type, userData );

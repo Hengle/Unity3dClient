@@ -17,7 +17,9 @@ namespace GameClient
                 return;
             }
 
-            if(null != luaScript)
+            Application.targetFrameRate = 30;
+
+            if (null != luaScript)
             {
                 LuaEnv luaEnv = new LuaEnv();
                 luaEnv.DoString(luaScript.text);

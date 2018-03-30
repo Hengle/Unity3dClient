@@ -125,8 +125,8 @@ namespace XLua.CSObjectWrap
                 
                 {
                     
-                        GameClient.FrameTypeID __cl_gen_ret = __cl_gen_to_be_invoked.getFrameTypeId(  );
-                        translator.PushGameClientFrameTypeID(L, __cl_gen_ret);
+                        int __cl_gen_ret = __cl_gen_to_be_invoked.getFrameTypeId(  );
+                        LuaAPI.xlua_pushinteger(L, __cl_gen_ret);
                     
                     
                     
@@ -208,10 +208,10 @@ namespace XLua.CSObjectWrap
             
 			    int __gen_param_count = LuaAPI.lua_gettop(L);
             
-                if(__gen_param_count == 4&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& translator.Assignable<GameClient.FrameTypeID>(L, 3)&& translator.Assignable<object>(L, 4)) 
+                if(__gen_param_count == 4&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<object>(L, 4)) 
                 {
                     int iId = LuaAPI.xlua_tointeger(L, 2);
-                    GameClient.FrameTypeID type;translator.Get(L, 3, out type);
+                    int type = LuaAPI.xlua_tointeger(L, 3);
                     object userData = translator.GetObject(L, 4, typeof(object));
                     
                     __cl_gen_to_be_invoked.openFrame( iId, type, userData );
@@ -220,10 +220,10 @@ namespace XLua.CSObjectWrap
                     
                     return 0;
                 }
-                if(__gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& translator.Assignable<GameClient.FrameTypeID>(L, 3)) 
+                if(__gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)) 
                 {
                     int iId = LuaAPI.xlua_tointeger(L, 2);
-                    GameClient.FrameTypeID type;translator.Get(L, 3, out type);
+                    int type = LuaAPI.xlua_tointeger(L, 3);
                     
                     __cl_gen_to_be_invoked.openFrame( iId, type );
                     
@@ -398,7 +398,7 @@ namespace XLua.CSObjectWrap
                 ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			
                 GameClient.ClientFrame __cl_gen_to_be_invoked = (GameClient.ClientFrame)translator.FastGetCSObj(L, 1);
-                translator.PushGameClientFrameTypeID(L, __cl_gen_to_be_invoked.FrameTypeID);
+                LuaAPI.xlua_pushinteger(L, __cl_gen_to_be_invoked.FrameTypeID);
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }

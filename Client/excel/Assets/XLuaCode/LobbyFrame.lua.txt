@@ -1,4 +1,4 @@
-local frame = CS.GameClient.UIFrameLua.OpenFrameLua(CS.GameClient.FrameTypeID.FTID_LOBBY)
-frame:SetObjectStatus('btnChargeStatus',0)
-frame:SetText('playerName','操逼大侠')
-frame:SetImage('playerHead','UI/Image/Packed/pck_lobby',"btnSetting")
+local frame = CS.GameClient.UIFrameLua.OpenFrameLua(5)
+--frame:SetObjectStatus('btnChargeStatus',0)
+--frame:SetText('playerName','操逼大侠')
+--frame:SetImage('playerHead','UI/Image/Packed/pck_lobby',"btnSetting")

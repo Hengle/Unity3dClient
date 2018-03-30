@@ -9,9 +9,9 @@ namespace GameClient
     public interface IFrame
     {
         int getFrameId();
-        FrameTypeID getFrameTypeId();
+        int getFrameTypeId();
         int getFrameHashCode();
-        void openFrame(int iId, FrameTypeID type,object userData);
+        void openFrame(int iId, int type,object userData);
         void closeFrame();
         FrameLayer getLayer();
 

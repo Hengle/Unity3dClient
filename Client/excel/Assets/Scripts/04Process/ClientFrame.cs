@@ -15,7 +15,7 @@ namespace GameClient
             return frameId;
         }
 
-        public FrameTypeID getFrameTypeId()
+        public int getFrameTypeId()
         {
             return frameTypeId;
         }
@@ -40,7 +40,7 @@ namespace GameClient
             return (FrameLayer)frameItem.Layer;
         }
 
-        public void openFrame(int iId = -1, FrameTypeID type = FrameTypeID.FTID_LOGIN, object userData = null)
+        public void openFrame(int iId = -1, int type = 1, object userData = null)
         {
             LogManager.Instance().LogProcessFormat(9000, "try open frame {0}!", type);
 
@@ -258,7 +258,7 @@ namespace GameClient
         #endregion
 
         int frameId = -1;
-        FrameTypeID frameTypeId = FrameTypeID.FTID_INVALID;
+        int frameTypeId = -1;
         int iHashCode = 0;
         protected object userData = null;
         protected GameObject root = null;
@@ -273,7 +273,7 @@ namespace GameClient
             }
         }
 
-        public FrameTypeID FrameTypeID
+        public int FrameTypeID
         {
             get
             {
