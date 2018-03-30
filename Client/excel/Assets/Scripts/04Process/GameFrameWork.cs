@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using XLua;
 
 namespace GameClient
 {
@@ -16,6 +17,10 @@ namespace GameClient
             }
 
 			UIManager.Instance ().OpenFrame<LobbyFrame> (FrameTypeID.FTID_LOBBY);
+
+            LuaEnv luaenv = new LuaEnv();
+            luaenv.DoString("CS.UnityEngine.Debug.Log('hello world')");
+            luaenv.Dispose();
         }
 
         private bool Initialize()

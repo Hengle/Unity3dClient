@@ -1,0 +1,8 @@
+local btnReturn = nil
+
+function start()
+	print("lua start...")
+	print("injected object", returnObject)
+	btnReturn= returnObject:GetComponent(typeof(CS.UnityEngine.Button))
+	print("btnReturn",btnReturn);
+end
