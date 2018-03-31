@@ -357,7 +357,9 @@ public class AssetPackageManager : Singleton<AssetPackageManager>
     {
         //TODO:DJM
         //if (!Global.Settings.loadFromPackage)
-        //    return;
+        bool loadFromPackage = false;
+        if(!loadFromPackage)
+            return;
 
         _Clear();
         LogManager.Instance().LogErrorFormat( "Load dependent file with path:" + _GetPlatformUrlHead() + "/" + m_DependencyFileName);

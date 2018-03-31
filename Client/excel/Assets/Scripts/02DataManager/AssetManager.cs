@@ -12,51 +12,6 @@ namespace GameClient
 	public class AssetManager : Singleton<AssetManager> 
 	{
 		private const string RES_CONFIG_TABLE_DATA_PATH = "Data/Table/";
-        Dictionary<int, UnityEngine.Object> memoryHandles = new Dictionary<int, UnityEngine.Object>();
-
-        public Sprite LoadImage(string path,string name)
-        {
-            Texture2D texture = LoadResource<Texture>(path) as Texture2D;
-            if(null != texture)
-            {
-                return Sprite.Create(texture, new Rect(364, 82, 113, 125), new Vector2(0.5f,0.5f));
-            }
-
-            return null;
-        }
-
-        public T LoadResource<T>(string path) where T : UnityEngine.Object, new()
-        {
-            int iHandleID = path.GetHashCode();
-            T handle = null;
-            if (!memoryHandles.ContainsKey(iHandleID))
-            {
-                handle = Resources.Load(path, typeof(T)) as T;
-
-                if (null == handle)
-                {
-                    Debug.LogErrorFormat("load resource failed : type = {0} path={1}", typeof(T), path);
-                    return null;
-                }
-
-                memoryHandles.Add(iHandleID, handle);
-            }
-            else
-            {
-                handle = memoryHandles[iHandleID] as T;
-            }
-
-            if (typeof(T) == typeof(AudioClip))
-            {
-                return handle;
-            }
-            else if(typeof(T) == typeof(Texture))
-            {
-                return handle;
-            }
-
-            return GameObject.Instantiate(handle) as T;
-        }
 
         public string GetTablePath(Type type)
 		{
@@ -90,7 +45,7 @@ namespace GameClient
             table = null;
 
             var path = GetTablePath(type);
-            AssetBinary res = Resources.Load(path, typeof(AssetBinary)) as AssetBinary;
+            AssetBinary res = AssetLoader.Instance().LoadRes(path, typeof(AssetBinary)).obj as AssetBinary;
             if (null == res)
             {
                 Debug.LogErrorFormat("can not find textasset type = {0}", type.Name);

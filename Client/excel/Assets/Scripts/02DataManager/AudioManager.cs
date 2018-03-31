@@ -573,7 +573,7 @@ public class AudioManager : Singleton<AudioManager>
                         hNewAudio = _AllocHandle() | ((typeIdx % 3) << 30);
                         Debug.Assert(hNewAudio != uint.MaxValue);
 
-                        AudioClip newAudioClip = AssetManager.Instance().LoadResource<AudioClip>(audioRes);
+                        AudioClip newAudioClip = AssetLoader.Instance().LoadRes(audioRes, typeof(AudioClip)).obj as AudioClip;
                         if (null != newAudioClip)
                         {
                             dstAudioInst.volume = m_AudioVolume[typeIdx];

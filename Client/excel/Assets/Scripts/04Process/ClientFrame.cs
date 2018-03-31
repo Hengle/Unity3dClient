@@ -68,7 +68,7 @@ namespace GameClient
                 return;
             }
 
-            root = AssetManager.Instance().LoadResource<GameObject>(frameItem.Prefab);
+            root = AssetLoader.Instance().LoadRes(frameItem.Prefab, typeof(GameObject)).obj as GameObject;
             if (null == root)
             {
                 LogManager.Instance().LogProcessFormat(9000, "load frame prefab failed : path = {0} typeid = {1}", frameItem.Prefab, type);
@@ -131,14 +131,14 @@ namespace GameClient
             }
         }
 
-        public void SetImage(string objName, string path,string name)
+        public void SetImage(string objName, string path)
         {
             if (null != mScriptBinder)
             {
                 Image img = mScriptBinder.GetObject(objName) as Image;
                 if (null != img)
                 {
-                    AssetInst inst = AssetLoader.Instance().LoadRes(path + ":" + name, typeof(Sprite));
+                    AssetInst inst = AssetLoader.Instance().LoadRes(path, typeof(Sprite));
                     if (null != inst && null != inst.obj)
                     {
                         img.sprite = inst.obj as Sprite;

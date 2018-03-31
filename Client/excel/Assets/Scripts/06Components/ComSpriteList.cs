@@ -29,8 +29,8 @@ namespace GameClient
 			{
 				for (int i = 0; i < paths.Length; ++i) 
 				{
-					_pools[i] = AssetManager.Instance ().LoadResource<Sprite> (paths [0]);
-				}
+                    _pools[i] = AssetLoader.Instance().LoadRes(paths[i], typeof(Sprite)).obj as Sprite;
+                }
 			}
 		}
 

@@ -146,7 +146,8 @@ public class AssetDesc
     {
         IAsyncLoadRequest<UnityEngine.Object> res = null;
         //if (!Global.Settings.loadFromPackage || assetPath.Contains("Base/")) TOOPEN:DJM
-        if (assetPath.Contains("Base/"))
+        bool loadFromPackage = false;
+        if (!loadFromPackage || assetPath.Contains("Base/"))
         {
             float lastTimeMS = 0;
             if (type == typeof(Sprite))
@@ -341,7 +342,8 @@ public class AssetDesc
     {
         Object asset = null;
         //if (!Global.Settings.loadFromPackage || assetPath.Contains("Base/"))
-        if (assetPath.Contains("Base/"))
+        bool loadFromPackage = false;
+        if (!loadFromPackage || assetPath.Contains("Base/"))
         {
             float lastTimeMS = (Time.realtimeSinceStartup * 1000.0f);
 
@@ -650,7 +652,7 @@ public class AssetInst
 
     ~AssetInst()
     {
-        LogManager.Instance().LogErrorFormat("Asset instance [{0}] has be disposed!", m_AssetDesc.m_FullPath);
+        //LogManager.Instance().LogErrorFormat("Asset instance [{0}] has be disposed!", m_AssetDesc.m_FullPath);
 
         _Dispose();
         m_Object = null;

@@ -314,7 +314,7 @@ public class AssetLoader : Singleton<AssetLoader>
 
 #region 私有方法
 
-    public void Init()
+    public void Initialize()
     {
         AssetAsyncLoader.instance.Init();
 

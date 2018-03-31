@@ -17,6 +17,6 @@ namespace GameClient
 
         void SetObjectStatus(string objName, int status);
         void SetText(string objName, string value);
-        void SetImage(string objName, string path, string name);
+        void SetImage(string objName, string path);
     }
 }

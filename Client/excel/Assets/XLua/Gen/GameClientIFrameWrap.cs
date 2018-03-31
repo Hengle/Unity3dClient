@@ -305,9 +305,8 @@ namespace XLua.CSObjectWrap
                 {
                     string objName = LuaAPI.lua_tostring(L, 2);
                     string path = LuaAPI.lua_tostring(L, 3);
-                    string name = LuaAPI.lua_tostring(L, 4);
                     
-                    __cl_gen_to_be_invoked.SetImage( objName, path, name );
+                    __cl_gen_to_be_invoked.SetImage( objName, path );
                     
                     
                     

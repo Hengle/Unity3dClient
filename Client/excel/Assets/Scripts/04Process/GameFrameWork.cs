@@ -18,26 +18,18 @@ namespace GameClient
             }
 
             Application.targetFrameRate = 30;
-
-            //AssetPackageLoader.instance.LoadPackage("");
-
             //if (null != luaScript)
             //{
             //    LuaEnv luaEnv = new LuaEnv();
             //    luaEnv.DoString(luaScript.text);
             //    luaEnv.Dispose();
             //}
-            //UIManager.Instance ().OpenFrame<LobbyFrame> (FrameTypeID.FTID_LOBBY);
-
-            var mFrame = UIFrameLua.OpenFrameLua(3);
-            if(null != mFrame)
-            {
-                mFrame.SetImage("playerHead", "UI/Image/Packed/pck_lobby.png", "btnSetting");
-            }
+            UIManager.Instance ().OpenFrame<LobbyFrame> (3);
         }
 
         private bool Initialize()
         {
+            AssetLoader.Instance().Initialize();
             //initialize global data
             if (!GlobalDataManager.Instance().Initialize(this))
             {
@@ -75,14 +67,15 @@ namespace GameClient
         {
             InvokeManager.Instance().Update();
             AudioManager.Instance().Update();
+            AsyncLoadTaskManager.Instance().Update(Time.deltaTime);
         }
 
         void OnDestroy()
 		{
             AudioManager.Instance().Clear();
             InvokeManager.Instance().Clear();
-
-            InvokeManager.Instance().RemoveInvoke(this);
+            AsyncLoadTaskManager.Instance().ClearAllAsyncTasks();
+            AssetLoader.Instance().ClearAll();
         }
 	}
 }
