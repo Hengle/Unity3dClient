@@ -1,16 +1,85 @@
 version: 2
 importPivots: 1
 tpsheetFileNames:
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_0.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_1.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_10.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_11.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_12.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_13.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_14.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_16.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_17.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_18.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_19.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_2.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_20.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_21.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_22.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_23.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_3.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_4.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_5.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_6.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_7.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_8.tpsheet
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_9.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_lobby.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_common00.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_fish_main.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_number00.tpsheet
 textureFileNames:
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_0.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_1.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_10.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_11.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_12.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_13.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_14.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_16.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_17.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_18.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_19.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_2.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_20.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_21.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_22.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_23.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_3.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_4.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_5.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_6.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_7.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_8.png
+- Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_9.png
 - Assets/Resources/UI/Image/Packed/pck_lobby.png
 - Assets/Resources/UI/Image/Packed/pck_ui_common00.png
 - Assets/Resources/UI/Image/Packed/pck_ui_fish_main.png
 - Assets/Resources/UI/Image/Packed/pck_ui_number00.png
 normalmapFileNames:
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
 - 
 - 
 - 

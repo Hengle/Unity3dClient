@@ -1,0 +1,25 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_fish_action_4.png (1024 x 256)
+# $TexturePacker:SmartUpdate:ea6eda71f32bcd2d4e4bb9ca7c75582e:37e0bfd0d50f278ad0e1a364197c237d:ec41aad8af3f37bc329598e33135d14d$
+#
+
+fish_denglongyu_walking01;2;46;158;68;0.5;0.5
+fish_denglongyu_walking02;2;186;160;68;0.5;0.5
+fish_denglongyu_walking03;2;116;160;68;0.5;0.5
+fish_denglongyu_walking04;324;186;156;68;0.5;0.5
+fish_denglongyu_walking05;324;116;156;68;0.5;0.5
+fish_denglongyu_walking06;482;186;154;68;0.5;0.5
+fish_denglongyu_walking07;482;46;152;68;0.5;0.5
+fish_denglongyu_walking08;636;46;152;68;0.5;0.5
+fish_denglongyu_walking09;638;186;152;68;0.5;0.5
+fish_denglongyu_walking10;638;116;152;68;0.5;0.5
+fish_denglongyu_walking11;482;116;154;68;0.5;0.5
+fish_denglongyu_walking12;162;46;158;68;0.5;0.5
+fish_denglongyu_walking13;164;186;158;68;0.5;0.5
+fish_denglongyu_walking14;164;116;158;68;0.5;0.5
+fish_denglongyu_walking15;322;46;158;68;0.5;0.5

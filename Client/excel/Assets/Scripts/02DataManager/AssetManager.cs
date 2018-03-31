@@ -87,7 +87,7 @@ namespace GameClient
 
 			Dictionary<int,object> table = new Dictionary<int, object> ();
             bool bCanParse = Serializer.CanParse(type);
-			byte[] data = asset.bytes;
+			byte[] data = asset.m_DataBytes;
             
             for (int i = 0; i < data.Length;)
 			{

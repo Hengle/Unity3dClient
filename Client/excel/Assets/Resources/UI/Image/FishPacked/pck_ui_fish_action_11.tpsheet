@@ -1,0 +1,25 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_fish_action_11.png (1024 x 1024)
+# $TexturePacker:SmartUpdate:098579d41a4221bf90a2305dadb05883:2cdf8124de925b30403a4ffc9af4ec9f:cc5db77542b02df90346e54e14476be0$
+#
+
+fish_jinsha_walking01;2;464;296;138;0.5;0.5
+fish_jinsha_walking02;2;324;296;138;0.5;0.5
+fish_jinsha_walking03;2;884;298;138;0.5;0.5
+fish_jinsha_walking04;302;884;298;138;0.5;0.5
+fish_jinsha_walking05;602;884;298;138;0.5;0.5
+fish_jinsha_walking06;2;744;298;138;0.5;0.5
+fish_jinsha_walking07;302;744;298;138;0.5;0.5
+fish_jinsha_walking08;602;744;298;138;0.5;0.5
+fish_jinsha_walking09;2;604;298;138;0.5;0.5
+fish_jinsha_walking10;302;604;298;138;0.5;0.5
+fish_jinsha_walking11;602;604;298;138;0.5;0.5
+fish_jinsha_walking12;2;184;296;138;0.5;0.5
+fish_jinsha_walking13;2;44;296;138;0.5;0.5
+fish_jinsha_walking14;300;464;296;138;0.5;0.5
+fish_jinsha_walking15;598;464;296;138;0.5;0.5

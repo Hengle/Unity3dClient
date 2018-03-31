@@ -1,0 +1,30 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_fish_action_10.png (1024 x 1024)
+# $TexturePacker:SmartUpdate:0c4a85fcd945711fd49fe5bcf36b5e01:d1dbfd1c615081d212b0a3913eef41d1:39d71bb993c271dbf61706c315682975$
+#
+
+fish_jianyu_walking01;2;568;278;94;0.5;0.5
+fish_jianyu_walking02;2;472;276;94;0.5;0.5
+fish_jianyu_walking03;562;474;276;94;0.5;0.5
+fish_jianyu_walking04;2;378;274;92;0.5;0.5
+fish_jianyu_walking05;280;386;276;90;0.5;0.5
+fish_jianyu_walking06;282;478;278;90;0.5;0.5
+fish_jianyu_walking07;284;664;280;90;0.5;0.5
+fish_jianyu_walking08;2;758;282;88;0.5;0.5
+fish_jianyu_walking09;286;756;282;86;0.5;0.5
+fish_jianyu_walking10;2;936;284;86;0.5;0.5
+fish_jianyu_walking11;288;936;284;86;0.5;0.5
+fish_jianyu_walking12;574;936;284;86;0.5;0.5
+fish_jianyu_walking13;2;848;284;86;0.5;0.5
+fish_jianyu_walking14;572;846;282;88;0.5;0.5
+fish_jianyu_walking15;572;756;282;88;0.5;0.5
+fish_jianyu_walking16;288;844;282;90;0.5;0.5
+fish_jianyu_walking17;566;664;280;90;0.5;0.5
+fish_jianyu_walking18;2;664;280;92;0.5;0.5
+fish_jianyu_walking19;282;570;278;92;0.5;0.5
+fish_jianyu_walking20;562;570;278;92;0.5;0.5

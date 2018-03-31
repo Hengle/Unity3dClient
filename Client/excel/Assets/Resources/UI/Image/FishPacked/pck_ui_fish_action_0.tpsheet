@@ -1,0 +1,25 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_fish_action_0.png (1024 x 512)
+# $TexturePacker:SmartUpdate:18ca98fab962f5a1bddc612006c7b11e:a892fdfdfcf5d7e7c66d379fc3f82145:2e5a3bb7e65825f464b3ad6a162ff660$
+#
+
+bglu_gun01;2;220;172;94;0.5;0.5
+bglu_gun02;174;416;172;94;0.5;0.5
+bglu_gun03;174;320;172;94;0.5;0.5
+bglu_gun04;176;34;174;92;0.5;0.5
+bglu_gun05;348;232;174;90;0.5;0.5
+bglu_gun06;522;326;174;90;0.5;0.5
+bglu_gun07;524;420;174;90;0.5;0.5
+bglu_gun08;348;418;174;92;0.5;0.5
+bglu_gun09;348;324;172;92;0.5;0.5
+bglu_gun10;2;124;172;94;0.5;0.5
+bglu_gun11;2;28;172;94;0.5;0.5
+bglu_gun12;176;224;170;94;0.5;0.5
+bglu_gun13;176;128;170;94;0.5;0.5
+bglu_gun14;2;414;170;96;0.5;0.5
+bglu_gun15;2;316;170;96;0.5;0.5
