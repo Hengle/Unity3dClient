@@ -1,0 +1,3 @@
+    包名    , 包体大小(MB) ,    资源数量    ,    依赖包数量    ,    依赖包详情    ,    资源量详情    
+data_table.pck,0.05591774,6,0,,data/table/buffinfotable  |  data/table/bufftable  |  data/table/frametypetable  |  data/table/hotfixtable  |  data/table/localsettingtable  |  data/table/soundtable,
+total:0.05591774 MB,actor:0 MB,scene:0 MB,sound:0 MB,effect:0 MB,ui:0 MB,other:0.05591774 MB

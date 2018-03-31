@@ -138,7 +138,11 @@ namespace GameClient
                 Image img = mScriptBinder.GetObject(objName) as Image;
                 if (null != img)
                 {
-                    img.sprite = AssetManager.Instance().LoadImage(path,name);
+                    AssetInst inst = AssetLoader.Instance().LoadRes(path + ":" + name, typeof(Sprite));
+                    if (null != inst && null != inst.obj)
+                    {
+                        img.sprite = inst.obj as Sprite;
+                    }
                 }
             }
         }

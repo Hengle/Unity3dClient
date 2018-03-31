@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 455329135
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: cb44c538f877219967a98e56061544cd
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6008763a1d0c70a2c0e6f14e1409f6f8
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: 9eb3a3ab2ff86478b8c4c155fe9f2525, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/PackAssetTemp/84e0a9914336e8a43907742f35fee28f.asset
+- Assets/PackAssetTemp/77faf2212ff4b864d955a58ccf95147a.asset
+- Assets/PackAssetTemp/66ea15948885a4edfad06b52490b9d98.asset
+- Assets/PackAssetTemp/aee7a73087468864ca864cf94424401a.asset
+- Assets/PackAssetTemp/6fee02b409321453ebd2db4828b1db12.asset
+- Assets/PackAssetTemp/1cdb79fc392dd264288aae8b2b9936f7.asset
+Dependencies: []

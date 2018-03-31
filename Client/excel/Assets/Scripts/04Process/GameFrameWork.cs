@@ -12,20 +12,28 @@ namespace GameClient
 		{
 			GameObject.DontDestroyOnLoad (this);
 
-            if(!Initialize())
+            if (!Initialize())
             {
                 return;
             }
 
             Application.targetFrameRate = 30;
 
-            if (null != luaScript)
+            //AssetPackageLoader.instance.LoadPackage("");
+
+            //if (null != luaScript)
+            //{
+            //    LuaEnv luaEnv = new LuaEnv();
+            //    luaEnv.DoString(luaScript.text);
+            //    luaEnv.Dispose();
+            //}
+            //UIManager.Instance ().OpenFrame<LobbyFrame> (FrameTypeID.FTID_LOBBY);
+
+            var mFrame = UIFrameLua.OpenFrameLua(3);
+            if(null != mFrame)
             {
-                LuaEnv luaEnv = new LuaEnv();
-                luaEnv.DoString(luaScript.text);
-                luaEnv.Dispose();
+                mFrame.SetImage("playerHead", "UI/Image/Packed/pck_lobby.png", "btnSetting");
             }
-			//UIManager.Instance ().OpenFrame<LobbyFrame> (FrameTypeID.FTID_LOBBY);
         }
 
         private bool Initialize()
