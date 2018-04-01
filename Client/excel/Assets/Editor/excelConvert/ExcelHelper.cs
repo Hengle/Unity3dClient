@@ -48,11 +48,11 @@ namespace npoi
 				{
 					var assetPath = save_dir + name + ".asset";
 					AssetBinary asset = ScriptableSingleton<AssetBinary>.CreateInstance<AssetBinary> ();
-					asset.bytes = File.ReadAllBytes (txtPath);
+					asset.m_DataBytes = File.ReadAllBytes (txtPath);
 
 					if (File.Exists (assetPath)) {
 						AssetBinary oldAsset = AssetDatabase.LoadAssetAtPath<AssetBinary> (assetPath);
-						oldAsset.bytes = asset.bytes;
+						oldAsset.m_DataBytes = asset.m_DataBytes;
 						EditorUtility.SetDirty (oldAsset);
 						AssetDatabase.SaveAssets ();
 					} 

@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+using XLua;
 
 namespace GameClient
 {
+    [LuaCallCSharp]
     public class ClientFrame : IFrame
     {
         public int getFrameId()
@@ -12,7 +15,7 @@ namespace GameClient
             return frameId;
         }
 
-        public FrameTypeID getFrameTypeId()
+        public int getFrameTypeId()
         {
             return frameTypeId;
         }
@@ -37,7 +40,7 @@ namespace GameClient
             return (FrameLayer)frameItem.Layer;
         }
 
-        public void openFrame(int iId, FrameTypeID type, object userData)
+        public void openFrame(int iId = -1, int type = 1, object userData = null)
         {
             LogManager.Instance().LogProcessFormat(9000, "try open frame {0}!", type);
 
@@ -65,8 +68,8 @@ namespace GameClient
                 return;
             }
 
-            root = AssetManager.Instance().LoadResource<GameObject>(frameItem.Prefab);
-            if(null == root)
+            root = AssetLoader.Instance().LoadRes(frameItem.Prefab, typeof(GameObject)).obj as GameObject;
+            if (null == root)
             {
                 LogManager.Instance().LogProcessFormat(9000, "load frame prefab failed : path = {0} typeid = {1}", frameItem.Prefab, type);
                 return;
@@ -102,6 +105,46 @@ namespace GameClient
             userData = null;
             frameItem = null;
 			Resources.UnloadUnusedAssets ();
+        }
+
+        public void SetObjectStatus(string objName, int status)
+        {
+            if (null != mScriptBinder)
+            {
+                ComStateMachine stateMachine = mScriptBinder.GetObject(objName) as ComStateMachine;
+                if (null != stateMachine)
+                {
+                    stateMachine.Key = status;
+                }
+            }
+        }
+
+        public void SetText(string objName, string value)
+        {
+            if (null != mScriptBinder)
+            {
+                Text text = mScriptBinder.GetObject(objName) as Text;
+                if (null != text)
+                {
+                    text.text = value;
+                }
+            }
+        }
+
+        public void SetImage(string objName, string path)
+        {
+            if (null != mScriptBinder)
+            {
+                Image img = mScriptBinder.GetObject(objName) as Image;
+                if (null != img)
+                {
+                    AssetInst inst = AssetLoader.Instance().LoadRes(path, typeof(Sprite));
+                    if (null != inst && null != inst.obj)
+                    {
+                        img.sprite = inst.obj as Sprite;
+                    }
+                }
+            }
         }
 
         protected virtual void _InitScriptBinder()
@@ -219,7 +262,7 @@ namespace GameClient
         #endregion
 
         int frameId = -1;
-        FrameTypeID frameTypeId = FrameTypeID.FTID_INVALID;
+        int frameTypeId = -1;
         int iHashCode = 0;
         protected object userData = null;
         protected GameObject root = null;
@@ -234,7 +277,7 @@ namespace GameClient
             }
         }
 
-        public FrameTypeID FrameTypeID
+        public int FrameTypeID
         {
             get
             {

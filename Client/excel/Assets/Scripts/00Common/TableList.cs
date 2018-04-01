@@ -5,10 +5,9 @@ namespace GameClient
 {
 	class TableList
 	{
-		protected static Type[] ms_table_types = new Type[6]
+		protected static Type[] ms_table_types = new Type[5]
 		{
-			typeof(BuffInfoTable),
-			typeof(BuffTable),
+			typeof(FishTable),
 			typeof(FrameTypeTable),
 			typeof(HotFixTable),
 			typeof(LocalSettingTable),

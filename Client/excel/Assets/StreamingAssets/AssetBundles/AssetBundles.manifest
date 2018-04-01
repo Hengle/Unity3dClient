@@ -1,7 +1,7 @@
 ManifestFileVersion: 0
-CRC: 1367962602
+CRC: 3808354412
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: assembly_charpdll.pak
+      Name: packageinfo.pak
       Dependencies: {}

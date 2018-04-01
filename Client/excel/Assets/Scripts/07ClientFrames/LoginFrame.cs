@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Scripts.UI;
+using XLua;
 
 namespace GameClient
 {
-    public sealed class LoginFrame : ClientFrame
+    public class LoginFrame : ClientFrame
     {
 		UnityEngine.UI.Button mbtnClose;
 
@@ -21,11 +22,6 @@ namespace GameClient
 			{
 				mbtnClose.onClick.AddListener (_OnClickClose);
 			}
-        }
-
-        protected void _OnClickCloseFrame()
-        {
-            UIManager.Instance().CloseFrame(this);
         }
 
 		protected override sealed void _OnCloseFrame()

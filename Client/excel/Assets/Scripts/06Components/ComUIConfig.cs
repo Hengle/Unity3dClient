@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XLua;
 
 namespace GameClient
 {
+    [LuaCallCSharp]
     public enum FrameLayer
     {
         BOTTOM = 0,
@@ -12,6 +14,7 @@ namespace GameClient
         TOP,
         COUNT,
     }
+
 
     public class ComUIConfig : MonoBehaviour
     {

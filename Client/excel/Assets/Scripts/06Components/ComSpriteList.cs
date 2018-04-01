@@ -18,7 +18,33 @@ namespace GameClient
 		int _count = 0;
 		int _loops = 0;
 
-		void _LoadAllSprites()
+        public void LoadRes(string path,int count)
+        {
+            paths = new string[count];
+            for(int i = 0; i < paths.Length; ++i)
+            {
+                paths[i] = string.Format(path,(i + 1));
+            }
+            _pools = null;
+            _LoadAllSprites();
+        }
+
+        public void Reset()
+        {
+            _Reset();
+            Utility.LoadSprite(ref sprite, _GetSprite(_index));
+            sprite.SetNativeSize();
+        }
+
+        public void Play()
+        {
+            _Reset();
+            Utility.LoadSprite(ref sprite, _GetSprite(_index));
+            sprite.SetNativeSize();
+            _start = true;
+        }
+
+        void _LoadAllSprites()
 		{
 			if (null == _pools) 
 			{
@@ -29,8 +55,12 @@ namespace GameClient
 			{
 				for (int i = 0; i < paths.Length; ++i) 
 				{
-					_pools[i] = AssetManager.Instance ().LoadResource<Sprite> (paths [0]);
-				}
+                    _pools[i] = AssetLoader.Instance().LoadRes(paths[i], typeof(Sprite)).obj as Sprite;
+                    if(null == _pools[i])
+                    {
+                        LogManager.Instance().LogErrorFormat("load sprite failed !!! {0}", paths[i]);
+                    }
+                }
 			}
 		}
 
@@ -67,6 +97,14 @@ namespace GameClient
 			_LoadAllSprites ();
 			_Reset ();
 			Utility.LoadSprite (ref sprite, _GetSprite (_index));
+            if(null != sprite)
+            {
+                sprite.SetNativeSize();
+            }
+            if (playOnAwake)
+            {
+                _start = true;
+            }
 		}
 
 		void Update()

@@ -1,0 +1,48 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_fish_action_19.png (512 x 512)
+# $TexturePacker:SmartUpdate:5aee394604f2bc84f6743da41d17833d:2ea3edfab51ed01577d5447956bf593e:cb94b5f0f129e2a44fd28632d9059f18$
+#
+
+fish_xiaociyu_walking01;362;460;118;50;0.5;0.5
+fish_xiaociyu_walking02;362;408;118;50;0.5;0.5
+fish_xiaociyu_walking03;122;406;118;50;0.5;0.5
+fish_xiaociyu_walking04;2;402;118;50;0.5;0.5
+fish_xiaociyu_walking05;242;406;118;50;0.5;0.5
+fish_xiaociyu_walking06;2;246;116;50;0.5;0.5
+fish_xiaociyu_walking07;242;250;116;50;0.5;0.5
+fish_xiaociyu_walking08;362;356;118;50;0.5;0.5
+fish_xiaociyu_walking09;122;354;118;50;0.5;0.5
+fish_xiaociyu_walking10;2;350;118;50;0.5;0.5
+fish_xiaociyu_walking11;242;354;118;50;0.5;0.5
+fish_xiaociyu_walking12;362;304;118;50;0.5;0.5
+fish_xiaociyu_walking13;122;302;118;50;0.5;0.5
+fish_xiaociyu_walking14;2;298;118;50;0.5;0.5
+fish_xiaociyu_walking15;242;302;118;50;0.5;0.5
+fish_xiaociyu_walking16;122;406;118;50;0.5;0.5
+fish_xiaociyu_walking17;2;402;118;50;0.5;0.5
+fish_xiaociyu_walking18;242;406;118;50;0.5;0.5
+fish_xiaociyu_walking19;360;200;116;50;0.5;0.5
+fish_xiaociyu_walking20;120;198;116;50;0.5;0.5
+fish_xiaociyu_walking21;362;356;118;50;0.5;0.5
+fish_xiaociyu_walking22;122;354;118;50;0.5;0.5
+fish_xiaociyu_walking23;2;350;118;50;0.5;0.5
+fish_xiaociyu_walking24;2;454;118;56;0.5;0.5
+fish_xiaociyu_walking25;362;252;118;50;0.5;0.5
+fish_xiaociyu_walking26;122;302;118;50;0.5;0.5
+fish_xiaociyu_walking27;122;458;118;52;0.5;0.5
+fish_xiaociyu_walking28;242;458;118;52;0.5;0.5
+fish_xiaociyu_walking29;2;138;114;54;0.5;0.5
+fish_xiaociyu_walking30;118;84;112;54;0.5;0.5
+fish_xiaociyu_walking31;2;82;112;54;0.5;0.5
+fish_xiaociyu_walking32;236;134;112;56;0.5;0.5
+fish_xiaociyu_walking33;238;192;114;56;0.5;0.5
+fish_xiaociyu_walking34;120;140;114;56;0.5;0.5
+fish_xiaociyu_walking35;354;146;114;52;0.5;0.5
+fish_xiaociyu_walking36;2;194;116;50;0.5;0.5
+fish_xiaociyu_walking37;122;250;118;50;0.5;0.5
+fish_xiaociyu_walking38;122;250;118;50;0.5;0.5

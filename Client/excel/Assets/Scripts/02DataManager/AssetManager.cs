@@ -5,42 +5,13 @@ using ProtoBuf;
 using ProtoBuf.Meta;
 using System.IO;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace GameClient
 {
 	public class AssetManager : Singleton<AssetManager> 
 	{
 		private const string RES_CONFIG_TABLE_DATA_PATH = "Data/Table/";
-        Dictionary<int, UnityEngine.Object> memoryHandles = new Dictionary<int, UnityEngine.Object>();
-
-        public T LoadResource<T>(string path) where T : UnityEngine.Object, new()
-        {
-            int iHandleID = path.GetHashCode();
-            T handle = null;
-            if (!memoryHandles.ContainsKey(iHandleID))
-            {
-                handle = Resources.Load(path, typeof(T)) as T;
-
-                if (null == handle)
-                {
-                    Debug.LogErrorFormat("load resource failed : type = {0} path={1}", typeof(T), path);
-                    return null;
-                }
-
-                memoryHandles.Add(iHandleID, handle);
-            }
-            else
-            {
-                handle = memoryHandles[iHandleID] as T;
-            }
-
-            if (typeof(T) == typeof(AudioClip))
-            {
-                return handle;
-            }
-
-            return GameObject.Instantiate(handle) as T;
-        }
 
         public string GetTablePath(Type type)
 		{
@@ -74,7 +45,7 @@ namespace GameClient
             table = null;
 
             var path = GetTablePath(type);
-            AssetBinary res = Resources.Load(path, typeof(AssetBinary)) as AssetBinary;
+            AssetBinary res = AssetLoader.Instance().LoadRes(path, typeof(AssetBinary)).obj as AssetBinary;
             if (null == res)
             {
                 Debug.LogErrorFormat("can not find textasset type = {0}", type.Name);
@@ -116,7 +87,7 @@ namespace GameClient
 
 			Dictionary<int,object> table = new Dictionary<int, object> ();
             bool bCanParse = Serializer.CanParse(type);
-			byte[] data = asset.bytes;
+			byte[] data = asset.m_DataBytes;
             
             for (int i = 0; i < data.Length;)
 			{

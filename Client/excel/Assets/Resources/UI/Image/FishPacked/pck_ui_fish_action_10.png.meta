@@ -1,0 +1,364 @@
+fileFormatVersion: 2
+guid: c01db4b60a063364097155d000831912
+timeCreated: 1522484610
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: fish_jianyu_walking01
+    21300002: fish_jianyu_walking02
+    21300004: fish_jianyu_walking03
+    21300006: fish_jianyu_walking04
+    21300008: fish_jianyu_walking05
+    21300010: fish_jianyu_walking06
+    21300012: fish_jianyu_walking07
+    21300014: fish_jianyu_walking08
+    21300016: fish_jianyu_walking09
+    21300018: fish_jianyu_walking10
+    21300020: fish_jianyu_walking11
+    21300022: fish_jianyu_walking12
+    21300024: fish_jianyu_walking13
+    21300026: fish_jianyu_walking14
+    21300028: fish_jianyu_walking15
+    21300030: fish_jianyu_walking16
+    21300032: fish_jianyu_walking17
+    21300034: fish_jianyu_walking18
+    21300036: fish_jianyu_walking19
+    21300038: fish_jianyu_walking20
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Android
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: fish_jianyu_walking01
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 568
+        width: 278
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking02
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 472
+        width: 276
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking03
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 474
+        width: 276
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking04
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 378
+        width: 274
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking05
+      rect:
+        serializedVersion: 2
+        x: 280
+        y: 386
+        width: 276
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking06
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 478
+        width: 278
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking07
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 664
+        width: 280
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking08
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 758
+        width: 282
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking09
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 756
+        width: 282
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking10
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 936
+        width: 284
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking11
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 936
+        width: 284
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking12
+      rect:
+        serializedVersion: 2
+        x: 574
+        y: 936
+        width: 284
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking13
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 848
+        width: 284
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking14
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 846
+        width: 282
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking15
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 756
+        width: 282
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking16
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 844
+        width: 282
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking17
+      rect:
+        serializedVersion: 2
+        x: 566
+        y: 664
+        width: 280
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking18
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 664
+        width: 280
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking19
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 570
+        width: 278
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fish_jianyu_walking20
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 570
+        width: 278
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

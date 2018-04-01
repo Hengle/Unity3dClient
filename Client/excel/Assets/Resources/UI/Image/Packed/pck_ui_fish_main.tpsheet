@@ -1,0 +1,24 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_fish_main.png (512 x 512)
+# $TexturePacker:SmartUpdate:9195f866e25290d8f43dc4e1a95d660f:45d44ec5d0237a98f660e8a296494483:55235319a48ed023a258e14de6811d3d$
+#
+
+autofire;2;361;102;102;0.5;0.5
+beishudi;418;370;86;29;0.5;0.5
+btnsetting;106;305;102;102;0.5;0.5
+fenshudi;2;465;170;45;0.5;0.5
+hide;2;257;102;102;0.5;0.5
+jianpao;210;305;102;102;0.5;0.5
+jiaopao;314;297;102;102;0.5;0.5
+lock;106;201;102;102;0.5;0.5
+paoguan;344;401;142;109;0.5;0.5
+paotai;174;409;168;101;0.5;0.5
+quit;2;153;102;102;0.5;0.5
+shangfen;210;201;102;102;0.5;0.5
+unlock;2;49;102;102;0.5;0.5
+xiaofen;314;193;102;102;0.5;0.5

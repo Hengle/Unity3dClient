@@ -1,0 +1,7 @@
+data_table.pck(2)
+- Asset:data/table/buffinfotable(66ea15948885a4edfad06b52490b9d98)
+- Asset:data/table/bufftable(6fee02b409321453ebd2db4828b1db12)
+- Asset:data/table/frametypetable(aee7a73087468864ca864cf94424401a)
+- Asset:data/table/hotfixtable(84e0a9914336e8a43907742f35fee28f)
+- Asset:data/table/localsettingtable(77faf2212ff4b864d955a58ccf95147a)
+- Asset:data/table/soundtable(1cdb79fc392dd264288aae8b2b9936f7)

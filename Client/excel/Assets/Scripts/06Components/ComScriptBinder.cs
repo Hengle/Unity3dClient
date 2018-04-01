@@ -114,7 +114,7 @@ namespace GameClient
                 var image = scriptItems[find].component as Image;
                 if(null != image)
                 {
-                    image.sprite = AssetManager.Instance().LoadResource<Sprite>(value);
+                    image.sprite = AssetLoader.Instance().LoadRes(value, typeof(Sprite)).obj as Sprite;
                     return;
                 }
             }

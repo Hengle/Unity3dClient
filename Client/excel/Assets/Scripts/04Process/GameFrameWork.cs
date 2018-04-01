@@ -1,25 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
+using XLua;
 
 namespace GameClient
 {
 	class GameFrameWork : MonoBehaviour 
 	{
+        public TextAsset luaScript = null;
 		// Use this for initialization
 		void Start() 
 		{
 			GameObject.DontDestroyOnLoad (this);
 
-            if(!Initialize())
+            if (!Initialize())
             {
                 return;
             }
 
-			UIManager.Instance ().OpenFrame<LobbyFrame> (FrameTypeID.FTID_LOBBY);
+            Application.targetFrameRate = 30;
+            //if (null != luaScript)
+            //{
+            //    LuaEnv luaEnv = new LuaEnv();
+            //    luaEnv.DoString(luaScript.text);
+            //    luaEnv.Dispose();
+            //}
+            UIManager.Instance ().OpenFrame<LobbyFrame> (3);
         }
 
         private bool Initialize()
         {
+            AssetLoader.Instance().Initialize();
             //initialize global data
             if (!GlobalDataManager.Instance().Initialize(this))
             {
@@ -57,14 +67,15 @@ namespace GameClient
         {
             InvokeManager.Instance().Update();
             AudioManager.Instance().Update();
+            AsyncLoadTaskManager.Instance().Update(Time.deltaTime);
         }
 
         void OnDestroy()
 		{
             AudioManager.Instance().Clear();
             InvokeManager.Instance().Clear();
-
-            InvokeManager.Instance().RemoveInvoke(this);
+            AsyncLoadTaskManager.Instance().ClearAllAsyncTasks();
+            AssetLoader.Instance().ClearAll();
         }
 	}
 }
