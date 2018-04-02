@@ -36,15 +36,8 @@ namespace ProtoTable
       get { return _Prefab; }
       set { _Prefab = value; }
     }
-    private int _FrameCount;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"FrameCount", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
-    public int FrameCount
-    {
-      get { return _FrameCount; }
-      set { _FrameCount = value; }
-    }
     private int _Interval;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"Interval", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"Interval", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
     public int Interval
     {
       get { return _Interval; }
@@ -74,12 +67,7 @@ namespace ProtoTable
                     Prefab = source.ReadString();
                     break;
                     
-            case 4:   //FrameCount LABEL_REQUIRED TYPE_SINT32  ZigZag
-                    source.Hint(ProtoBuf.WireType.SignedVariant); 
-                    FrameCount = source.ReadInt32();
-                    break;
-                    
-            case 5:   //Interval LABEL_REQUIRED TYPE_SINT32  ZigZag
+            case 4:   //Interval LABEL_REQUIRED TYPE_SINT32  ZigZag
                     source.Hint(ProtoBuf.WireType.SignedVariant); 
                     Interval = source.ReadInt32();
                     break;

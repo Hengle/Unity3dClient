@@ -17,7 +17,7 @@ namespace GameClient
 
             public ProtoTable.FishTable fishItem;
             public GameObject self;
-            public ComSpriteList action;
+            public ComSpriteItems action;
 
             public void OnCreate(GameObject root)
             {
@@ -51,17 +51,16 @@ namespace GameClient
                 return;
             }
 
-            if (fishItem.FrameCount <= 0)
-            {
-                LogManager.Instance().LogErrorFormat("can not create fish with resId = {0} frameCount = {1} is less than 1 ", iResId, fishItem.FrameCount);
-                return;
-            }
-
-            string res = string.Format(fishItem.Prefab, 1);
-            Sprite sprite = AssetLoader.Instance().LoadRes(res, typeof(Sprite)).obj as Sprite;
-            if (null == sprite)
+            GameObject goFish = AssetLoader.Instance().LoadRes(fishItem.Prefab, typeof(GameObject)).obj as GameObject;
+            if (null == goFish)
             {
                 LogManager.Instance().LogErrorFormat("can not create fish first frame res is null ! resId = {0} name = {1}", iResId, fishItem.Desc);
+                return;
+            }
+            ComSpriteItems sprite = goFish.GetComponent<ComSpriteItems>();
+            if (null == sprite)
+            {
+                LogManager.Instance().LogErrorFormat("can not create fish first frame ComSpriteItems is null ! resId = {0} name = {1}", iResId, fishItem.Desc);
                 return;
             }
 
@@ -79,13 +78,11 @@ namespace GameClient
             if (-1 == findIndex)
             {
                 fishBody = new FishBody();
-                fishBody.self = new GameObject(fishItem.Desc);
-                Image img = fishBody.self.AddComponent<Image>();
+                fishBody.self = goFish;
+                Image img = sprite.sprite;
                 img.raycastTarget = false;
-                fishBody.action = fishBody.self.AddComponent<ComSpriteList>();
+                fishBody.action = sprite;
                 fishBody.action.sprite = img;
-                fishBody.action.LoadRes(fishItem.Prefab, fishItem.FrameCount);
-                fishBody.action.interval = fishItem.Interval;
                 fishBody.guid = guid;
                 fishBody.OnCreate(fishLayer);
             }

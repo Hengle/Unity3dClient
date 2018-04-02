@@ -4,6 +4,5 @@ message FishTable
 required sint32 ID = 1;
 required string Desc = 2;
 required string Prefab = 3;
-required sint32 FrameCount = 4;
-required sint32 Interval = 5;
+required sint32 Interval = 4;
 };
