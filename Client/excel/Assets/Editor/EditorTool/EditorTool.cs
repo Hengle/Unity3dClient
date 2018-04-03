@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.Text;
+using System.IO;
 
 public class EditorTool
 {
@@ -70,5 +71,43 @@ public class EditorTool
         StringBuilder path = new StringBuilder(GetAssetFullPath(assets));
         path = path.Replace(ResourceRootPath, "");
         return path.ToString();
+    }
+
+    private static string LuaSourceRootPath = "/XLuaCode/";
+
+    [MenuItem("XLua/Lua2Txt", false)]
+    static public void Lua2Txt()
+    {
+        var fullPath = Path.GetFullPath(Application.dataPath + LuaSourceRootPath);
+        Debug.LogErrorFormat(fullPath);
+        var files = Directory.GetFiles(fullPath, "*.lua");
+        for (int i = 0; i < files.Length; ++i)
+        {
+            var file = Path.GetFileName(files[i]);
+            if (!string.IsNullOrEmpty(file))
+            {
+                Debug.LogErrorFormat(file);
+                File.Move(files[i], files[i] + ".txt");
+            }
+        }
+        AssetDatabase.Refresh();
+    }
+
+    [MenuItem("XLua/Txt2Lua", false)]
+    static public void Txt2Lua()
+    {
+        var fullPath = Path.GetFullPath(Application.dataPath + LuaSourceRootPath);
+        Debug.LogErrorFormat(fullPath);
+        var files = Directory.GetFiles(fullPath, "*.lua.txt");
+        for (int i = 0; i < files.Length; ++i)
+        {
+            var file = Path.GetFileNameWithoutExtension(files[i]);
+            if (!string.IsNullOrEmpty(file))
+            {
+                Debug.LogErrorFormat(file);
+                File.Move(files[i], fullPath + file);
+            }
+        }
+        AssetDatabase.Refresh();
     }
 }

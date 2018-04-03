@@ -21,8 +21,10 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(LuaBehaviour);
-			Utils.BeginObjectRegister(type, L, translator, 0, 0, 2, 2);
+			Utils.BeginObjectRegister(type, L, translator, 0, 2, 2, 2);
 			
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnCloseFrame", _m_OnCloseFrame);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnOpenFrame", _m_OnOpenFrame);
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "luaScript", _g_get_luaScript);
@@ -74,6 +76,61 @@ namespace XLua.CSObjectWrap
         
         
         
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_OnCloseFrame(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                LuaBehaviour __cl_gen_to_be_invoked = (LuaBehaviour)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    
+                    __cl_gen_to_be_invoked.OnCloseFrame(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_OnOpenFrame(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                LuaBehaviour __cl_gen_to_be_invoked = (LuaBehaviour)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    GameClient.ClientFrame clientFrame = (GameClient.ClientFrame)translator.GetObject(L, 2, typeof(GameClient.ClientFrame));
+                    
+                    __cl_gen_to_be_invoked.OnOpenFrame( clientFrame );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
         
         
         

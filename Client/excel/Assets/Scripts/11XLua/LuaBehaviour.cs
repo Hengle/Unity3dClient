@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using XLua;
 using System;
+using GameClient;
 
 [System.Serializable]
 public class Injection
@@ -19,27 +20,33 @@ public class Injection
     public GameObject value;
 }
 
+[CSharpCallLua]
+public delegate void EAction();
+
+[CSharpCallLua]
+public delegate void EActionOpenFrame(ClientFrame clientFrame);
+
 [LuaCallCSharp]
 public class LuaBehaviour : MonoBehaviour {
     public TextAsset luaScript;
     public Injection[] injections;
 
-    internal static LuaEnv luaEnv = new LuaEnv(); //all lua behaviour shared one luaenv only!
+    //internal static LuaEnv luaEnv = new LuaEnv(); //all lua behaviour shared one luaenv only!
     internal static float lastGCTime = 0;
     internal const float GCInterval = 1;//1 second 
 
-    private Action luaStart;
-    private Action luaUpdate;
-    private Action luaOnDestroy;
+    private EActionOpenFrame luaOpenFrame;
+    private EAction luaUpdate;
+    private EAction luaCloseFrame;
 
     private LuaTable scriptEnv;
 
     void Awake()
     {
-        scriptEnv = luaEnv.NewTable();
+        scriptEnv = GameClient.GameFrameWork.LuaInstance.NewTable();
 
-        LuaTable meta = luaEnv.NewTable();
-        meta.Set("__index", luaEnv.Global);
+        LuaTable meta = GameClient.GameFrameWork.LuaInstance.NewTable();
+        meta.Set("__index", GameClient.GameFrameWork.LuaInstance.Global);
         scriptEnv.SetMetaTable(meta);
         meta.Dispose();
 
@@ -49,27 +56,37 @@ public class LuaBehaviour : MonoBehaviour {
             scriptEnv.Set(injection.name, injection.value);
         }
 
-        luaEnv.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
+        GameClient.GameFrameWork.LuaInstance.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
 
-        Action luaAwake = scriptEnv.Get<Action>("awake");
-        scriptEnv.Get("start", out luaStart);
+        scriptEnv.Get("OnOpenFrame", out luaOpenFrame);
         scriptEnv.Get("update", out luaUpdate);
-        scriptEnv.Get("ondestroy", out luaOnDestroy);
-
-        if (luaAwake != null)
-        {
-            luaAwake();
-        }
+        scriptEnv.Get("OnCloseFrame", out luaCloseFrame);
     }
 
-	// Use this for initialization
-	void Start ()
+    public void OnCloseFrame()
     {
-        if (luaStart != null)
+        if(null != luaCloseFrame)
         {
-            luaStart();
+            luaCloseFrame();
+            luaCloseFrame = null;
         }
-	}
+        luaUpdate = null;
+        luaOpenFrame = null;
+        if(null != scriptEnv)
+        {
+            scriptEnv.Dispose();
+            scriptEnv = null;
+        }
+        injections = null;
+    }
+
+    public void OnOpenFrame(ClientFrame clientFrame)
+    {
+        if(null != luaOpenFrame)
+        {
+            luaOpenFrame(clientFrame);
+        }
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -78,23 +95,5 @@ public class LuaBehaviour : MonoBehaviour {
         {
             luaUpdate();
         }
-        if (Time.time - LuaBehaviour.lastGCTime > GCInterval)
-        {
-            luaEnv.Tick();
-            LuaBehaviour.lastGCTime = Time.time;
-        }
 	}
-
-    void OnDestroy()
-    {
-        if (luaOnDestroy != null)
-        {
-            luaOnDestroy();
-        }
-        luaOnDestroy = null;
-        luaUpdate = null;
-        luaStart = null;
-        scriptEnv.Dispose();
-        injections = null;
-    }
 }

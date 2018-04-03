@@ -78,10 +78,15 @@ namespace GameClient
             Utility.AttachTo(root, GlobalDataManager.Instance().uiConfig.goLayers[(int)getLayer()]);
 
             mScriptBinder = root.GetComponent<ComScriptBinder>();
+            mLuaBehavior = root.GetComponent<LuaBehaviour>();
             _InitScriptBinder();
 
             LogManager.Instance().LogProcessFormat(9000, "open {0} frame succeed !", frameItem.Desc);
 
+            if(null != mLuaBehavior)
+            {
+                mLuaBehavior.OnOpenFrame(this);
+            }
             _OnOpenFrame();
         }
 
@@ -90,6 +95,10 @@ namespace GameClient
             LogManager.Instance().LogProcessFormat(9000, "close frame {0} !", frameTypeId);
 
             _OnCloseFrame();
+            if(null != mLuaBehavior)
+            {
+                mLuaBehavior.OnCloseFrame();
+            }
             _AutoUnRegisterAllEvents();
             _CancelAllInvokes();
             if(null != mScriptBinder)
@@ -145,6 +154,15 @@ namespace GameClient
                     }
                 }
             }
+        }
+
+        public Object GetObject(string objName)
+        {
+            if(null != mScriptBinder)
+            {
+                return mScriptBinder.GetObject(objName);
+            }
+            return null;
         }
 
         protected virtual void _InitScriptBinder()
@@ -268,6 +286,7 @@ namespace GameClient
         protected GameObject root = null;
         protected ProtoTable.FrameTypeTable frameItem = null;
         protected ComScriptBinder mScriptBinder = null;
+        protected LuaBehaviour mLuaBehavior = null;
 
         public int FrameID
         {

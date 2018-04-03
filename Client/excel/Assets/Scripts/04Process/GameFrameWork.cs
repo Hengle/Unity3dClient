@@ -1,14 +1,43 @@
 ﻿using UnityEngine;
 using System.Collections;
 using XLua;
+using System;
 
 namespace GameClient
 {
 	class GameFrameWork : MonoBehaviour 
 	{
         public TextAsset luaScript = null;
-		// Use this for initialization
-		void Start() 
+        public static LuaEnv LuaInstance
+        {
+            get
+            {
+                return luaEnv;
+            }
+        }
+        internal static LuaEnv luaEnv = new LuaEnv();
+        internal static float lastGCTime = 0;
+        internal const float GCInterval = 1;//1 second 
+
+        private Action luaStart;
+        private Action luaUpdate;
+        private Action luaOnDestroy;
+        private LuaTable scriptEnv;
+
+        void Awake()
+        {
+            scriptEnv = luaEnv.NewTable();
+
+            LuaTable meta = luaEnv.NewTable();
+            meta.Set("__index", luaEnv.Global);
+            scriptEnv.SetMetaTable(meta);
+            meta.Dispose();
+
+            scriptEnv.Set("self", this);
+        }
+
+        // Use this for initialization
+        void Start() 
 		{
 			GameObject.DontDestroyOnLoad (this);
 
@@ -18,13 +47,17 @@ namespace GameClient
             }
 
             Application.targetFrameRate = 30;
-            //if (null != luaScript)
-            //{
-            //    LuaEnv luaEnv = new LuaEnv();
-            //    luaEnv.DoString(luaScript.text);
-            //    luaEnv.Dispose();
-            //}
-            UIManager.Instance ().OpenFrame<LobbyFrame> (3);
+
+            luaEnv.DoString(luaScript.text);
+
+            scriptEnv.Get("start", out luaStart);
+            scriptEnv.Get("update", out luaUpdate);
+            scriptEnv.Get("ondestroy", out luaOnDestroy);
+
+            if (null != luaStart)
+            {
+                luaStart();
+            }
         }
 
         private bool Initialize()
@@ -68,6 +101,17 @@ namespace GameClient
             InvokeManager.Instance().Update();
             AudioManager.Instance().Update();
             AsyncLoadTaskManager.Instance().Update(Time.deltaTime);
+
+            if(null != luaUpdate)
+            {
+                luaUpdate();
+            }
+
+            if (Time.time - LuaBehaviour.lastGCTime > GCInterval)
+            {
+                luaEnv.Tick();
+                LuaBehaviour.lastGCTime = Time.time;
+            }
         }
 
         void OnDestroy()
@@ -76,6 +120,25 @@ namespace GameClient
             InvokeManager.Instance().Clear();
             AsyncLoadTaskManager.Instance().ClearAllAsyncTasks();
             AssetLoader.Instance().ClearAll();
+            UIManager.Instance().CloseAllFrames();
+            if(null != luaOnDestroy)
+            {
+                luaOnDestroy();
+            }
+            luaOnDestroy = null;
+            luaUpdate = null;
+            luaStart = null;
+            if(null != scriptEnv)
+            {
+                scriptEnv.Dispose();
+                scriptEnv = null;
+            }
+
+            //if (null != luaEnv)
+            //{
+            //    luaEnv.Dispose();
+            //    luaEnv = null;
+            //}
         }
 	}
 }

@@ -6,24 +6,34 @@
     using UnityEngine;
     using UnityEngine.UI;
     using UnityEngine.Serialization;
-
+    using XLua;
+    [LuaCallCSharp]
     public class ComUIListScript : MonoBehaviour
     {
+        [CSharpCallLua]
         public delegate System.Object OnBindItemDelegate(GameObject itemObject);
+        [CSharpCallLua]
         public delegate void          OnItemSelectedDelegate(ComUIListElementScript item);
+        [CSharpCallLua]
         public delegate void          OnItemVisiableDelegate(ComUIListElementScript item);
+        [CSharpCallLua]
         public delegate void          OnItemChangeDisplayDelegate(ComUIListElementScript item,bool bSelected);
+        [CSharpCallLua]
         public delegate void          OnItemRecycleDelegate(ComUIListElementScript item);
 
-
+        [CSharpCallLua]
         [HideInInspector]
         public OnBindItemDelegate           onBindItem;
+        [CSharpCallLua]
         [HideInInspector]
         public OnItemSelectedDelegate       onItemSelected;
+        [CSharpCallLua]
         [HideInInspector]
         public OnItemVisiableDelegate       onItemVisiable;
+        [CSharpCallLua]
         [HideInInspector]
         public OnItemChangeDisplayDelegate  onItemChageDisplay;
+        [CSharpCallLua]
         [HideInInspector]
         public OnItemRecycleDelegate        OnItemRecycle;
 
@@ -259,6 +269,7 @@
         
         public void Initialize()
         {
+            UnityEngine.Debug.LogError("Initialize Initialize Initialize");
             if (!m_isInitialized)
             {
                 m_isInitialized = true;
@@ -511,6 +522,11 @@
 
         private void OnDestroy()
         {
+            onBindItem = null;
+            onItemVisiable = null;
+            onItemSelected = null;
+            onItemChageDisplay = null;
+            OnItemRecycle = null;
             /* 
             if (LeanTween.IsInitialised())
             {

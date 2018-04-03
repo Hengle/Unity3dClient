@@ -38,6 +38,8 @@ namespace GameClient
         public ScriptBinderItem[] scriptItems = new ScriptBinderItem[0];
         [HideInInspector]
         public ScriptStateItem[] scriptStatus = new ScriptStateItem[0];
+        [HideInInspector]
+        public ClientFrame mFrameHandle = null;
 
         protected int findItemLabel(string key)
         {

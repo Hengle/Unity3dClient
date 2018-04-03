@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XLua;
+using Scripts.UI;
 
 namespace GameClient
 {
@@ -18,5 +19,6 @@ namespace GameClient
         void SetObjectStatus(string objName, int status);
         void SetText(string objName, string value);
         void SetImage(string objName, string path);
+        Object GetObject(string objName);
     }
 }

@@ -83,7 +83,6 @@ namespace GameClient
                 img.raycastTarget = false;
                 fishBody.action = sprite;
                 fishBody.action.sprite = img;
-                fishBody.guid = guid;
                 fishBody.OnCreate(fishLayer);
             }
             else
@@ -93,13 +92,15 @@ namespace GameClient
                 fishBody.guid = guid;
                 fishBody.OnCreate(fishLayer);
             }
-            _actived.Add(fishBody);
 
             if (null != fishBody)
             {
                 fishBody.SetPosition(new Vector2(UnityEngine.Random.Range(-20, 20), UnityEngine.Random.Range(-20, 20)));
+                fishBody.guid = guid;
+                fishBody.resId = iResId;
                 fishBody.action.Play();
                 fishBody.action.loops = -1;
+                _actived.Add(fishBody);
             }
         }
 
