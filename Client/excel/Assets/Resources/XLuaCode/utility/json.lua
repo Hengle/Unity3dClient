@@ -39,7 +39,7 @@ local base = _G
 -- Module declaration
 -----------------------------------------------------------------------------
 --module("json")
-local modname = {}
+local json = {}
 
 -- Public functions
 
@@ -71,7 +71,7 @@ function json.encode (v)
 
   -- Handle strings
   if vtype=='string' then
-    return '"' .. encodeString(v) .. '"'	    -- Need to handle encoding in string
+    return '"' .. json.encodeString(v) .. '"'	    -- Need to handle encoding in string
   end
 
   -- Handle booleans
@@ -83,15 +83,15 @@ function json.encode (v)
   if vtype=='table' then
     local rval = {}
     -- Consider arrays separately
-    local bArray, maxCount = isArray(v)
+    local bArray, maxCount = json.isArray(v)
     if bArray then
       for i = 1,maxCount do
         table.insert(rval, json.encode(v[i]))
       end
     else	-- An object, not an array
       for i,j in base.pairs(v) do
-        if isEncodable(i) and isEncodable(j) then
-          table.insert(rval, '"' .. encodeString(i) .. '":' .. json.encode(j))
+        if json.isEncodable(i) and json.isEncodable(j) then
+          table.insert(rval, '"' .. json.encodeString(i) .. '":' .. json.encode(j))
         end
       end
     end
@@ -119,7 +119,7 @@ end
 -- the scanned JSON object.
 function json.decode(s, startPos)
   startPos = startPos and startPos or 1
-  startPos = decode_scanWhitespace(s,startPos)
+  startPos = json.decode_scanWhitespace(s,startPos)
   base.assert(startPos<=string.len(s), 'Unterminated JSON encoded object found at position in [' .. s .. ']')
   local curChar = string.sub(s,startPos,startPos)
   -- Object
@@ -136,7 +136,7 @@ function json.decode(s, startPos)
   end
   -- String
   if curChar==[["]] or curChar==[[']] then
-    return decode_scanString(s,startPos)
+    return json.decode_scanString(s,startPos)
   end
   if string.sub(s,startPos,startPos+1)=='/*' then
     return json.decode(s, json.decode_scanComment(s,startPos))
@@ -250,23 +250,23 @@ function json.decode_scanObject(s,startPos)
   base.assert(string.sub(s,startPos,startPos)=='{','decode_scanObject called but object does not start at position ' .. startPos .. ' in string:\n' .. s)
   startPos = startPos + 1
   repeat
-    startPos = decode_scanWhitespace(s,startPos)
+    startPos = json.decode_scanWhitespace(s,startPos)
     base.assert(startPos<=stringLen, 'JSON string ended unexpectedly while scanning object.')
     local curChar = string.sub(s,startPos,startPos)
     if (curChar=='}') then
       return object,startPos+1
     end
     if (curChar==',') then
-      startPos = decode_scanWhitespace(s,startPos+1)
+      startPos = json.decode_scanWhitespace(s,startPos+1)
     end
     base.assert(startPos<=stringLen, 'JSON string ended unexpectedly scanning object.')
     -- Scan the key
     key, startPos = json.decode(s,startPos)
     base.assert(startPos<=stringLen, 'JSON string ended unexpectedly searching for value of key ' .. key)
-    startPos = decode_scanWhitespace(s,startPos)
+    startPos = json.decode_scanWhitespace(s,startPos)
     base.assert(startPos<=stringLen, 'JSON string ended unexpectedly searching for value of key ' .. key)
     base.assert(string.sub(s,startPos,startPos)==':','JSON object key-value assignment mal-formed at ' .. startPos)
-    startPos = decode_scanWhitespace(s,startPos+1)
+    startPos = json.decode_scanWhitespace(s,startPos+1)
     base.assert(startPos<=stringLen, 'JSON string ended unexpectedly searching for value of key ' .. key)
     value, startPos = json.decode(s,startPos)
     object[key]=value
@@ -375,4 +375,4 @@ function json.isEncodable(o)
   return (t=='string' or t=='boolean' or t=='number' or t=='nil' or t=='table') or (t=='function' and o==null)
 end
 
-return modname
+return json

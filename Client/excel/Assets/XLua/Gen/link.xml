@@ -3,7 +3,8 @@
 <linker>
 
 	<assembly fullname="Assembly-CSharp">
-	    <type fullname="GameClient.FrameTypeID" preserve="all"/>
+	    <type fullname="NetWork.HttpNet" preserve="all"/>
+		<type fullname="GameClient.FrameTypeID" preserve="all"/>
 		<type fullname="GameClient.ClientFrame" preserve="all"/>
 		<type fullname="GameClient.IFrame" preserve="all"/>
 		<type fullname="GameClient.FrameLayer" preserve="all"/>
