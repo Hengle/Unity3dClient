@@ -1,1 +1,2 @@
-local frame = CS.GameClient.UIFrameLua.OpenFrameLua(3)
+--打开登陆界面
+local frame = CS.GameClient.UIFrameLua.OpenFrameLua(1)

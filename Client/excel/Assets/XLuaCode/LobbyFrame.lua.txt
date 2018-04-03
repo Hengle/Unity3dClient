@@ -1,22 +1,21 @@
-local lobbyFrame = null;
+--打开登陆界面
+local frame = nil
 
 --点击返回按钮
 local OnClickReturn = function()
-	CS.UnityEngine.Debug.LogError('OnClickReturn !!!')
+	if nil ~= frame then
+		CS.GameClient.UIFrameLua.CloseFrame(frame)
+		frame = nil
+	end
 end
 
 function OnOpenFrame(x)
-	lobbyFrame = x
-	x = nil;
-	lobbyFrame:GetObject('btnReturn').onClick:AddListener(OnClickReturn)
-    --Button组件添加监听事件
+	--添加点击登陆安扭事件
+	frame = x
+	x = nil
+	frame:GetObject('btnReturn').onClick:AddListener(OnClickReturn)
 end
 
-function update()
-    -- body
-end
-
-function OnCloseFrame()
-    CS.UnityEngine.Debug.LogError("This is OnCloseFrame function")
-	lobbyFrame = nil;
+function OnCloseFrame(x)
+	frame = nil
 end

@@ -75,7 +75,7 @@ public class EditorTool
 
     private static string LuaSourceRootPath = "/XLuaCode/";
 
-    [MenuItem("XLua/Lua2Txt", false)]
+    [MenuItem("XLua/Lua2Txt(给UNITY用)", false)]
     static public void Lua2Txt()
     {
         var fullPath = Path.GetFullPath(Application.dataPath + LuaSourceRootPath);
@@ -93,7 +93,7 @@ public class EditorTool
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("XLua/Txt2Lua", false)]
+    [MenuItem("XLua/Txt2Lua(方便Lua编辑器读)", false)]
     static public void Txt2Lua()
     {
         var fullPath = Path.GetFullPath(Application.dataPath + LuaSourceRootPath);

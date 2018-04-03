@@ -17,5 +17,13 @@ namespace GameClient
         {
             UIManager.Instance().CloseFrameLua(frameTypeId, frameId);
         }
+
+        public static void CloseFrame(IFrame frame)
+        {
+            if(null != frame)
+            {
+                UIManager.Instance().CloseFrameLua(frame.getFrameTypeId(), frame.getFrameId());
+            }
+        }
     }
 }

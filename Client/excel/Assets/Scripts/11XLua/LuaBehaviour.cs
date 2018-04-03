@@ -56,7 +56,14 @@ public class LuaBehaviour : MonoBehaviour {
             scriptEnv.Set(injection.name, injection.value);
         }
 
-        GameClient.GameFrameWork.LuaInstance.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
+        if(null != luaScript)
+        {
+            GameClient.GameFrameWork.LuaInstance.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
+        }
+        else
+        {
+            UnityEngine.Debug.LogErrorFormat("luaScript can not be nil !!!");
+        }
 
         scriptEnv.Get("OnOpenFrame", out luaOpenFrame);
         scriptEnv.Get("update", out luaUpdate);

@@ -1,0 +1,1272 @@
+fileFormatVersion: 2
+guid: 5eec07bb7a27a7b419fa60260124d2b7
+timeCreated: 1522727343
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Common_background_black
+    21300002: Tongyong_Xialatiao_Shangmian_Di_01
+    21300004: Tongyong_Xialatiao_Xiamian_Di_01
+    21300006: UI_Common_TabPageBG01
+    21300008: UI_Common_TitleBar01_Shadow
+    21300010: UI_Common_TitleLine01
+    21300012: UI_Common_TitleTextBG01
+    21300014: UI_Common_Xian
+    21300016: UI_Tongyong_Anniu_Huangse_01
+    21300018: UI_Tongyong_Anniu_Lanse_01
+    21300020: UI_Tongyong_Anniu_Quren_Changtai_01
+    21300022: UI_Tongyong_Anniu_Quren_Xuanzhong_01
+    21300024: UI_Tongyong_Anniu_Quren_Xuanzhong_02
+    21300026: UI_Tongyong_Anniu_Quren_Xuanzhong_03
+    21300028: UI_Tongyong_Anniu_Quren_Xuanzhong_04
+    21300030: UI_Tongyong_Anniu_Quren_Xuanzhong_05
+    21300032: UI_Tongyong_Anniu_Quren_Xuanzhong_06
+    21300034: UI_Tongyong_Anniu_Quren_Xuanzhong_07
+    21300036: UI_Tongyong_Anniu_Quren_Xuanzhong_08
+    21300038: UI_Tongyong_Cedaohang_Changtai
+    21300040: UI_Tongyong_Cedaohang_Tubiao_Jiantou
+    21300042: UI_Tongyong_Cedaohang_Tubiao_Jiantou_Xiangxia
+    21300044: UI_Tongyong_Cedaohang_Xuanzhong
+    21300046: UI_Tongyong_Cedaohang_Xuanzhong_01
+    21300048: UI_Tongyong_Cedaohang_Xuanzhong_Huangse
+    21300050: UI_Tongyong_Guang_Fengexian
+    21300052: UI_Tongyong_Hengxiangyeqian_Changtai_01
+    21300054: UI_Tongyong_Hengxiangyeqian_Xuanzhong_01
+    21300056: UI_Tongyong_Huangse
+    21300058: UI_Tongyong_Huawen_Di_01
+    21300060: UI_Tongyong_Huawen_Di_02
+    21300062: UI_Tongyong_Huawen_Di_03_
+    21300064: UI_Tongyong_Item_04
+    21300066: UI_Tongyong_Item_Huangse_Xuanzhong
+    21300068: UI_Tongyong_Jianbian_Di
+    21300070: UI_Tongyong_Jindutiao_Tiao_01
+    21300072: UI_Tongyong_Lanse_Zhuangshi_Guang
+    21300074: UI_Tongyong_Piaozi_Tankuang
+    21300076: UI_Tongyong_Quanping_Di_01
+    21300078: UI_Tongyong_Quanping_Di_02
+    21300080: UI_Tongyong_Quanping_Jiesuan_Di_01
+    21300082: UI_Tongyong_Saiji_Zhijiao_Di
+    21300084: UI_Tongyong_Shengji
+    21300086: UI_Tongyong_Shurukuang_Di
+    21300088: UI_Tongyong_Shurukuang_Xiala_Di
+    21300090: UI_Tongyong_Shuxiang_Yeqian_Changtai_01
+    21300092: UI_Tongyong_Shuxiang_Yeqian_Xuanzhong_01
+    21300094: UI_Tongyong_Tiaomu_01
+    21300096: UI_Tongyong_Tiaomu_02
+    21300098: UI_Tongyong_Tiaomu_03
+    21300100: UI_Tongyong_Title_Jinbi_Heise_Di
+    21300102: UI_Tongyong_Title_Zuishangmian_Di
+    21300104: UI_Tongyong_Tubiao_Biaoti_Jiahao
+    21300106: UI_Tongyong_Tubiao_Blue_Di
+    21300108: UI_Tongyong_Tubiao_Chenghuijian
+    21300110: UI_Tongyong_Tubiao_Close
+    21300112: UI_Tongyong_Tubiao_Close_01
+    21300114: UI_Tongyong_Tubiao_Fengzhuang
+    21300116: UI_Tongyong_Tubiao_GouxuanLvse
+    21300118: UI_Tongyong_Tubiao_Gouxuan_Di
+    21300120: UI_Tongyong_Tubiao_Green_Di
+    21300122: UI_Tongyong_Tubiao_Hongdian
+    21300124: UI_Tongyong_Tubiao_Huakuai
+    21300126: UI_Tongyong_Tubiao_Huise_Di
+    21300128: UI_Tongyong_Tubiao_Jineng_Big_Di
+    21300130: UI_Tongyong_Tubiao_Lanse_Duanxian
+    21300132: UI_Tongyong_Tubiao_Orange_Di
+    21300134: UI_Tongyong_Tubiao_Pink_Di
+    21300136: UI_Tongyong_Tubiao_Purple_Di
+    21300138: UI_Tongyong_Tubiao_Red_Di
+    21300140: UI_Tongyong_Tubiao_Shurukuang
+    21300142: UI_Tongyong_Tubiao_Sousuo
+    21300144: UI_Tongyong_Tubiao_Title_Jineng_Di
+    21300146: UI_Tongyong_Tubiao_Tongyong_Di
+    21300148: UI_Tongyong_Tubiao_Wenhao
+    21300150: UI_Tongyong_Tubiao_Wenzi_Di
+    21300152: UI_Tongyong_Tubiao_White_Di
+    21300154: UI_Tongyong_Tubiao_Xinde
+    21300156: UI_Tongyong_Tubiao_Xingxing_Liangse
+    21300158: UI_Tongyong_Tubiao_Xlt
+    21300160: UI_Tongyong_Tubiao_Zudui_Di_01
+    21300162: UI_Tongyong_Xiala_Di
+    21300164: UI_Tongyong_Xian_Huangse_01
+    21300166: UI_Tongyong_Xiankuang_Yuanjiao_Di_01
+    21300168: UI_Tongyong_Xuanzhongkuang_Di
+    21300170: UI_Tongyong_jianbian
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Common_background_black
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 902
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Tongyong_Xialatiao_Shangmian_Di_01
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 908
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: Tongyong_Xialatiao_Xiamian_Di_01
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 909
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Common_TabPageBG01
+      rect:
+        serializedVersion: 2
+        x: 913
+        y: 566
+        width: 60
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Common_TitleBar01_Shadow
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 832
+        width: 10
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Common_TitleLine01
+      rect:
+        serializedVersion: 2
+        x: 859
+        y: 577
+        width: 55
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Common_TitleTextBG01
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 840
+        width: 140
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Common_Xian
+      rect:
+        serializedVersion: 2
+        x: 1020
+        y: 1020
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Huangse_01
+      rect:
+        serializedVersion: 2
+        x: 492
+        y: 489
+        width: 227
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Lanse_01
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 418
+        width: 227
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Quren_Changtai_01
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 418
+        width: 48
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Quren_Xuanzhong_01
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 382
+        width: 227
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Quren_Xuanzhong_02
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 403
+        width: 227
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Quren_Xuanzhong_03
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 916
+        width: 100
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Quren_Xuanzhong_04
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 468
+        width: 227
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Quren_Xuanzhong_05
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 575
+        width: 227
+        height: 106
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Quren_Xuanzhong_06
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 504
+        width: 227
+        height: 106
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Quren_Xuanzhong_07
+      rect:
+        serializedVersion: 2
+        x: 314
+        y: 677
+        width: 48
+        height: 84
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Anniu_Quren_Xuanzhong_08
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 858
+        width: 100
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Cedaohang_Changtai
+      rect:
+        serializedVersion: 2
+        x: 889
+        y: 693
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Cedaohang_Tubiao_Jiantou
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 548
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Cedaohang_Tubiao_Jiantou_Xiangxia
+      rect:
+        serializedVersion: 2
+        x: 435
+        y: 901
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Cedaohang_Xuanzhong
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 504
+        width: 31
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Cedaohang_Xuanzhong_01
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 698
+        width: 27
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Cedaohang_Xuanzhong_Huangse
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 776
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Guang_Fengexian
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 981
+        width: 512
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Hengxiangyeqian_Changtai_01
+      rect:
+        serializedVersion: 2
+        x: 917
+        y: 765
+        width: 67
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Hengxiangyeqian_Xuanzhong_01
+      rect:
+        serializedVersion: 2
+        x: 507
+        y: 575
+        width: 287
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Huangse
+      rect:
+        serializedVersion: 2
+        x: 507
+        y: 673
+        width: 300
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Huawen_Di_01
+      rect:
+        serializedVersion: 2
+        x: 917
+        y: 573
+        width: 65
+        height: 122
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Huawen_Di_02
+      rect:
+        serializedVersion: 2
+        x: 913
+        y: 475
+        width: 58
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Huawen_Di_03_
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 667
+        width: 50
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Item_04
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 608
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Item_Huangse_Xuanzhong
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 786
+        width: 57
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Jianbian_Di
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 897
+        width: 45
+        height: 3
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Jindutiao_Tiao_01
+      rect:
+        serializedVersion: 2
+        x: 481
+        y: 821
+        width: 5
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Lanse_Zhuangshi_Guang
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 889
+        width: 400
+        height: 133
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Piaozi_Tankuang
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 581
+        width: 32
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Quanping_Di_01
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 744
+        width: 91
+        height: 143
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Quanping_Di_02
+      rect:
+        serializedVersion: 2
+        x: 907
+        y: 721
+        width: 8
+        height: 166
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Quanping_Jiesuan_Di_01
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 576
+        width: 41
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Saiji_Zhijiao_Di
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 710
+        width: 11
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Shengji
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 814
+        width: 36
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Shurukuang_Di
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 902
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Shurukuang_Xiala_Di
+      rect:
+        serializedVersion: 2
+        x: 889
+        y: 669
+        width: 26
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Shuxiang_Yeqian_Changtai_01
+      rect:
+        serializedVersion: 2
+        x: 985
+        y: 643
+        width: 32
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Shuxiang_Yeqian_Xuanzhong_01
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 855
+        width: 312
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tiaomu_01
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 624
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tiaomu_02
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 616
+        width: 50
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tiaomu_03
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 738
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Title_Jinbi_Heise_Di
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 674
+        width: 75
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Title_Zuishangmian_Di
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 853
+        width: 172
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Biaoti_Jiahao
+      rect:
+        serializedVersion: 2
+        x: 875
+        y: 627
+        width: 40
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Blue_Di
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 820
+        width: 300
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Chenghuijian
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 683
+        width: 258
+        height: 135
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Close
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 922
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Close_01
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 616
+        width: 50
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Fengzhuang
+      rect:
+        serializedVersion: 2
+        x: 875
+        y: 586
+        width: 40
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_GouxuanLvse
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 897
+        width: 70
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Gouxuan_Di
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 631
+        width: 48
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Green_Di
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 854
+        width: 300
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Hongdian
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 609
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Huakuai
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 775
+        width: 19
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Huise_Di
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 819
+        width: 300
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Jineng_Big_Di
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 906
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Lanse_Duanxian
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 850
+        width: 150
+        height: 1
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Orange_Di
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 784
+        width: 300
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Pink_Di
+      rect:
+        serializedVersion: 2
+        x: 511
+        y: 749
+        width: 300
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Purple_Di
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 680
+        width: 300
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Red_Di
+      rect:
+        serializedVersion: 2
+        x: 510
+        y: 714
+        width: 300
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Shurukuang
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 763
+        width: 51
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Sousuo
+      rect:
+        serializedVersion: 2
+        x: 859
+        y: 524
+        width: 52
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Title_Jineng_Di
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 816
+        width: 58
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Tongyong_Di
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 762
+        width: 11
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Wenhao
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 767
+        width: 52
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Wenzi_Di
+      rect:
+        serializedVersion: 2
+        x: 917
+        y: 697
+        width: 66
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_White_Di
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 975
+        width: 384
+        height: 4
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Xinde
+      rect:
+        serializedVersion: 2
+        x: 986
+        y: 739
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Xingxing_Liangse
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 545
+        width: 61
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Xlt
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 857
+        width: 20
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Tubiao_Zudui_Di_01
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 612
+        width: 27
+        height: 69
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Xiala_Di
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 674
+        width: 4
+        height: 174
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Xian_Huangse_01
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 968
+        width: 381
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Xiankuang_Yuanjiao_Di_01
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 691
+        width: 47
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_Xuanzhongkuang_Di
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 927
+        width: 23
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: UI_Tongyong_jianbian
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 953
+        width: 126
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

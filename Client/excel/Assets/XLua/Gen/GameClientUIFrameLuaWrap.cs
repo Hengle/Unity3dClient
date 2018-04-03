@@ -31,9 +31,10 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 3, 0, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 4, 0, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "OpenFrameLua", _m_OpenFrameLua_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "CloseFrameLua", _m_CloseFrameLua_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "CloseFrame", _m_CloseFrame_xlua_st_);
             
 			
             
@@ -165,6 +166,32 @@ namespace XLua.CSObjectWrap
             }
             
             return LuaAPI.luaL_error(L, "invalid arguments to GameClient.UIFrameLua.CloseFrameLua!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_CloseFrame_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    GameClient.IFrame frame = (GameClient.IFrame)translator.GetObject(L, 1, typeof(GameClient.IFrame));
+                    
+                    GameClient.UIFrameLua.CloseFrame( frame );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
             
         }
         
