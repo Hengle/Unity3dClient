@@ -1,10 +1,7 @@
 --打开登陆界面
-package.path = package.path ..';.\\utility\\?.lua';
-print(package.path);
-
 
 local frame = CS.GameClient.UIFrameLua.OpenFrameLua(1)
-local json = require("json")
+local json = require(".utility.json")
 
 local params = {a=1, b="my"}
 local msg = json.encode(params)

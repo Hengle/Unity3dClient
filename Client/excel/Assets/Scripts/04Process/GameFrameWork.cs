@@ -28,7 +28,7 @@ namespace GameClient
         private byte[] CustomLoaderMethod(ref string fileName)
         {
             Debug.LogErrorFormat("CustomLoaderMethod fileName");
-            fileName = Application.dataPath + "/XLuaCode/" + fileName.Replace('.', '/') + ".lua";
+            fileName = Application.dataPath + "/Resources/XLuaCode" + fileName.Replace('.', '/') + ".lua";
             Debug.LogErrorFormat("TargetPath = {0}", fileName);
             if (File.Exists(fileName))
             {
