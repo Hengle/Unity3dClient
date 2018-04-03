@@ -1,2 +1,17 @@
 --打开登陆界面
+package.path = package.path ..';.\\utility\\?.lua';
+print(package.path);
+
+
 local frame = CS.GameClient.UIFrameLua.OpenFrameLua(1)
+local json = require("json")
+
+local params = {a=1, b="my"}
+local msg = json.encode(params)
+print(msg)
+
+local http = frame:GetObject('http')
+http:Post(function(isError, res)
+	print(isError)
+	print(res)
+end, "www.baidu.com")
