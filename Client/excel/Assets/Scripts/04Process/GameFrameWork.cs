@@ -2,6 +2,7 @@
 using System.Collections;
 using XLua;
 using System;
+using System.IO;
 
 namespace GameClient
 {
@@ -24,8 +25,26 @@ namespace GameClient
         private Action luaOnDestroy;
         private LuaTable scriptEnv;
 
+        private byte[] CustomLoaderMethod(ref string fileName)
+        {
+            Debug.LogErrorFormat("CustomLoaderMethod fileName");
+            fileName = Application.dataPath + "/XLuaCode/" + fileName.Replace('.', '/') + ".lua";
+            Debug.LogErrorFormat("TargetPath = {0}", fileName);
+            if (File.Exists(fileName))
+            {
+                return File.ReadAllBytes(fileName);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         void Awake()
         {
+            LuaEnv.CustomLoader method = CustomLoaderMethod;
+            luaEnv.AddLoader(method);
+
             scriptEnv = luaEnv.NewTable();
 
             LuaTable meta = luaEnv.NewTable();
