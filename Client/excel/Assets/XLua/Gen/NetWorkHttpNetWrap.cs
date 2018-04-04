@@ -23,7 +23,7 @@ namespace XLua.CSObjectWrap
 			System.Type type = typeof(NetWork.HttpNet);
 			Utils.BeginObjectRegister(type, L, translator, 0, 2, 0, 0);
 			
-			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Log", _m_Log);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Get", _m_Get);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Post", _m_Post);
 			
 			
@@ -74,7 +74,7 @@ namespace XLua.CSObjectWrap
         
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_Log(RealStatePtr L)
+        static int _m_Get(RealStatePtr L)
         {
 		    try {
             
@@ -86,8 +86,10 @@ namespace XLua.CSObjectWrap
             
                 
                 {
+                    NetWork.HttpResponseCb cb = translator.GetDelegate<NetWork.HttpResponseCb>(L, 2);
+                    string url = LuaAPI.lua_tostring(L, 3);
                     
-                    __cl_gen_to_be_invoked.Log(  );
+                    __cl_gen_to_be_invoked.Get( cb, url );
                     
                     
                     
