@@ -4,10 +4,18 @@ local LoginFrame = {}
 local json = require(".utility.json")
 local util = require(".utility.util")
 local web = require(".net.web")
-LOGIN_SERVER = { ip="192.168.0.100", port=6001 }
 
 --点击登陆按钮
 local OnClickLogin = function()
+	--[[
+	local hasAccount = true
+	if hasAccount then
+		CS.GameClient.UIFrameLua.OpenFrameLua(3)
+	else
+		CS.UnityEngine.Debug.LogError('has no Account Register !!!')
+	end
+	]]
+	--准备登陆
 
 	local account = frame:GetObject('account').text
 	local password = frame:GetObject('password').text
@@ -19,20 +27,12 @@ local OnClickLogin = function()
 		return
 	end
 	
-	--准备登陆
+
 	LoginFrame:login({
             channel = 'game',
             account = account, 
             password = password,
         })
-		
-	--[[
-	local hasAccount = true
-	if hasAccount then
-		CS.GameClient.UIFrameLua.OpenFrameLua(3)
-	else
-		CS.UnityEngine.Debug.LogError('has no Account Register !!!')
-	end]]
 end
 
 function OnOpenFrame(x)
@@ -100,8 +100,10 @@ function LoginFrame:serverTimeAndPack(callback, params)
 end
 
 function loginCallback(ok, msg)
-    print(ok)
-    print(msg)
+	if ok then
+			print(msg)
+		return
+	end
     --print("loginCallback,ok:"..ok.."msg:"..msg)
 end
 

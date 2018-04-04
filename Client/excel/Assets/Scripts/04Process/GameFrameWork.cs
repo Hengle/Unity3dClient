@@ -27,6 +27,7 @@ namespace GameClient
 
         private byte[] CustomLoaderMethod(ref string fileName)
         {
+#if UNITY_EDITOR
             fileName = Application.dataPath + "/Resources/XLuaCode" + fileName.Replace('.', '/') + ".lua";
             if (File.Exists(fileName))
             {
@@ -37,6 +38,22 @@ namespace GameClient
                 Debug.LogErrorFormat("Load Lua File {0} Failed !!!", fileName);
                 return null;
             }
+#else
+            fileName = "XLuaCode" + fileName;
+            fileName = fileName.Replace('.', '/') + ".lua";
+            var assetInst = AssetLoader.Instance().LoadRes(fileName, typeof(TextAsset));
+            if(null != assetInst && null != assetInst.obj)
+            {
+                TextAsset file = assetInst.obj as TextAsset;
+                if (file != null)
+                {
+                    return file.bytes;
+                }
+            }
+
+            LogManager.Instance().LogProcessFormat(1000,"can not load lua file {0}",fileName);
+            return null;
+#endif
         }
 
         void Awake()

@@ -73,41 +73,71 @@ public class EditorTool
         return path.ToString();
     }
 
-    private static string LuaSourceRootPath = "/XLuaCode/";
+    private static string LuaSourceRootPath = "/Resources/XLuaCode/";
 
     [MenuItem("XLua/Lua2Txt(给UNITY用)", false)]
     static public void Lua2Txt()
     {
-        var fullPath = Path.GetFullPath(Application.dataPath + LuaSourceRootPath);
-        Debug.LogErrorFormat(fullPath);
-        var files = Directory.GetFiles(fullPath, "*.lua");
-        for (int i = 0; i < files.Length; ++i)
+        try
         {
-            var file = Path.GetFileName(files[i]);
-            if (!string.IsNullOrEmpty(file))
+            var fullPath = Path.GetFullPath(Application.dataPath + LuaSourceRootPath);
+            var dirs = Directory.GetDirectories(fullPath);
+            for (int j = 0; j < dirs.Length; ++j)
             {
-                Debug.LogErrorFormat(file);
-                File.Move(files[i], files[i] + ".txt");
+                Debug.LogFormat("<color=#00ff00>convert dir : {0}</color>", dirs[j]);
+                var files = Directory.GetFiles(dirs[j] + "/", "*.lua");
+                for (int i = 0; i < files.Length; ++i)
+                {
+                    var file = Path.GetFileName(files[i]);
+                    if (!string.IsNullOrEmpty(file))
+                    {
+                        Debug.LogFormat("<color=#00ff00>convert file : {0}</color>", file);
+                        File.Move(files[i], files[i] + ".txt");
+                    }
+                }
             }
         }
+        catch (System.Exception e)
+        {
+            Debug.LogErrorFormat(e.ToString());
+            return;
+        }
+
+        Debug.LogFormat("<color=#00ff00>convert all .lua to .lua.txt succeed !!</color>");
+
         AssetDatabase.Refresh();
     }
 
     [MenuItem("XLua/Txt2Lua(方便Lua编辑器读)", false)]
     static public void Txt2Lua()
     {
-        var fullPath = Path.GetFullPath(Application.dataPath + LuaSourceRootPath);
-        Debug.LogErrorFormat(fullPath);
-        var files = Directory.GetFiles(fullPath, "*.lua.txt");
-        for (int i = 0; i < files.Length; ++i)
+        try
         {
-            var file = Path.GetFileNameWithoutExtension(files[i]);
-            if (!string.IsNullOrEmpty(file))
+            var fullPath = Path.GetFullPath(Application.dataPath + LuaSourceRootPath);
+            var dirs = Directory.GetDirectories(fullPath);
+            for (int j = 0; j < dirs.Length; ++j)
             {
-                Debug.LogErrorFormat(file);
-                File.Move(files[i], fullPath + file);
+                Debug.LogFormat("<color=#00ff00>convert dir : {0}</color>", dirs[j]);
+                var files = Directory.GetFiles(dirs[j] + "/", "*.txt");
+                for (int i = 0; i < files.Length; ++i)
+                {
+                    var file = Path.GetFileName(files[i]);
+                    if (!string.IsNullOrEmpty(file))
+                    {
+                        Debug.LogFormat("<color=#00ff00>convert file : {0}</color>", file);
+                        File.Move(files[i], files[i].Substring(0, files[i].Length - 4));
+                    }
+                }
             }
         }
+        catch (System.Exception e)
+        {
+            Debug.LogErrorFormat(e.ToString());
+            return;
+        }
+
+        Debug.LogFormat("<color=#00ff00>convert all .lua.txt to .lua succeed !!</color>");
+
         AssetDatabase.Refresh();
     }
 }

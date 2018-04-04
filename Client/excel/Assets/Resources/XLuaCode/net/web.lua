@@ -1,4 +1,4 @@
-LOGIN_SERVER = { ip="192.168.0.100", port=6001 }
+LOGIN_SERVER = { ip="192.168.0.108", port=6001 }
 local web = {}
 local http = CS.UnityEngine.GameObject.Find('GameFrameWork'):GetComponent('HttpNet')
 
