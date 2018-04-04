@@ -1,21 +1,26 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/04Process/GameFrameWork.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/07ClientFrames/SettingFrame/ComSettingFrameDataBinder.cs">
     <Files>
       <File FileName="Assets/Scripts/04Process/GameFrameWork.cs" Line="17" Column="4" />
       <File FileName="Assets/Editor/Package/PackageAsset.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/01TableScripts/BuffInfoTable.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/07ClientFrames/LoginFrame.cs" Line="8" Column="2" />
-      <File FileName="Assets/Scripts/06Components/ComSpriteList.cs" Line="20" Column="3" />
-      <File FileName="Assets/Scripts/02DataManager/AssetManager.cs" Line="28" Column="18" />
+      <File FileName="Assets/Scripts/07ClientFrames/LoginFrame.cs" Line="25" Column="3" />
+      <File FileName="Assets/Scripts/06Components/ComSpriteList.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/02DataManager/AssetManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/04Process/ClientFrame.cs" Line="24" Column="3" />
       <File FileName="Assets/Scripts/06Components/ComScriptBinder.cs" Line="26" Column="6" />
-      <File FileName="Assets/Scripts/07ClientFrames/LobbyFrame.cs" Line="11" Column="4" />
-      <File FileName="Assets/Scripts/02DataManager/UIManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/07ClientFrames/SettingFrame.cs" Line="26" Column="25" />
+      <File FileName="Assets/Scripts/06Components/ComStateMachine.cs" Line="22" Column="3" />
+      <File FileName="Assets/Editor/Components/ComStateMachineEditor.cs" Line="30" Column="2" />
+      <File FileName="Assets/Editor/Components/ComScriptBinderEditor.cs" Line="225" Column="3" />
+      <File FileName="Assets/Scripts/07ClientFrames/SettingFrame/ComSettingFrameDataBinder.cs" Line="36" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/shenshaojun/Documents/GitHub/Unity3dClient/Client/excel/Assets/Scripts/07ClientFrames/SettingFrame/ComSettingFrameDataBinder.cs" line="36" column="8" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
