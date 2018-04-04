@@ -12,14 +12,29 @@ namespace NetWork
     [LuaCallCSharp]
     public class HttpNet : MonoBehaviour
     {
-        public void Log()
+        public void Get(HttpResponseCb cb, string url)
         {
-            Debug.Log("this is httpnet!");
+            StartCoroutine(getRequest(cb, url));
         }
 
         public void Post(HttpResponseCb cb, string url, string postData)
         {
             StartCoroutine(postRequest(cb, url, postData));
+        }
+
+        IEnumerator getRequest(HttpResponseCb cb, string url)
+        {
+            UnityWebRequest uwr = UnityWebRequest.Get(url);
+            yield return uwr.Send();
+
+            if (uwr.isError)
+            {
+                cb(true, uwr.error);
+            }
+            else
+            {
+                cb(false, uwr.downloadHandler.text);
+            }
         }
 
         IEnumerator postRequest(HttpResponseCb cb, string url, string postData)

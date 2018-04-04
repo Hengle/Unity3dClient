@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GameClient;
+using System;
+using System.Security.Cryptography;
+using System.Text;
 
 public static class Utility
 {
@@ -126,4 +129,5 @@ public static class Utility
 #endif
         return url;
     }
+    
 }

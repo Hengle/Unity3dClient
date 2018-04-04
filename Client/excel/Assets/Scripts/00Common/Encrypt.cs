@@ -2,12 +2,15 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.IO;
+using XLua;
 
 namespace Common
 {
 	/// <summary>
 	/// DESEncrypt加密解密算法。
 	/// </summary>
+    /// 
+    [LuaCallCSharp]
 	public sealed class DESEncrypt
 	{
 		private DESEncrypt()
@@ -17,29 +20,28 @@ namespace Common
 			//
 		}
 
-		private static string key = "zhoufoxcn";
+        [LuaCallCSharp]
+        public static string MyEncode(string Text, Int64 tm)
+        {
+            tm = tm >> 1;
+            var key = string.Format("{0:X}", tm);
+            return DesEncrypt(Text, key);
+        }
 
-		/// <summary>
-		/// 对称加密解密的密钥
-		/// </summary>
-		public static string Key
-		{
-			get
-			{
-				return key;
-			}
-			set
-			{
-				key = value;
-			}
-		}
+        [LuaCallCSharp]
+        public static string MyDecode(string Text, Int64 tm)
+        {
+            tm = tm >> 1;
+            var key = string.Format("{0:X}", tm);
+            return DesDecrypt(Text, key);
+        }
 
-		/// <summary>
-		/// DES加密
-		/// </summary>
-		/// <param name="encryptString"></param>
-		/// <returns></returns>
-		public static string DesEncrypt(string encryptString)
+        /// <summary>
+        /// DES加密
+        /// </summary>
+        /// <param name="encryptString"></param>
+        /// <returns></returns>
+        public static string DesEncrypt(string encryptString, string key)
 		{
 			byte[] keyBytes = Encoding.UTF8.GetBytes(key.Substring(0, 8));
 			byte[] keyIV = keyBytes;
@@ -57,7 +59,7 @@ namespace Common
 		/// </summary>
 		/// <param name="decryptString"></param>
 		/// <returns></returns>
-		public static string DesDecrypt(string decryptString)
+		public static string DesDecrypt(string decryptString, string key)
 		{
 			byte[] keyBytes = Encoding.UTF8.GetBytes(key.Substring(0, 8));
 			byte[] keyIV = keyBytes;
