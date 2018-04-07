@@ -269,7 +269,6 @@
         
         public void Initialize()
         {
-            UnityEngine.Debug.LogError("Initialize Initialize Initialize");
             if (!m_isInitialized)
             {
                 m_isInitialized = true;
