@@ -13,29 +13,17 @@ using XLua;
 using System;
 using GameClient;
 
-[System.Serializable]
-public class Injection
-{
-    public string name;
-    public GameObject value;
-}
-
 [CSharpCallLua]
 public delegate void EAction();
 
-[CSharpCallLua]
-public delegate void EActionOpenFrame(ClientFrame clientFrame);
-
 [LuaCallCSharp]
-public class LuaBehaviour : MonoBehaviour {
+public class LuaBehaviour : MonoBehaviour
+{
     public TextAsset luaScript;
-    public Injection[] injections;
-
-    //internal static LuaEnv luaEnv = new LuaEnv(); //all lua behaviour shared one luaenv only!
     internal static float lastGCTime = 0;
     internal const float GCInterval = 1;//1 second 
 
-    private EActionOpenFrame luaOpenFrame;
+    private EAction luaOpenFrame;
     private EAction luaUpdate;
     private EAction luaCloseFrame;
 
@@ -49,21 +37,6 @@ public class LuaBehaviour : MonoBehaviour {
         meta.Set("__index", GameClient.GameFrameWork.LuaInstance.Global);
         scriptEnv.SetMetaTable(meta);
         meta.Dispose();
-
-        scriptEnv.Set("self", this);
-        foreach (var injection in injections)
-        {
-            scriptEnv.Set(injection.name, injection.value);
-        }
-
-        if(null != luaScript)
-        {
-            GameClient.GameFrameWork.LuaInstance.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
-        }
-        else
-        {
-            UnityEngine.Debug.LogErrorFormat("luaScript can not be nil !!!");
-        }
 
         scriptEnv.Get("OnOpenFrame", out luaOpenFrame);
         scriptEnv.Get("update", out luaUpdate);
@@ -84,14 +57,24 @@ public class LuaBehaviour : MonoBehaviour {
             scriptEnv.Dispose();
             scriptEnv = null;
         }
-        injections = null;
     }
 
     public void OnOpenFrame(ClientFrame clientFrame)
     {
-        if(null != luaOpenFrame)
+        scriptEnv.Set("self", clientFrame);
+
+        if (null != luaScript)
         {
-            luaOpenFrame(clientFrame);
+            GameClient.GameFrameWork.LuaInstance.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
+        }
+        else
+        {
+            UnityEngine.Debug.LogErrorFormat("luaScript can not be nil !!!");
+        }
+
+        if (null != luaOpenFrame)
+        {
+            luaOpenFrame();
         }
     }
 	
