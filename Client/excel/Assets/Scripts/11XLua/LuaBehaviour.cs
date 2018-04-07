@@ -53,6 +53,7 @@ public class LuaBehaviour : MonoBehaviour
             scriptEnv.Dispose();
             scriptEnv = null;
         }
+        luaScript = null;
     }
 
     public void OnOpenFrame(ClientFrame clientFrame)

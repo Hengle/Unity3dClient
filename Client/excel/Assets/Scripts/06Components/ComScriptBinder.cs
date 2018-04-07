@@ -258,9 +258,9 @@ namespace GameClient
             }
         }
 
-        void OnDestroy()
+        public void DestroyWithFrame()
         {
-            if(null != mRegistertedEvents)
+            if (null != mRegistertedEvents)
             {
                 for (int i = 0; i < mRegistertedEvents.Count; ++i)
                 {
@@ -269,22 +269,31 @@ namespace GameClient
                 mRegistertedEvents.Clear();
             }
 
-            for(int i = 0; i < scriptItems.Length; ++i)
+            for (int i = 0; i < scriptItems.Length; ++i)
             {
                 var scriptItem = scriptItems[i];
-                if(null != scriptItem)
+                if (null != scriptItem)
                 {
-                    if(scriptItem.component is Button)
+                    if (scriptItem.component is Button)
                     {
                         (scriptItem.component as Button).onClick.RemoveAllListeners();
                     }
-                    else if(scriptItem.component is Toggle)
+                    else if (scriptItem.component is Toggle)
                     {
                         (scriptItem.component as Toggle).onValueChanged.RemoveAllListeners();
+                    }
+                    else if(scriptItem.component is ComUIListBinderItems)
+                    {
+                        (scriptItem.component as ComUIListBinderItems).UnInitialize();
                     }
                 }
                 scriptItems[i] = null;
             }
+        }
+
+        void OnDestroy()
+        {
+            DestroyWithFrame();
         }
     }
 }

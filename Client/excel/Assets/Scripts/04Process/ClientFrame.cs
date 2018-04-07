@@ -95,7 +95,7 @@ namespace GameClient
             LogManager.Instance().LogProcessFormat(9000, "close frame {0} !", frameTypeId);
 
             _OnCloseFrame();
-            if(null != mLuaBehavior)
+            if (null != mLuaBehavior)
             {
                 mLuaBehavior.OnCloseFrame();
             }
@@ -104,6 +104,7 @@ namespace GameClient
             if(null != mScriptBinder)
             {
                 mScriptBinder.StopAllCoroutines();
+                mScriptBinder.DestroyWithFrame();
             }
             mScriptBinder = null;
             if (null != root)

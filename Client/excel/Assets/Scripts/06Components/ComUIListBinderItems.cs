@@ -111,6 +111,9 @@ namespace GameClient
                 comUiListScript.onItemChageDisplay = null;
                 comUiListScript = null;
             }
+            mOnListElementVisible = null;
+            mOnListElementSelected = null;
+            mOnListElementChangeDisplay = null;
             mElementCount = 0;
         }
     }

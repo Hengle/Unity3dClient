@@ -153,9 +153,10 @@ namespace GameClient
 		{
             AudioManager.Instance().Clear();
             InvokeManager.Instance().Clear();
+            UIManager.Instance().CloseAllFrames();
             AsyncLoadTaskManager.Instance().ClearAllAsyncTasks();
             AssetLoader.Instance().ClearAll();
-            UIManager.Instance().CloseAllFrames();
+            
             if(null != luaOnDestroy)
             {
                 luaOnDestroy();
