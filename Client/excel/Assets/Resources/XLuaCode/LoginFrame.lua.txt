@@ -1,5 +1,4 @@
 --打开登陆界面
-local frame = nil
 local LoginFrame = {}
 local json = require(".utility.json")
 local util = require(".utility.util")
@@ -20,8 +19,8 @@ local OnClickLogin = function()
 	--return
 	--准备登陆
 	--[[
-	local account = frame:GetObject('account').text
-	local password = frame:GetObject('password').text
+	local account = self:GetObject('account').text
+	local password = self:GetObject('password').text
 	CS.UnityEngine.Debug.LogError('account = ' .. account .. ' password = ' .. password)
 	
 	local err = LoginFrame:checkLoginInput(account,password)
@@ -39,19 +38,17 @@ local OnClickLogin = function()
 		]]
 end
 
-function OnOpenFrame(x)
+function OnOpenFrame()
 	--添加点击登陆安扭事件
-	frame = x
-	x = nil
+	CS.UnityEngine.Debug.LogError('OnOpenFrame')
+	self:GetObject('account').text = 'DingJiaMing'
+	self:GetObject('password').text = '123456'
 	
-	frame:GetObject('account').text = 'DingJiaMing'
-	frame:GetObject('password').text = '123456'
-	
-	frame:GetObject('btnLogin').onClick:AddListener(OnClickLogin)
+	self:GetObject('btnLogin').onClick:AddListener(OnClickLogin)
 	
 	local accounts = {"jermine","wangzhe","shenshaojun","sddr","lanwei","niceo","sfaoer","ggsdrlll" }
 	
-	local accountList = frame:GetObject('accountList')
+	local accountList = self:GetObject('accountList')
 	if accountList then
 		accountList:Initialize()
 		accountList.mOnListElementVisible = function(index,script)
@@ -64,11 +61,10 @@ function OnOpenFrame(x)
 end
 
 function OnCloseFrame()
-	local accountList = frame:GetObject('accountList')
+	local accountList = self:GetObject('accountList')
 	if accountList then
 		accountList:UnInitialize()
 	end
-	frame = nil
 end
 
 function LoginFrame:checkLoginInput(account, password)

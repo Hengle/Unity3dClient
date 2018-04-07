@@ -37,10 +37,6 @@ public class LuaBehaviour : MonoBehaviour
         meta.Set("__index", GameClient.GameFrameWork.LuaInstance.Global);
         scriptEnv.SetMetaTable(meta);
         meta.Dispose();
-
-        scriptEnv.Get("OnOpenFrame", out luaOpenFrame);
-        scriptEnv.Get("update", out luaUpdate);
-        scriptEnv.Get("OnCloseFrame", out luaCloseFrame);
     }
 
     public void OnCloseFrame()
@@ -62,14 +58,12 @@ public class LuaBehaviour : MonoBehaviour
     public void OnOpenFrame(ClientFrame clientFrame)
     {
         scriptEnv.Set("self", clientFrame);
-
         if (null != luaScript)
         {
             GameClient.GameFrameWork.LuaInstance.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
-        }
-        else
-        {
-            UnityEngine.Debug.LogErrorFormat("luaScript can not be nil !!!");
+            scriptEnv.Get("OnOpenFrame", out luaOpenFrame);
+            scriptEnv.Get("update", out luaUpdate);
+            scriptEnv.Get("OnCloseFrame", out luaCloseFrame);
         }
 
         if (null != luaOpenFrame)

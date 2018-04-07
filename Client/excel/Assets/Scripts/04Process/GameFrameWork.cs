@@ -169,11 +169,11 @@ namespace GameClient
                 scriptEnv = null;
             }
 
-            //if (null != luaEnv)
-            //{
-            //    luaEnv.Dispose();
-            //    luaEnv = null;
-            //}
+            if (null != luaEnv)
+            {
+                luaEnv.Dispose();
+                luaEnv = null;
+            }
         }
 	}
 }
