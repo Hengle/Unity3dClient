@@ -24,11 +24,6 @@ namespace GameClient
     [LuaCallCSharp]
     public class MessageBoxFrame : ClientFrame
     {
-        public static string FormatMessage(int iId,params object[] objs)
-        {
-            return string.Empty;
-        }
-
         public static void Open(OnClickMessageBoxOK onOk, OnClickMessageBoxCancel onCancel, string title, string desc,string ok, string cancel, int frameId = -1,int msgId = 6)
         {
             MessageBoxFrameData data = new MessageBoxFrameData

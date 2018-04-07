@@ -31,9 +31,8 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 3, 0, 0);
-			Utils.RegisterFunc(L, Utils.CLS_IDX, "FormatMessage", _m_FormatMessage_xlua_st_);
-            Utils.RegisterFunc(L, Utils.CLS_IDX, "Open", _m_Open_xlua_st_);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 2, 0, 0);
+			Utils.RegisterFunc(L, Utils.CLS_IDX, "Open", _m_Open_xlua_st_);
             
 			
             
@@ -72,34 +71,6 @@ namespace XLua.CSObjectWrap
         
         
         
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _m_FormatMessage_xlua_st_(RealStatePtr L)
-        {
-		    try {
-            
-                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
-            
-            
-            
-                
-                {
-                    int iId = LuaAPI.xlua_tointeger(L, 1);
-                    object[] objs = translator.GetParams<object>(L, 2);
-                    
-                        string __cl_gen_ret = GameClient.MessageBoxFrame.FormatMessage( iId, objs );
-                        LuaAPI.lua_pushstring(L, __cl_gen_ret);
-                    
-                    
-                    
-                    return 1;
-                }
-                
-            } catch(System.Exception __gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
-            }
-            
-        }
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int _m_Open_xlua_st_(RealStatePtr L)
