@@ -1,0 +1,9 @@
+package ProtoTable;
+message CommonMessageTable
+{
+required sint32 ID = 1;
+required string Descs = 2;
+required string TitleText = 3;
+required string OkText = 4;
+required string CancelText = 5;
+};

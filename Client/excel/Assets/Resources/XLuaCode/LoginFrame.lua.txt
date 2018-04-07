@@ -16,7 +16,7 @@ local OnClickLogin = function()
 	end
 	]]
 	
-	CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,"fuck","nice to meet you ! may i make friend with you","OK","CANCEL")
+	CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,1)
 	--return
 	--准备登陆
 	--[[

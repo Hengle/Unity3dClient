@@ -12,7 +12,6 @@ namespace GameClient
 
     class MessageBoxFrameData
     {
-        public int iId = -1;
         public string title = string.Empty;
         public string ok = string.Empty;
         public string cancel = string.Empty;
@@ -24,19 +23,23 @@ namespace GameClient
     [LuaCallCSharp]
     public class MessageBoxFrame : ClientFrame
     {
-        public static void Open(OnClickMessageBoxOK onOk, OnClickMessageBoxCancel onCancel, string title, string desc,string ok, string cancel, int frameId = -1,int msgId = 6)
+        static string ms_empty = "-";
+        public static void Open(OnClickMessageBoxOK onOk, OnClickMessageBoxCancel onCancel,int messageId,int frameTypeId = 6, int frameId = -1)
         {
-            MessageBoxFrameData data = new MessageBoxFrameData
+            var messageTable = TableManager.Instance().GetTableItem<ProtoTable.CommonMessageTable>(messageId);
+            if(null != messageTable)
             {
-                iId = frameId,
-                title = title,
-                ok = ok,
-                cancel = cancel,
-                cbOk = onOk,
-                cbCancel = onCancel,
-                desc = desc,
-            };
-            UIManager.Instance().OpenFrame<MessageBoxFrame>(msgId, data, frameId);
+                MessageBoxFrameData data = new MessageBoxFrameData
+                {
+                    title = messageTable.TitleText,
+                    ok = messageTable.OkText,
+                    cancel = messageTable.CancelText,
+                    desc = messageTable.Descs,
+                    cbOk = onOk,
+                    cbCancel = onCancel,
+                };
+                UIManager.Instance().OpenFrame<MessageBoxFrame>(frameTypeId, data, frameId);
+            }
         }
 
         MessageBoxFrameData data = null;
@@ -91,19 +94,24 @@ namespace GameClient
                 if(null != mOkText)
                 {
                     mOkText.text = data.ok;
-                    mgoOK.CustomActive(!string.IsNullOrEmpty(data.ok));
+                    mgoOK.CustomActive(_IsValidContent(data.ok));
                 }
                 if(null != mCancelText)
                 {
                     mCancelText.text = data.cancel;
-                    mgoCancel.CustomActive(!string.IsNullOrEmpty(data.cancel));
+                    mgoCancel.CustomActive(_IsValidContent(data.cancel));
                 }
                 if(null != mTitleText)
                 {
                     mTitleText.text = data.title;
-                    mgoTitle.CustomActive(!string.IsNullOrEmpty(data.title));
+                    mgoTitle.CustomActive(_IsValidContent(data.title));
                 }
             }
+        }
+
+        bool _IsValidContent(string content)
+        {
+            return !string.IsNullOrEmpty(content) && !content.Equals(ms_empty);
         }
 
         void _OnOK()

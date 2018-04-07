@@ -83,49 +83,40 @@ namespace XLua.CSObjectWrap
             
 			    int __gen_param_count = LuaAPI.lua_gettop(L);
             
-                if(__gen_param_count == 8&& translator.Assignable<GameClient.OnClickMessageBoxOK>(L, 1)&& translator.Assignable<GameClient.OnClickMessageBoxCancel>(L, 2)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 4) || LuaAPI.lua_type(L, 4) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 5) || LuaAPI.lua_type(L, 5) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 6) || LuaAPI.lua_type(L, 6) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 7)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 8)) 
+                if(__gen_param_count == 5&& translator.Assignable<GameClient.OnClickMessageBoxOK>(L, 1)&& translator.Assignable<GameClient.OnClickMessageBoxCancel>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 4)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 5)) 
                 {
                     GameClient.OnClickMessageBoxOK onOk = translator.GetDelegate<GameClient.OnClickMessageBoxOK>(L, 1);
                     GameClient.OnClickMessageBoxCancel onCancel = translator.GetDelegate<GameClient.OnClickMessageBoxCancel>(L, 2);
-                    string title = LuaAPI.lua_tostring(L, 3);
-                    string desc = LuaAPI.lua_tostring(L, 4);
-                    string ok = LuaAPI.lua_tostring(L, 5);
-                    string cancel = LuaAPI.lua_tostring(L, 6);
-                    int frameId = LuaAPI.xlua_tointeger(L, 7);
-                    int msgId = LuaAPI.xlua_tointeger(L, 8);
+                    int messageId = LuaAPI.xlua_tointeger(L, 3);
+                    int frameTypeId = LuaAPI.xlua_tointeger(L, 4);
+                    int frameId = LuaAPI.xlua_tointeger(L, 5);
                     
-                    GameClient.MessageBoxFrame.Open( onOk, onCancel, title, desc, ok, cancel, frameId, msgId );
+                    GameClient.MessageBoxFrame.Open( onOk, onCancel, messageId, frameTypeId, frameId );
                     
                     
                     
                     return 0;
                 }
-                if(__gen_param_count == 7&& translator.Assignable<GameClient.OnClickMessageBoxOK>(L, 1)&& translator.Assignable<GameClient.OnClickMessageBoxCancel>(L, 2)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 4) || LuaAPI.lua_type(L, 4) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 5) || LuaAPI.lua_type(L, 5) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 6) || LuaAPI.lua_type(L, 6) == LuaTypes.LUA_TSTRING)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 7)) 
+                if(__gen_param_count == 4&& translator.Assignable<GameClient.OnClickMessageBoxOK>(L, 1)&& translator.Assignable<GameClient.OnClickMessageBoxCancel>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 4)) 
                 {
                     GameClient.OnClickMessageBoxOK onOk = translator.GetDelegate<GameClient.OnClickMessageBoxOK>(L, 1);
                     GameClient.OnClickMessageBoxCancel onCancel = translator.GetDelegate<GameClient.OnClickMessageBoxCancel>(L, 2);
-                    string title = LuaAPI.lua_tostring(L, 3);
-                    string desc = LuaAPI.lua_tostring(L, 4);
-                    string ok = LuaAPI.lua_tostring(L, 5);
-                    string cancel = LuaAPI.lua_tostring(L, 6);
-                    int frameId = LuaAPI.xlua_tointeger(L, 7);
+                    int messageId = LuaAPI.xlua_tointeger(L, 3);
+                    int frameTypeId = LuaAPI.xlua_tointeger(L, 4);
                     
-                    GameClient.MessageBoxFrame.Open( onOk, onCancel, title, desc, ok, cancel, frameId );
+                    GameClient.MessageBoxFrame.Open( onOk, onCancel, messageId, frameTypeId );
                     
                     
                     
                     return 0;
                 }
-                if(__gen_param_count == 6&& translator.Assignable<GameClient.OnClickMessageBoxOK>(L, 1)&& translator.Assignable<GameClient.OnClickMessageBoxCancel>(L, 2)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 4) || LuaAPI.lua_type(L, 4) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 5) || LuaAPI.lua_type(L, 5) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 6) || LuaAPI.lua_type(L, 6) == LuaTypes.LUA_TSTRING)) 
+                if(__gen_param_count == 3&& translator.Assignable<GameClient.OnClickMessageBoxOK>(L, 1)&& translator.Assignable<GameClient.OnClickMessageBoxCancel>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)) 
                 {
                     GameClient.OnClickMessageBoxOK onOk = translator.GetDelegate<GameClient.OnClickMessageBoxOK>(L, 1);
                     GameClient.OnClickMessageBoxCancel onCancel = translator.GetDelegate<GameClient.OnClickMessageBoxCancel>(L, 2);
-                    string title = LuaAPI.lua_tostring(L, 3);
-                    string desc = LuaAPI.lua_tostring(L, 4);
-                    string ok = LuaAPI.lua_tostring(L, 5);
-                    string cancel = LuaAPI.lua_tostring(L, 6);
+                    int messageId = LuaAPI.xlua_tointeger(L, 3);
                     
-                    GameClient.MessageBoxFrame.Open( onOk, onCancel, title, desc, ok, cancel );
+                    GameClient.MessageBoxFrame.Open( onOk, onCancel, messageId );
                     
                     
                     
