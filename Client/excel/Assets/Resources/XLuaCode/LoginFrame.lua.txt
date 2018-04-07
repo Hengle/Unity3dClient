@@ -40,7 +40,6 @@ end
 
 function OnOpenFrame()
 	--添加点击登陆安扭事件
-	CS.UnityEngine.Debug.LogError('OnOpenFrame')
 	self:GetObject('account').text = 'DingJiaMing'
 	self:GetObject('password').text = '123456'
 	
