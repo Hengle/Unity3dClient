@@ -35,6 +35,8 @@ namespace XLua.CSObjectWrap
 				
 				translator.DelayWrapLoader(typeof(Scripts.UI.ComUIListScript), ScriptsUIComUIListScriptWrap.__Register);
 				
+				translator.DelayWrapLoader(typeof(GameClient.MessageBoxFrame), GameClientMessageBoxFrameWrap.__Register);
+				
 				translator.DelayWrapLoader(typeof(LuaBehaviour), LuaBehaviourWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(GameClient.UIFrameLua), GameClientUIFrameLuaWrap.__Register);

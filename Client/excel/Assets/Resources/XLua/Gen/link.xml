@@ -10,6 +10,7 @@
 		<type fullname="GameClient.IFrame" preserve="all"/>
 		<type fullname="GameClient.FrameLayer" preserve="all"/>
 		<type fullname="Scripts.UI.ComUIListScript" preserve="all"/>
+		<type fullname="GameClient.MessageBoxFrame" preserve="all"/>
 		<type fullname="LuaBehaviour" preserve="all"/>
 		<type fullname="GameClient.UIFrameLua" preserve="all"/>
 		

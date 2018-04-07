@@ -218,6 +218,16 @@ namespace XLua
 			    return new Scripts.UI.ComUIListScript.OnItemChangeDisplayDelegate(__Gen_Delegate_Imp3);
 			}
 		
+		    if (type == typeof(GameClient.OnClickMessageBoxOK))
+			{
+			    return new GameClient.OnClickMessageBoxOK(__Gen_Delegate_Imp4);
+			}
+		
+		    if (type == typeof(GameClient.OnClickMessageBoxCancel))
+			{
+			    return new GameClient.OnClickMessageBoxCancel(__Gen_Delegate_Imp4);
+			}
+		
 		    if (type == typeof(EAction))
 			{
 			    return new EAction(__Gen_Delegate_Imp4);

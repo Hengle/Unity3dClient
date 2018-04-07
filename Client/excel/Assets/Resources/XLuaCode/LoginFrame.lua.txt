@@ -15,8 +15,11 @@ local OnClickLogin = function()
 		CS.UnityEngine.Debug.LogError('has no Account Register !!!')
 	end
 	]]
+	
+	CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,"fuck","nice to meet you ! may i make friend with you","OK","CANCEL")
+	--return
 	--准备登陆
-
+	--[[
 	local account = frame:GetObject('account').text
 	local password = frame:GetObject('password').text
 	CS.UnityEngine.Debug.LogError('account = ' .. account .. ' password = ' .. password)
@@ -33,6 +36,7 @@ local OnClickLogin = function()
             account = account, 
             password = password,
         })
+		]]
 end
 
 function OnOpenFrame(x)
