@@ -48,9 +48,26 @@ function OnOpenFrame(x)
 	frame:GetObject('password').text = '123456'
 	
 	frame:GetObject('btnLogin').onClick:AddListener(OnClickLogin)
+	
+	local accounts = {"jermine","wangzhe","shenshaojun","sddr","lanwei","niceo","sfaoer","ggsdrlll" }
+	
+	local accountList = frame:GetObject('accountList')
+	if accountList then
+		accountList:Initialize()
+		accountList.mOnListElementVisible = function(index,script)
+			if index >= 0 and index < #accounts then
+				script:GetObject('accountName').text = accounts[index + 1]
+			end
+		end
+		accountList:SetElementAmount(#accounts)
+	end
 end
 
-function OnCloseFrame(x)
+function OnCloseFrame()
+	local accountList = frame:GetObject('accountList')
+	if accountList then
+		accountList:UnInitialize()
+	end
 	frame = nil
 end
 
