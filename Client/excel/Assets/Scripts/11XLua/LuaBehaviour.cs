@@ -24,7 +24,7 @@ public class LuaBehaviour : MonoBehaviour
     internal const float GCInterval = 1;//1 second 
 
     private EAction luaOpenFrame;
-    private EAction luaUpdate;
+    private EAction luaUpdateFrame;
     private EAction luaCloseFrame;
 
     private LuaTable scriptEnv;
@@ -46,7 +46,7 @@ public class LuaBehaviour : MonoBehaviour
             luaCloseFrame();
             luaCloseFrame = null;
         }
-        luaUpdate = null;
+        luaUpdateFrame = null;
         luaOpenFrame = null;
         if(null != scriptEnv)
         {
@@ -58,14 +58,35 @@ public class LuaBehaviour : MonoBehaviour
 
     public void OnOpenFrame(ClientFrame clientFrame)
     {
-        scriptEnv.Set("self", clientFrame);
-        if (null != luaScript)
+        if(null == scriptEnv)
         {
-            GameClient.GameFrameWork.LuaInstance.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
-            scriptEnv.Get("OnOpenFrame", out luaOpenFrame);
-            scriptEnv.Get("update", out luaUpdate);
-            scriptEnv.Get("OnCloseFrame", out luaCloseFrame);
+            LogManager.Instance().LogErrorFormat("scriptEnv is Invalid when to open {0} frame", clientFrame.GetType());
+            return;
         }
+        scriptEnv.Set("self", clientFrame);
+        if(null == luaScript)
+        {
+            LogManager.Instance().LogErrorFormat("missing luaScript when to open {0} frame", clientFrame.GetType());
+            return;
+        }
+
+        var tables = GameClient.GameFrameWork.LuaInstance.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
+        if(null == tables || tables.Length <= 0)
+        {
+            LogManager.Instance().LogErrorFormat("luaScript is Invalid when to open {0} frame", clientFrame.GetType());
+            return;
+        }
+
+        LuaTable luaTable = (tables[0] as LuaTable);
+        if(null == luaTable)
+        {
+            LogManager.Instance().LogErrorFormat("luaTable convert failed when to open {0} frame", clientFrame.GetType());
+            return;
+        }
+
+        luaOpenFrame = luaTable.Get<EAction>("OnOpenFrame");
+        luaUpdateFrame = luaTable.Get<EAction>("OnUpdateFrame");
+        luaCloseFrame = luaTable.Get<EAction>("OnCloseFrame");
 
         if (null != luaOpenFrame)
         {
@@ -76,9 +97,9 @@ public class LuaBehaviour : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (luaUpdate != null)
+        if (luaUpdateFrame != null)
         {
-            luaUpdate();
+            luaUpdateFrame();
         }
 	}
 }
