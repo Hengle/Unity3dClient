@@ -68,14 +68,14 @@ function OnOpenFrame()
 		accountList:SetElementAmount(#accounts)
 	end
 	
-	CS.GameClient.LuaEventManager.Instance():RegisterEvent(155,f1)
-	CS.GameClient.LuaEventManager.Instance():RegisterEvent(155,f2)
+	self:RegisterEvent(155,f1)
+	self:RegisterEvent(155,f2)
 	CS.GameClient.LuaEventManager.Instance():SendEvent(155,{"jermine","wangzhe","shenshaojun","sddr","lanwei","niceo","sfaoer","ggsdrlll" })
 end
 
 function OnCloseFrame()
-	CS.GameClient.LuaEventManager.Instance():UnRegisterEvent(155,f1)
-	CS.GameClient.LuaEventManager.Instance():UnRegisterEvent(155,f2)
+	self:UnRegisterEvent(155,f1)
+	self:UnRegisterEvent(155,f2)
 	local accountList = self:GetObject('accountList')
 	if accountList then
 		accountList:UnInitialize()

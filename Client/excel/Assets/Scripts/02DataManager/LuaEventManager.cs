@@ -8,7 +8,6 @@ namespace GameClient
 {
     [CSharpCallLua]
     public delegate void LuaEvent(object argv);
-
     [LuaCallCSharp]
     public class LuaEventManager : Singleton<LuaEventManager>
     {

@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(GameClient.ClientFrame);
-			Utils.BeginObjectRegister(type, L, translator, 0, 10, 3, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 13, 3, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "getFrameId", _m_getFrameId);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "getFrameTypeId", _m_getFrameTypeId);
@@ -29,6 +29,9 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "getLayer", _m_getLayer);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "openFrame", _m_openFrame);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "closeFrame", _m_closeFrame);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "RegisterEvent", _m_RegisterEvent);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "UnRegisterEvent", _m_UnRegisterEvent);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SendEvent", _m_SendEvent);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetObjectStatus", _m_SetObjectStatus);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetText", _m_SetText);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetImage", _m_SetImage);
@@ -275,6 +278,93 @@ namespace XLua.CSObjectWrap
                 {
                     
                     __cl_gen_to_be_invoked.closeFrame(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_RegisterEvent(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                GameClient.ClientFrame __cl_gen_to_be_invoked = (GameClient.ClientFrame)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    int eventId = LuaAPI.xlua_tointeger(L, 2);
+                    GameClient.LuaEvent handler = translator.GetDelegate<GameClient.LuaEvent>(L, 3);
+                    
+                    __cl_gen_to_be_invoked.RegisterEvent( eventId, handler );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_UnRegisterEvent(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                GameClient.ClientFrame __cl_gen_to_be_invoked = (GameClient.ClientFrame)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    int eventId = LuaAPI.xlua_tointeger(L, 2);
+                    GameClient.LuaEvent handler = translator.GetDelegate<GameClient.LuaEvent>(L, 3);
+                    
+                    __cl_gen_to_be_invoked.UnRegisterEvent( eventId, handler );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SendEvent(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                GameClient.ClientFrame __cl_gen_to_be_invoked = (GameClient.ClientFrame)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    int eventId = LuaAPI.xlua_tointeger(L, 2);
+                    object argv = translator.GetObject(L, 3, typeof(object));
+                    
+                    __cl_gen_to_be_invoked.SendEvent( eventId, argv );
                     
                     
                     

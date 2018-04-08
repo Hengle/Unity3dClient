@@ -99,6 +99,7 @@ namespace GameClient
             {
                 mLuaBehavior.OnCloseFrame();
             }
+            _AutoUnRegisterAllLuaEvents();
             _AutoUnRegisterAllEvents();
             _CancelAllInvokes();
             if(null != mScriptBinder)
@@ -116,6 +117,47 @@ namespace GameClient
             frameItem = null;
 			Resources.UnloadUnusedAssets ();
         }
+
+        #region lua_event_wrap
+        struct LuaEventBody
+        {
+            public int eventId;
+            public LuaEvent handler;
+        };
+        List<LuaEventBody> mLuaEvents = new List<LuaEventBody>(8);
+        public void RegisterEvent(int eventId, LuaEvent handler)
+        {
+            LuaEventManager.Instance().RegisterEvent(eventId, handler);
+            mLuaEvents.Add(new LuaEventBody { eventId = eventId, handler = handler });
+        }
+
+        public void UnRegisterEvent(int eventId, LuaEvent handler)
+        {
+            LuaEventManager.Instance().UnRegisterEvent(eventId, handler);
+            for(int i = 0; i < mLuaEvents.Count; ++i)
+            {
+                if(mLuaEvents[i].eventId == eventId && mLuaEvents[i].handler == handler)
+                {
+                    mLuaEvents.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        public void SendEvent(int eventId, object argv)
+        {
+            LuaEventManager.Instance().SendEvent(eventId, argv);
+        }
+
+        private void _AutoUnRegisterAllLuaEvents()
+        {
+            for (int i = 0; i < mLuaEvents.Count; ++i)
+            {
+                LuaEventManager.Instance().UnRegisterEvent(mLuaEvents[i].eventId, mLuaEvents[i].handler);
+            }
+            mLuaEvents.Clear();
+        }
+        #endregion
 
         public void SetObjectStatus(string objName, int status)
         {

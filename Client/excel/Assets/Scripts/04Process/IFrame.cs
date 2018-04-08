@@ -16,6 +16,9 @@ namespace GameClient
         void closeFrame();
         FrameLayer getLayer();
 
+        void RegisterEvent(int eventId, LuaEvent handler);
+        void UnRegisterEvent(int eventId, LuaEvent handler);
+        void SendEvent(int eventId, object argv);
         void SetObjectStatus(string objName, int status);
         void SetText(string objName, string value);
         void SetImage(string objName, string path);
