@@ -3,10 +3,6 @@ message LocalSettingTable
 {
 required sint32 ID = 1;
 required string Desc = 2;
-enum eSetting
-{
-	MUSIC_SETTING = 1;	//????
-}
-required eSetting Setting = 3;
+required sint32 Setting = 3;
 required string FilePath = 4;
 };

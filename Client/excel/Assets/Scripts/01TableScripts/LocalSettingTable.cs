@@ -29,9 +29,9 @@ namespace ProtoTable
       get { return _Desc; }
       set { _Desc = value; }
     }
-    private ProtoTable.LocalSettingTable.eSetting _Setting;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"Setting", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public ProtoTable.LocalSettingTable.eSetting Setting
+    private int _Setting;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"Setting", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
+    public int Setting
     {
       get { return _Setting; }
       set { _Setting = value; }
@@ -43,14 +43,6 @@ namespace ProtoTable
       get { return _FilePath; }
       set { _FilePath = value; }
     }
-    [global::ProtoBuf.ProtoContract(Name=@"eSetting")]
-    public enum eSetting
-    {
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"MUSIC_SETTING", Value=1)]
-      MUSIC_SETTING = 1
-    }
-  
     public void Parse(ProtoBuf.ProtoReader source){
         int fieldNumber = 0;
         while ((fieldNumber = source.ReadFieldHeader()) > 0)
@@ -71,8 +63,9 @@ namespace ProtoTable
                     Desc = source.ReadString();
                     break;
                     
-            case 3:   //Setting LABEL_REQUIRED TYPE_ENUM .ProtoTable.LocalSettingTable.eSetting TwosComplement
-                    Setting = (ProtoTable.LocalSettingTable.eSetting)source.ReadInt32();
+            case 3:   //Setting LABEL_REQUIRED TYPE_SINT32  ZigZag
+                    source.Hint(ProtoBuf.WireType.SignedVariant); 
+                    Setting = source.ReadInt32();
                     break;
                     
             case 4:   //FilePath LABEL_REQUIRED TYPE_STRING  TwosComplement
