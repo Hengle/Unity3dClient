@@ -9,12 +9,14 @@ namespace GameClient
         UnityEngine.UI.Text mloadTitle;
         UnityEngine.UI.Text mloadInfo;
         UnityEngine.UI.Slider mloadProcess;
+        UnityEngine.UI.Slider msubLoadProcess;
 
         protected override void _InitScriptBinder()
         {
             mloadTitle = mScriptBinder.GetObject("loadTitle") as UnityEngine.UI.Text;
             mloadInfo = mScriptBinder.GetObject("loadInfo") as UnityEngine.UI.Text;
             mloadProcess = mScriptBinder.GetObject("loadProcess") as UnityEngine.UI.Slider;
+            msubLoadProcess = mScriptBinder.GetObject("subLoadProcess") as UnityEngine.UI.Slider;
         }
 
         protected void _OnSetLoadingTitle(object argv)
@@ -46,7 +48,11 @@ namespace GameClient
 
         protected void _OnSetLoadingSubProcess(object argv)
         {
-
+            float value = (float)argv;
+            if (null != msubLoadProcess)
+            {
+                msubLoadProcess.value = value;
+            }
         }
 
         protected void _OnSetLoadingFinish(object argv)
@@ -70,6 +76,11 @@ namespace GameClient
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, _OnSetLoadingProcess);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_ON_SET_LOADING_SUB_PROCESS, _OnSetLoadingSubProcess);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_ON_SET_LOADING_FINISH, _OnSetLoadingFinish);
+        }
+
+        public override string getPrefabPath()
+        {
+            return "UI/Prefabs/LoadingFrame";
         }
     }
 }

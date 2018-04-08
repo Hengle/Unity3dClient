@@ -8,7 +8,7 @@ namespace GameClient
 {
 	public class TableManager : Singleton<TableManager> 
 	{
-		Dictionary<Type,Dictionary<int,object>> mTableDic = new Dictionary<Type,Dictionary<int,object>>();
+        Dictionary<Type, Dictionary<int, object>> mTableDic = null;
 
 		public bool Initialize()
 		{
@@ -21,6 +21,25 @@ namespace GameClient
             LogManager.Instance().LogFormat("<color=#00ff00>load table cost {0} ms</color>", delta / 10000);
 			return true;
 		}
+
+        public void ClearAll()
+        {
+            if (null != mTableDic)
+            {
+                mTableDic.Clear();
+                mTableDic = null;
+            }
+        }
+
+        public bool IsValid()
+        {
+            return null != mTableDic;
+        }
+
+        public void LoadTableResources(Dictionary<Type, Dictionary<int, object>> table)
+        {
+            mTableDic = table;
+        }
 
 		public T GetTableItem<T> (int id) where T : class,new()
 		{

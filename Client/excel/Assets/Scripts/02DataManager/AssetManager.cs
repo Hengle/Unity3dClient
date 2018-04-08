@@ -40,11 +40,47 @@ namespace GameClient
 			return true;
 		}
 
+        public IEnumerator AnsyLoadAllTables()
+        {
+            Dictionary<Type, Dictionary<int, object>> tableDic = new Dictionary<Type, Dictionary<int, object>>();
+            tableDic.Clear();
+
+            for (int i = 0; i < TableList.Values.Length; ++i)
+            {
+                var type = TableList.Values[i];
+                Dictionary<int, object> table = null;
+                float fRadio = i * 1.0f / TableList.Values.Length;
+
+                EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_PROCESS, fRadio);
+                EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_TITLE, string.Format("正在加载{0}表...{1}/{2}", type.Name, i + 1, TableList.Values.Length));
+                yield return new WaitForSecondsRealtime(0.05f);
+                if (!_LoadTable(type, ref table))
+                {
+                    yield break;
+                }
+
+                fRadio = (i + 1) * 0.1f / TableList.Values.Length;
+                EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_PROCESS, fRadio);
+
+                tableDic.Add(type, table);
+            }
+
+            TableManager.Instance().LoadTableResources(tableDic);
+            tableDic = null;
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+
         bool _LoadTable(Type type,ref Dictionary<int, object> table)
         {
             table = null;
 
             var path = GetTablePath(type);
+            AssetInst assetInstance = AssetLoader.Instance().LoadRes(path, typeof(AssetBinary));
+            if(null == assetInstance || null == assetInstance.obj)
+            {
+                return false;
+            }
+
             AssetBinary res = AssetLoader.Instance().LoadRes(path, typeof(AssetBinary)).obj as AssetBinary;
             if (null == res)
             {

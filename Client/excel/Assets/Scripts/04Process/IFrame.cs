@@ -15,6 +15,7 @@ namespace GameClient
         void openFrame(int iId, int type,object userData);
         void closeFrame();
         FrameLayer getLayer();
+        string getPrefabPath();
 
         void RegisterEvent(int eventId, LuaEvent handler);
         void UnRegisterEvent(int eventId, LuaEvent handler);

@@ -25,16 +25,21 @@ namespace GameClient
             return iHashCode;
         }
 
+        public virtual string getPrefabPath()
+        {
+            return string.Empty;
+        }
+
         public FrameLayer getLayer()
         {
             if(null == frameItem)
             {
-                return FrameLayer.COUNT;
+                return FrameLayer.TOP;
             }
 
             if(frameItem.Layer < (int)FrameLayer.BOTTOM || frameItem.Layer >= (int)FrameLayer.COUNT)
             {
-                return FrameLayer.COUNT;
+                return FrameLayer.TOP;
             }
 
             return (FrameLayer)frameItem.Layer;
@@ -48,18 +53,24 @@ namespace GameClient
             this.frameTypeId = type;
             this.iHashCode = UIManager.Instance().MakeFrameHashCode(iId, type);
             this.userData = userData;
+            string prefabPath = getPrefabPath();
 
-            frameItem = TableManager.Instance().GetTableItem<ProtoTable.FrameTypeTable>((int)type);
-            if(null == frameItem)
+            if(string.IsNullOrEmpty(prefabPath))
             {
-                LogManager.Instance().LogProcessFormat(9000, "can not find frametype with type id = {0}", type);
-                return;
-            }
+                frameItem = TableManager.Instance().GetTableItem<ProtoTable.FrameTypeTable>((int)type);
+                if (null == frameItem)
+                {
+                    LogManager.Instance().LogProcessFormat(9000, "can not find frametype with type id = {0}", type);
+                    return;
+                }
 
-            if (frameItem.Layer < (int)FrameLayer.BOTTOM || frameItem.Layer >= (int)FrameLayer.COUNT)
-            {
-                LogManager.Instance().LogProcessFormat(9000, "layer = {0} is invlalid with type id = {1}", frameItem.Layer, type);
-                return;
+                if (frameItem.Layer < (int)FrameLayer.BOTTOM || frameItem.Layer >= (int)FrameLayer.COUNT)
+                {
+                    LogManager.Instance().LogProcessFormat(9000, "layer = {0} is invlalid with type id = {1}", frameItem.Layer, type);
+                    return;
+                }
+
+                prefabPath = frameItem.Prefab;
             }
 
             if (null == GlobalDataManager.Instance().uiConfig)
@@ -68,10 +79,10 @@ namespace GameClient
                 return;
             }
 
-            root = AssetLoader.Instance().LoadRes(frameItem.Prefab, typeof(GameObject)).obj as GameObject;
+            root = AssetLoader.Instance().LoadRes(prefabPath, typeof(GameObject)).obj as GameObject;
             if (null == root)
             {
-                LogManager.Instance().LogProcessFormat(9000, "load frame prefab failed : path = {0} typeid = {1}", frameItem.Prefab, type);
+                LogManager.Instance().LogProcessFormat(9000, "load frame prefab failed : path = {0} typeid = {1}", prefabPath, type);
                 return;
             }
 
@@ -81,7 +92,14 @@ namespace GameClient
             mLuaBehavior = root.GetComponent<LuaBehaviour>();
             _InitScriptBinder();
 
-            LogManager.Instance().LogProcessFormat(9000, "open {0} frame succeed !", frameItem.Desc);
+            if (null != frameItem)
+            {
+                LogManager.Instance().LogProcessFormat(9000, "open {0} frame succeed !", frameItem.Desc);
+            }
+            else
+            {
+                LogManager.Instance().LogProcessFormat(9000, "open {0} frame succeed !", prefabPath);
+            }
 
             if(null != mLuaBehavior)
             {

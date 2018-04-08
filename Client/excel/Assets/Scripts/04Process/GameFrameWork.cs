@@ -25,6 +25,20 @@ namespace GameClient
         private Action luaOnDestroy;
         private LuaTable scriptEnv;
 
+        static GameFrameWork mFrameWorkHandle = null;
+        public static GameFrameWork FrameWorkHandle
+        {
+            private set
+            {
+                mFrameWorkHandle = value;
+            }
+            get
+            {
+                return mFrameWorkHandle;
+            }
+        }
+
+
         private byte[] CustomLoaderMethod(ref string fileName)
         {
 #if UNITY_EDITOR
@@ -58,6 +72,8 @@ namespace GameClient
 
         void Awake()
         {
+            FrameWorkHandle = this;
+
             LuaEnv.CustomLoader method = CustomLoaderMethod;
             luaEnv.AddLoader(method);
 
@@ -75,14 +91,21 @@ namespace GameClient
         void Start() 
 		{
 			GameObject.DontDestroyOnLoad (this);
-
-            if (!Initialize())
-            {
-                return;
-            }
-
             Application.targetFrameRate = 30;
 
+            //initialize global data
+            if (!GlobalDataManager.Instance().Initialize(this))
+            {
+                LogManager.Instance().LogProcessFormat(8000, "<color=#ff0000>GlobalDataManager Initialized failed !</color>");
+                return;
+            }
+            LogManager.Instance().LogProcessFormat(8000, "<color=#00ff00>GlobalDataManager Initialized succeed !</color>");
+
+            SceneManager.Instance().SwitchSceneTo(SceneManager.SceneType.ST_LOGIN, _LoadAllResource(), _OnLoadFinish);
+        }
+
+        void _OnLoadFinish()
+        {
             luaEnv.DoString(luaScript.text);
 
             scriptEnv.Get("start", out luaStart);
@@ -95,40 +118,46 @@ namespace GameClient
             }
         }
 
-        private bool Initialize()
+        IEnumerator _LoadAllResource()
         {
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "加载AssetLoader...");
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS,0.0f);
             AssetLoader.Instance().Initialize();
-            //initialize global data
-            if (!GlobalDataManager.Instance().Initialize(this))
-            {
-                LogManager.Instance().LogProcessFormat(8000, "<color=#ff0000>GlobalDataManager Initialized failed !</color>");
-                return false;
-            }
-            LogManager.Instance().LogProcessFormat(8000, "<color=#00ff00>GlobalDataManager Initialized succeed !</color>");
+            yield return new WaitForEndOfFrame();
 
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "加载合局表格...");
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.01f);
             //initialize data here , for table data ,net work, and so on ...
-            if (!TableManager.Instance().Initialize())
+            yield return AssetManager.Instance().AnsyLoadAllTables();
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.95f);
+            yield return new WaitForEndOfFrame();
+            if (!TableManager.Instance().IsValid())
             {
                 LogManager.Instance().LogProcessFormat(8001, "<color=#ff0000>TableManager Initialize failed !</color>");
-                return false;
+                yield break;
             }
             LogManager.Instance().LogProcessFormat(8001, "<color=#00ff00>TableManager Initialize succeed !</color>");
 
-            if(!AudioManager.Instance().Initialize())
+            yield return new WaitForEndOfFrame();
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "初始化音效管理器...");
+            if (!AudioManager.Instance().Initialize())
             {
                 LogManager.Instance().LogProcessFormat(8002, "<color=#ff0000>AudioManager  Initialize failed !</color>");
-                return false;
+                yield break;
             }
             LogManager.Instance().LogProcessFormat(8002, "<color=#00ff00>AudioManager  Initialize succeed !</color>");
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.96f);
 
-            if(!InvokeManager.Instance().Initialize())
+            yield return new WaitForEndOfFrame();
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "初始化调度管理器...");
+            if (!InvokeManager.Instance().Initialize())
             {
                 LogManager.Instance().LogProcessFormat(8003, "<color=#ff0000>InvokeManager  Initialize failed !</color>");
-                return false;
+                yield break;
             }
             LogManager.Instance().LogProcessFormat(8003, "<color=#00ff00>InvokeManager  Initialize succeed !</color>");
-
-            return true;
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 1.0f);
+            yield return new WaitForEndOfFrame();
         }
 
         private void Update()
@@ -151,12 +180,8 @@ namespace GameClient
 
         void OnDestroy()
 		{
-            AudioManager.Instance().Clear();
-            InvokeManager.Instance().Clear();
-            UIManager.Instance().CloseAllFrames();
-            AsyncLoadTaskManager.Instance().ClearAllAsyncTasks();
-            AssetLoader.Instance().ClearAll();
-            
+            StopAllCoroutines();
+            SceneManager.Instance().ExitGame();
             if(null != luaOnDestroy)
             {
                 luaOnDestroy();
@@ -175,6 +200,7 @@ namespace GameClient
                 luaEnv.Dispose();
                 luaEnv = null;
             }
+            FrameWorkHandle = null;
         }
 	}
 }
