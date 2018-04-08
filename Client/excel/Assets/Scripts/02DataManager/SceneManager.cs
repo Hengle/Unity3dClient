@@ -7,31 +7,73 @@ namespace GameClient
 	class SceneManager : Singleton<SceneManager>
 	{
 		Scene current = null;
+        public enum SceneType
+        {
+            ST_INVALID = -1,
+            ST_LOGIN = 0,
+        }
+        SceneType eCurrent = SceneType.ST_INVALID;
+        bool _loading = false;
+        bool Loading
+        {
+            get
+            {
+                return _loading;
+            }
+            set
+            {
+                _loading = value;
 
-		public bool Initialize()
+                if(_loading)
+                {
+                    _OpenLoadingFrame();
+                }
+                else
+                {
+                    _CloseLoadingFrame();
+                }
+            }
+        }
+
+        protected void _OpenLoadingFrame()
+        {
+
+        }
+
+        protected void _CloseLoadingFrame()
+        {
+
+        }
+
+        public bool Initialize()
 		{
 			return true;
 		}
 
-		private Scene _CreateScene(int iSceneId)
+		public void SwitchSceneTo(SceneType eSceneType)
 		{
-			//var sceneItem = TableManager.Instance ().GetTableItem<ProtoTable.SceneTable> (iSceneId);
-			//if (null == sceneItem) 
-			//{
-			//	Debug.LogErrorFormat ("can not find scene resource for sceneid = {0}", iSceneId);
-			//	return null;
-			//}
+            if (eSceneType == eCurrent)
+            {
+                return;
+            }
 
-			Scene scene = new Scene ();
-			//scene.Create (sceneItem,m_environment);
+            if (Loading)
+            {
+                return;
+            }
 
-			return scene;
-		}
+            Loading = true;
 
-		public void SwitchScene(int iSceneId)
-		{
-			
-		}
+            Clear();
+        }
+
+        public void Clear()
+        {
+            AudioManager.Instance().Clear();
+            InvokeManager.Instance().Clear();
+            UIManager.Instance().CloseAllFrames();
+            AsyncLoadTaskManager.Instance().ClearAllAsyncTasks();
+        }
 
 		public void UnInitialize()
 		{

@@ -38,6 +38,16 @@ local OnClickLogin = function()
 		]]
 end
 
+	local f1 = function(x)
+		for i=1,#x do
+			CS.UnityEngine.Debug.LogError(x[i])
+		end
+	end
+	
+	local f2 = function(x)
+		CS.UnityEngine.Debug.LogError('table length = ' .. #x)
+	end
+
 function OnOpenFrame()
 	--添加点击登陆安扭事件
 	self:GetObject('account').text = 'DingJiaMing'
@@ -57,9 +67,15 @@ function OnOpenFrame()
 		end
 		accountList:SetElementAmount(#accounts)
 	end
+	
+	CS.GameClient.LuaEventManager.Instance():RegisterEvent(155,f1)
+	CS.GameClient.LuaEventManager.Instance():RegisterEvent(155,f2)
+	CS.GameClient.LuaEventManager.Instance():SendEvent(155,{"jermine","wangzhe","shenshaojun","sddr","lanwei","niceo","sfaoer","ggsdrlll" })
 end
 
 function OnCloseFrame()
+	CS.GameClient.LuaEventManager.Instance():UnRegisterEvent(155,f1)
+	CS.GameClient.LuaEventManager.Instance():UnRegisterEvent(155,f2)
 	local accountList = self:GetObject('accountList')
 	if accountList then
 		accountList:UnInitialize()

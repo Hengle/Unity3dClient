@@ -12,7 +12,14 @@ namespace GameClient
         CE_LOG_TO_SCREEN,
         CE_SEND_MSG_TO_NORMAL_SOCKET,
         CE_ON_LOGIN_FRAME_OPENED,
+        CE_ON_SET_LOADING_TITLE,
+        CE_ON_SET_LOADING_SUB_TITLE,
+        CE_ON_SET_LOADING_PROCESS,
+        CE_ON_SET_LOADING_SUB_PROCESS,
+        CE_ON_SET_LOADING_FINISH,
+        CE_LUA_EVENT_START = 64,
         CE_FIXED_END = 128,
+
         CE_COUNT = 256,
     }
 }
