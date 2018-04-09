@@ -139,6 +139,11 @@ namespace GameClient
                 mScriptBinder.DestroyWithFrame();
             }
             mScriptBinder = null;
+            if(null != mLuaBehavior)
+            {
+                mLuaBehavior.DestroyWithFrame();
+                mLuaBehavior = null;
+            }
             if (null != root)
             {
                 GameObject.Destroy(root);

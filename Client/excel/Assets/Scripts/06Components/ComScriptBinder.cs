@@ -277,10 +277,12 @@ namespace GameClient
                     if (scriptItem.component is Button)
                     {
                         (scriptItem.component as Button).onClick.RemoveAllListeners();
+                        (scriptItem.component as Button).onClick.Invoke();
                     }
                     else if (scriptItem.component is Toggle)
                     {
                         (scriptItem.component as Toggle).onValueChanged.RemoveAllListeners();
+                        (scriptItem.component as Toggle).onValueChanged.Invoke(false);
                     }
                     else if(scriptItem.component is ComUIListBinderItems)
                     {
