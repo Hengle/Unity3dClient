@@ -156,6 +156,11 @@ namespace GameClient
                 yield break;
             }
             LogManager.Instance().LogProcessFormat(8003, "<color=#00ff00>InvokeManager  Initialize succeed !</color>");
+
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.98f);
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "加载场景音乐...");
+            AudioManager.Instance().PlaySound(1001);
+
             EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 1.0f);
             yield return new WaitForEndOfFrame();
         }
