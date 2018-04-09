@@ -44,11 +44,15 @@ public class LuaBehaviour : MonoBehaviour
         if(null != luaCloseFrame)
         {
             luaCloseFrame();
-            luaCloseFrame = null;
         }
+    }
+
+    public void DestroyWithFrame()
+    {
+        luaCloseFrame = null;
         luaUpdateFrame = null;
         luaOpenFrame = null;
-        if(null != scriptEnv)
+        if (null != scriptEnv)
         {
             scriptEnv.Dispose();
             scriptEnv = null;
