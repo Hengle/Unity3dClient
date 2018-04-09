@@ -1,0 +1,149 @@
+--打开登陆界面
+require('.init')
+local LoginFrame = {}
+
+local json = require(".utility.json")
+local util = require(".utility.util")
+local web = require(".net.web")
+
+function OnOpenFrame()
+	self:GetObject('account').text = 'DingJiaMing'
+	self:GetObject('password').text = '123456'
+	-- 添加按钮事件
+	self:GetObject('btnLogin').onClick:AddListener(OnClickLogin)
+	self:GetObject("changeAccount").onClick:AddListener(onClickChangeAccount)
+end
+
+-- 按钮事件回调 局部变量且不写入元表
+local onClickChangeAccount = function()
+	app.FrameManager.OpenFrameLua(app._FrameList.AccSelectFrame)
+end
+
+--点击登陆按钮
+local OnClickLogin = function()
+	--[[
+	local hasAccount = true
+	if hasAccount then
+		CS.GameClient.UIFrameLua.OpenFrameLua(3)
+	else
+		CS.UnityEngine.Debug.LogError('has no Account Register !!!')
+	end
+	]]
+
+	CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,1)
+	--return
+	--准备登陆
+	--[[
+	local account = self:GetObject('account').text
+	local password = self:GetObject('password').text
+	CS.UnityEngine.Debug.LogError('account = ' .. account .. ' password = ' .. password)
+
+	local err = LoginFrame:checkLoginInput(account,password)
+	if err then
+		CS.UnityEngine.Debug.LogError('chekLoginInput unValid !' .. err.err_code)
+		return
+	end
+
+
+	LoginFrame:login({
+            channel = 'game',
+            account = account,
+            password = password,
+        })
+		]]
+end
+
+function OnCloseFrame()
+end
+
+-- ----------------------------------------控制代码--------------------------------------------------
+
+function LoginFrame:checkLoginInput(account, password)
+	local err
+	if not account or #account == 0 then
+		err = { err_code = 'account_nil' }
+	elseif #account < 6 or #account > 20 or string.find(account, "[%W]") then
+		err = { err_code = 'account_error' }
+	elseif not password or #password == 0 then
+		err = { err_code = 'password_nil' }
+	elseif #password < 6 or #password > 20 or string.find(password, "[%W]") then
+		err = { err_code = 'password_error' }
+	end
+	return err
+end
+
+function LoginFrame:login(params)
+	app.Debugger.LogError('ready to login !!!')
+	params.cmd = "login"
+	params.reg_id = ""
+	LoginFrame:auth(params)
+end
+
+function LoginFrame:auth(params)
+	app.Debugger.LogError('ready to auth !!!')
+	function loginCallback(ok, msg)
+		print(ok)
+		print(msg)
+	end
+	LoginFrame:serverTimeAndPack(loginCallback,params)
+end
+
+local loginCallback = function(ok, msg)
+	if ok then
+		print(msg)
+		return
+	end
+	--print("loginCallback,ok:"..ok.."msg:"..msg)
+end
+
+function LoginFrame:serverTimeAndPack(callback, params)
+	app.Debugger.LogError('ready to auth serverTimeAndPack!!!')
+	web.getServerTime(function (time)
+		if time <= 0 then
+			callback(false,"time over")
+			return
+		end
+
+		params.client_tag = "test_clt_tag"
+		params.platform = "test_pf"
+
+		local msg = json.encode(params)
+		msg = CS.Common.DESEncrypt.MyEncode(msg, time)
+		msg = util.tohex(msg)
+
+		LoginFrame:FinalAuth(callback, time, msg, params)
+	end)
+end
+
+function LoginFrame:FinalAuth(callback, time, msg, params)
+	local postdata = {
+		time = tostring(time),
+		content = msg,
+	}
+
+	print(LOGIN_SERVER,"/login","POST",postdata)
+	web.httpRequest(callback,LOGIN_SERVER, "/login", "POST", postdata)
+end
+
+return LoginFrame
+
+--[[
+	local accounts = {"jermine","wangzhe","shenshaojun","sddr","lanwei","niceo","sfaoer","ggsdrlll" }
+
+	local accountList = self:GetObject('accountList')
+	if accountList then
+		accountList:Initialize()
+		accountList.mOnListElementVisible = function(index,script)
+			if index >= 0 and index < #accounts then
+				script:GetObject('accountName').text = accounts[index + 1]
+			end
+		end
+		accountList:SetElementAmount(#accounts)
+	end
+	]]--
+
+--[[local accountList = self:GetObject('accountList')
+	if accountList then
+		accountList:UnInitialize()
+	end
+	]]--

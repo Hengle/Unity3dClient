@@ -1,5 +1,5 @@
 --打开登陆界面
-local frame = nil
+local LobbyFrame = {}
 
 --点击返回按钮
 local OnClickReturn = function()
@@ -19,3 +19,5 @@ end
 function OnCloseFrame(x)
 	frame = nil
 end
+
+return LobbyFrame
