@@ -25,6 +25,11 @@ namespace GameClient
             return iHashCode;
         }
 
+        public virtual bool needLuaBehavior()
+        {
+            return true;
+        }
+
         public virtual string getPrefabPath()
         {
             return string.Empty;
@@ -105,6 +110,14 @@ namespace GameClient
             {
                 mLuaBehavior.OnOpenFrame(this);
             }
+            else
+            {
+                if(needLuaBehavior())
+                {
+                    LogManager.Instance().LogProcessFormat(9000, "open <color=#ff0000>{0}</color> frame failed ! missing componet LuaBehavior !!", prefabPath);
+                }
+            }
+
             _OnOpenFrame();
         }
 

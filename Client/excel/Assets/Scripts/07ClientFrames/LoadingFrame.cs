@@ -55,6 +55,11 @@ namespace GameClient
             }
         }
 
+        public sealed override bool needLuaBehavior()
+        {
+            return false;
+        }
+
         protected void _OnSetLoadingFinish(object argv)
         {
             UIManager.Instance().CloseFrame(this);
