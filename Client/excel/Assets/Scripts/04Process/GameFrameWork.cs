@@ -8,7 +8,6 @@ namespace GameClient
 {
 	class GameFrameWork : MonoBehaviour 
 	{
-        public TextAsset[] globalLuaScripts = new TextAsset[0];
         public TextAsset luaScript = null;
         public static LuaEnv LuaInstance
         {
@@ -107,14 +106,6 @@ namespace GameClient
 
         void _OnLoadFinish()
         {
-            for(int i = 0; i < globalLuaScripts.Length; ++i)
-            {
-                if(null != globalLuaScripts[i])
-                {
-                    luaEnv.DoString(globalLuaScripts[i].text);
-                }
-            }
-
             luaEnv.DoString(luaScript.text);
 
             scriptEnv.Get("start", out luaStart);
