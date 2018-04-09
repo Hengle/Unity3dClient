@@ -56,6 +56,20 @@ public class LuaBehaviour : MonoBehaviour
         luaScript = null;
     }
 
+    protected string _GetChunkName(ClientFrame clientFrame)
+    {
+        string ret = "LuaBehaviour:[UnKnownFrame]";
+        if(null != clientFrame)
+        {
+            var frameTable = TableManager.Instance().GetTableItem<ProtoTable.FrameTypeTable>(clientFrame.getFrameTypeId());
+            if(null != frameTable)
+            {
+                ret = string.Format("LuaBehaviour:[{0}]", frameTable.Desc);
+            }
+        }
+        return ret;
+    }
+
     public void OnOpenFrame(ClientFrame clientFrame)
     {
         if(null == scriptEnv)
@@ -70,7 +84,7 @@ public class LuaBehaviour : MonoBehaviour
             return;
         }
 
-        var tables = GameClient.GameFrameWork.LuaInstance.DoString(luaScript.text, "LuaBehaviour", scriptEnv);
+        var tables = GameClient.GameFrameWork.LuaInstance.DoString(luaScript.text, _GetChunkName(clientFrame), scriptEnv);
         if(null == tables || tables.Length <= 0)
         {
             LogManager.Instance().LogErrorFormat("luaScript is Invalid when to open {0} frame", clientFrame.GetType());
