@@ -9,14 +9,14 @@ local OnClickReturn = function()
 	end
 end
 
-function OnOpenFrame(x)
+function AccountSelectFrame.OnOpenFrame(x)
 	--添加点击登陆安扭事件
 	frame = x
 	x = nil
 	frame:GetObject('btnReturn').onClick:AddListener(OnClickReturn)
 end
 
-function OnCloseFrame(x)
+function AccountSelectFrame.OnCloseFrame(x)
 	frame = nil
 end
 

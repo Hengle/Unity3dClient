@@ -5,7 +5,7 @@
 ---
 local AccountSelectFrame = {}
 
-function OnOpenFrame()
+function AccountSelectFrame.OnOpenFrame()
     self:GetObject("btnLoginOther").onClick:AddListener(onClickLoginOther)
     self:GetObject("btnRegister").onClick:AddListener(onClickRegister)
     self:GetObject("btnBack").onClick:AddListener(onClickBack)
@@ -40,7 +40,7 @@ local onClickConfirmLogin = function()
 
 end
 
-function OnCloseFrame()
+function AccountSelectFrame.OnCloseFrame()
 end
 
 -- ---------------------显示控制接口AccountSelectPresenter调用--------------------------------
