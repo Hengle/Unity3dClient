@@ -4,6 +4,7 @@
 --- DateTime: 2018/4/8 11:25
 ---
 local AccountSelectFrame = {}
+local accountArray = {'nice','fuck','shenshaojun','wangzhe','dingjiaming'}
 
 function AccountSelectFrame.OnOpenFrame()
     self.frame:GetObject("btnLoginOther").onClick:AddListener(AccountSelectFrame.onClickLoginOther)
@@ -15,14 +16,12 @@ function AccountSelectFrame.OnOpenFrame()
     if accountList then
         accountList:Initialize()
         accountList.mOnListElementVisible = function(index,script)
-            --[[
-            local accountArray = pre.get
             if index >= 0 and index < #accountArray then
-                script:GetObject('accountName').text = accounts[index + 1]
+                script:GetObject('accountName').text = accountArray[index + 1]
             end
-            --]]
         end
     end
+	self:UpdateAccountList()
 end
 
 AccountSelectFrame.onClickLoginOther = function()
@@ -47,10 +46,8 @@ end
 
 -- ---------------------显示控制接口AccountSelectPresenter调用--------------------------------
 
-function AccountSelectFrame:showAccountList()
-    local accountArray = {"115878524","115878525","115878526","115878527","115878528","115878529","115878531"}
-
-    local accountList = self:GetObject('accountList')
+function AccountSelectFrame:UpdateAccountList()
+    local accountList = self.frame:GetObject('accountList')
     if accountList then
         accountList:SetElementAmount(#accountArray)
     end
