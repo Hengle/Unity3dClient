@@ -6,7 +6,7 @@ local json = require(".utility.json")
 local util = require(".utility.util")
 local web = require(".net.web")
 
-function OnOpenFrame()
+function LoginFrame.OnOpenFrame()
 	self:GetObject('account').text = 'DingJiaMing'
 	self:GetObject('password').text = '123456'
 	-- 添加按钮事件
@@ -53,7 +53,7 @@ local OnClickLogin = function()
 		]]
 end
 
-function OnCloseFrame()
+function LoginFrame.OnCloseFrame()
 end
 
 -- ----------------------------------------控制代码--------------------------------------------------
