@@ -6,10 +6,10 @@
 local AccountSelectFrame = {}
 
 function AccountSelectFrame.OnOpenFrame()
-    --self.frame:GetObject("btnLoginOther").onClick:AddListener(AccountSelectFrame.onClickLoginOther)
-    --self.frame:GetObject("btnRegister").onClick:AddListener(AccountSelectFrame.onClickRegister)
-    --self.frame:GetObject("btnBack").onClick:AddListener(AccountSelectFrame.onClickBack)
-    --self.frame:GetObject("btnConfirmLogin").onClick:AddListener(AccountSelectFrame.onClickConfirmLogin)
+    self.frame:GetObject("btnLoginOther").onClick:AddListener(AccountSelectFrame.onClickLoginOther)
+    self.frame:GetObject("btnRegister").onClick:AddListener(AccountSelectFrame.onClickRegister)
+    self.frame:GetObject("btnBack").onClick:AddListener(AccountSelectFrame.onClickBack)
+    self.frame:GetObject("btnConfirmLogin").onClick:AddListener(AccountSelectFrame.onClickConfirmLogin)
 
     local accountList = self.frame:GetObject('accountList')
     if accountList then
