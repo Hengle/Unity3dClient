@@ -106,7 +106,7 @@ namespace GameClient
 
         void _OnLoadFinish()
         {
-            luaEnv.DoString(luaScript.text);
+            luaEnv.DoString(luaScript.text, "GameFrameWork");
 
             scriptEnv.Get("start", out luaStart);
             scriptEnv.Get("update", out luaUpdate);
