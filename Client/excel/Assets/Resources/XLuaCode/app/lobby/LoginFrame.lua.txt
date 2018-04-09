@@ -11,7 +11,7 @@ function OnOpenFrame()
 	self:GetObject('password').text = '123456'
 	-- 添加按钮事件
 	self:GetObject('btnLogin').onClick:AddListener(OnClickLogin)
-	self:GetObject("changeAccount").onClick:AddListener(onClickChangeAccount)
+	self:GetObject("btnChangeAccount").onClick:AddListener(onClickChangeAccount)
 end
 
 -- 按钮事件回调 局部变量且不写入元表
