@@ -16,7 +16,6 @@ end
 
 -- 按钮事件回调 局部变量且不写入元表
 LoginFrame.onClickChangeAccount = function()
-	CS.UnityEngine.Debug.LogError('onClickChangeAccount here !!!')
 	app.FrameManager.OpenFrameLua(app._FrameList.AccSelectFrame)
 end
 

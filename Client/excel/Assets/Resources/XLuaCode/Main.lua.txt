@@ -1,9 +1,7 @@
 -- main entrance/collectgarbage setting
 require(".init")
 require(".app.FrameConfig")
---local main = {}
---local init = loadfile("init")
---init()
+
 function __G__TRACKBACK__(msg)
     print("----------------------------------------")
     print("LUA ERROR: " .. tostring(msg) .. "\n")

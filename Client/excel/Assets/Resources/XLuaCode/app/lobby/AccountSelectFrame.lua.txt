@@ -6,41 +6,43 @@
 local AccountSelectFrame = {}
 
 function AccountSelectFrame.OnOpenFrame()
-    self:GetObject("btnLoginOther").onClick:AddListener(onClickLoginOther)
-    self:GetObject("btnRegister").onClick:AddListener(onClickRegister)
-    self:GetObject("btnBack").onClick:AddListener(onClickBack)
-    self:GetObject("btnConfirmLogin").onClick:AddListener(onClickConfirmLogin)
+    --self.frame:GetObject("btnLoginOther").onClick:AddListener(AccountSelectFrame.onClickLoginOther)
+    --self.frame:GetObject("btnRegister").onClick:AddListener(AccountSelectFrame.onClickRegister)
+    --self.frame:GetObject("btnBack").onClick:AddListener(AccountSelectFrame.onClickBack)
+    --self.frame:GetObject("btnConfirmLogin").onClick:AddListener(AccountSelectFrame.onClickConfirmLogin)
 
-    local accountList = self:GetObject('accountList')
+    local accountList = self.frame:GetObject('accountList')
     if accountList then
         accountList:Initialize()
         accountList.mOnListElementVisible = function(index,script)
+            --[[
             local accountArray = pre.get
             if index >= 0 and index < #accountArray then
                 script:GetObject('accountName').text = accounts[index + 1]
             end
+            --]]
         end
     end
 end
 
-local onClickLoginOther = function()
+AccountSelectFrame.onClickLoginOther = function()
     --TODO 回传选定的账号给LoginFrame 并登录
 end
 
-local onClickRegister = function()
-    --TODO 拉起注册界面
-    --FrameManager:OpenFrameLua(LobbyData._FrameList.)
+AccountSelectFrame.onClickRegister = function()
+    app.FrameManager.OpenFrameLua(app._FrameList.AccountLoginFrame)
 end
 
-local onClickBack = function()
-    FrameManager:CloseFrame(self)
+AccountSelectFrame.onClickBack = function()
+    app.FrameManager.CloseFrame(self.frame)
 end
 
-local onClickConfirmLogin = function()
+AccountSelectFrame.onClickConfirmLogin = function()
 
 end
 
 function AccountSelectFrame.OnCloseFrame()
+
 end
 
 -- ---------------------显示控制接口AccountSelectPresenter调用--------------------------------
