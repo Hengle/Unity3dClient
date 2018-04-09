@@ -43,7 +43,7 @@ namespace GameClient
         private byte[] CustomLoaderMethod(ref string fileName)
         {
 #if UNITY_EDITOR
-            fileName = Application.dataPath + "/Resources/XLuaCode" + fileName.Replace('.', '/') + ".lua";
+            fileName = Application.dataPath + "/Resources/XLuaCode" + fileName.Replace('.', '/') + ".lua" + ".txt";
             if (File.Exists(fileName))
             {
                 return File.ReadAllBytes(fileName);
