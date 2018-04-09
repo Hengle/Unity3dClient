@@ -77,7 +77,7 @@ public class LuaBehaviour : MonoBehaviour
             LogManager.Instance().LogErrorFormat("scriptEnv is Invalid when to open {0} frame", clientFrame.GetType());
             return;
         }
-        scriptEnv.Set("self", clientFrame);
+        
         if(null == luaScript)
         {
             LogManager.Instance().LogErrorFormat("missing luaScript when to open {0} frame", clientFrame.GetType());
@@ -98,6 +98,8 @@ public class LuaBehaviour : MonoBehaviour
             return;
         }
 
+        scriptEnv.Set("self", luaTable);
+        luaTable.Set("frame", clientFrame);
         luaOpenFrame = luaTable.Get<EAction>("OnOpenFrame");
         luaUpdateFrame = luaTable.Get<EAction>("OnUpdateFrame");
         luaCloseFrame = luaTable.Get<EAction>("OnCloseFrame");

@@ -12,5 +12,6 @@ app._FrameList = {
     SettingFrame = 4,
     FishMainFrame = 5,
     MessageBoxFrame_001 = 6,
-    AccSelectFrame = 7,
+    LoadingFrame0 = 7,
+    AccSelectFrame = 8,
 }

@@ -7,50 +7,22 @@ local util = require(".utility.util")
 local web = require(".net.web")
 
 function LoginFrame.OnOpenFrame()
-	self:GetObject('account').text = 'DingJiaMing'
-	self:GetObject('password').text = '123456'
+	self.frame:GetObject('account').text = 'DingJiaMing'
+	self.frame:GetObject('password').text = '123456'
 	-- 添加按钮事件
-	self:GetObject('btnLogin').onClick:AddListener(OnClickLogin)
-	self:GetObject("btnChangeAccount").onClick:AddListener(onClickChangeAccount)
+	self.frame:GetObject('btnLogin').onClick:AddListener(LoginFrame.OnClickLogin)
+	self.frame:GetObject("btnChangeAccount").onClick:AddListener(LoginFrame.onClickChangeAccount)
 end
 
 -- 按钮事件回调 局部变量且不写入元表
-local onClickChangeAccount = function()
+LoginFrame.onClickChangeAccount = function()
+	CS.UnityEngine.Debug.LogError('onClickChangeAccount here !!!')
 	app.FrameManager.OpenFrameLua(app._FrameList.AccSelectFrame)
 end
 
 --点击登陆按钮
-local OnClickLogin = function()
-	--[[
-	local hasAccount = true
-	if hasAccount then
-		CS.GameClient.UIFrameLua.OpenFrameLua(3)
-	else
-		CS.UnityEngine.Debug.LogError('has no Account Register !!!')
-	end
-	]]
-
+LoginFrame.OnClickLogin = function()
 	CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,1)
-	--return
-	--准备登陆
-	--[[
-	local account = self:GetObject('account').text
-	local password = self:GetObject('password').text
-	CS.UnityEngine.Debug.LogError('account = ' .. account .. ' password = ' .. password)
-
-	local err = LoginFrame:checkLoginInput(account,password)
-	if err then
-		CS.UnityEngine.Debug.LogError('chekLoginInput unValid !' .. err.err_code)
-		return
-	end
-
-
-	LoginFrame:login({
-            channel = 'game',
-            account = account,
-            password = password,
-        })
-		]]
 end
 
 function LoginFrame.OnCloseFrame()
