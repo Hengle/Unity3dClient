@@ -50,6 +50,4 @@ function AccountUtils.saveAccountHistory(history)
     file:close()
 end
 
-
-
 return AccountUtils
