@@ -11,4 +11,4 @@ app.Debugger = CS.UnityEngine.Debug
 app.FrameManager = CS.GameClient.UIFrameLua
 app.MessageBoxFrame = CS.GameClient.MessageBoxFrame
 
-app.util = require(".initUtils")
+require(".initUtils")

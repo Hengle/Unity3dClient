@@ -9,6 +9,8 @@ function AccountLoginFrame.OnOpenFrame()
     --self.frame:GetObject("btnRegister").onClick:AddListener(AccountRegisterFrame.onClickRegister)
     self.frame:GetObject("btnLogin").onClick:AddListener(AccountLoginFrame.onClickLogin)
     self.frame:GetObject("btnPasswordRetire").onClick:AddListener(AccountLoginFrame.onClickPasswordRetire)
+    self.frame:GetObject("btnClose").onClick:AddListener(AccountLoginFrame.OnCloseFrame())
+
 end
 
 AccountLoginFrame.onClickLogin = function()
@@ -17,6 +19,10 @@ end
 
 AccountLoginFrame.onClickPasswordRetire = function()
     app.FrameManager.OpenFrameLua(app._FrameList.PasswordRetrieveFrame)
+end
+
+AccountLoginFrame.onclickClose = function()
+    app.FrameManager.CloseFrame(self.frame)
 end
 
 function AccountLoginFrame.OnCloseFrame()
