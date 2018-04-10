@@ -16,7 +16,7 @@ AccountLoginFrame.onClickLogin = function()
 end
 
 AccountLoginFrame.onClickPasswordRetire = function()
-    --TODO 忘记密码实现
+    app.FrameManager.OpenFrameLua(app._FrameList.PasswordRetrieveFrame)
 end
 
 function AccountLoginFrame.OnCloseFrame()
@@ -24,7 +24,5 @@ function AccountLoginFrame.OnCloseFrame()
 end
 
 -- ----------------------------------------控制代码--------------------------------------------------
-
-
 
 return AccountLoginFrame

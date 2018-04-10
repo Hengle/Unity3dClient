@@ -1,9 +1,8 @@
 --打开登陆界面
-require('.init')
 local LoginFrame = {}
 
-local json = require(".utility.json")
-local util = require(".utility.util")
+local json = app.util.JsonUtils
+local util = app.util.NumericUtils
 local web = require(".net.web")
 
 function LoginFrame.OnOpenFrame()

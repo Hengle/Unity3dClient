@@ -16,5 +16,5 @@ app._FrameList = {
     AccSelectFrame = 8,
     AccountRegisterFrame = 9,
     AccountLoginFrame = 10,
-
+    PasswordRetrieveFrame = 11,
 }

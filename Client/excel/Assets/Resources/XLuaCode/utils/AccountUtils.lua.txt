@@ -5,6 +5,8 @@
 ---
 local AccountUtils = {}
 
+local Json = app.util.JsonUtils
+
 function AccountUtils.addAccountHistory(history, account, password)
     if not account or account == "" then return end
 
@@ -32,7 +34,22 @@ end
 function AccountUtils.saveAccountHistory(history)
     if not history then return end
 
-    local file = io.open()
+    --table.insert(history,1, util.getVersion())
+
+    local json = Json.encode(history)
+
+    for i,v in ipairs(history) do
+        if i > 10 --[[app.constant.account_history_upper]]--
+        then
+            break
+        end
+
+        local record = history[i]
+        --file:write(record.account .. "=" .. util.encodePwd(record.password) .. "\n")
+    end
+    file:close()
 end
+
+
 
 return AccountUtils
