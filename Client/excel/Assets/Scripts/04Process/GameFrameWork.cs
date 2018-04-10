@@ -45,6 +45,7 @@ namespace GameClient
             fileName = Application.dataPath + "/Resources/XLuaCode" + fileName.Replace('.', '/') + ".lua" + ".txt";
             if (File.Exists(fileName))
             {
+                Debug.LogErrorFormat("Load Lua Succeed [<color=#00ff00>{0}</color>]", fileName);
                 return File.ReadAllBytes(fileName);
             }
             else
