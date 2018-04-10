@@ -14,5 +14,7 @@ app._FrameList = {
     MessageBoxFrame_001 = 6,
     LoadingFrame0 = 7,
     AccSelectFrame = 8,
-    AccountLoginFrame = 9,
+    AccountRegisterFrame = 9,
+    AccountLoginFrame = 10,
+
 }

@@ -22,6 +22,14 @@ end
 --点击登陆按钮
 LoginFrame.OnClickLogin = function()
 	CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,1)
+	--[[]audio.playSound("Sound/click.mp3")
+	local err = self:checkLoginInput(account, password)
+	if err then
+		ErrorLayer.new(err, errorLayerCallBack):addTo(self)
+		return
+	end
+
+	]]--
 end
 
 function LoginFrame.OnCloseFrame()
@@ -57,14 +65,6 @@ function LoginFrame:auth(params)
 		print(msg)
 	end
 	LoginFrame:serverTimeAndPack(loginCallback,params)
-end
-
-local loginCallback = function(ok, msg)
-	if ok then
-		print(msg)
-		return
-	end
-	--print("loginCallback,ok:"..ok.."msg:"..msg)
 end
 
 function LoginFrame:serverTimeAndPack(callback, params)

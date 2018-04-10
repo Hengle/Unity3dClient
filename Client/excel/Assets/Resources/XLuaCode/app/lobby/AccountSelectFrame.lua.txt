@@ -25,11 +25,11 @@ function AccountSelectFrame.OnOpenFrame()
 end
 
 AccountSelectFrame.onClickLoginOther = function()
-    --TODO 回传选定的账号给LoginFrame 并登录
+    app.FrameManager.OpenFrameLua(app._FrameList.AccountLoginFrame)
 end
 
 AccountSelectFrame.onClickRegister = function()
-    app.FrameManager.OpenFrameLua(app._FrameList.AccountLoginFrame)
+    app.FrameManager.OpenFrameLua(app._FrameList.AccountRegisterFrame)
 end
 
 AccountSelectFrame.onClickBack = function()
@@ -37,7 +37,7 @@ AccountSelectFrame.onClickBack = function()
 end
 
 AccountSelectFrame.onClickConfirmLogin = function()
-
+    --TODO 回传选定的账号给LoginFrame 并登录
 end
 
 function AccountSelectFrame.OnCloseFrame()
