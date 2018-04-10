@@ -9,7 +9,7 @@ function AccountLoginFrame.OnOpenFrame()
     --self.frame:GetObject("btnRegister").onClick:AddListener(AccountRegisterFrame.onClickRegister)
     self.frame:GetObject("btnLogin").onClick:AddListener(AccountLoginFrame.onClickLogin)
     self.frame:GetObject("btnPasswordRetire").onClick:AddListener(AccountLoginFrame.onClickPasswordRetire)
-    self.frame:GetObject("btnClose").onClick:AddListener(AccountLoginFrame.OnCloseFrame())
+    self.frame:GetObject("btnClose").onClick:AddListener(AccountLoginFrame.onclickClose)
 
 end
 
