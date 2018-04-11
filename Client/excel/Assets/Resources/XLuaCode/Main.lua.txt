@@ -24,7 +24,8 @@ function  Start()
 end
 
 function  Update()
-    CS.UnityEngine.Debug.LogError("Update ...")
+    --CS.UnityEngine.Debug.LogError("Update ...")
+
 end
 
 function OnDestroy()

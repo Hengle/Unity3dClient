@@ -27,6 +27,13 @@ local msgWaitReconnct = nil
 function GateNet.sendData(data)
     local buff = string.char(math.floor(#data/256)%256) .. string.char(#data%256) .. data
 
+    if not param.gateSocket then
+        print("GateNet.sendData socket not exist! reconnect")
+        GateNet.reconnect()
+        msgWaitReconnct = buff
+        return false
+    end
+
 	-- 重连
     --[[local scene = display.getRunningScene()
 	if scene.name ~= "LoginScene" and (not param.gateSocket or not param.isConnected) then
@@ -35,13 +42,8 @@ function GateNet.sendData(data)
 		return false
 	end]]--
 
-	local ok, ret = pcall(param.gateSocket.send, param.gateSocket, buff)
-	if not ok then
-		GateNet.reconnect()
-		msgWaitReconnct = buff
-		return false
-	end
-
+	pcall(param.gateSocket.Send, param.gateSocket, buff)
+	
 	param.lastHearTime = os.time()
 	return true
 end
