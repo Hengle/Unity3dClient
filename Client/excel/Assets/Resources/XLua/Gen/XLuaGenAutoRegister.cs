@@ -25,6 +25,8 @@ namespace XLua.CSObjectWrap
 				
 				translator.DelayWrapLoader(typeof(NetWork.HttpNet), NetWorkHttpNetWrap.__Register);
 				
+				translator.DelayWrapLoader(typeof(GameClient.InvokeManager), GameClientInvokeManagerWrap.__Register);
+				
 				translator.DelayWrapLoader(typeof(GameClient.LuaEventManager), GameClientLuaEventManagerWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(GameClient.FrameTypeID), GameClientFrameTypeIDWrap.__Register);

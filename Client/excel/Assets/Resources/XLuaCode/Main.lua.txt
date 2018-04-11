@@ -20,15 +20,15 @@ local function main()
 end
 
 function  Start()
-    CS.UnityEngine.Debug.LogError("Start ...")
+    --CS.UnityEngine.Debug.LogError("Start ...")
 end
 
 function  Update()
-    CS.UnityEngine.Debug.LogError("Update ...")
+    --CS.UnityEngine.Debug.LogError("Update ...")
 end
 
 function OnDestroy()
-    CS.UnityEngine.Debug.LogError("OnDestroy ...")
+    --CS.UnityEngine.Debug.LogError("OnDestroy ...")
 end
 
 local status, msg = xpcall(main, __G__TRACKBACK__)

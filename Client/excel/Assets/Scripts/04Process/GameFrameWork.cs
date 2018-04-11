@@ -38,6 +38,14 @@ namespace GameClient
             }
         }
 
+        public void Invoke(EAction action)
+        {
+            if (null != action)
+            {
+                luaUpdate = (EAction)Delegate.Remove((EAction)this.luaUpdate, action);
+                luaUpdate = (EAction)Delegate.Combine((EAction)this.luaUpdate, action);
+            }
+        }
 
         private byte[] CustomLoaderMethod(ref string fileName)
         {

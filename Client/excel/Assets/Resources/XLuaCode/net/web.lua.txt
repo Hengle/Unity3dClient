@@ -1,4 +1,6 @@
-LOGIN_SERVER = { ip="192.168.0.108", port=6001 }
+LOGIN_SERVER = { ip="39.105.7.29", port=6001 }
+GATE_SERVER = { ip="39.105.7.29", port=7001 }
+
 local web = {}
 local http = CS.UnityEngine.GameObject.Find('GameFrameWork'):GetComponent('HttpNet')
 
@@ -18,18 +20,13 @@ function web.httpRequest(callback, svr, suburl, method, postdata)
 end
 
 
-function web.getServerTime(callback)
-    web.httpRequest(function (isErr, res)
-        if isErr == true then
-			callback(0)
-            return
-		end
-
-        local time = math.floor(res)
+function web.getServerTime(callback,server)
+    local cb = function(ok,res)
         if callback then
-            callback(time)
+            callback(ok,res)
         end
-    end, LOGIN_SERVER, "/hello", "GET")
+    end
+    web.httpRequest(cb,server,"/hello", "GET")
 end
 
 

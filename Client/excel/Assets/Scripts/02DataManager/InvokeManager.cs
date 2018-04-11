@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
+using XLua;
 
 namespace GameClient
 {
+    [LuaCallCSharp]
     public class InvokeManager : Singleton<InvokeManager>
     {
         const int InvokeOnce = (1 << 0);
@@ -44,6 +46,11 @@ namespace GameClient
 
         List<InvokeItem> mCachedInvokeItems = new List<InvokeItem>(16);
         List<InvokeItem> mActivedInvokeItems = new List<InvokeItem>(16);
+
+        public void Invoke(EAction action)
+        {
+            GameFrameWork.FrameWorkHandle.Invoke(action);
+        }
 
         public int Invoke(object target, float delay, UnityAction callback)
         {

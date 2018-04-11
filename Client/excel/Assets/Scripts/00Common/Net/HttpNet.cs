@@ -29,11 +29,11 @@ namespace NetWork
 
             if (uwr.isError)
             {
-                cb(true, uwr.error);
+                cb(false, uwr.error);
             }
             else
             {
-                cb(false, uwr.downloadHandler.text);
+                cb(true, uwr.downloadHandler.text);
             }
         }
 
@@ -44,11 +44,11 @@ namespace NetWork
 
             if (uwr.isError)
             {
-                cb(true, uwr.error);
+                cb(false, uwr.error);
             }
             else
             {
-                cb(false, uwr.downloadHandler.text);
+                cb(true, uwr.downloadHandler.text);
             }
         }
 
