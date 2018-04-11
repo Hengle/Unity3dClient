@@ -6,16 +6,21 @@
 local AccountRegisterFrame = {}
 
 function AccountRegisterFrame.OnOpenFrame()
-    self.frame:GetObject("btnRegister").onClick:AddListener(AccountSelectFrame.onClickRegister)
-    sekf.frame:GetObject("btnClose").onClick:AddListener(AccountRegisterFrame.onClickClose)
+    self.frame:GetObject("btnRegister").onClick:AddListener(AccountRegisterFrame.onClickRegister)
+    self.frame:GetObject("btnClose").onClick:AddListener(AccountRegisterFrame.onClickClose)
+    self.frame:GetObject("btnGetVerifyCode").onClick:AddListener(AccountRegisterFrame.onClickGetVerifyCode)
 end
 
 AccountRegisterFrame.onClickClose = function()
-    app.FrameManager.CloseFrame(self)
+    app.FrameManager.CloseFrame(self.frame)
 end
 
 AccountRegisterFrame.onClickRegister = function()
-    -- TODO注册逻辑实现
+    --TODO 注册逻辑实现
+end
+
+AccountRegisterFrame.onClickGetVerifyCode = function()
+    --TODO 获取验证码逻辑实现
 end
 
 function AccountRegisterFrame.OnCloseFrame()

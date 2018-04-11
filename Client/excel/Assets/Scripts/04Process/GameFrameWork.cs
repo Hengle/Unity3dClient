@@ -20,9 +20,9 @@ namespace GameClient
         internal static float lastGCTime = 0;
         internal const float GCInterval = 1;//1 second 
 
-        private Action luaStart;
-        private Action luaUpdate;
-        private Action luaOnDestroy;
+        private EAction luaStart;
+        private EAction luaUpdate;
+        private EAction luaOnDestroy;
         private LuaTable scriptEnv;
 
         static GameFrameWork mFrameWorkHandle = null;
@@ -45,6 +45,7 @@ namespace GameClient
             fileName = Application.dataPath + "/Resources/XLuaCode" + fileName.Replace('.', '/') + ".lua" + ".txt";
             if (File.Exists(fileName))
             {
+                Debug.LogFormat("Load Lua Succeed [<color=#00ff00>{0}</color>]", fileName);
                 return File.ReadAllBytes(fileName);
             }
             else
@@ -108,9 +109,9 @@ namespace GameClient
         {
             luaEnv.DoString(luaScript.text, "GameFrameWork");
 
-            scriptEnv.Get("start", out luaStart);
-            scriptEnv.Get("update", out luaUpdate);
-            scriptEnv.Get("ondestroy", out luaOnDestroy);
+            scriptEnv.Get("Start", out luaStart);
+            scriptEnv.Get("Update", out luaUpdate);
+            scriptEnv.Get("OnDestroy", out luaOnDestroy);
 
             if (null != luaStart)
             {

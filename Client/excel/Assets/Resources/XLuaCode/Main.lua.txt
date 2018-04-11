@@ -19,8 +19,16 @@ local function main()
     app.FrameManager.OpenFrameLua(app._FrameList.LoginFrame)
 end
 
-local function update()
-    print("update")
+function  Start()
+    CS.UnityEngine.Debug.LogError("Start ...")
+end
+
+function  Update()
+    CS.UnityEngine.Debug.LogError("Update ...")
+end
+
+function OnDestroy()
+    CS.UnityEngine.Debug.LogError("OnDestroy ...")
 end
 
 local status, msg = xpcall(main, __G__TRACKBACK__)
