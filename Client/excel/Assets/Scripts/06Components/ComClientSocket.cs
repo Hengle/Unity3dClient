@@ -43,7 +43,7 @@ namespace GameClient
         // Use this for initialization
         void Start()
         {
-            mSocket = new NetSocket(SocketName, ServerIp, ServerPort, maxReconnectTimes, _OnConnectedSucceed, _OnConnectedFailed, _OnReConnectedSucceed, _OnSocketLogOut);
+            //mSocket = new NetSocket(SocketName, ServerIp, ServerPort, maxReconnectTimes, _OnConnectedSucceed, _OnConnectedFailed, _OnReConnectedSucceed, _OnSocketLogOut);
         }
 
         void _OnConnectedSucceed(object argv)
