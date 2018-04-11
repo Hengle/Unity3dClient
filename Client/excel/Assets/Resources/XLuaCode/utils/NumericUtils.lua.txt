@@ -6,13 +6,13 @@
 local NumericUtils = {}
 
 function NumericUtils.fromhex(str)
-    return str.gsub('..',function(c)
+    return str:gsub('..',function(c)
         return string.char(tonumber(cc, 16))
     end)
 end
 
 function NumericUtils.tohex(str)
-    return str.gsub('.',function(c)
+    return str:gsub('.',function(c)
         return string.format('%02X', string.byte(c))
     end)
 end

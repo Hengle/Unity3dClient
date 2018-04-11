@@ -4,11 +4,10 @@
 --- DateTime: 2018/4/9 17:23
 ---
 local web = require('.net.web')
-require('.utils.JsonUtils')
-require('.utils.NumericUtils')
+local json=require('.utils.JsonUtils')
+local numeric=require('.utils.NumericUtils')
 
 local AccountRegisterFrame = {}
-local regParams = nil
 
 function AccountRegisterFrame.OnOpenFrame()
     self.frame:GetObject("btnRegister").onClick:AddListener(AccountRegisterFrame.onClickRegister)
@@ -28,10 +27,9 @@ AccountRegisterFrame.onClickRegister = function()
     local verifyCode = self.frame:GetObject("verifyCode").text
 
     if DEVELOPMENT then
-        phone = '13867486001'
+        phone = '13867486002'
         password = 'il15958589125'
         repeat_password = password
-        verifyCode = '9277'
         CS.UnityEngine.Debug.LogError(phone)
         CS.UnityEngine.Debug.LogError(password)
         CS.UnityEngine.Debug.LogError(repeat_password)
@@ -45,25 +43,16 @@ AccountRegisterFrame.onClickRegister = function()
         return
     end
 
-    regParams =
-    {
+    self:auth({
         cmd = "register",
         channel = "game",
         account = phone,
         password = password,
-        invite_code = verifyCode,
+        --invite_code = verifyCode,
         phone = phone,
         reg_code = verifyCode,
         reg_id = ""
-    }
-
-    self:auth(regParams,
-            nil,--app.lang.register_loading,
-            nil,--app.lang.register_error,
-            --[=[function ()
-                --self.registerEditBoxSet:setTouchEnabled(true)
-            end--]=]
-            nil)
+    })
 end
 
 function AccountRegisterFrame:checkRegisterInput(account, password, inviteCode)
@@ -76,115 +65,48 @@ function AccountRegisterFrame:checkRegisterInput(account, password, inviteCode)
         err = app._ErrorCode.password_nil
     elseif #password < 6 or #password > 20 or string.find(password, "[%W]") then
         err = app._ErrorCode.password_error
+        --[[
     elseif inviteCode and (#inviteCode == 0 or #inviteCode > 10) then
         err = app._ErrorCode.invite_error
+        --]]
     end
     return err
 end
 
-function AccountRegisterFrame.getTimeCallback(ok,msg)
-    if ok then
-        if msg then
-            CS.UnityEngine.Debug.LogFormat('<color=#00ff00>get server time = {0} succeed !!</color>',msg)
+function AccountRegisterFrame:auth(params)
+    local function loginCallback(err,res)
+        if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
+            CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
+        else
+            CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
         end
-        if regParams then
-            regParams.client_tag = tostring(CLIENT_TAG)
-            regParams.platform = 'Android'
-            local regMsg = JsonUtils.encode(regParams)
-            local time = tonumber(msg)
-            regMsg = CS.Common.DESEncrypt.MyEncode(regMsg, time)
-            regMsg = NumericUtils.tohex(regMsg)
+    end
+
+    local function getServerTimeCallback(err,res)
+        if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
+            CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
+            --登陆服务器
+            params.client_tag = tostring(CLIENT_TAG)
+            params.platform = 'android'
+            local msg = json.encode(params)
+            --regMsg = CS.Common.DESEncrypt.MyEncode(regMsg,msg)
+            --regMsg = numeric.tohex(regMsg)
             local postValues =
             {
-                time = tostring(time),
-                content = regMsg,
+                time = res,
+                content = msg,
             }
-            web.httpRequest(callback, LOGIN_SERVER, "/login", "POST", postValues)
-        end
-    else
-        if msg then
-            CS.UnityEngine.Debug.LogError(msg)
-        end
-    end
-end
+            local postStr = web.ToPostData(postValues)
+            print("HTTP postStr"..postStr)
 
-function AccountRegisterFrame.loginCallback(ok, msg)
-    --FirstEnterScene = false
-    if not ok then
-        print("auth failed:", (msg or ""))
-        --ProgressLayer.stop()
-        if msg  then
-            CS.UnityEngine.Debug.LogError(msg)
-            --ErrorLayer.new(app.lang[msg], errorLayerCallBack):addTo(self)
+            web.httpRequest(loginCallback,LOGIN_SERVER, "/login", "POST", postStr)
         else
-            CS.UnityEngine.Debug.LogError("failure , call errorLayerCallBack")
-            --ErrorLayer.new(failure, errorLayerCallBack):addTo(self)
+            CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
         end
-        return
     end
 
-    CS.UnityEngine.Debug.LogFormat("<color=#00ff00>校验成功！</color>")
-    --rogressLayer.setText("校验成功！")
-    cc.UserDefault:getInstance():setStringForKey("wx_refresh_token", "")
-    if params.channel == "game" then
-        CS.UnityEngine.Debug.LogFormat("<color=#00ff00>params.channel  = </color>")
-        --[=[
-        if self.scene.rememberPassword:isButtonSelected() then
-            util.addAccountHistory(self.accountHistory, params.account, params.password)
-        else
-            util.addAccountHistory(self.accountHistory, params.account, "")
-        end
-        util.saveAccountHistory(self.accountHistory)
-        --]=]
-    elseif params.channel == "weixin" then
-        --cc.UserDefault:getInstance():setStringForKey("wx_refresh_token", params.refresh_token)
-    end
-
-    --[=[
-    ProgressLayer.new("正在登录网关...", 16, function ()
-        ErrorLayer.new(app.lang.network_disabled, errorLayerCallBack):addTo(self)
-        GateNet.disconnect()
-    end)--]=]
-
-    GateNet.connect(function(ok, msg)
-        if not ok then
-            ProgressLayer.stop()
-            ErrorLayer.new(app.lang.gate_error..(msg or ""), errorLayerCallBack):addTo(self)
-            return
-        end
-        -- set jpush tag and alias
-        util.setJPushTagAndAlias(params.channel, params.account)
-        UserMessage.send("UserInfoReq", {uid=Account.uid})
-        -- enter Lobby
-        UserMessage.send("CheckReconnectReq", function(msg)
-            if msg.roomid == 0 then
-                app:enterScene("LobbyPrivateScene", nil)
-            else
-                if msg.private then
-                    print("reconnect to private game")
-                    UserMessage.EnterPrivateReq(msg.tableid)
-                else
-                    print("reconnect to normal game")
-                    UserMessage.send("RoomListReq", function()
-                        roomMgr:init(math.floor(msg.roomid/100), msg.roomid)
-                        UserMessage.send("EnterRoomReq", {roomid=msg.roomid}, function(m)
-                            roomMgr:EnterRoomRep(m)
-                        end)
-                    end)
-                end
-            end
-        end)
-    end)
-end
-
-function AccountRegisterFrame:auth(params, loading, failure, errorLayerCallBack)
-    --[=[
-    ProgressLayer.new(loading, 8, function ()
-        ErrorLayer.new(app.lang.network_disabled, errorLayerCallBack):addTo(self)
-        GateNet.disconnect()
-    end)--]=]
-    web.getServerTime(self.getTimeCallback,LOGIN_SERVER)
-    --LoginNet.auth(loginCallback, params)
+    --拉取服务器时间
+    web.getServerTime(getServerTimeCallback,LOGIN_SERVER)
 end
 
 AccountRegisterFrame.onClickGetVerifyCode = function()

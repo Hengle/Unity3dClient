@@ -4,6 +4,9 @@
 
 	<assembly fullname="Assembly-CSharp">
 	    <type fullname="Common.DESEncrypt" preserve="all"/>
+		<type fullname="NetWork.HttpRequestError" preserve="all"/>
+		<type fullname="NetWork.HttpRequestStatus" preserve="all"/>
+		<type fullname="NetWork.LocalHttpWebRequest" preserve="all"/>
 		<type fullname="NetWork.HttpNet" preserve="all"/>
 		<type fullname="GameClient.InvokeManager" preserve="all"/>
 		<type fullname="GameClient.LuaEventManager" preserve="all"/>

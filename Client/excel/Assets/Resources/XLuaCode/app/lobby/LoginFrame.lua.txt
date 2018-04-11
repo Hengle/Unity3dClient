@@ -20,99 +20,60 @@ end
 
 --点击登陆按钮
 LoginFrame.OnClickLogin = function()
-	CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,1)
-	--[[]audio.playSound("Sound/click.mp3")
-	local err = self:checkLoginInput(account, password)
-	if err then
-		ErrorLayer.new(err, errorLayerCallBack):addTo(self)
-		return
-	end
+	--CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,1)
+	local loginParam =
+	{
+		cmd = "login",
+		channel = "game",
+		account = '13867486001',
+		password = 'il15958589125',
+		--invite_code = verifyCode,
+		--phone = '13867486001',
+		--reg_code = verifyCode,
+		--reg_id = ""
+	}
 
-	]]--
+	self:auth(loginParam)
 end
 
 function LoginFrame.OnCloseFrame()
-end
--- ----------------------------------------控制代码--------------------------------------------------
 
-function LoginFrame:checkLoginInput(account, password)
-	local err
-	if not account or #account == 0 then
-		err = { err_code = 'account_nil' }
-	elseif #account < 6 or #account > 20 or string.find(account, "[%W]") then
-		err = { err_code = 'account_error' }
-	elseif not password or #password == 0 then
-		err = { err_code = 'password_nil' }
-	elseif #password < 6 or #password > 20 or string.find(password, "[%W]") then
-		err = { err_code = 'password_error' }
+end
+
+function LoginFrame.loginCallback(err,res)
+	if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
+		CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
+	else
+		CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
 	end
-	return err
-end
-
-function LoginFrame:login(params)
-	app.Debugger.LogError('ready to login !!!')
-	params.cmd = "login"
-	params.reg_id = ""
-	LoginFrame:auth(params)
 end
 
 function LoginFrame:auth(params)
-	app.Debugger.LogError('ready to auth !!!')
-	function loginCallback(ok, msg)
-		print(ok)
-		print(msg)
-	end
-	LoginFrame:serverTimeAndPack(loginCallback,params)
-end
+	local function getServerTimeCallback(err,res)
+		if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
+			CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
+			--登陆服务器
+			params.client_tag = tostring(CLIENT_TAG)
+			params.platform = 'android'
+			local msg = json.encode(params)
+			--regMsg = CS.Common.DESEncrypt.MyEncode(regMsg,msg)
+			--regMsg = numeric.tohex(regMsg)
 
-function LoginFrame:serverTimeAndPack(callback, params)
-	app.Debugger.LogError('ready to auth serverTimeAndPack!!!')
-	web.getServerTime(function (time)
-		if time <= 0 then
-			callback(false,"time over")
-			return
+			local postValues =
+			{
+				time = res,
+				content = msg,
+			}
+			local postStr = web.ToPostData(postValues)
+			print("HTTP postStr"..postStr)
+			web.httpRequest(self.loginCallback, LOGIN_SERVER, "/login", "POST", postStr)
+		else
+			CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
 		end
+	end
 
-		params.client_tag = "test_clt_tag"
-		params.platform = "test_pf"
-
-		local msg = json.encode(params)
-		msg = CS.Common.DESEncrypt.MyEncode(msg, time)
-		msg = util.tohex(msg)
-
-		LoginFrame:FinalAuth(callback, time, msg, params)
-	end)
-end
-
-function LoginFrame:FinalAuth(callback, time, msg, params)
-	local postdata = {
-		time = tostring(time),
-		content = msg,
-	}
-
-	print(LOGIN_SERVER,"/login","POST",postdata)
-	web.httpRequest(callback,LOGIN_SERVER, "/login", "POST", postdata)
+	--拉取服务器时间
+	web.getServerTime(getServerTimeCallback,LOGIN_SERVER)
 end
 
 return LoginFrame
-
---[[
-	local accounts = {"jermine","wangzhe","shenshaojun","sddr","lanwei","niceo","sfaoer","ggsdrlll" }
-
-	local accountList = self:GetObject('accountList')
-	if accountList then
-		accountList:Initialize()
-		accountList.mOnListElementVisible = function(index,script)
-			if index >= 0 and index < #accounts then
-				script:GetObject('accountName').text = accounts[index + 1]
-			end
-		end
-		accountList:SetElementAmount(#accounts)
-	end
-	]]--
-
---[[local accountList = self:GetObject('accountList')
-	if accountList then
-		accountList:UnInitialize()
-	end
-	]]--
