@@ -33,7 +33,6 @@ end
 
 function LoginFrame.OnCloseFrame()
 end
-
 -- ----------------------------------------控制代码--------------------------------------------------
 
 function LoginFrame:checkLoginInput(account, password)

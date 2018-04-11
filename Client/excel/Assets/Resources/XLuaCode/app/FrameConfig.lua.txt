@@ -18,3 +18,16 @@ app._FrameList = {
     AccountLoginFrame = 10,
     PasswordRetrieveFrame = 11,
 }
+
+app._ErrorCode = {
+    account_nil = 1000,
+    account_error=1001,
+    account_repeat=1002,
+    password_nil = 1003,
+    password_error = 1004,
+    password_repeat_error = 1005,
+    invite_error = 1006,
+}
+
+DEVELOPMENT = true
+CLIENT_TAG = 0
