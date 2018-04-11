@@ -3,34 +3,16 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
-using XLua;
 
 namespace NetWork
 {
-    [LuaCallCSharp]
-    public class RecvEvent
-    {
-        public byte[] data;
-    }
-    [LuaCallCSharp]
     public delegate void OnConnectedSucceed(object param);
-    [LuaCallCSharp]
     public delegate void OnConnectedFailed(object param);
-    [LuaCallCSharp]
     public delegate void OnReconnectedSucceed(object param);
-    [LuaCallCSharp]
     public delegate void OnSocketLogOut(string log);
     public delegate void SendCallBack();
-    public delegate void AsyncRecvCb(SocketError error);
-    [LuaCallCSharp]
-    public delegate void OnSocketRecv(RecvEvent re);
-    [LuaCallCSharp]
-    public delegate void OnConnectClose();
-    [LuaCallCSharp]
-    public delegate void OnConnectClosed();
     public delegate void NetWorkReceiveCallback(bool isDone, int bytesRead, string errInfo);
 
-    [LuaCallCSharp]
     public class NetSocket
     {
         public string targetName = string.Empty;
@@ -42,16 +24,26 @@ namespace NetWork
         public OnReconnectedSucceed onReconnectedSucceed;
         public OnSocketLogOut onSocketLogOut;
         public object param = null;
-        public OnConnectClose onClose;
-        public OnConnectClosed onClosed;
-        public Socket socket;
-        public List<SendCallBack> mSendCB = new List<SendCallBack>(16);
-        public OnSocketRecv onRecv;
-        public Queue<RecvEvent> mRecvEvents = new Queue<RecvEvent>();
-        
-        protected byte[] inBuffer = new byte[2048];
+        protected NetWorkReceiveCallback recvCB = null;
+
+        protected NetInputBuffer inBuffer = null;
         protected NetOutputBuffer outBuffer = null;
-        public AsyncRecvCb mRecvCB = null;
+
+        public NetSocket(string targetName, string ip, short port,
+            int maxReconnectTimes = 5,
+            OnConnectedSucceed onConnecteSucceed = null,
+            OnConnectedFailed onConnecteFailed = null,
+            OnReconnectedSucceed onReconnectedSucceed = null,
+            OnSocketLogOut onSocketLogOut = null)
+        {
+            this.targetName = targetName;
+            this.ip = ip;
+            this.port = port;
+            this.onConnecteSucceed = onConnecteSucceed;
+            this.onConnecteFailed = onConnecteFailed;
+            this.onReconnectedSucceed = onReconnectedSucceed;
+            this.onSocketLogOut = onSocketLogOut;
+        }
 
         const float delay = 5.0f;
         SocketStatus eSocketStatus = SocketStatus.SS_INVALID;
@@ -63,14 +55,15 @@ namespace NetWork
             }
             set
             {
-                lock (SocketStatusLock)
+                lock(SocketStatusLock)
                 {
                     eSocketStatus = value;
                 }
             }
         }
-
-
+        Socket socket;
+        List<SendCallBack> mSendCB = new List<SendCallBack>(16);
+        
         int reconnectTimes = -1;
         float time = -1.0f;
         public float nextReconnectTime
@@ -104,27 +97,6 @@ namespace NetWork
             }
         }
 
-        [LuaCallCSharp]
-        public NetSocket(string targetName, string ip, short port,
-            int maxReconnectTimes = 5,
-            OnConnectedSucceed onConnecteSucceed = null,
-            OnConnectedFailed onConnecteFailed = null,
-            OnSocketRecv onRecved = null,
-            OnConnectClose onClose = null,
-            OnConnectClosed onClosed = null)
-        {
-            this.targetName = targetName;
-            this.ip = ip;
-            this.port = port;
-            this.maxReconnectTimes = maxReconnectTimes;
-            this.onConnecteSucceed = onConnecteSucceed;
-            this.onConnecteFailed = onConnecteFailed;
-            this.onRecv = onRecved;
-            this.onClose = onClose;
-            this.onClosed = onClosed;
-        }
-        
-        [CSharpCallLua]
         public bool Connect(string ip, short port)
         {
             try
@@ -155,14 +127,8 @@ namespace NetWork
             return true;
         }
 
-        [CSharpCallLua]
-        public void DisConnect()
-        {
-            socket.BeginDisconnect(true, new System.AsyncCallback(OnThreadDisConnected), socket);
-        }
-
         int mInvokeHandle = -1;
-        /*public void TryReconnect()
+        public void TryReconnect()
         {
             if (reconnectTimes > 0)
             {
@@ -208,7 +174,7 @@ namespace NetWork
 
                 LogPrint("{0} socket closed!!!", targetName, reconnectTimes);
             }
-        }*/
+        }
 
         void OnThreadConnected(System.IAsyncResult iar)
         {
@@ -220,7 +186,6 @@ namespace NetWork
             }
             catch (System.Exception e)
             {
-                LogPrint("{0}", e.ToString());
                 EStatus = SocketStatus.SS_TRYCONNECT;
             }
             finally
@@ -228,25 +193,6 @@ namespace NetWork
 
             }
         }
-
-        void OnThreadDisConnected(System.IAsyncResult iar)
-        {
-            Socket client = (Socket)iar.AsyncState;
-            try
-            {
-                client.EndConnect(iar);
-                EStatus = SocketStatus.SS_DISCONNECTED;
-            }
-            catch (System.Exception e)
-            {
-                EStatus = SocketStatus.SS_TRYCONNECT;
-            }
-            finally
-            {
-
-            }
-        }
-
 
         void LogPrint(string format,params object[] argv)
         {
@@ -276,8 +222,6 @@ namespace NetWork
                 }
             }
             reconnectTimes = maxReconnectTimes;
-
-            Receive();
         }
 
         public void Close()
@@ -361,54 +305,97 @@ namespace NetWork
         {
             try
             {
-                var cb = ar.AsyncState as AsyncCallback;
+                if (socket == null)
+                {
+                    //NetManager.Instance().Log("{0} NetworkBase ReceiveCallback: Socket is not created.", serverType);
+                    if (recvCB != null)
+                    {
+                        recvCB(false, -1, "NetworkBase ReceiveCallback: Socket is not created.");
+                    }
+                    return;
+                }
+
+                if (eSocketStatus != SocketStatus.SS_DISCONNECTED)
+                {
+                    //NetManager.Instance().Log("{0} NetworkBase ReceiveCallback: invalid netStatus {1}.", serverType, netStatus);
+                    if (recvCB != null)
+                    {
+                        recvCB(false, -1, "NetworkBase ReceiveCallback: netStatus is not CONNECT_SUCESS.");
+                    }
+                    return;
+                }
+
                 //收消息的
                 SocketError errCode = SocketError.Success;
                 int bytesRead = socket.EndReceive(ar, out errCode);
-                
+
                 if (errCode != SocketError.Success)
                 {
                     //Logger.LogForNet("socket recv error: {0}", errCode);
                 }
-                else
-                {
-                    lock (mRecvEvents)
-                    {
-                        RecvEvent recvEvent = new RecvEvent();
-                        recvEvent.data = new byte[bytesRead];
-                        Array.Copy(recvEvent.data, inBuffer, bytesRead);
 
-                        mRecvEvents.Enqueue(recvEvent);
-                        
-                    }
-                    
-                    Receive();
+                if (errCode != SocketError.Success && errCode != SocketError.WouldBlock && errCode != SocketError.TryAgain && errCode != SocketError.Interrupted)
+                {
+                    //NetManager.Instance().Log("Error while receive data from server. Error Code: " + errCode);
+                    throw new Exception("Connect Failed");
                 }
-                
+
+                //具体如何收取数据交给回调函数处理
+                if (recvCB != null)
+                {
+                    recvCB(true, bytesRead, "NetworkBase ReceiveCallback: netStatus is not CONNECT_SUCESS.");
+                }
             }
             catch (Exception e)
             {
-                
+                //Logger.Log("NetworkBase ReceiveCallback Exception: Connect is shutdown.");
+                if (recvCB != null)
+                {
+                    recvCB(false, -1, "NetworkBase ReceiveCallback Exception: Connect is shutdown.");
+                }
+                //ShutDown() ;
             }
         }
-        
 
-        public void Receive()
+        public void Receive(byte[] byteData, int offset, int size, NetWorkReceiveCallback cb = null)
         {
+            recvCB = cb;
+            
             try
             {
                 if (socket == null)
                 {
+                    //NetManager.Instance().Log("{0} NetworkBase Receive: Socket is not created.", serverType);
+                    if (recvCB != null)
+                    {
+                        recvCB(false, -1, "Network Receive: Socket is not created.");
+                    }
                     return;
                 }
-                
-                socket.BeginReceive(inBuffer, 0,
-                            inBuffer.Length, SocketFlags.None,
-                            new System.AsyncCallback(ReceiveCallback), null);
+
+                if (eSocketStatus != SocketStatus.SS_DISCONNECTED)
+                {
+                    //NetManager.Instance().Log("{0} NetworkBase Receive: netStatus is not CONNECT_SUCESS.", serverType);
+                    if (recvCB != null)
+                    {
+                        recvCB(false, -1, "NetworkBase Receive: netStatus is not CONNECT_SUCESS.");
+                    }
+                    return;
+                }
+
+                socket.BeginReceive(byteData, offset, size, SocketFlags.None,
+                                   new System.AsyncCallback(ReceiveCallback), null);
             }
             catch (Exception e)
             {
-                
+                //NetManager.Instance().Log("{0} receive exception: {1}", serverType, e.ToString());
+                //ShutDown();
+                //SetCurrentStatus(NETMANAGER_STATUS.NO_CONNECT);
+                //Logger.Log(e.ToString());
+                if (recvCB != null)
+                {
+                    recvCB(false, -1, "NetworkBase Receive Exception: " + e.ToString());
+                }
             }
         }
 
@@ -425,7 +412,7 @@ namespace NetWork
                 }
                 mSendCB.Clear();
             }
-            
+
             if (EStatus == SocketStatus.SS_DISCONNECTED)
             {
                 return;
@@ -433,7 +420,7 @@ namespace NetWork
 
             if (EStatus == SocketStatus.SS_TRYCONNECT)
             {
-                //TryReconnect();
+                TryReconnect();
             }
             else if (EStatus == NetSocket.SocketStatus.SS_TRYCONNECTED)
             {
@@ -458,17 +445,10 @@ namespace NetWork
 
             if (EStatus == NetSocket.SocketStatus.SS_CONNECTED)
             {
-                if (mRecvEvents.Count > 0)
-                {
-                    lock (mRecvEvents)
-                    {
-                        while (mRecvEvents.Count > 0)
-                        {
-                            var recvEvent = mRecvEvents.Dequeue();
-                            this.onRecv(recvEvent);
-                        }
-                    }
-                }
+                Receive(inBuffer.GetRawBuffer(),
+                            inBuffer.GetCurrentOffset(),
+                            inBuffer.GetCurrentSize(),
+                            recvCB);
             }
         }
     }

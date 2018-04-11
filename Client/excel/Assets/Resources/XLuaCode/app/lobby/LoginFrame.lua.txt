@@ -1,5 +1,7 @@
 --打开登陆界面
 require('.init')
+local GateNet = require('.net.GateNet')
+
 local LoginFrame = {}
 
 local json = require(".utility.json")
@@ -21,6 +23,8 @@ end
 
 --点击登陆按钮
 LoginFrame.OnClickLogin = function()
+	print("connect")
+	GateNet.connect(function() end)
 	CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,1)
 end
 

@@ -21,9 +21,10 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(LuaBehaviour);
-			Utils.BeginObjectRegister(type, L, translator, 0, 2, 1, 1);
+			Utils.BeginObjectRegister(type, L, translator, 0, 3, 1, 1);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnCloseFrame", _m_OnCloseFrame);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "DestroyWithFrame", _m_DestroyWithFrame);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnOpenFrame", _m_OnOpenFrame);
 			
 			
@@ -90,6 +91,33 @@ namespace XLua.CSObjectWrap
                 {
                     
                     __cl_gen_to_be_invoked.OnCloseFrame(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_DestroyWithFrame(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                LuaBehaviour __cl_gen_to_be_invoked = (LuaBehaviour)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    
+                    __cl_gen_to_be_invoked.DestroyWithFrame(  );
                     
                     
                     
