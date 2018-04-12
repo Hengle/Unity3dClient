@@ -31,11 +31,12 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 6, 1, 1);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 7, 1, 1);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "GetFileMD5", _m_GetFileMD5_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "GetFileMD5Async", _m_GetFileMD5Async_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "GetFileBytes", _m_GetFileBytes_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "FileExists", _m_FileExists_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "ReadContentFromFile", _m_ReadContentFromFile_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "HasFile", _m_HasFile_xlua_st_);
             
 			
@@ -168,6 +169,31 @@ namespace XLua.CSObjectWrap
                     
                         long __cl_gen_ret = FileUtil.FileExists( path );
                         LuaAPI.lua_pushint64(L, __cl_gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_ReadContentFromFile_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    string path = LuaAPI.lua_tostring(L, 1);
+                    
+                        byte[] __cl_gen_ret = FileUtil.ReadContentFromFile( path );
+                        LuaAPI.lua_pushstring(L, __cl_gen_ret);
                     
                     
                     

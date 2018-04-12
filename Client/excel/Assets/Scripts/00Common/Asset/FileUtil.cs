@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Security.Cryptography;
 using XLua;
+using GameClient;
 
 [LuaCallCSharp]
 public class FileUtil
@@ -94,7 +95,27 @@ public class FileUtil
         return lSize;
     }
 
-	public static bool HasFile(string path)
+    [LuaCallCSharp]
+    public static byte[] ReadContentFromFile(string path)
+    {
+        try
+        {
+            if (File.Exists(path))
+            {
+                var bytes =  File.ReadAllBytes(path);
+                LogManager.Instance().LogFormat("<color=#00ff00>read {0} succeed , length={1}</color>", path, bytes.Length);
+                return bytes;
+            }
+        }
+        catch (System.Exception e)
+        {
+            LogManager.Instance().LogErrorFormat("read {0} failed , error={1}", path, e.ToString());
+            return new byte[0];
+        }
+        return new byte[0];
+    }
+
+    public static bool HasFile(string path)
 	{
 		return File.Exists(path);
 	}
