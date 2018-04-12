@@ -16,6 +16,140 @@ namespace XLua.CSObjectWrap
 {
     using Utils = XLua.Utils;
     
+    public class NetWorkHttpRequestErrorWrap
+    {
+		public static void __Register(RealStatePtr L)
+        {
+		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+		    Utils.BeginObjectRegister(typeof(NetWork.HttpRequestError), L, translator, 0, 0, 0, 0);
+			Utils.EndObjectRegister(typeof(NetWork.HttpRequestError), L, translator, null, null, null, null, null);
+			
+			Utils.BeginClassRegister(typeof(NetWork.HttpRequestError), L, null, 7, 0, 0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "HRE_SUCCEED", NetWork.HttpRequestError.HRE_SUCCEED);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "HRE_INVALID_POST_DATA", NetWork.HttpRequestError.HRE_INVALID_POST_DATA);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "HRE_INVALID_POST_DATA_BYTES", NetWork.HttpRequestError.HRE_INVALID_POST_DATA_BYTES);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "HRE_INVALID_POST_METHOD", NetWork.HttpRequestError.HRE_INVALID_POST_METHOD);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "HRE_STATUS_ERROR", NetWork.HttpRequestError.HRE_STATUS_ERROR);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "HRE_EXCEPTION", NetWork.HttpRequestError.HRE_EXCEPTION);
+            
+			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
+            
+            Utils.EndClassRegister(typeof(NetWork.HttpRequestError), L, translator);
+        }
+		
+		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int __CastFrom(RealStatePtr L)
+		{
+			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
+            if (lua_type == LuaTypes.LUA_TNUMBER)
+            {
+                translator.PushNetWorkHttpRequestError(L, (NetWork.HttpRequestError)LuaAPI.xlua_tointeger(L, 1));
+            }
+            else if(lua_type == LuaTypes.LUA_TSTRING)
+            {
+			    if (LuaAPI.xlua_is_eq_str(L, 1, "HRE_SUCCEED"))
+                {
+                    translator.PushNetWorkHttpRequestError(L, NetWork.HttpRequestError.HRE_SUCCEED);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "HRE_INVALID_POST_DATA"))
+                {
+                    translator.PushNetWorkHttpRequestError(L, NetWork.HttpRequestError.HRE_INVALID_POST_DATA);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "HRE_INVALID_POST_DATA_BYTES"))
+                {
+                    translator.PushNetWorkHttpRequestError(L, NetWork.HttpRequestError.HRE_INVALID_POST_DATA_BYTES);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "HRE_INVALID_POST_METHOD"))
+                {
+                    translator.PushNetWorkHttpRequestError(L, NetWork.HttpRequestError.HRE_INVALID_POST_METHOD);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "HRE_STATUS_ERROR"))
+                {
+                    translator.PushNetWorkHttpRequestError(L, NetWork.HttpRequestError.HRE_STATUS_ERROR);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "HRE_EXCEPTION"))
+                {
+                    translator.PushNetWorkHttpRequestError(L, NetWork.HttpRequestError.HRE_EXCEPTION);
+                }
+				else
+                {
+                    return LuaAPI.luaL_error(L, "invalid string for NetWork.HttpRequestError!");
+                }
+            }
+            else
+            {
+                return LuaAPI.luaL_error(L, "invalid lua type for NetWork.HttpRequestError! Expect number or string, got + " + lua_type);
+            }
+
+            return 1;
+		}
+	}
+    
+    public class NetWorkHttpRequestStatusWrap
+    {
+		public static void __Register(RealStatePtr L)
+        {
+		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+		    Utils.BeginObjectRegister(typeof(NetWork.HttpRequestStatus), L, translator, 0, 0, 0, 0);
+			Utils.EndObjectRegister(typeof(NetWork.HttpRequestStatus), L, translator, null, null, null, null, null);
+			
+			Utils.BeginClassRegister(typeof(NetWork.HttpRequestStatus), L, null, 4, 0, 0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "HRS_INVALID", NetWork.HttpRequestStatus.HRS_INVALID);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "HRS_BEGIN_REQUEST", NetWork.HttpRequestStatus.HRS_BEGIN_REQUEST);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "HRS_WAIT_EVENT", NetWork.HttpRequestStatus.HRS_WAIT_EVENT);
+            
+			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
+            
+            Utils.EndClassRegister(typeof(NetWork.HttpRequestStatus), L, translator);
+        }
+		
+		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int __CastFrom(RealStatePtr L)
+		{
+			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
+            if (lua_type == LuaTypes.LUA_TNUMBER)
+            {
+                translator.PushNetWorkHttpRequestStatus(L, (NetWork.HttpRequestStatus)LuaAPI.xlua_tointeger(L, 1));
+            }
+            else if(lua_type == LuaTypes.LUA_TSTRING)
+            {
+			    if (LuaAPI.xlua_is_eq_str(L, 1, "HRS_INVALID"))
+                {
+                    translator.PushNetWorkHttpRequestStatus(L, NetWork.HttpRequestStatus.HRS_INVALID);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "HRS_BEGIN_REQUEST"))
+                {
+                    translator.PushNetWorkHttpRequestStatus(L, NetWork.HttpRequestStatus.HRS_BEGIN_REQUEST);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "HRS_WAIT_EVENT"))
+                {
+                    translator.PushNetWorkHttpRequestStatus(L, NetWork.HttpRequestStatus.HRS_WAIT_EVENT);
+                }
+				else
+                {
+                    return LuaAPI.luaL_error(L, "invalid string for NetWork.HttpRequestStatus!");
+                }
+            }
+            else
+            {
+                return LuaAPI.luaL_error(L, "invalid lua type for NetWork.HttpRequestStatus! Expect number or string, got + " + lua_type);
+            }
+
+            return 1;
+		}
+	}
+    
     public class GameClientFrameTypeIDWrap
     {
 		public static void __Register(RealStatePtr L)

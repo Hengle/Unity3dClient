@@ -1,87 +1,39 @@
 LOGIN_SERVER = { ip="39.105.7.29", port=6001 }
 GATE_SERVER = { ip="39.105.7.29", port=7001 }
 
+local localHttpWeb = CS.NetWork.LocalHttpWebRequest()
 local web = {}
-local http = CS.UnityEngine.GameObject.Find('GameFrameWork'):GetComponent('HttpNet')
 
 function web.httpRequest(callback, svr, suburl, method, postdata)
     print(svr,suburl,method,postdata)
-    local fullurl = "http://"..svr.ip..":"..svr.port..suburl
-
-    if method == "POST" then
-    	http:Post(callback, fullurl, postdata)
-	elseif method == "GET" then
-		http:Get(callback, fullurl)
-	else
-		print("method is not support!")
+    local httpUrl = "http://"..svr.ip..":"..svr.port..suburl
+    print('DoHttpRequest')
+    if method == 'GET' then
+        localHttpWeb:HttpGetRequest(httpUrl,callback)
+    elseif method == 'POST' then
+        localHttpWeb:HttpPostRequest(httpUrl,postdata,callback)
     end
-    
-    print("start request:", fullurl)
 end
-
 
 function web.getServerTime(callback,server)
-    local cb = function(ok,res)
-        if callback then
-            callback(ok,res)
+    web.httpRequest(callback,server,"/hello", "GET",nil,2000)
+end
+
+function web.ToPostData(postdata)
+    local content = ""
+    local first = true
+    for k,v in pairs(postdata) do
+        local value = k .. '=' .. v
+        if first then
+            content = value
+            first = false
+            CS.UnityEngine.Debug.LogError(content)
+        else
+            content = content .. '&' .. value
+            CS.UnityEngine.Debug.LogError(content)
         end
     end
-    web.httpRequest(cb,server,"/hello", "GET")
+    return content
 end
-
 
 return web
-
---[[
-LOGIN_SERVER = { ip="192.168.0.100", port=6001 }
-local json = require(".utility.json")
-local util = require(".utility.util")
-local web = require(".net.web")
-
-local params = {
-                cmd = "register",
-                channel = "channel_game", 
-                account = "test_acc", 
-                password = "123",
-                invite_code = "nviteCode",
-                phone = "13566668888",
-                reg_code = "code",
-                reg_id = ""
-            }
-
-local LoginNet = {}
-
-function LoginNet.auth(callback, params)
-    web.getServerTime(function (time)
-        if time <= 0 then
-            return
-        end
-
-        params.client_tag = "test_clt_tag"
-        params.platform = "test_pf"
-
-        local msg = json.encode(params)
-        msg = CS.Common.DESEncrypt.MyEncode(msg, time)
-        msg = util.tohex(msg)
-
-        auth(callback, time, msg, params)
-    end)
-end
-
-function loginCallback(ok, msg)
-    print(ok)
-    print(msg)
-    --print("loginCallback,ok:"..ok.."msg:"..msg)
-end
-
-function auth(callback, time, msg, params)
-    local postdata = {
-        time = tostring(time),
-        content = msg,
-    }
-
-    web.httpRequest(callback, LOGIN_SERVER, "/login", "POST", postdata)
-end
-
-LoginNet.auth(loginCallback, params)
-]]

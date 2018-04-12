@@ -34,6 +34,8 @@ namespace XLua
 				translator.RegisterPushAndGetAndUpdate<UnityEngine.Ray>(translator.PushUnityEngineRay, translator.Get, translator.UpdateUnityEngineRay);
 				translator.RegisterPushAndGetAndUpdate<UnityEngine.Bounds>(translator.PushUnityEngineBounds, translator.Get, translator.UpdateUnityEngineBounds);
 				translator.RegisterPushAndGetAndUpdate<UnityEngine.Ray2D>(translator.PushUnityEngineRay2D, translator.Get, translator.UpdateUnityEngineRay2D);
+				translator.RegisterPushAndGetAndUpdate<NetWork.HttpRequestError>(translator.PushNetWorkHttpRequestError, translator.Get, translator.UpdateNetWorkHttpRequestError);
+				translator.RegisterPushAndGetAndUpdate<NetWork.HttpRequestStatus>(translator.PushNetWorkHttpRequestStatus, translator.Get, translator.UpdateNetWorkHttpRequestStatus);
 				translator.RegisterPushAndGetAndUpdate<GameClient.FrameTypeID>(translator.PushGameClientFrameTypeID, translator.Get, translator.UpdateGameClientFrameTypeID);
 				translator.RegisterPushAndGetAndUpdate<GameClient.FrameLayer>(translator.PushGameClientFrameLayer, translator.Get, translator.UpdateGameClientFrameLayer);
 			
@@ -572,6 +574,174 @@ namespace XLua
             }
         }
         
+        int NetWorkHttpRequestError_TypeID = -1;
+		int NetWorkHttpRequestError_EnumRef = -1;
+        
+        public void PushNetWorkHttpRequestError(RealStatePtr L, NetWork.HttpRequestError val)
+        {
+            if (NetWorkHttpRequestError_TypeID == -1)
+            {
+			    bool is_first;
+                NetWorkHttpRequestError_TypeID = getTypeId(L, typeof(NetWork.HttpRequestError), out is_first);
+				
+				if (NetWorkHttpRequestError_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(NetWork.HttpRequestError));
+				    NetWorkHttpRequestError_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, NetWorkHttpRequestError_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, NetWorkHttpRequestError_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for NetWork.HttpRequestError ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, NetWorkHttpRequestError_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out NetWork.HttpRequestError val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != NetWorkHttpRequestError_TypeID)
+				{
+				    throw new Exception("invalid userdata for NetWork.HttpRequestError");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for NetWork.HttpRequestError");
+                }
+				val = (NetWork.HttpRequestError)e;
+                
+            }
+            else
+            {
+                val = (NetWork.HttpRequestError)objectCasters.GetCaster(typeof(NetWork.HttpRequestError))(L, index, null);
+            }
+        }
+		
+        public void UpdateNetWorkHttpRequestError(RealStatePtr L, int index, NetWork.HttpRequestError val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != NetWorkHttpRequestError_TypeID)
+				{
+				    throw new Exception("invalid userdata for NetWork.HttpRequestError");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for NetWork.HttpRequestError ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
+        int NetWorkHttpRequestStatus_TypeID = -1;
+		int NetWorkHttpRequestStatus_EnumRef = -1;
+        
+        public void PushNetWorkHttpRequestStatus(RealStatePtr L, NetWork.HttpRequestStatus val)
+        {
+            if (NetWorkHttpRequestStatus_TypeID == -1)
+            {
+			    bool is_first;
+                NetWorkHttpRequestStatus_TypeID = getTypeId(L, typeof(NetWork.HttpRequestStatus), out is_first);
+				
+				if (NetWorkHttpRequestStatus_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(NetWork.HttpRequestStatus));
+				    NetWorkHttpRequestStatus_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, NetWorkHttpRequestStatus_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, NetWorkHttpRequestStatus_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for NetWork.HttpRequestStatus ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, NetWorkHttpRequestStatus_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out NetWork.HttpRequestStatus val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != NetWorkHttpRequestStatus_TypeID)
+				{
+				    throw new Exception("invalid userdata for NetWork.HttpRequestStatus");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for NetWork.HttpRequestStatus");
+                }
+				val = (NetWork.HttpRequestStatus)e;
+                
+            }
+            else
+            {
+                val = (NetWork.HttpRequestStatus)objectCasters.GetCaster(typeof(NetWork.HttpRequestStatus))(L, index, null);
+            }
+        }
+		
+        public void UpdateNetWorkHttpRequestStatus(RealStatePtr L, int index, NetWork.HttpRequestStatus val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != NetWorkHttpRequestStatus_TypeID)
+				{
+				    throw new Exception("invalid userdata for NetWork.HttpRequestStatus");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for NetWork.HttpRequestStatus ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
         int GameClientFrameTypeID_TypeID = -1;
 		int GameClientFrameTypeID_EnumRef = -1;
         
@@ -799,6 +969,18 @@ namespace XLua
 				translator.PushUnityEngineRay2D(L, array[index]);
 				return true;
 			}
+			else if (type == typeof(NetWork.HttpRequestError[]))
+			{
+			    NetWork.HttpRequestError[] array = obj as NetWork.HttpRequestError[];
+				translator.PushNetWorkHttpRequestError(L, array[index]);
+				return true;
+			}
+			else if (type == typeof(NetWork.HttpRequestStatus[]))
+			{
+			    NetWork.HttpRequestStatus[] array = obj as NetWork.HttpRequestStatus[];
+				translator.PushNetWorkHttpRequestStatus(L, array[index]);
+				return true;
+			}
 			else if (type == typeof(GameClient.FrameTypeID[]))
 			{
 			    GameClient.FrameTypeID[] array = obj as GameClient.FrameTypeID[];
@@ -862,6 +1044,18 @@ namespace XLua
 			else if (type == typeof(UnityEngine.Ray2D[]))
 			{
 			    UnityEngine.Ray2D[] array = obj as UnityEngine.Ray2D[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(NetWork.HttpRequestError[]))
+			{
+			    NetWork.HttpRequestError[] array = obj as NetWork.HttpRequestError[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(NetWork.HttpRequestStatus[]))
+			{
+			    NetWork.HttpRequestStatus[] array = obj as NetWork.HttpRequestStatus[];
 				translator.Get(L, obj_idx, out array[array_idx]);
 				return true;
 			}

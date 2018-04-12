@@ -19,6 +19,7 @@
 /Client/excel/Library/
 /Tools/LoggerServer/LoggerServer/bin/
 /Tools/LoggerServer/LoggerServer/obj/
+/Client/excel/Assets/Resources/XLuaCode/.idea/
 
 .DS_Store
 
@@ -32,3 +33,4 @@
 *.tlog
 *.obj
 *.idb
+Client/excel/.vs/excel/v14/.suo

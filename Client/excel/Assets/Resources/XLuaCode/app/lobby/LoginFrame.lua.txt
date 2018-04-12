@@ -1,121 +1,122 @@
 --打开登陆界面
 local LoginFrame = {}
 
+
+local AccountUtils = app.util.AccountUtils
 local json = app.util.JsonUtils
-local util = app.util.NumericUtils
 local web = require(".net.web")
-local gateNet = require(".net.GateNet")
+
+LoginFrame.accountHistory = nil
 
 function LoginFrame.OnOpenFrame()
-	self.frame:GetObject('account').text = 'DingJiaMing'
-	self.frame:GetObject('password').text = '123456'
+	--self.accountHistory = AccountUtils.readAccountHistory()
+
+	--DEMO
+	self.frame:GetObject('account').text = '13867486001'
+	self.frame:GetObject('password').text = 'il15958589125'
 	-- 添加按钮事件
 	self.frame:GetObject('btnLogin').onClick:AddListener(LoginFrame.OnClickLogin)
 	self.frame:GetObject("btnChangeAccount").onClick:AddListener(LoginFrame.onClickChangeAccount)
 end
 
--- 按钮事件回调 局部变量且不写入元表
+-- 点击切换账号事件
 LoginFrame.onClickChangeAccount = function()
 	app.FrameManager.OpenFrameLua(app._FrameList.AccSelectFrame)
 end
 
---点击登陆按钮
+-- 点击登陆按钮事件
 LoginFrame.OnClickLogin = function()
-    gateNet.connect(function () end)
+	local account, password = self.frame:GetObject("account").text,self.frame:GetObject("password").text
 
-	CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,1)
-	--[[]audio.playSound("Sound/click.mp3")
-	local err = self:checkLoginInput(account, password)
-	if err then
-		ErrorLayer.new(err, errorLayerCallBack):addTo(self)
+	--local err = self:checkLoginInput(account,password)
+	--[[if err then
+		--TODO 错误遮罩
 		return
-	end
+	end]]--
 
-	]]--
+	self:login({
+		channel = "game",
+		account = account,
+		password = password,
+	})
 end
 
 function LoginFrame.OnCloseFrame()
 end
+
 -- ----------------------------------------控制代码--------------------------------------------------
+
+function LoginFrame:initAccountList()
+
+end
 
 function LoginFrame:checkLoginInput(account, password)
 	local err
 	if not account or #account == 0 then
-		err = { err_code = 'account_nil' }
-	elseif #account < 6 or #account > 20 or string.find(account, "[%W]") then
-		err = { err_code = 'account_error' }
+		err = app.lang.account_nil
+	elseif #account < 5 or #account > 12 or string.find(account, "[%W%.%-_]") then
+		err = app.lang.account_error
 	elseif not password or #password == 0 then
-		err = { err_code = 'password_nil' }
-	elseif #password < 6 or #password > 20 or string.find(password, "[%W]") then
-		err = { err_code = 'password_error' }
+		err = app.lang.password_nil
+	elseif #password < 5 or #password > 12 or string.find(password, "[%W%.%-_]") then
+		err = app.lang.password_error
 	end
 	return err
 end
 
 function LoginFrame:login(params)
-	app.Debugger.LogError('ready to login !!!')
+
 	params.cmd = "login"
-	params.reg_id = ""
-	LoginFrame:auth(params)
+	self:auth(params)
+end
+
+function LoginFrame.loginCallback(err,res)
+	if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
+		CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
+	else
+		CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
+	end
 end
 
 function LoginFrame:auth(params)
-	app.Debugger.LogError('ready to auth !!!')
-	function loginCallback(ok, msg)
-		print(ok)
-		print(msg)
-	end
-	LoginFrame:serverTimeAndPack(loginCallback,params)
-end
+	--TODO 登录Loading
 
-function LoginFrame:serverTimeAndPack(callback, params)
-	app.Debugger.LogError('ready to auth serverTimeAndPack!!!')
-	web.getServerTime(function (time)
-		if time <= 0 then
-			callback(false,"time over")
-			return
+	function loginCallback(ok, msg)
+		if not ok then
+			print("auth failed:", (msg or ""))
 		end
 
-		params.client_tag = "test_clt_tag"
-		params.platform = "test_pf"
+		-- ------------
 
-		local msg = json.encode(params)
-		msg = CS.Common.DESEncrypt.MyEncode(msg, time)
-		msg = util.tohex(msg)
+	end
 
-		LoginFrame:FinalAuth(callback, time, msg, params)
-	end)
-end
 
-function LoginFrame:FinalAuth(callback, time, msg, params)
-	local postdata = {
-		time = tostring(time),
-		content = msg,
-	}
 
-	print(LOGIN_SERVER,"/login","POST",postdata)
-	web.httpRequest(callback,LOGIN_SERVER, "/login", "POST", postdata)
+	local function getServerTimeCallback(err,res)
+		if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
+			CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
+			--登陆服务器
+			params.client_tag = tostring(CLIENT_TAG)
+			params.platform = 'android'
+			local msg = json.encode(params)
+			--regMsg = CS.Common.DESEncrypt.MyEncode(regMsg,msg)
+			--regMsg = numeric.tohex(regMsg)
+
+			local postValues =
+			{
+				time = res,
+				content = msg,
+			}
+			local postStr = web.ToPostData(postValues)
+			print("HTTP postStr"..postStr)
+			web.httpRequest(self.loginCallback, LOGIN_SERVER, "/login", "POST", postStr)
+		else
+			CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
+		end
+	end
+
+	--拉取服务器时间
+	web.getServerTime(getServerTimeCallback,LOGIN_SERVER)
 end
 
 return LoginFrame
-
---[[
-	local accounts = {"jermine","wangzhe","shenshaojun","sddr","lanwei","niceo","sfaoer","ggsdrlll" }
-
-	local accountList = self:GetObject('accountList')
-	if accountList then
-		accountList:Initialize()
-		accountList.mOnListElementVisible = function(index,script)
-			if index >= 0 and index < #accounts then
-				script:GetObject('accountName').text = accounts[index + 1]
-			end
-		end
-		accountList:SetElementAmount(#accounts)
-	end
-	]]--
-
---[[local accountList = self:GetObject('accountList')
-	if accountList then
-		accountList:UnInitialize()
-	end
-	]]--
