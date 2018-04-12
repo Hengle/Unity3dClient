@@ -124,6 +124,7 @@ namespace NetWork
             this.onClosed = onClosed;
         }
         
+        
         [CSharpCallLua]
         public bool Connect(string ip, short port)
         {
@@ -414,6 +415,8 @@ namespace NetWork
 
         public void Update()
         {
+            LogPrint("NetSocket Update");
+
             lock (mSendCB)
             {
                 for(int i = 0; i < mSendCB.Count; ++i)

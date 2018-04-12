@@ -1,0 +1,162 @@
+local UserMessage = {}
+
+local Message = import(".Message")
+local Msgprotocol = import(".Msgprotocol")
+
+local crypt = require("crypt")
+
+local util = require("app.Common.util")
+local base64 = require("app.Common.base64")
+
+local AvatarConfig = require("app.config.AvatarConfig")
+local RoomConfig = require("app.config.RoomConfig")
+
+
+local Player = app.userdata.Player
+local Account = app.userdata.Account
+
+local _hookMap = {}
+local _last_msg = nil
+
+local CMD = {}
+
+
+function CMD.UserInfoRep(msg)
+	if Account.uid == msg.uid then
+		for k,v in pairs(msg) do
+			app.userdata.Player[k] = v
+		end
+	end
+	
+	-- download player's avatar 
+	local url = msg.avatarurl
+	if url and #url > 0 then
+		AvatarConfig:getAvatarByUrl(msg.uid, url)
+	end
+end
+
+
+function CMD.RoomListRep(msg)
+	local newConfig = assert(loadstring(msg.config))()
+    newConfig = checktable(newConfig)
+    for _, config in ipairs(RoomConfig) do
+        config.room = {}
+        for _, newRoom in ipairs(newConfig) do
+            if newRoom.gameid == config.gameid then
+                table.insert(config.room, newRoom)
+                for _, room in ipairs(config.room) do
+                    if newRoom.roomid == room.roomid then
+                        room.players = room.count or 0
+                        break
+                    end
+                end
+            end
+        end
+        table.sort(config.room, function(v1, v2) 
+            return v1.roomid < v2.roomid 
+        end)
+    end
+end
+
+
+function CMD.NoticeInfo(msg)
+	local notice_pack = app.userdata.notice_pack
+	local updated = false
+	for i, v in ipairs(notice_pack) do
+		if v.infotype == msg.infotype then
+			if v.infotype == 0 or v.id == msg.id then
+				notice_pack[i] = msg
+				updated = true
+				break
+			end
+		end
+	end
+	if not updated then
+		table.insert(notice_pack, msg)
+	end
+end
+
+
+function CMD.NoticeSyncPack(msg)
+	app.userdata.notice_pack = msg.pack or {}
+end
+
+
+function UserMessage.EnterPrivateReq(pid)
+	local privateMgr = require("app.room.privateMgr")
+	privateMgr:init()
+	UserMessage.send("EnterPrivateReq", {privateid=pid}, handler(privateMgr, privateMgr.EnterPrivateRep))
+end
+
+
+function UserMessage.send(name, msg, handle)
+	if not handle and type(msg) == "function" then
+		handle = msg
+		msg = {}
+	end
+
+	local name = "user." .. name
+	Message.sendMessage(name, msg)
+	_last_msg = msg
+
+	if handle then
+		local req_idx = Msgprotocol[name]
+		local rep_name = Msgprotocol[req_idx+1]
+		if rep_name then
+			_hookMap[rep_name] = {
+				reqmsg = msg,
+				handle = handle,
+			}
+		else
+			printf("response proto of:%s is nil !", name)
+		end
+	end
+end
+
+
+function UserMessage.hook(name, handle, always)
+	local name = "user." .. name
+	if not Msgprotocol[name] then
+		print("invalid msg name:", name)
+		return
+	end
+
+	if not handle then
+		_hookMap[name] = nil
+		return
+	end
+
+	if type(handle) ~= "function" then
+		print("invalide hanle!")
+		return
+	end
+
+	_hookMap[name] = {
+		handle = handle,
+		always = always,
+	}
+end
+
+
+function UserMessage.dispatch(name, msg)
+	local module, method = name:match "([^.]*).(.*)"
+	if CMD[method] then
+		CMD[method](msg)
+	end
+
+	local hook = _hookMap[name]
+	if hook then
+		hook.handle(msg, hook.reqmsg)
+		if not hook.always then
+			_hookMap[name] = nil
+		end
+	else
+		Message.notifyScene(method, msg, _last_msg)
+	end
+end
+
+
+Message.registerHandle("user", UserMessage.dispatch)
+
+
+return UserMessage

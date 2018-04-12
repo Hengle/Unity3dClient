@@ -43,7 +43,7 @@ function GateNet.sendData(data)
 	end]]--
 
 	pcall(param.gateSocket.Send, param.gateSocket, buff)
-	
+
 	param.lastHearTime = os.time()
 	return true
 end
@@ -52,7 +52,7 @@ local function connected(event)
 	print("gate connected, retrycnt:", param.retrycnt)
 
 	param.isConnected = true
-	auth()
+	--auth()
 end
 
 local function failure(event)
@@ -96,15 +96,17 @@ end
 
 
 function GateNet.realConnect()
-	local ip, port = GATE_SERVER.ip, GATE_SERVER.port
-	print("GateNet start connect:"..ip.." port:"..port)
+    local ip, port = GATE_SERVER.ip, GATE_SERVER.port
+    print("GateNet start connect:"..ip.." port:"..port)
 
-	param.gateSocket = net.NetSocket("GateTCP", ip, port, 5, connected, failure, receive, close, closed)
+    param.gateSocket = net.NetSocket("GateTCP", ip, port, 5, connected, failure, receive, close, closed)
+
+    CS.GameClient.InvokeManager.Instance():Invoke(function() param.gateSocket:Update() end)
 
     local ok = pcall(param.gateSocket.Connect, param.gateSocket, ip, port)
     if not ok then
-   		param.gateSocket = nil
-   	end
+    param.gateSocket = nil
+    end
 end
 
 

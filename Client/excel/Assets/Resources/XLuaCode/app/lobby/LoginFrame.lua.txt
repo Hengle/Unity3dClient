@@ -4,6 +4,7 @@ local LoginFrame = {}
 local json = app.util.JsonUtils
 local util = app.util.NumericUtils
 local web = require(".net.web")
+local gateNet = require(".net.GateNet")
 
 function LoginFrame.OnOpenFrame()
 	self.frame:GetObject('account').text = 'DingJiaMing'
@@ -20,6 +21,8 @@ end
 
 --点击登陆按钮
 LoginFrame.OnClickLogin = function()
+    gateNet.connect(function () end)
+
 	CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,1)
 	--[[]audio.playSound("Sound/click.mp3")
 	local err = self:checkLoginInput(account, password)
