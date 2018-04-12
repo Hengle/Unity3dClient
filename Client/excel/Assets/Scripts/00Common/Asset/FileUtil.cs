@@ -2,7 +2,9 @@
 using System.Collections;
 using System.IO;
 using System.Security.Cryptography;
+using XLua;
 
+[LuaCallCSharp]
 public class FileUtil
 {
     public static string GetFileMD5(string filePath)
@@ -65,7 +67,7 @@ public class FileUtil
             fs.Close();
         }
     }
-
+    [LuaCallCSharp]
     public static long GetFileBytes(string path)
     {
         long cbSize = 0;
@@ -77,7 +79,7 @@ public class FileUtil
 
         return cbSize;
     }
-
+    [LuaCallCSharp]
     public static long FileExists(string path)
     {
         long lSize = -1;
