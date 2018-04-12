@@ -4,9 +4,12 @@
 --- DateTime: 2018/4/8 11:25
 ---
 local AccountSelectFrame = {}
+local maxAccountCount = 6
 local accountArray = {'nice','fuck','shenshaojun','wangzhe','dingjiaming'}
 
 function AccountSelectFrame.OnOpenFrame()
+    --self.accountHistory = AccountUtils.readAccountHistory()
+
     self.frame:GetObject("btnLoginOther").onClick:AddListener(AccountSelectFrame.onClickLoginOther)
     self.frame:GetObject("btnRegister").onClick:AddListener(AccountSelectFrame.onClickRegister)
     self.frame:GetObject("btnBack").onClick:AddListener(AccountSelectFrame.onClickBack)
@@ -15,13 +18,26 @@ function AccountSelectFrame.OnOpenFrame()
     local accountList = self.frame:GetObject('accountList')
     if accountList then
         accountList:Initialize()
-        accountList.mOnListElementVisible = function(index,script)
-            if index >= 0 and index < #accountArray then
-                script:GetObject('accountName').text = accountArray[index + 1]
+        local accountCount = ((#accountArray > maxAccountCount) and {maxAccountCount} or {#accountArray})[1]
+        print("accountCount", accountCount)
+        accountList:SetElementAmount(accountCount)
+        accountList.mOnListElementVisible = function(index,binder)
+
+            if index >= 0 and index < accountCount then
+                binder:GetObject('accountName').text = accountArray[index + 1]
+                binder:GetObject('btnDelete').onClick:RemoveListener(AccountSelectFrame.onClickDeleteAccount)
+                binder:GetObject('btnDelete').onClick:AddListener(AccountSelectFrame.onClickDeleteAccount)
             end
         end
+
+        --[[accountList.mOnListElementChangeDisplay = function(elementIndex, binder, bSelected)
+            binder:GetObject('accountName'):CustomActive(bSelected)
+        end]]--
     end
-	self:UpdateAccountList()
+end
+
+AccountSelectFrame.onClickDeleteAccount = function()
+    print("click callback invoked")
 end
 
 AccountSelectFrame.onClickLoginOther = function()
@@ -46,11 +62,5 @@ end
 
 -- ---------------------显示控制接口AccountSelectPresenter调用--------------------------------
 
-function AccountSelectFrame:UpdateAccountList()
-    local accountList = self.frame:GetObject('accountList')
-    if accountList then
-        accountList:SetElementAmount(#accountArray)
-    end
-end
 
 return AccountSelectFrame

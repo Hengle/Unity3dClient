@@ -1,43 +1,73 @@
 --打开登陆界面
 local LoginFrame = {}
 
+
+local AccountUtils = app.util.AccountUtils
 local json = app.util.JsonUtils
-local util = app.util.NumericUtils
 local web = require(".net.web")
 
+LoginFrame.accountHistory = nil
+
 function LoginFrame.OnOpenFrame()
-	self.frame:GetObject('account').text = 'DingJiaMing'
-	self.frame:GetObject('password').text = '123456'
+	--self.accountHistory = AccountUtils.readAccountHistory()
+
+	--DEMO
+	self.frame:GetObject('account').text = '13867486001'
+	self.frame:GetObject('password').text = 'il15958589125'
 	-- 添加按钮事件
 	self.frame:GetObject('btnLogin').onClick:AddListener(LoginFrame.OnClickLogin)
 	self.frame:GetObject("btnChangeAccount").onClick:AddListener(LoginFrame.onClickChangeAccount)
 end
 
--- 按钮事件回调 局部变量且不写入元表
+-- 点击切换账号事件
 LoginFrame.onClickChangeAccount = function()
 	app.FrameManager.OpenFrameLua(app._FrameList.AccSelectFrame)
 end
 
---点击登陆按钮
+-- 点击登陆按钮事件
 LoginFrame.OnClickLogin = function()
-	--CS.GameClient.MessageBoxFrame.Open(function() print('ok') end,function() print('cancel') end,1)
-	local loginParam =
-	{
-		cmd = "login",
-		channel = "game",
-		account = '13867486001',
-		password = 'il15958589125',
-		--invite_code = verifyCode,
-		--phone = '13867486001',
-		--reg_code = verifyCode,
-		--reg_id = ""
-	}
+	local account, password = self.frame:GetObject("account").text,self.frame:GetObject("password").text
 
-	self:auth(loginParam)
+	--local err = self:checkLoginInput(account,password)
+	--[[if err then
+		--TODO 错误遮罩
+		return
+	end]]--
+
+	self:login({
+		channel = "game",
+		account = account,
+		password = password,
+	})
 end
 
 function LoginFrame.OnCloseFrame()
+end
 
+-- ----------------------------------------控制代码--------------------------------------------------
+
+function LoginFrame:initAccountList()
+
+end
+
+function LoginFrame:checkLoginInput(account, password)
+	local err
+	if not account or #account == 0 then
+		err = app.lang.account_nil
+	elseif #account < 5 or #account > 12 or string.find(account, "[%W%.%-_]") then
+		err = app.lang.account_error
+	elseif not password or #password == 0 then
+		err = app.lang.password_nil
+	elseif #password < 5 or #password > 12 or string.find(password, "[%W%.%-_]") then
+		err = app.lang.password_error
+	end
+	return err
+end
+
+function LoginFrame:login(params)
+
+	params.cmd = "login"
+	self:auth(params)
 end
 
 function LoginFrame.loginCallback(err,res)
@@ -49,6 +79,19 @@ function LoginFrame.loginCallback(err,res)
 end
 
 function LoginFrame:auth(params)
+	--TODO 登录Loading
+
+	function loginCallback(ok, msg)
+		if not ok then
+			print("auth failed:", (msg or ""))
+		end
+
+		-- ------------
+
+	end
+
+
+
 	local function getServerTimeCallback(err,res)
 		if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
 			CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
