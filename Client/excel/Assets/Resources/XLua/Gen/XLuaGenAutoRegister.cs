@@ -21,8 +21,6 @@ namespace XLua.CSObjectWrap
         {
 		    XLua.LuaEnv.AddIniter((luaenv, translator) => {
 			    
-				translator.DelayWrapLoader(typeof(FileUtil), FileUtilWrap.__Register);
-				
 				translator.DelayWrapLoader(typeof(Common.DESEncrypt), CommonDESEncryptWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(NetWork.HttpRequestError), NetWorkHttpRequestErrorWrap.__Register);
@@ -38,6 +36,8 @@ namespace XLua.CSObjectWrap
 				translator.DelayWrapLoader(typeof(NetWork.NetSocket), NetWorkNetSocketWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(GameClient.InvokeManager), GameClientInvokeManagerWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.LocalSettingManager), GameClientLocalSettingManagerWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(GameClient.LuaEventManager), GameClientLuaEventManagerWrap.__Register);
 				

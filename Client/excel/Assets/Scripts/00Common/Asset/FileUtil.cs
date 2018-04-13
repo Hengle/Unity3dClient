@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using XLua;
 using GameClient;
 
-[LuaCallCSharp]
 public class FileUtil
 {
     public static string GetFileMD5(string filePath)
@@ -68,7 +67,7 @@ public class FileUtil
             fs.Close();
         }
     }
-    [LuaCallCSharp]
+
     public static long GetFileBytes(string path)
     {
         long cbSize = 0;
@@ -80,7 +79,7 @@ public class FileUtil
 
         return cbSize;
     }
-    [LuaCallCSharp]
+
     public static long FileExists(string path)
     {
         long lSize = -1;
@@ -93,26 +92,6 @@ public class FileUtil
         }
 
         return lSize;
-    }
-
-    [LuaCallCSharp]
-    public static byte[] ReadContentFromFile(string path)
-    {
-        try
-        {
-            if (File.Exists(path))
-            {
-                var bytes =  File.ReadAllBytes(path);
-                LogManager.Instance().LogFormat("<color=#00ff00>read {0} succeed , length={1}</color>", path, bytes.Length);
-                return bytes;
-            }
-        }
-        catch (System.Exception e)
-        {
-            LogManager.Instance().LogErrorFormat("read {0} failed , error={1}", path, e.ToString());
-            return new byte[0];
-        }
-        return new byte[0];
     }
 
     public static bool HasFile(string path)

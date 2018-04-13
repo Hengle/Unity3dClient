@@ -10,6 +10,8 @@
 		<type fullname="NetWork.HttpNet" preserve="all"/>
 		<type fullname="NetWork.RecvEvent" preserve="all"/>
 		<type fullname="NetWork.NetSocket" preserve="all"/>
+		<type fullname="GameClient.InvokeManager" preserve="all"/>
+		<type fullname="GameClient.LocalSettingManager" preserve="all"/>
 		<type fullname="GameClient.LuaEventManager" preserve="all"/>
 		<type fullname="GameClient.FrameTypeID" preserve="all"/>
 		<type fullname="GameClient.ClientFrame" preserve="all"/>
