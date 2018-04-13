@@ -1,3 +1,5 @@
+local protobuf = {}
+
 local c = require "protobuf.c"
 
 local setmetatable = setmetatable
@@ -12,7 +14,7 @@ local io = io
 local tinsert = table.insert
 local rawget = rawget
 
-module "protobuf"
+--module "protobuf"
 
 local _pattern_cache = {}
 
@@ -573,3 +575,5 @@ function extract(tbl)
 end
 
 default=set_default
+
+return protobuf

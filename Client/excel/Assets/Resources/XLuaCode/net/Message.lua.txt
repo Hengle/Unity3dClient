@@ -1,17 +1,17 @@
 local Message = {}
 
-require("framework.protobuf")
-local Msgprotocol = require "app.net.Msgprotocol"
+local protobuf = require(".net.protobuf")
+local Msgprotocol = require ".net.Msgprotocol"
 
 local function registerProto(path)
-	local buffer = cc.HelperFunc:getFileData(path)
+	local buffer = CS.FileUtil.ReadContentFromFile(path)
 	protobuf.register(buffer)
 end
 
 
 --TODO: auto generate below code
---[[registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/game.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/user.pb"))
+registerProto(cc.FileUtils:getInstance():fullPathForFilename("Asserts/Resources/XLuaCode/Protocol/game.pb"))
+--[[registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/user.pb"))
 registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/HkFiveCard.pb"))
 registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/NN100.pb"))
 registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/TBNN.pb"))
@@ -33,7 +33,7 @@ function Message.sendMessage(name, msg)
 		return
 	end
     local data = protobuf.encode(name, msg)
-    -- print("send message "..name)
+    print("send message "..name..data)
 	if Message.net and Message.net.sendData then
 		Message.net.sendData(string.char(math.floor(id/256)%256) .. string.char(id%256) .. data)
 	end

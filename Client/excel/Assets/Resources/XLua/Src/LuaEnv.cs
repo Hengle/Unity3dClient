@@ -112,6 +112,8 @@ namespace XLua
 
                 AddBuildin("socket.core", StaticLuaCallbacks.LoadSocketCore);
                 AddBuildin("socket", StaticLuaCallbacks.LoadSocketCore);
+                AddBuildin("protobuf.core", StaticLuaCallbacks.LoadPbcCore);
+                AddBuildin("protobuf", StaticLuaCallbacks.LoadPbcCore);
 
                 LuaAPI.lua_newtable(rawL); //metatable of indexs and newindexs functions
                 LuaAPI.xlua_pushasciistring(rawL, "__index");
