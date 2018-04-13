@@ -8,6 +8,7 @@ using XLua;
 
 namespace GameClient
 {
+    [LuaCallCSharp]
     public class LocalSettingManager : Singleton<LocalSettingManager>
     {
         Dictionary<int, object> _localSetting = new Dictionary<int, object>();
@@ -50,12 +51,12 @@ namespace GameClient
             return _localSetting[eSetting] as T;
         }
         [LuaCallCSharp]
-        public string GetJasonString(int eSetting)
+        public static string GetJasonString(int eSetting)
         {
             var settingItem = TableManager.Instance().GetTableItem<ProtoTable.LocalSettingTable>((int)eSetting);
             if (null != settingItem)
             {
-                string filePath = getPersistentPath(settingItem.FilePath);
+                string filePath = LocalSettingManager.Instance().getPersistentPath(settingItem.FilePath);
                 if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
                 {
                     var content = File.ReadAllText(filePath);
@@ -66,12 +67,12 @@ namespace GameClient
             return string.Empty;
         }
         [LuaCallCSharp]
-        public void SaveJasonString(int eSetting,string content)
+        public static void SaveJasonString(int eSetting,string content)
         {
             var settingItem = TableManager.Instance().GetTableItem<ProtoTable.LocalSettingTable>(eSetting);
             if (null != settingItem)
             {
-                string filePath = getPersistentPath(settingItem.FilePath);
+                string filePath = LocalSettingManager.Instance().getPersistentPath(settingItem.FilePath);
                 if (!string.IsNullOrEmpty(filePath) && !string.IsNullOrEmpty(content))
                 {
                     try

@@ -100,11 +100,11 @@ namespace XLua.CSObjectWrap
                     
                     return 0;
                 }
-                if(__gen_param_count == 4&& translator.Assignable<object>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<UnityEngine.Events.UnityAction>(L, 4)) 
+                if(__gen_param_count == 4&& translator.Assignable<object>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<EAction>(L, 4)) 
                 {
                     object target = translator.GetObject(L, 2, typeof(object));
                     float delay = (float)LuaAPI.lua_tonumber(L, 3);
-                    UnityEngine.Events.UnityAction callback = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 4);
+                    EAction callback = translator.GetDelegate<EAction>(L, 4);
                     
                         int __cl_gen_ret = __cl_gen_to_be_invoked.Invoke( target, delay, callback );
                         LuaAPI.xlua_pushinteger(L, __cl_gen_ret);
@@ -133,17 +133,34 @@ namespace XLua.CSObjectWrap
                 GameClient.InvokeManager __cl_gen_to_be_invoked = (GameClient.InvokeManager)translator.FastGetCSObj(L, 1);
             
             
-                
+			    int __gen_param_count = LuaAPI.lua_gettop(L);
+            
+                if(__gen_param_count == 5&& translator.Assignable<object>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<EAction>(L, 4)&& LuaTypes.LUA_TBOOLEAN == LuaAPI.lua_type(L, 5)) 
+                {
+                    object target = translator.GetObject(L, 2, typeof(object));
+                    float interval = (float)LuaAPI.lua_tonumber(L, 3);
+                    EAction onUpdate = translator.GetDelegate<EAction>(L, 4);
+                    bool bGlobal = LuaAPI.lua_toboolean(L, 5);
+                    
+                        int __cl_gen_ret = __cl_gen_to_be_invoked.InvokeRepeate( target, interval, onUpdate, bGlobal );
+                        LuaAPI.xlua_pushinteger(L, __cl_gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                if(__gen_param_count == 9&& translator.Assignable<object>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 4)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 5)&& translator.Assignable<EAction>(L, 6)&& translator.Assignable<EAction>(L, 7)&& translator.Assignable<EAction>(L, 8)&& LuaTypes.LUA_TBOOLEAN == LuaAPI.lua_type(L, 9)) 
                 {
                     object target = translator.GetObject(L, 2, typeof(object));
                     float delay = (float)LuaAPI.lua_tonumber(L, 3);
                     int repeat = LuaAPI.xlua_tointeger(L, 4);
                     float interval = (float)LuaAPI.lua_tonumber(L, 5);
-                    UnityEngine.Events.UnityAction onStart = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 6);
-                    UnityEngine.Events.UnityAction onUpdate = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 7);
-                    UnityEngine.Events.UnityAction onEnd = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 8);
+                    EAction onStart = translator.GetDelegate<EAction>(L, 6);
+                    EAction onUpdate = translator.GetDelegate<EAction>(L, 7);
+                    EAction onEnd = translator.GetDelegate<EAction>(L, 8);
+                    bool bGlobal = LuaAPI.lua_toboolean(L, 9);
                     
-                        int __cl_gen_ret = __cl_gen_to_be_invoked.InvokeRepeate( target, delay, repeat, interval, onStart, onUpdate, onEnd );
+                        int __cl_gen_ret = __cl_gen_to_be_invoked.InvokeRepeate( target, delay, repeat, interval, onStart, onUpdate, onEnd, bGlobal );
                         LuaAPI.xlua_pushinteger(L, __cl_gen_ret);
                     
                     
@@ -154,6 +171,8 @@ namespace XLua.CSObjectWrap
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
             }
+            
+            return LuaAPI.luaL_error(L, "invalid arguments to GameClient.InvokeManager.InvokeRepeate!");
             
         }
         
@@ -239,8 +258,9 @@ namespace XLua.CSObjectWrap
             
                 
                 {
+                    bool bGlobal = LuaAPI.lua_toboolean(L, 2);
                     
-                        bool __cl_gen_ret = __cl_gen_to_be_invoked.Initialize(  );
+                        bool __cl_gen_ret = __cl_gen_to_be_invoked.Initialize( bGlobal );
                         LuaAPI.lua_pushboolean(L, __cl_gen_ret);
                     
                     
@@ -267,8 +287,9 @@ namespace XLua.CSObjectWrap
             
                 
                 {
+                    bool bGlobal = LuaAPI.lua_toboolean(L, 2);
                     
-                    __cl_gen_to_be_invoked.Clear(  );
+                    __cl_gen_to_be_invoked.Clear( bGlobal );
                     
                     
                     

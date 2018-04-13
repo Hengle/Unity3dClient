@@ -68,7 +68,7 @@ public class FileUtil
             fs.Close();
         }
     }
-    [LuaCallCSharp]
+
     public static long GetFileBytes(string path)
     {
         long cbSize = 0;
@@ -80,7 +80,7 @@ public class FileUtil
 
         return cbSize;
     }
-    [LuaCallCSharp]
+
     public static long FileExists(string path)
     {
         long lSize = -1;
@@ -94,24 +94,36 @@ public class FileUtil
 
         return lSize;
     }
-
     [LuaCallCSharp]
-    public static byte[] ReadContentFromFile(string path)
+    public static byte[] ReadFileFromResource(string path)
     {
-        try
+        if(string.IsNullOrEmpty(path))
         {
-            if (File.Exists(path))
-            {
-                var bytes =  File.ReadAllBytes(path);
-                LogManager.Instance().LogFormat("<color=#00ff00>read {0} succeed , length={1}</color>", path, bytes.Length);
-                return bytes;
-            }
-        }
-        catch (System.Exception e)
-        {
-            LogManager.Instance().LogErrorFormat("read {0} failed , error={1}", path, e.ToString());
+            LogManager.Instance().LogErrorFormat("path is empty !");
             return new byte[0];
         }
+
+        string fullpath = Path.GetFullPath(Application.dataPath + "/Resources/" + path);
+
+        if (!File.Exists(fullpath))
+        {
+            LogManager.Instance().LogErrorFormat("<color=#ff0000>path error : {0}</color>",fullpath);
+            return new byte[0];
+        }
+
+        try
+        {
+            var datas = File.ReadAllBytes(fullpath);
+            int len = null == datas ? 0 : datas.Length;
+            LogManager.Instance().LogFormat("<color=#00ff00> read {0} succeed ! length = {1} bytes !</color>", fullpath, len);
+            return datas;
+        }
+        catch(System.Exception e)
+        {
+            LogManager.Instance().LogErrorFormat("<color=#ff0000>read error : {0}</color>", fullpath);
+            LogManager.Instance().LogErrorFormat("<color=#ff0000>read error : {0}</color>", e.ToString());
+        }
+
         return new byte[0];
     }
 

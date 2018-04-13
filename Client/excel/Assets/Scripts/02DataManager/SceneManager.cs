@@ -67,7 +67,7 @@ namespace GameClient
             if(null != co)
             {
                 eTo = eSceneType;
-                Clear();
+                Clear(false);
                 Loading = true;
                 onSceneChangeFinish = cb;
                 GameFrameWork.FrameWorkHandle.StartCoroutine(StartChangeScene(co));
@@ -94,17 +94,17 @@ namespace GameClient
             }
         }
 
-        public void Clear()
+        public void Clear(bool bGlobal)
         {
             AudioManager.Instance().Clear();
-            InvokeManager.Instance().Clear();
+            InvokeManager.Instance().Clear(bGlobal);
             UIManager.Instance().CloseAllFrames();
             AsyncLoadTaskManager.Instance().ClearAllAsyncTasks();
         }
 
         public void ExitGame()
         {
-            Clear();
+            Clear(true);
             TableManager.Instance().ClearAll();
             eCurrent = SceneType.ST_INVALID;
             eTo = SceneType.ST_INVALID;

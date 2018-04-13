@@ -287,17 +287,17 @@ namespace GameClient
         List<EventBody> mCachedEvents = new List<EventBody>(8);
         #endregion
         #region invoke_wrapp
-        protected void Invoke(int flag, float delay, UnityAction callback)
+        protected void Invoke(int flag, float delay, EAction callback)
         {
             CancelInvoke(flag);
             int iHandleId = InvokeManager.Instance().Invoke(this, delay, callback);
             mInvokeHandles.Add(new InvokeBody { iFlag = flag, iInvokeHandle = iHandleId });
         }
 
-        protected void InvokeRepeate(int flag, float delay, int repeat, float interval, UnityAction onStart, UnityAction onUpdate, UnityAction onEnd)
+        protected void InvokeRepeate(int flag, float delay, int repeat, float interval, EAction onStart, EAction onUpdate, EAction onEnd)
         {
             CancelInvoke(flag);
-            int iHandleId = InvokeManager.Instance().InvokeRepeate(this, delay, repeat, interval,onStart,onUpdate,onEnd);
+            int iHandleId = InvokeManager.Instance().InvokeRepeate(this, delay, repeat, interval,onStart,onUpdate,onEnd,false);
             mInvokeHandles.Add(new InvokeBody { iFlag = flag, iInvokeHandle = iHandleId });
         }
 
