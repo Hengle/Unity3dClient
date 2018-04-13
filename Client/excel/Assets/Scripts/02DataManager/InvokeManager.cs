@@ -76,6 +76,11 @@ namespace GameClient
             return invokeItem.iHandleId;
         }
 
+        public int InvokeRepeate(object target,float interval,EAction onUpdate)
+        {
+            return InvokeRepeate(target, 0.0f, 2100000000, interval, null, onUpdate, null);
+        }
+
         public int InvokeRepeate(object target,float delay,int repeat,float interval, EAction onStart, EAction onUpdate, EAction onEnd)
         {
             InvokeItem invokeItem = null;
