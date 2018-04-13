@@ -121,9 +121,6 @@ namespace GameClient
             scriptEnv.Get("Update", out luaUpdate);
             scriptEnv.Get("OnDestroy", out luaOnDestroy);
 
-            int res = LuaProtobuf.add(5, 6);
-            UnityEngine.Debug.LogErrorFormat("value = {0}",res);
-
             if (null != luaStart)
             {
                 luaStart();
