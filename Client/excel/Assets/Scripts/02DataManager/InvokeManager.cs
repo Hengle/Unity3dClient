@@ -24,9 +24,9 @@ namespace GameClient
             public float delay = 0.0f;
             public float interval = 0.0f;
             public float start = 0.0f;
-            public UnityAction onStart;
-            public UnityAction onUpdate;
-            public UnityAction onEnd;
+            public EAction onStart;
+            public EAction onUpdate;
+            public EAction onEnd;
 
             public void Reset()
             {
@@ -52,7 +52,7 @@ namespace GameClient
             GameFrameWork.FrameWorkHandle.Invoke(action);
         }
 
-        public int Invoke(object target, float delay, UnityAction callback)
+        public int Invoke(object target, float delay, EAction callback)
         {
             InvokeItem invokeItem = null;
             if (mCachedInvokeItems.Count > 0)
@@ -76,7 +76,7 @@ namespace GameClient
             return invokeItem.iHandleId;
         }
 
-        public int InvokeRepeate(object target,float delay,int repeat,float interval,UnityAction onStart,UnityAction onUpdate,UnityAction onEnd)
+        public int InvokeRepeate(object target,float delay,int repeat,float interval, EAction onStart, EAction onUpdate, EAction onEnd)
         {
             InvokeItem invokeItem = null;
             if (mCachedInvokeItems.Count > 0)

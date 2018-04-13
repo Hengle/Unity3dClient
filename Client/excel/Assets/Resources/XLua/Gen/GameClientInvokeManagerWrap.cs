@@ -100,11 +100,11 @@ namespace XLua.CSObjectWrap
                     
                     return 0;
                 }
-                if(__gen_param_count == 4&& translator.Assignable<object>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<UnityEngine.Events.UnityAction>(L, 4)) 
+                if(__gen_param_count == 4&& translator.Assignable<object>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<EAction>(L, 4)) 
                 {
                     object target = translator.GetObject(L, 2, typeof(object));
                     float delay = (float)LuaAPI.lua_tonumber(L, 3);
-                    UnityEngine.Events.UnityAction callback = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 4);
+                    EAction callback = translator.GetDelegate<EAction>(L, 4);
                     
                         int __cl_gen_ret = __cl_gen_to_be_invoked.Invoke( target, delay, callback );
                         LuaAPI.xlua_pushinteger(L, __cl_gen_ret);
@@ -139,9 +139,9 @@ namespace XLua.CSObjectWrap
                     float delay = (float)LuaAPI.lua_tonumber(L, 3);
                     int repeat = LuaAPI.xlua_tointeger(L, 4);
                     float interval = (float)LuaAPI.lua_tonumber(L, 5);
-                    UnityEngine.Events.UnityAction onStart = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 6);
-                    UnityEngine.Events.UnityAction onUpdate = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 7);
-                    UnityEngine.Events.UnityAction onEnd = translator.GetDelegate<UnityEngine.Events.UnityAction>(L, 8);
+                    EAction onStart = translator.GetDelegate<EAction>(L, 6);
+                    EAction onUpdate = translator.GetDelegate<EAction>(L, 7);
+                    EAction onEnd = translator.GetDelegate<EAction>(L, 8);
                     
                         int __cl_gen_ret = __cl_gen_to_be_invoked.InvokeRepeate( target, delay, repeat, interval, onStart, onUpdate, onEnd );
                         LuaAPI.xlua_pushinteger(L, __cl_gen_ret);
