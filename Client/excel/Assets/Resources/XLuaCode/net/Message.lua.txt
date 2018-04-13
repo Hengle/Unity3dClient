@@ -4,24 +4,24 @@ local protobuf = require(".net.protobuf")
 local Msgprotocol = require ".net.Msgprotocol"
 
 local function registerProto(path)
-	local buffer = CS.FileUtil.ReadContentFromFile(path)
+	local buffer = CS.FileUtil.ReadFileFromResource(path)
 	protobuf.register(buffer)
 end
 
 
 --TODO: auto generate below code
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Asserts/Resources/XLuaCode/Protocol/game.pb"))
---[[registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/user.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/HkFiveCard.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/NN100.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/TBNN.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/HLNN.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/TexasPoker.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/Baccarat.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/XZMJ.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/CatchFish.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/ShiSanShui.pb"))
-registerProto(cc.FileUtils:getInstance():fullPathForFilename("Protocol/MaJiang.pb"))]]--
+registerProto("XLuaCode/Protocol/game.pb")
+registerProto("XLuaCode/Protocol/user.pb")
+registerProto("XLuaCode/Protocol/HkFiveCard.pb")
+registerProto("XLuaCode/Protocol/NN100.pb")
+registerProto("XLuaCode/Protocol/TBNN.pb")
+registerProto("XLuaCode/Protocol/HLNN.pb")
+registerProto("XLuaCode/Protocol/TexasPoker.pb")
+registerProto("XLuaCode/Protocol/Baccarat.pb")
+registerProto("XLuaCode/Protocol/XZMJ.pb")
+registerProto("XLuaCode/Protocol/CatchFish.pb")
+registerProto("XLuaCode/Protocol/ShiSanShui.pb")
+registerProto("XLuaCode/Protocol/MaJiang.pb")
 
 local dispatch_handler = {}
 local current = ""

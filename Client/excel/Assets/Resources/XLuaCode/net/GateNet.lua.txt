@@ -2,20 +2,19 @@ local GateNet = {}
 
 --local crypt = require("crypt")
 
-local net = CS.NetWork
+--local net = require("framework.cc.net.init")
+local scheduler = CS.GameClient.InvokeManager.Instance()
 
---local scheduler = require("framework.scheduler")
-
---local web = require("app.net.web")
---local Message = require("app.net.Message")
---local Msgprotocol = require("app.net.Msgprotocol")
+local web = require(".net.web")
+local Message = require(".net.Message")
+local Msgprotocol = require(".net.Msgprotocol")
 
 
-GateNet.EVENT_DATA = "SOCKET_TCP_DATA"
-GateNet.EVENT_CLOSE = "SOCKET_TCP_CLOSE"
-GateNet.EVENT_CLOSED = "SOCKET_TCP_CLOSED"
-GateNet.EVENT_CONNECTED = "SOCKET_TCP_CONNECTED"
-GateNet.EVENT_CONNECT_FAILURE = "SOCKET_TCP_CONNECT_FAILURE"
+GateNet.EVENT_DATA = net.SocketTCP.EVENT_DATA
+GateNet.EVENT_CLOSE = net.SocketTCP.EVENT_CLOSE
+GateNet.EVENT_CLOSED = net.SocketTCP.EVENT_CLOSED
+GateNet.EVENT_CONNECTED = net.SocketTCP.EVENT_CONNECTED
+GateNet.EVENT_CONNECT_FAILURE = net.SocketTCP.EVENT_CONNECT_FAILURE
 
 
 local TIME_GAP_HEART_BEAT = 3.0
@@ -24,46 +23,226 @@ local param = {}
 local msgWaitReconnct = nil
 
 
-function GateNet.sendData(data)
-    local buff = string.char(math.floor(#data/256)%256) .. string.char(#data%256) .. data
-
-    if not param.gateSocket then
-        print("GateNet.sendData socket not exist! reconnect")
-        GateNet.reconnect()
-        msgWaitReconnct = buff
-        return false
-    end
-
-	-- 重连
-    --[[local scene = display.getRunningScene()
-	if scene.name ~= "LoginScene" and (not param.gateSocket or not param.isConnected) then
-		GateNet.reconnect()
-		msgWaitReconnct = buff
-		return false
-	end]]--
-
-	pcall(param.gateSocket.Send, param.gateSocket, buff)
-
-	param.lastHearTime = os.time()
-	return true
+local function recvData(data)
+    local id = 256*data:byte(1) + data:byte(2)
+    return id, data:sub(3, #data)
 end
+
+
+local function gotoLoginScene(errStr)
+	-- 验证失败，退出到登陆界面
+	local scene = display.getRunningScene()
+	if scene.name and scene.name ~= "LoginScene" then
+		cc.Director:getInstance():popToRootScene()
+		app:enterScene("LoginScene", {errStr})
+	end
+end
+
+
+local function gotoLobbyScene()
+	-- 重连进入大厅
+	local scene = display.getRunningScene()
+	if scene.name ~= "LoginScene" and scene.name ~= "LobbyScene" and scene.name ~= "LobbyPrivateScene" then
+		cc.Director:getInstance():popToRootScene()
+		if app.last_lobby then
+			print("last lobby:", app.last_lobby.name)
+			app:enterScene(app.last_lobby.name, {true})
+		else
+			app:enterScene("LobbyPrivateScene", {true})
+		end
+	end
+end
+
+
+local function gobackScene()
+	local UserMessage = require("app.net.UserMessage")
+	local ProgressLayer = require("app.layers.ProgressLayer")
+	UserMessage.CheckReconnectReq()
+	ProgressLayer.new("正在重连中...")
+end
+
+
+local function schedulerReconnect()
+	if param.reconnect == true then
+		param.gateSocket = nil
+		param.isConnected = false
+		param.isAuth = false
+		if not param.reconnectScheduler then
+			GateNet.reconnect()
+			param.reconnectScheduler = scheduler.InvokeRepeate(self, 1, GateNet.reconnect, true)
+		end
+	elseif param.reconnect == false then
+		if param.reconnectScheduler then
+			scheduler.RemoveInvoke(param.reconnectScheduler)
+			param.reconnectScheduler = nil
+		end
+		gotoLoginScene()
+	end
+
+	param.reconnect = nil
+end
+
+
+local function auth()
+	if not param.gateSocket or not param.isConnected or param.isAuth then
+		return false
+	end
+
+	if not app.userdata.Account.uid or not app.userdata.Account.token then
+		gotoLoginScene("您当前网络状态不佳，请重新登录")
+		return
+	end
+
+	param.index = (param.index or 0) + 1
+	local hmac = crypt.hmac_hash(app.userdata.Account.token, app.userdata.Account.uid .. ":" .. param.index)
+	local cmd = string.char(0, 0)
+	local message = string.format("%s%d:%d:%s:%s", cmd, app.userdata.Account.uid, 
+		param.index, crypt.base64encode(hmac), app.userdata.Account.secret)
+	GateNet.sendData(message)
+end
+
+
+local function heartbeat()
+	if not param.isAuth or not param.isConnected then
+		if param.scheduler ~= nil then
+			scheduler.RemoveInvoke(param.scheduler)
+			param.scheduler = nil
+		end
+		return
+	end
+
+	if param.lastHearTime + 60 < os.time() then
+		GateNet.disconnect(4)  -- will reconnect
+		return
+	end
+
+	local id = 2
+	GateNet.sendData(string.char(math.floor(id/256)%256) .. string.char(id%256))
+end
+
+
+local function receive(event)
+	param.gateBuff = (param.gateBuff or "") .. event.data
+    local len = #param.gateBuff
+    while (len > 2) do
+        local size = 256 * param.gateBuff:byte(1) + param.gateBuff:byte(2)
+        if (len < 2 + size) then
+            return
+        end
+
+        local id, data = recvData(param.gateBuff:sub(3, 2+size))
+        --NOTE: update buff before process data.
+        param.gateBuff = param.gateBuff:sub(3 + size, #param.gateBuff)
+        len = #param.gateBuff
+
+        if not param.isAuth then
+        	print(id, type(id), Msgprotocol["AuthGateSuccess"], type(Msgprotocol["AuthGateSuccess"]))
+        	if id == Msgprotocol["AuthGateSuccess"] then
+        		print("GateNet.auth success!", data)
+
+        		-- unscheduler reconnect
+        		if param.reconnectScheduler then
+        			scheduler.RemoveInvoke(param.reconnectScheduler)
+        			param.reconnectScheduler = nil
+        			param.reconnect = true
+        			gotoLobbyScene()
+        		end
+
+        		param.isAuth = true
+        		Message.net = GateNet
+        		if param.scheduler ~= nil then
+        			scheduler.RemoveInvoke(param.scheduler)
+        			param.scheduler = nil
+        		end
+        		param.scheduler = scheduler.InvokeRepeate(self, TIME_GAP_HEART_BEAT, heartbeat)
+
+        		-- 如果有存储待发送消息，继续发送
+        		if msgWaitReconnct then
+					param.gateSocket:send(msgWaitReconnct)
+        			msgWaitReconnct = nil
+        		end
+
+        		-- 通知当前界面连接成功
+				Message.notifyScene("socket", GateNet.EVENT_CONNECTED)
+        	else
+        		print("GateNet.auth failed!", data)
+        		GateNet.disconnect()
+        		-- 验证失败，退出到登陆界面
+				gotoLoginScene("当前网络状态不佳，请重新登录")
+        	end
+
+    		if param.authCallback then
+    			param.authCallback(param.isAuth, data)
+    			param.authCallback = nil
+    		end
+        else
+        	Message.dispatch(id, data)
+        end
+    end
+end
+
+
+local function close(event)
+	print("gate close, retrycnt:", param.retrycnt)
+	param.gateSocket = nil
+	param.isConnected = false
+	param.isAuth = false
+	if not param.reconnect and not param.reconnectScheduler then
+		msgWaitReconnct = nil
+	end
+
+	Message.notifyScene("socket", GateNet.EVENT_CLOSE)
+end
+
+
+local function closed(event)
+	print("gate closed, reconnect:", param.reconnect)
+
+	Message.notifyScene("socket", GateNet.EVENT_CLOSED)
+	schedulerReconnect()
+end
+
 
 local function connected(event)
 	print("gate connected, retrycnt:", param.retrycnt)
 
 	param.isConnected = true
-	--auth()
+	auth()
 end
+
 
 local function failure(event)
 	print("gate failure, reconnect:", param.reconnect)
 
-	-- 只有主动连接失败才去检查备用 ip/域名
+	-- 只有主动连接失败才去检查备用 ip/域名 
 	web.checkStandbyIp(GATE_SERVER)
 
 	Message.notifyScene("socket", GateNet.EVENT_CONNECT_FAILURE)
 	schedulerReconnect()
 end
+
+
+function GateNet.sendData(data)
+    local buff = string.char(math.floor(#data/256)%256) .. string.char(#data%256) .. data
+
+    local scene = display.getRunningScene()
+	if scene.name ~= "LoginScene" and (not param.gateSocket or not param.isConnected) then
+		GateNet.reconnect()
+		msgWaitReconnct = buff
+		return false
+	end
+
+	local ok, ret = pcall(param.gateSocket.send, param.gateSocket, buff)
+	if not ok then
+		GateNet.reconnect()
+		msgWaitReconnct = buff
+		return false
+	end
+
+	param.lastHearTime = os.time()
+	return true
+end
+
 
 function GateNet.connect(authCallback)
 	if param.gateSocket then
@@ -96,17 +275,22 @@ end
 
 
 function GateNet.realConnect()
-    local ip, port = GATE_SERVER.ip, GATE_SERVER.port
-    print("GateNet start connect:"..ip.." port:"..port)
+	local ip, port = GATE_SERVER.ip, GATE_SERVER.port
+	printf("GateNet start connect %s:%s ...", ip, port)
 
-    param.gateSocket = net.NetSocket("GateTCP", ip, port, 5, connected, failure, receive, close, closed)
+	param.gateSocket = net.SocketTCP.new(ip, port, false)
+	param.gateSocket:setName("GateTCP")
 
-    CS.GameClient.InvokeManager.Instance():Invoke(function() param.gateSocket:Update() end)
+	param.gateSocket:addEventListener(net.SocketTCP.EVENT_DATA, receive)
+	param.gateSocket:addEventListener(net.SocketTCP.EVENT_CLOSE, close)
+	param.gateSocket:addEventListener(net.SocketTCP.EVENT_CLOSED, closed)
+	param.gateSocket:addEventListener(net.SocketTCP.EVENT_CONNECTED, connected)
+	param.gateSocket:addEventListener(net.SocketTCP.EVENT_CONNECT_FAILURE, failure)
 
-    local ok = pcall(param.gateSocket.Connect, param.gateSocket, ip, port)
+    local ok = pcall(param.gateSocket.connect, param.gateSocket, ip, port)
     if not ok then
-    param.gateSocket = nil
-    end
+   		param.gateSocket = nil
+   	end
 end
 
 

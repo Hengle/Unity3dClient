@@ -86,6 +86,37 @@ function LoginFrame:auth(params)
 			print("auth failed:", (msg or ""))
 		end
 
+		-- 连接gate
+		GateNet.connect(function(ok, msg)
+			if not ok then
+				--ProgressLayer.stop()
+				--ErrorLayer.new(app.lang.gate_error..(msg or ""), errorLayerCallBack):addTo(self)
+				print("connect failed:", (msg or ""))
+				return
+			end
+			-- set jpush tag and alias
+			--util.setJPushTagAndAlias(params.channel, params.account)
+			UserMessage.send("UserInfoReq", {uid=Account.uid})
+			-- enter Lobby
+			UserMessage.send("CheckReconnectReq", function(msg)
+				if msg.roomid == 0 then
+					app:enterScene("LobbyPrivateScene", nil)
+				else
+					if msg.private then
+						print("reconnect to private game")
+						UserMessage.EnterPrivateReq(msg.tableid)
+					else
+						print("reconnect to normal game")
+						UserMessage.send("RoomListReq", function()
+							roomMgr:init(math.floor(msg.roomid/100), msg.roomid)
+							UserMessage.send("EnterRoomReq", {roomid=msg.roomid}, function(m)
+								roomMgr:EnterRoomRep(m)
+							end)
+						end)
+					end
+				end
+			end)
+		end)
 		-- ------------
 
 	end

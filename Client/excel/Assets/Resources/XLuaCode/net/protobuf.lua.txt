@@ -1,6 +1,7 @@
 local protobuf = {}
 
-local c = require "protobuf.c"
+--local c = require "protobuf.c"
+local c = CS.protobuf
 
 local setmetatable = setmetatable
 local type = type

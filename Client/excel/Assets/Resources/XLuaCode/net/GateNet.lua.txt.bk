@@ -1,0 +1,123 @@
+local GateNet = {}
+
+--local crypt = require("crypt")
+
+local net = CS.NetWork
+
+--local scheduler = require("framework.scheduler")
+
+--local web = require("app.net.web")
+--local Message = require("app.net.Message")
+--local Msgprotocol = require("app.net.Msgprotocol")
+
+
+GateNet.EVENT_DATA = "SOCKET_TCP_DATA"
+GateNet.EVENT_CLOSE = "SOCKET_TCP_CLOSE"
+GateNet.EVENT_CLOSED = "SOCKET_TCP_CLOSED"
+GateNet.EVENT_CONNECTED = "SOCKET_TCP_CONNECTED"
+GateNet.EVENT_CONNECT_FAILURE = "SOCKET_TCP_CONNECT_FAILURE"
+
+
+local TIME_GAP_HEART_BEAT = 3.0
+
+local param = {}
+local msgWaitReconnct = nil
+
+
+function GateNet.sendData(data)
+    local buff = string.char(math.floor(#data/256)%256) .. string.char(#data%256) .. data
+
+    if not param.gateSocket then
+        print("GateNet.sendData socket not exist! reconnect")
+        GateNet.reconnect()
+        msgWaitReconnct = buff
+        return false
+    end
+
+	-- 重连
+    --[[local scene = display.getRunningScene()
+	if scene.name ~= "LoginScene" and (not param.gateSocket or not param.isConnected) then
+		GateNet.reconnect()
+		msgWaitReconnct = buff
+		return false
+	end]]--
+
+	pcall(param.gateSocket.Send, param.gateSocket, buff)
+
+	param.lastHearTime = os.time()
+	return true
+end
+
+local function connected(event)
+	print("gate connected, retrycnt:", param.retrycnt)
+
+	param.isConnected = true
+	--auth()
+end
+
+local function failure(event)
+	print("gate failure, reconnect:", param.reconnect)
+
+	-- 只有主动连接失败才去检查备用 ip/域名
+	web.checkStandbyIp(GATE_SERVER)
+
+	Message.notifyScene("socket", GateNet.EVENT_CONNECT_FAILURE)
+	schedulerReconnect()
+end
+
+function GateNet.connect(authCallback)
+	if param.gateSocket then
+		print("GateNet.connect, socket already exist!")
+		return false
+	end
+
+	param = {}
+	param.authCallback = authCallback
+	param.reconnect = true
+	param.retrycnt = 0
+
+	GateNet.realConnect()
+	return true
+end
+
+
+function GateNet.reconnect()
+	if param.gateSocket then
+		print("GateNet.reconnect, socket already exist!")
+		return false
+	end
+
+	param.retrycnt = (param.retrycnt or 0) + 1
+	print("gate reconnect, retrycnt:", param.retrycnt)
+
+	GateNet.realConnect()
+    return true
+end
+
+
+function GateNet.realConnect()
+    local ip, port = GATE_SERVER.ip, GATE_SERVER.port
+    print("GateNet start connect:"..ip.." port:"..port)
+
+    param.gateSocket = net.NetSocket("GateTCP", ip, port, 5, connected, failure, receive, close, closed)
+
+    CS.GameClient.InvokeManager.Instance():Invoke(function() param.gateSocket:Update() end)
+
+    local ok = pcall(param.gateSocket.Connect, param.gateSocket, ip, port)
+    if not ok then
+    param.gateSocket = nil
+    end
+end
+
+
+function GateNet.disconnect(typ)
+	print("GateNet.disconnect, typ:", typ)
+	param.reconnect = (typ == 4)
+	if param.gateSocket then
+		param.gateSocket:disconnect()
+		param.gateSocket = nil
+	end
+end
+
+
+return GateNet
