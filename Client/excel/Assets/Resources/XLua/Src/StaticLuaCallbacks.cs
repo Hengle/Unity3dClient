@@ -641,6 +641,7 @@ namespace XLua
         [MonoPInvokeCallback(typeof(LuaCSFunction))]
         internal static int LoadPbcCore(RealStatePtr L)
         {
+            GameClient.LogManager.Instance().LogFormat("<color=#00ff00>luaopen_protobuf_c !!!</color>");
             return LuaAPI.luaopen_protobuf_c(L);
         }
 
