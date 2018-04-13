@@ -104,7 +104,7 @@ namespace NetWork
             httpWebRequest.Timeout = timeout;
             _postdata = postdata;
             _cb = cb;
-            _InvokeId = InvokeManager.Instance().InvokeRepeate(this, 0.0f, 99999999, 0.10f, null, UpdateEvent, null);
+            _InvokeId = InvokeManager.Instance().InvokeRepeate(this, 0.0f, 99999999, 0.10f, null, UpdateEvent, null,false);
 
             httpWebRequest.BeginGetRequestStream(EndRequest, this);
         }
@@ -137,7 +137,7 @@ namespace NetWork
             httpWebRequest.Timeout = timeout;
             _postdata = string.Empty;
             _cb = cb;
-            _InvokeId = InvokeManager.Instance().InvokeRepeate(this, 0.0f, 99999999, 0.10f, null, UpdateEvent, null);
+            _InvokeId = InvokeManager.Instance().InvokeRepeate(this, 0.0f, 99999999, 0.10f, null, UpdateEvent, null,false);
 
             httpWebRequest.BeginGetResponse(EndResponse, this);
         }

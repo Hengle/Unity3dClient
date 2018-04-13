@@ -297,7 +297,7 @@ namespace GameClient
         protected void InvokeRepeate(int flag, float delay, int repeat, float interval, EAction onStart, EAction onUpdate, EAction onEnd)
         {
             CancelInvoke(flag);
-            int iHandleId = InvokeManager.Instance().InvokeRepeate(this, delay, repeat, interval,onStart,onUpdate,onEnd);
+            int iHandleId = InvokeManager.Instance().InvokeRepeate(this, delay, repeat, interval,onStart,onUpdate,onEnd,false);
             mInvokeHandles.Add(new InvokeBody { iFlag = flag, iInvokeHandle = iHandleId });
         }
 

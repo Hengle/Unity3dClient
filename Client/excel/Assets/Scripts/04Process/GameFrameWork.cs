@@ -159,7 +159,7 @@ namespace GameClient
 
             yield return new WaitForEndOfFrame();
             EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "初始化调度管理器...");
-            if (!InvokeManager.Instance().Initialize())
+            if (!InvokeManager.Instance().Initialize(true))
             {
                 LogManager.Instance().LogProcessFormat(8003, "<color=#ff0000>InvokeManager  Initialize failed !</color>");
                 yield break;

@@ -11,6 +11,7 @@ namespace GameClient
     {
         const int InvokeOnce = (1 << 0);
         const int InvokeRepeated = (1 << 1);
+        const int InvokeGlobal = (1 << 2);
 
         int mHandleID = -1;
 
@@ -76,12 +77,12 @@ namespace GameClient
             return invokeItem.iHandleId;
         }
 
-        public int InvokeRepeate(object target,float interval,EAction onUpdate)
+        public int InvokeRepeate(object target,float interval,EAction onUpdate,bool bGlobal)
         {
-            return InvokeRepeate(target, 0.0f, 2100000000, interval, null, onUpdate, null);
+            return InvokeRepeate(target, 0.0f, 2100000000, interval, null, onUpdate, null, bGlobal);
         }
 
-        public int InvokeRepeate(object target,float delay,int repeat,float interval, EAction onStart, EAction onUpdate, EAction onEnd)
+        public int InvokeRepeate(object target,float delay,int repeat,float interval, EAction onStart, EAction onUpdate, EAction onEnd,bool bGlobal)
         {
             InvokeItem invokeItem = null;
             if (mCachedInvokeItems.Count > 0)
@@ -101,6 +102,10 @@ namespace GameClient
             invokeItem.onUpdate = onUpdate;
             invokeItem.onEnd = onEnd;
             invokeItem.flag |= InvokeRepeated;
+            if (bGlobal)
+            {
+                invokeItem.flag |= InvokeGlobal;
+            }
             invokeItem.repeate = repeat;
             invokeItem.interval = interval;
             invokeItem.start = Time.time;
@@ -211,17 +216,32 @@ namespace GameClient
             }
         }
 
-        public bool Initialize()
+        public bool Initialize(bool bGlobal)
         {
-            Clear();
+            Clear(bGlobal);
             return true;
         }
 
-        public void Clear()
+        public void Clear(bool bGlobal)
         {
-            mCachedInvokeItems.Clear();
-            mActivedInvokeItems.Clear();
-            mHandleID = -1;
+            if(bGlobal)
+            {
+                mCachedInvokeItems.Clear();
+                mActivedInvokeItems.Clear();
+                mHandleID = -1;
+            }
+            else
+            {
+                for(int i = 0; i < mActivedInvokeItems.Count; ++i)
+                {
+                    if ((InvokeGlobal) != (mActivedInvokeItems[i].flag & InvokeGlobal))
+                    {
+                        mActivedInvokeItems[i].Reset();
+                        mCachedInvokeItems.Add(mActivedInvokeItems[i]);
+                        mActivedInvokeItems.RemoveAt(i--);
+                    }
+                }
+            }
         }
     }
 }
