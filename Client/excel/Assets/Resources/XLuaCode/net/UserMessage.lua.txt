@@ -1,18 +1,18 @@
 local UserMessage = {}
 
-local Message = import(".Message")
-local Msgprotocol = import(".Msgprotocol")
+local Message = require(".net.Message")
+local Msgprotocol = require(".net.Msgprotocol")
 
-local crypt = require("crypt")
+--local crypt = require("crypt")
 
-local util = require("app.Common.util")
-local base64 = require("app.Common.base64")
+--local util = require("app.Common.util")
+--local base64 = require("app.Common.base64")
 
 local AvatarConfig = require("app.config.AvatarConfig")
 local RoomConfig = require("app.config.RoomConfig")
 
 
-local Player = app.userdata.Player
+--local Player = app.userdata.Player
 local Account = app.userdata.Account
 
 local _hookMap = {}

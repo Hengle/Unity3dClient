@@ -5,6 +5,7 @@ local LoginFrame = {}
 local AccountUtils = app.util.AccountUtils
 local json = app.util.JsonUtils
 local web = require(".net.web")
+local UserMessage = require(".net.UserMessage")
 
 LoginFrame.accountHistory = nil
 
@@ -96,26 +97,8 @@ function LoginFrame:auth(params)
 			end
 			-- set jpush tag and alias
 			--util.setJPushTagAndAlias(params.channel, params.account)
-			UserMessage.send("UserInfoReq", {uid=Account.uid})
-			-- enter Lobby
-			UserMessage.send("CheckReconnectReq", function(msg)
-				if msg.roomid == 0 then
-					app:enterScene("LobbyPrivateScene", nil)
-				else
-					if msg.private then
-						print("reconnect to private game")
-						UserMessage.EnterPrivateReq(msg.tableid)
-					else
-						print("reconnect to normal game")
-						UserMessage.send("RoomListReq", function()
-							roomMgr:init(math.floor(msg.roomid/100), msg.roomid)
-							UserMessage.send("EnterRoomReq", {roomid=msg.roomid}, function(m)
-								roomMgr:EnterRoomRep(m)
-							end)
-						end)
-					end
-				end
-			end)
+			UserMessage.send("UserInfoReq", {uid=params.account})
+
 		end)
 		-- ------------
 

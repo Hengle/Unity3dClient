@@ -1,6 +1,5 @@
 -- main entrance/collectgarbage setting
-package.cpath = "I:/Unity3dClient/Client/excel/Assets/Resources/XLuaCode/?.dll"
-
+require(".app.FrameConfig")
 require(".init")
 
 function __G__TRACKBACK__(msg)
