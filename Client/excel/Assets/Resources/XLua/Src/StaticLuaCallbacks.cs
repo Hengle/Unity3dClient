@@ -639,6 +639,12 @@ namespace XLua
         }
 
         [MonoPInvokeCallback(typeof(LuaCSFunction))]
+        internal static int LoadPbcCore(RealStatePtr L)
+        {
+            return LuaAPI.luaopen_protobuf_c(L);
+        }
+
+        [MonoPInvokeCallback(typeof(LuaCSFunction))]
         internal static int LoadBuiltinLib(RealStatePtr L)
         {
             try
