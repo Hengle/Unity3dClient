@@ -1,7 +1,6 @@
 local protobuf = {}
 
---local c = require "protobuf.c"
-local c = CS.protobuf
+local c = require "protobuf"
 
 local setmetatable = setmetatable
 local type = type
@@ -185,8 +184,8 @@ _reader[5] = function(msg) return _reader.string end
 _reader[6] = function(msg)
 	local message = _reader.message
 	return	function(self,key)
-			return message(self, key, msg)
-		end
+		return message(self, key, msg)
+	end
 end
 _reader[7] = function(msg) return _reader.int64 end
 _reader[8] = function(msg) return _reader.int32 end
@@ -202,8 +201,8 @@ _reader[128+5] = function(msg) return _reader.string_repeated end
 _reader[128+6] = function(msg)
 	local message = _reader.message_repeated
 	return	function(self,key)
-			return message(self, key, msg)
-		end
+		return message(self, key, msg)
+	end
 end
 _reader[128+7] = function(msg) return _reader.int64_repeated end
 _reader[128+8] = function(msg) return _reader.int32_repeated end
@@ -335,8 +334,8 @@ _writer[5] = function(msg) return _writer.string end
 _writer[6] = function(msg)
 	local message = _writer.message
 	return	function(self,key , v)
-			return message(self, key, v, msg)
-		end
+		return message(self, key, v, msg)
+	end
 end
 _writer[7] = function(msg) return _writer.int64 end
 _writer[8] = function(msg) return _writer.int32 end
@@ -352,8 +351,8 @@ _writer[128+5] = function(msg) return _writer.string_repeated end
 _writer[128+6] = function(msg)
 	local message = _writer.message_repeated
 	return	function(self,key, v)
-			return message(self, key, v, msg)
-		end
+		return message(self, key, v, msg)
+	end
 end
 _writer[128+7] = function(msg) return _writer.int64_repeated end
 _writer[128+8] = function(msg) return _writer.int32_repeated end
@@ -378,7 +377,7 @@ setmetatable(encode_type_cache , {
 	end
 })
 
-function encode( message, t , func , ...)
+function protobuf.encode( message, t , func , ...)
 	local encoder = c._wmessage_new(P, message)
 	assert(encoder ,  message)
 	encode_message(encoder, message, t)
@@ -458,17 +457,17 @@ setmetatable(_pattern_cache, {
 	end
 })
 
-function unpack(pattern, buffer, length)
+function protobuf.unpack(pattern, buffer, length)
 	local pat = _pattern_cache[pattern]
 	return c._pattern_unpack(pat.CObj , pat.format, pat.size, buffer, length)
 end
 
-function pack(pattern, ...)
+function protobuf.pack(pattern, ...)
 	local pat = _pattern_cache[pattern]
 	return c._pattern_pack(pat.CObj, pat.format, pat.size , ...)
 end
 
-function check(typename , field)
+function protobuf.check(typename , field)
 	if field == nil then
 		return c._env_type(P,typename)
 	else
@@ -500,7 +499,7 @@ local function decode_message_cb(typename, buffer)
 	return setmetatable ( { typename, buffer } , decode_message_mt)
 end
 
-function decode(typename, buffer, length)
+function protobuf.decode(typename, buffer, length)
 	local ret = {}
 	local ok = c._decode(P, decode_message_cb , ret , typename, buffer, length)
 	if ok then
@@ -544,35 +543,35 @@ local function set_default(typename, tbl)
 	return setmetatable(tbl , default_table(typename))
 end
 
-function register( buffer)
+function protobuf.register( buffer)
 	c._env_register(P, buffer)
 end
 
-function register_file(filename)
+function protobuf.register_file(filename)
 	local f = assert(io.open(filename , "rb"))
 	local buffer = f:read "*a"
 	c._env_register(P, buffer)
 	f:close()
 end
 
-function enum_id(enum_type, enum_name)
+function protobuf.enum_id(enum_type, enum_name)
 	return c._env_enum_id(P, enum_type, enum_name)
 end
 
-function extract(tbl)
-    local typename = rawget(tbl , 1)
-    local buffer = rawget(tbl , 2)
-    if type(typename) == "string" and type(buffer) == "string" then
-        if check(typename) then
-            expand(tbl)
-        end
-    end
+function protobuf.extract(tbl)
+	local typename = rawget(tbl , 1)
+	local buffer = rawget(tbl , 2)
+	if type(typename) == "string" and type(buffer) == "string" then
+		if check(typename) then
+			expand(tbl)
+		end
+	end
 
-    for k, v in pairs(tbl) do
-        if type(v) == "table" then
-            extract(v)
-        end
-    end
+	for k, v in pairs(tbl) do
+		if type(v) == "table" then
+			extract(v)
+		end
+	end
 end
 
 default=set_default

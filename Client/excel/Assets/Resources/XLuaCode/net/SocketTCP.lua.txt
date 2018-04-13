@@ -12,7 +12,7 @@ local STATUS_TIMEOUT = "timeout"
 local STATUS_REFUSED = "connection refused"
 
 local scheduler = CS.GameClient.InvokeManager.Instance()
-local socket = CS.socket
+local socket = require("socket")
 
 local SocketTCP = class("SocketTCP")
 
@@ -30,7 +30,7 @@ function SocketTCP.getTime()
 end
 
 function SocketTCP:ctor(__name, __host, __port, __retryConnectWhenFailure)
-	cc(self):addComponent("components.behavior.EventProtocol"):exportMethods()
+	--cc(self):addComponent("components.behavior.EventProtocol"):exportMethods()
 
 	self.name = __name
     self.host = __host

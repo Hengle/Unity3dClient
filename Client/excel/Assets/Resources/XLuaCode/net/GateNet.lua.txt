@@ -2,7 +2,7 @@ local GateNet = {}
 
 --local crypt = require("crypt")
 
---local net = require("framework.cc.net.init")
+local net = require(".net.init")
 local scheduler = CS.GameClient.InvokeManager.Instance()
 
 local web = require(".net.web")
