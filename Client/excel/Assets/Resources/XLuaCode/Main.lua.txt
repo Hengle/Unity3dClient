@@ -1,6 +1,7 @@
 -- main entrance/collectgarbage setting
 require(".init")
 require(".app.FrameConfig")
+require("protobuf")
 
 function __G__TRACKBACK__(msg)
     print("----------------------------------------")

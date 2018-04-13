@@ -14,6 +14,7 @@
 		<type fullname="GameClient.InvokeManager" preserve="all"/>
 		<type fullname="GameClient.LocalSettingManager" preserve="all"/>
 		<type fullname="GameClient.LuaEventManager" preserve="all"/>
+		<type fullname="GameClient.LuaSocketEventManager" preserve="all"/>
 		<type fullname="GameClient.FrameTypeID" preserve="all"/>
 		<type fullname="GameClient.ClientFrame" preserve="all"/>
 		<type fullname="GameClient.IFrame" preserve="all"/>
