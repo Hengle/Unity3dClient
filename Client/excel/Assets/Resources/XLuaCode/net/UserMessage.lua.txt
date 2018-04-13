@@ -8,12 +8,12 @@ local Msgprotocol = require(".net.Msgprotocol")
 --local util = require("app.Common.util")
 --local base64 = require("app.Common.base64")
 
-local AvatarConfig = require("app.config.AvatarConfig")
-local RoomConfig = require("app.config.RoomConfig")
+--local AvatarConfig = require("app.config.AvatarConfig")
+--local RoomConfig = require("app.config.RoomConfig")
 
 
 --local Player = app.userdata.Player
-local Account = app.userdata.Account
+--local Account = app.userdata.Account
 
 local _hookMap = {}
 local _last_msg = nil
@@ -22,7 +22,8 @@ local CMD = {}
 
 
 function CMD.UserInfoRep(msg)
-	if Account.uid == msg.uid then
+	print(msg)
+	--[[if Account.uid == msg.uid then
 		for k,v in pairs(msg) do
 			app.userdata.Player[k] = v
 		end
@@ -31,12 +32,12 @@ function CMD.UserInfoRep(msg)
 	-- download player's avatar 
 	local url = msg.avatarurl
 	if url and #url > 0 then
-		AvatarConfig:getAvatarByUrl(msg.uid, url)
-	end
+		--AvatarConfig:getAvatarByUrl(msg.uid, url)
+	end]]--
 end
 
 
-function CMD.RoomListRep(msg)
+--[[function CMD.RoomListRep(msg)
 	local newConfig = assert(loadstring(msg.config))()
     newConfig = checktable(newConfig)
     for _, config in ipairs(RoomConfig) do
@@ -86,7 +87,7 @@ function UserMessage.EnterPrivateReq(pid)
 	local privateMgr = require("app.room.privateMgr")
 	privateMgr:init()
 	UserMessage.send("EnterPrivateReq", {privateid=pid}, handler(privateMgr, privateMgr.EnterPrivateRep))
-end
+end]]--
 
 
 function UserMessage.send(name, msg, handle)

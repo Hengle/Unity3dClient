@@ -1,7 +1,7 @@
 --打开登陆界面
 local LoginFrame = {}
 
-
+local GateNet = require(".net.GateNet")
 local AccountUtils = app.util.AccountUtils
 local json = app.util.JsonUtils
 local web = require(".net.web")
@@ -74,18 +74,6 @@ end
 function LoginFrame.loginCallback(err,res)
 	if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
 		CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
-	else
-		CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
-	end
-end
-
-function LoginFrame:auth(params)
-	--TODO 登录Loading
-
-	function loginCallback(ok, msg)
-		if not ok then
-			print("auth failed:", (msg or ""))
-		end
 
 		-- 连接gate
 		GateNet.connect(function(ok, msg)
@@ -97,15 +85,16 @@ function LoginFrame:auth(params)
 			end
 			-- set jpush tag and alias
 			--util.setJPushTagAndAlias(params.channel, params.account)
+
 			UserMessage.send("UserInfoReq", {uid=params.account})
 
 		end)
-		-- ------------
-
+	else
+		CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
 	end
+end
 
-
-
+function LoginFrame:auth(params)
 	local function getServerTimeCallback(err,res)
 		if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
 			CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
