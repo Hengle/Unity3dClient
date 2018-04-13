@@ -3,7 +3,8 @@
 <linker>
 
 	<assembly fullname="Assembly-CSharp">
-	    <type fullname="Common.DESEncrypt" preserve="all"/>
+	    <type fullname="FileUtil" preserve="all"/>
+		<type fullname="Common.DESEncrypt" preserve="all"/>
 		<type fullname="NetWork.HttpRequestError" preserve="all"/>
 		<type fullname="NetWork.HttpRequestStatus" preserve="all"/>
 		<type fullname="NetWork.LocalHttpWebRequest" preserve="all"/>

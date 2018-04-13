@@ -21,6 +21,8 @@ namespace XLua.CSObjectWrap
         {
 		    XLua.LuaEnv.AddIniter((luaenv, translator) => {
 			    
+				translator.DelayWrapLoader(typeof(FileUtil), FileUtilWrap.__Register);
+				
 				translator.DelayWrapLoader(typeof(Common.DESEncrypt), CommonDESEncryptWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(NetWork.HttpRequestError), NetWorkHttpRequestErrorWrap.__Register);
