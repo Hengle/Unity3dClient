@@ -14,8 +14,8 @@
       <file leaf-file-name="LoginFrame.lua.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/lobby/LoginFrame.lua.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="5" column="31" lean-forward="true" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
+            <state relative-caret-position="322">
+              <caret line="77" column="14" selection-start-line="77" selection-start-column="14" selection-end-line="77" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -23,36 +23,31 @@
       <file leaf-file-name="Main.lua.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Main.lua.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="3" column="19" lean-forward="true" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
+            <state relative-caret-position="159">
+              <caret line="23" column="48" lean-forward="true" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SocketTCP.lua.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="FrameConfig.lua.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/FrameConfig.lua.txt">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="web.lua.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/net/web.lua.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="276">
+              <caret line="12" column="32" lean-forward="true" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SocketTCP.lua.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/net/SocketTCP.lua.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="14" column="58" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="58" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="init.lua.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/net/init.lua.txt">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file leaf-file-name="initUtils.lua.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/initUtils.lua.txt">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file leaf-file-name="functions.lua.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/functions.lua.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="436" column="13" selection-start-line="436" selection-start-column="13" selection-end-line="436" selection-end-column="13" />
+            <state relative-caret-position="552">
+              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
             </state>
           </provider>
         </entry>
@@ -60,17 +55,35 @@
       <file leaf-file-name="UserMessage.lua.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/net/UserMessage.lua.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="672">
+              <caret line="162" column="18" lean-forward="true" selection-start-line="162" selection-start-column="18" selection-end-line="162" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="protobuf.lua.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/net/protobuf.lua.txt">
+      <file leaf-file-name="AccountRegisterFrame.lua.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/lobby/AccountRegisterFrame.lua.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="561" column="36" lean-forward="true" selection-start-line="561" selection-start-column="36" selection-end-line="561" selection-end-column="36" />
+            <state relative-caret-position="1656">
+              <caret line="75" column="29" selection-start-line="75" selection-start-column="9" selection-end-line="75" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="functions.lua.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/functions.lua.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1155">
+              <caret line="312" column="23" selection-start-line="312" selection-start-column="23" selection-end-line="312" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GateNet.lua.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/net/GateNet.lua.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="475">
+              <caret line="173" column="24" selection-start-line="173" selection-start-column="24" selection-end-line="173" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -78,17 +91,8 @@
       <file leaf-file-name="Message.lua.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/net/Message.lua.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="46">
-              <caret line="2" column="14" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GateNet.lua.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/net/GateNet.lua.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
-              <caret line="83" column="25" lean-forward="true" selection-start-line="83" selection-start-column="25" selection-end-line="83" selection-end-column="25" />
+            <state relative-caret-position="505">
+              <caret line="102" column="23" selection-start-line="102" selection-start-column="23" selection-end-line="102" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -98,7 +102,6 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>getServerTime</find>
-      <find>authCallback</find>
       <find>OnClickLogin</find>
       <find>crypt</find>
       <find>util</find>
@@ -107,18 +110,31 @@
       <find>register</find>
       <find>AvatarConfig</find>
       <find>RoomConfig</find>
-      <find>loginCallback</find>
       <find>net</find>
-      <find>import</find>
       <find>addEventListener</find>
       <find>addList</find>
       <find>regi</find>
       <find>EVENT_DATA</find>
       <find>receive</find>
       <find>Event</find>
-      <find>gateSocket</find>
       <find>EVENT_CLOSE</find>
+      <find>SocketEventMgr</find>
+      <find>_onConnected</find>
+      <find>gateSocket</find>
+      <find>_connect</find>
+      <find>httpRequest</find>
+      <find>class</find>
+      <find>scheduler</find>
+      <find>import</find>
+      <find>SendEvent</find>
+      <find>authCallback</find>
+      <find>loginCallback</find>
+      <find>cmd</find>
+      <find>notifyScene</find>
     </findStrings>
+    <dirStrings>
+      <dir>I:\Unity3dClient\Client\excel\Assets\Resources\XLuaCode\net</dir>
+    </dirStrings>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -128,11 +144,11 @@
         <option value="$PROJECT_DIR$/net/web.lua.txt" />
         <option value="$PROJECT_DIR$/net/protobuf.lua.txt" />
         <option value="$PROJECT_DIR$/net/UserMessage.lua.txt" />
-        <option value="$PROJECT_DIR$/app/lobby/LoginFrame.lua.txt" />
         <option value="$PROJECT_DIR$/net/init.lua" />
         <option value="$PROJECT_DIR$/Main.lua.txt" />
-        <option value="$PROJECT_DIR$/net/GateNet.lua.txt" />
         <option value="$PROJECT_DIR$/net/SocketTCP.lua.txt" />
+        <option value="$PROJECT_DIR$/app/lobby/LoginFrame.lua.txt" />
+        <option value="$PROJECT_DIR$/net/GateNet.lua.txt" />
       </list>
     </option>
   </component>
@@ -285,7 +301,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25451000" />
+    <option name="totallyTimeSpent" value="33429000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
@@ -296,7 +312,7 @@
       <window_info anchor="right" id="Palette&#9;" order="3" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" visible="true" weight="0.3298969" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" visible="true" weight="0.17244612" />
       <window_info anchor="right" id="Maven Projects" order="3" />
       <window_info anchor="bottom" id="LuaCheck" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
@@ -435,9 +451,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/lobby/LobbyFrame.lua.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils/NumericUtils.lua.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
@@ -551,42 +564,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/net/SocketTCP.lua" />
     <entry file="file://$PROJECT_DIR$/utility/json.lua.txt" />
-    <entry file="file://$PROJECT_DIR$/net/web.lua.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="15" column="3" selection-start-line="15" selection-start-column="3" selection-end-line="15" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="lua-dummy://root/GameFrameWork" />
-    <entry file="file://$PROJECT_DIR$/app/lobby/AccountRegisterFrame.lua.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="81" column="11" lean-forward="true" selection-start-line="81" selection-start-column="11" selection-end-line="81" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/net/Message.lua.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" column="14" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/net/UserMessage.lua.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/lobby/LoginFrame.lua.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="5" column="31" lean-forward="true" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/net/init.lua">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="115">
@@ -597,20 +575,6 @@
     <entry file="file://$PROJECT_DIR$/initUtils.lua.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Main.lua.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="3" column="19" lean-forward="true" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/functions.lua.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="436" column="13" selection-start-line="436" selection-start-column="13" selection-end-line="436" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/net/protobuf.lua.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="332">
@@ -618,20 +582,75 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/net/GateNet.lua.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="83" column="25" lean-forward="true" selection-start-line="83" selection-start-column="25" selection-end-line="83" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/net/init.lua.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/lobby/LobbyFrame.lua.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/net/web.lua.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="12" column="32" lean-forward="true" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/lobby/AccountRegisterFrame.lua.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1656">
+          <caret line="75" column="29" selection-start-line="75" selection-start-column="9" selection-end-line="75" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/functions.lua.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1155">
+          <caret line="312" column="23" selection-start-line="312" selection-start-column="23" selection-end-line="312" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/FrameConfig.lua.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main.lua.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="23" column="48" lean-forward="true" selection-start-line="23" selection-start-column="48" selection-end-line="23" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/net/SocketTCP.lua.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="14" column="58" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="58" />
+        <state relative-caret-position="552">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/lobby/LoginFrame.lua.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="77" column="14" selection-start-line="77" selection-start-column="14" selection-end-line="77" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/net/Message.lua.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="505">
+          <caret line="102" column="23" selection-start-line="102" selection-start-column="23" selection-end-line="102" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/net/UserMessage.lua.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="672">
+          <caret line="162" column="18" lean-forward="true" selection-start-line="162" selection-start-column="18" selection-end-line="162" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/net/GateNet.lua.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="173" column="24" selection-start-line="173" selection-start-column="24" selection-end-line="173" selection-end-column="24" />
         </state>
       </provider>
     </entry>

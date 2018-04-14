@@ -90,17 +90,23 @@ local function auth()
 		return false
 	end
 
-	if not app.userdata.Account.uid or not app.userdata.Account.token then
+	--[[if not app.userdata.Account.uid or not app.userdata.Account.token then
 		gotoLoginScene("您当前网络状态不佳，请重新登录")
 		return
-	end
+	end]]--
 
-	param.index = (param.index or 0) + 1
+	local cmd = string.char(0, 0)
+	local message = string.format("%s%d:%d:%s:%s", cmd, 100001,
+			1, "crypt.base64encode(hmac)", "app.userdata.Account.secret")
+	GateNet.sendData(message)
+
+
+	--[[param.index = (param.index or 0) + 1
 	local hmac = crypt.hmac_hash(app.userdata.Account.token, app.userdata.Account.uid .. ":" .. param.index)
 	local cmd = string.char(0, 0)
 	local message = string.format("%s%d:%d:%s:%s", cmd, app.userdata.Account.uid, 
 		param.index, crypt.base64encode(hmac), app.userdata.Account.secret)
-	GateNet.sendData(message)
+	GateNet.sendData(message)--]]
 end
 
 
@@ -228,12 +234,13 @@ end
 function GateNet.sendData(data)
     local buff = string.char(math.floor(#data/256)%256) .. string.char(#data%256) .. data
 
-    local scene = display.getRunningScene()
+	-- 重连
+    --[[local scene = display.getRunningScene()
 	if scene.name ~= "LoginScene" and (not param.gateSocket or not param.isConnected) then
 		GateNet.reconnect()
 		msgWaitReconnct = buff
 		return false
-	end
+	end--]]
 
 	local ok, ret = pcall(param.gateSocket.send, param.gateSocket, buff)
 	if not ok then

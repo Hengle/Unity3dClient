@@ -75,6 +75,9 @@ function LoginFrame.loginCallback(err,res)
 	if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
 		CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
 
+		--全局保存
+		--app.userdata.Account.uid = uid
+		--app.userdata.Account.token = token
 		-- 连接gate
 		GateNet.connect(function(ok, msg)
 			if not ok then
@@ -85,7 +88,7 @@ function LoginFrame.loginCallback(err,res)
 			end
 			-- set jpush tag and alias
 			--util.setJPushTagAndAlias(params.channel, params.account)
-
+			print("UserMessage.send(UserInfoReq)")
 			UserMessage.send("UserInfoReq", {uid=params.account})
 
 		end)
