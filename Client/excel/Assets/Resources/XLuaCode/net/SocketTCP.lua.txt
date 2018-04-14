@@ -12,15 +12,16 @@ local STATUS_TIMEOUT = "timeout"
 local STATUS_REFUSED = "connection refused"
 
 local scheduler = CS.GameClient.InvokeManager.Instance()
+local SocketEventMgr = CS.GameClient.LuaSocketEventManager.Instance()
 local socket = require("socket")
 
 local SocketTCP = class("SocketTCP")
 
-SocketTCP.EVENT_DATA = "SOCKET_TCP_DATA"
-SocketTCP.EVENT_CLOSE = "SOCKET_TCP_CLOSE"
-SocketTCP.EVENT_CLOSED = "SOCKET_TCP_CLOSED"
-SocketTCP.EVENT_CONNECTED = "SOCKET_TCP_CONNECTED"
-SocketTCP.EVENT_CONNECT_FAILURE = "SOCKET_TCP_CONNECT_FAILURE"
+SocketTCP.EVENT_DATA = 1--"SOCKET_TCP_DATA"
+SocketTCP.EVENT_CLOSE = 2--"SOCKET_TCP_CLOSE"
+SocketTCP.EVENT_CLOSED = 3--"SOCKET_TCP_CLOSED"
+SocketTCP.EVENT_CONNECTED = 4--"SOCKET_TCP_CONNECTED"
+SocketTCP.EVENT_CONNECT_FAILURE = 5--"SOCKET_TCP_CONNECT_FAILURE"
 
 SocketTCP._VERSION = socket._VERSION
 SocketTCP._DEBUG = socket._DEBUG
@@ -125,7 +126,8 @@ function SocketTCP:close( ... )
 	self.tcp:close();
 	if self.connectTimeTickScheduler then scheduler:RemoveInvoke(self.connectTimeTickScheduler) end
 	if self.tickScheduler then scheduler:RemoveInvoke(self.tickScheduler) end
-	self:dispatchEvent({name=SocketTCP.EVENT_CLOSE})
+	--self:dispatchEvent({name=SocketTCP.EVENT_CLOSE})
+	SocketEventMgr:SendEvent(self, SocketTCP.EVENT_CLOSE, nil)
 end
 
 -- disconnect on user's own initiative.
@@ -152,13 +154,15 @@ end
 function SocketTCP:_disconnect()
 	self.isConnected = false
 	self.tcp:shutdown()
-	self:dispatchEvent({name=SocketTCP.EVENT_CLOSED})
+	--self:dispatchEvent({name=SocketTCP.EVENT_CLOSED})
+	SocketEventMgr:SendEvent(self, SocketTCP.EVENT_CLOSE, nil)
 end
 
 function SocketTCP:_onDisconnect()
 	--printInfo("%s._onDisConnect", self.name);
 	self.isConnected = false
-	self:dispatchEvent({name=SocketTCP.EVENT_CLOSED})
+	--self:dispatchEvent({name=SocketTCP.EVENT_CLOSED})
+	SocketEventMgr:SendEvent(self, SocketTCP.EVENT_CLOSE, nil)
 	self:_reconnect();
 end
 
@@ -166,7 +170,8 @@ end
 function SocketTCP:_onConnected()
 	printInfo("%s._onConnectd", self.name)
 	self.isConnected = true
-	self:dispatchEvent({name=SocketTCP.EVENT_CONNECTED})
+	--self:dispatchEvent({name=SocketTCP.EVENT_CONNECTED})
+	SocketEventMgr:SendEvent(self, SocketTCP.EVENT_CONNECTED, nil)
 	if self.connectTimeTickScheduler then scheduler:RemoveInvoke(self.connectTimeTickScheduler) end
 
 	local __tick = function()
@@ -187,7 +192,8 @@ function SocketTCP:_onConnected()
 				(__partial and string.len(__partial) == 0)
 			then return end
 			if __body and __partial then __body = __body .. __partial end
-			self:dispatchEvent({name=SocketTCP.EVENT_DATA, data=(__partial or __body), partial=__partial, body=__body})
+			--self:dispatchEvent({name=SocketTCP.EVENT_DATA, data=(__partial or __body), partial=__partial, body=__body})
+			SocketEventMgr:SendEvent(self, SocketTCP.EVENT_DATA, {data=(__partial or __body), partial=__partial, body=__body})
 		end
 	end
 
@@ -198,6 +204,7 @@ end
 function SocketTCP:_connectFailure(status)
 	--printInfo("%s._connectFailure", self.name);
 	self:dispatchEvent({name=SocketTCP.EVENT_CONNECT_FAILURE})
+	SocketEventMgr:SendEvent(self, SocketTCP.EVENT_CONNECT_FAILURE,nil)
 	self:_reconnect();
 end
 
@@ -211,6 +218,14 @@ function SocketTCP:_reconnect(__immediately)
 		self:connect()
 	end
 	self.reconnectScheduler = scheduler.Invoke(self, SOCKET_RECONNECT_TIME, __doReConnect)
+end
+
+function SocketTCP:addEventListener(eventId, func)
+	SocketEventMgr:RegisterEvent(self, eventId, func)
+end
+
+function SocketTCP:removeAllEventListener()
+	SocketEventMgr:UnRegisterSocketEvent(self)
 end
 
 return SocketTCP

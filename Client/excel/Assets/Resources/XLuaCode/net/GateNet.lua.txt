@@ -5,6 +5,7 @@ local GateNet = {}
 local net = require(".net.init")
 local scheduler = CS.GameClient.InvokeManager.Instance()
 
+
 local web = require(".net.web")
 local Message = require(".net.Message")
 local Msgprotocol = require(".net.Msgprotocol")
@@ -64,6 +65,7 @@ end
 
 local function schedulerReconnect()
 	if param.reconnect == true then
+		param.gateSocket:removeAllEventListener()
 		param.gateSocket = nil
 		param.isConnected = false
 		param.isAuth = false
@@ -184,6 +186,7 @@ end
 
 local function close(event)
 	print("gate close, retrycnt:", param.retrycnt)
+	param.gateSocket:removeAllEventListener()
 	param.gateSocket = nil
 	param.isConnected = false
 	param.isAuth = false
@@ -289,6 +292,7 @@ function GateNet.realConnect()
 
     local ok = pcall(param.gateSocket.connect, param.gateSocket, ip, port)
     if not ok then
+		param.gateSocket:removeAllEventListener()
    		param.gateSocket = nil
    	end
 end
@@ -299,6 +303,7 @@ function GateNet.disconnect(typ)
 	param.reconnect = (typ == 4)
 	if param.gateSocket then
 		param.gateSocket:disconnect()
+		param.gateSocket:removeAllEventListener()
 		param.gateSocket = nil
 	end
 end
