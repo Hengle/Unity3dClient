@@ -16,8 +16,22 @@ namespace GameClient
         {
             if(null != handler)
             {
-                mEventDispatcher[eventId] = (LuaSocketEvent)Delegate.Remove((LuaSocketEvent)mEventDispatcher[eventId], handler);
-                mEventDispatcher[eventId] = (LuaSocketEvent)Delegate.Combine((LuaSocketEvent)mEventDispatcher[eventId], handler);
+                if(mEventDispatcher.ContainsKey(eventId))
+                {
+                    if(null != mEventDispatcher[eventId])
+                    {
+                        mEventDispatcher[eventId] = (LuaSocketEvent)Delegate.Remove((LuaSocketEvent)mEventDispatcher[eventId], handler);
+                        mEventDispatcher[eventId] = (LuaSocketEvent)Delegate.Combine((LuaSocketEvent)mEventDispatcher[eventId], handler);
+                    }
+                    else
+                    {
+                        mEventDispatcher[eventId] = handler;
+                    }
+                }
+                else
+                {
+                    mEventDispatcher[eventId] = handler;
+                }
                 LogManager.Instance().LogFormat("<color=#00ff00>reg net socket event {0} succeed !</color>", eventId);
             }
         }
@@ -26,7 +40,10 @@ namespace GameClient
         {
             if(mEventDispatcher.ContainsKey(eventId))
             {
-                mEventDispatcher[eventId] = (LuaSocketEvent)Delegate.Remove((LuaSocketEvent)mEventDispatcher[eventId], handler);
+                if(null != mEventDispatcher[eventId])
+                {
+                    mEventDispatcher[eventId] = (LuaSocketEvent)Delegate.Remove((LuaSocketEvent)mEventDispatcher[eventId], handler);
+                }
                 LogManager.Instance().LogFormat("<color=#00ff00>un reg net socket event {0} succeed !</color>", eventId);
             }
         }
