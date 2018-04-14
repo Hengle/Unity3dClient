@@ -50,8 +50,19 @@ namespace GameClient
     }
 
     [LuaCallCSharp]
-    public class LuaSocketEventManager : Singleton<LuaSocketEventManager>
+    public class LuaSocketEventManager
     {
+		protected static LuaSocketEventManager ms_handle = null;
+		[LuaCallCSharp]
+		public static LuaSocketEventManager Instance()
+		{
+			if (null == ms_handle) 
+			{
+				ms_handle = new LuaSocketEventManager();
+			}
+			return ms_handle;
+		}
+
         Dictionary<int, SocketEventManager> socketMgr = new Dictionary<int, SocketEventManager>();
 
         [LuaCallCSharp]
@@ -95,6 +106,20 @@ namespace GameClient
                 }
             }
         }
+
+		[LuaCallCSharp]
+		public void SendEvent(object socket,int eventId, object argv)
+		{
+			int hash = socket.GetHashCode();
+			if (socketMgr.ContainsKey(hash))
+			{
+				var dispatcher = socketMgr[hash];
+				if(null != dispatcher)
+				{
+					dispatcher.SendEvent (eventId, argv);
+				}
+			}
+		}
 
         [LuaCallCSharp]
         public void Clear()
