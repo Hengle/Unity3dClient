@@ -32,8 +32,14 @@ function Message.sendMessage(name, msg)
 		print("!!! msg have no id, name:", name)
 		return
 	end
-    local data = protobuf.encode(name, msg)
-    print("send message "..name..data)
+
+	local ok,data
+	ok, data = pcall(protobuf.encode, name, msg)
+	if not ok then
+		print("protobuf.encode error! failed:"..tostring(data))
+	end
+    --local data = protobuf.encode(name, msg)
+    print("send message "..name)
 	if Message.net and Message.net.sendData then
 		Message.net.sendData(string.char(math.floor(id/256)%256) .. string.char(id%256) .. data)
 	end
@@ -101,7 +107,7 @@ function Message.unregisterHandle(name)
 end
 
 function Message.notifyScene(name, msg, ...)
-	local scene = display.getRunningScene()
+	--[[local scene = display.getRunningScene()
 	if not scene then 
 		print("scene is nil, notify msg failed", name, msg)
 		return
@@ -110,7 +116,9 @@ function Message.notifyScene(name, msg, ...)
 		scene[name](scene, msg, ...)
 	else
 		-- print("notify scene failed", scene.name, "have no method:", name)
-	end
+	end]]--
+
+	print("notifyScene name:"..name)
 end
 
 return Message

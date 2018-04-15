@@ -217,7 +217,7 @@ function SocketTCP:_reconnect(__immediately)
 	local __doReConnect = function ()
 		self:connect()
 	end
-	self.reconnectScheduler = scheduler.Invoke(self, SOCKET_RECONNECT_TIME, __doReConnect)
+	self.reconnectScheduler = scheduler:Invoke(self, SOCKET_RECONNECT_TIME, __doReConnect)
 end
 
 function SocketTCP:addEventListener(eventId, func)

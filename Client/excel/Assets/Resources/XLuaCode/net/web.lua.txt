@@ -36,4 +36,46 @@ function web.ToPostData(postdata)
     return content
 end
 
+function web.FromResData(szFullString)
+    local nFindStartIndex = 1
+    local nSplitIndex = 1
+    local nSplitArray = {}
+    local szSeparator = '&'
+    local keyValueSep = '='
+    local retArray = {}
+
+    while true do
+        local nFindLastIndex = string.find(szFullString, szSeparator, nFindStartIndex)
+        if not nFindLastIndex then
+            nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, string.len(szFullString))
+            break
+        end
+        nSplitArray[nSplitIndex] = string.sub(szFullString, nFindStartIndex, nFindLastIndex - 1)
+        nFindStartIndex = nFindLastIndex + string.len(szSeparator)
+        nSplitIndex = nSplitIndex + 1
+    end
+
+
+    for i=1,#nSplitArray,1 do
+        repeat
+            print("nSplitArray["..i.."] = "..nSplitArray[i])
+            local lastIdx = string.find(nSplitArray[i], keyValueSep, 1)
+            if not lastIdx then
+                break
+            else
+                print("lastIdx = "..lastIdx)
+                print("string.len(nSplitArray[i]) = "..string.len(nSplitArray[i]))
+                local key = string.sub(nSplitArray[i], 1,lastIdx - 1)
+                local value = string.sub(nSplitArray[i], lastIdx+1, string.len(nSplitArray[i]))
+                print("count = "..i.." key = ".. key.. " value = "..value)
+                retArray[key] = value
+            end
+        until true
+    end
+
+    return retArray
+
+end
+
+
 return web

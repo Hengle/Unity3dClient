@@ -71,11 +71,11 @@ local function schedulerReconnect()
 		param.isAuth = false
 		if not param.reconnectScheduler then
 			GateNet.reconnect()
-			param.reconnectScheduler = scheduler.InvokeRepeate(self, 1, GateNet.reconnect, true)
+			param.reconnectScheduler = scheduler:InvokeRepeate(self, 1, GateNet.reconnect, true)
 		end
 	elseif param.reconnect == false then
 		if param.reconnectScheduler then
-			scheduler.RemoveInvoke(param.reconnectScheduler)
+			scheduler:RemoveInvoke(param.reconnectScheduler)
 			param.reconnectScheduler = nil
 		end
 		gotoLoginScene()
@@ -113,7 +113,7 @@ end
 local function heartbeat()
 	if not param.isAuth or not param.isConnected then
 		if param.scheduler ~= nil then
-			scheduler.RemoveInvoke(param.scheduler)
+			scheduler:RemoveInvoke(param.scheduler)
 			param.scheduler = nil
 		end
 		return
@@ -150,7 +150,7 @@ local function receive(event)
 
         		-- unscheduler reconnect
         		if param.reconnectScheduler then
-        			scheduler.RemoveInvoke(param.reconnectScheduler)
+        			scheduler:RemoveInvoke(param.reconnectScheduler)
         			param.reconnectScheduler = nil
         			param.reconnect = true
         			gotoLobbyScene()
@@ -159,10 +159,10 @@ local function receive(event)
         		param.isAuth = true
         		Message.net = GateNet
         		if param.scheduler ~= nil then
-        			scheduler.RemoveInvoke(param.scheduler)
+        			scheduler:RemoveInvoke(param.scheduler)
         			param.scheduler = nil
         		end
-        		param.scheduler = scheduler.InvokeRepeate(self, TIME_GAP_HEART_BEAT, heartbeat)
+        		param.scheduler = scheduler:InvokeRepeate(self, TIME_GAP_HEART_BEAT, heartbeat, true)
 
         		-- 如果有存储待发送消息，继续发送
         		if msgWaitReconnct then
