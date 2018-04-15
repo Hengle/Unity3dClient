@@ -163,7 +163,7 @@ namespace NetWork
         }
 
         int mInvokeHandle = -1;
-        /*public void TryReconnect()
+        public void TryReconnect()
         {
             if (reconnectTimes > 0)
             {
@@ -192,7 +192,7 @@ namespace NetWork
                             mInvokeHandle = -1;
                         }
                         Connect(ip, port);
-                    });
+                    },false);
             }
             else
             {
@@ -209,7 +209,7 @@ namespace NetWork
 
                 LogPrint("{0} socket closed!!!", targetName, reconnectTimes);
             }
-        }*/
+        }
 
         void OnThreadConnected(System.IAsyncResult iar)
         {
@@ -415,8 +415,6 @@ namespace NetWork
 
         public void Update()
         {
-            LogPrint("NetSocket Update");
-
             lock (mSendCB)
             {
                 for(int i = 0; i < mSendCB.Count; ++i)
@@ -436,7 +434,7 @@ namespace NetWork
 
             if (EStatus == SocketStatus.SS_TRYCONNECT)
             {
-                //TryReconnect();
+                TryReconnect();
             }
             else if (EStatus == NetSocket.SocketStatus.SS_TRYCONNECTED)
             {
@@ -444,15 +442,15 @@ namespace NetWork
             }
             else if (EStatus == NetSocket.SocketStatus.SS_RECONNECT)
             {
-                //if (Time.time > nextReconnectTime)
-                //{
-                //    if (-1 != mInvokeHandle)
-                //    {
-                //        GameClient.InvokeManager.Instance().RemoveInvoke(mInvokeHandle);
-                //        mInvokeHandle = -1;
-                //    }
-                //    Connect(ip, port);
-                //}
+                if (Time.time > nextReconnectTime)
+                {
+                    if (-1 != mInvokeHandle)
+                    {
+                        GameClient.InvokeManager.Instance().RemoveInvoke(mInvokeHandle);
+                        mInvokeHandle = -1;
+                    }
+                    Connect(ip, port);
+                }
             }
             else if (EStatus == NetSocket.SocketStatus.SS_INVALID)
             {

@@ -49,6 +49,8 @@ namespace LoggerServer
                 socket.Listen(20);
                 socket.BeginAccept(new System.AsyncCallback(Accept), socket);
                 Console.WriteLine("日志服务器启动成功!");
+                Console.WriteLine("IP:{0}", ip);
+                Console.WriteLine("port:{0}", port);
             }
             catch (System.Exception e)
             {

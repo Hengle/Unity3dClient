@@ -20,7 +20,7 @@ namespace GameClient
         void _OnSocketLogOut(string log)
         {
             LogManager.Instance().LogProcessFormat(9850, log);
-            UnityEngine.Debug.LogErrorFormat("<color=#00ff00>{0}:{1}</color>", 9850, log);
+            //UnityEngine.Debug.LogErrorFormat("<color=#00ff00>{0}:{1}</color>", 9850, log);
         }
 
         void _PrintLogItems()
