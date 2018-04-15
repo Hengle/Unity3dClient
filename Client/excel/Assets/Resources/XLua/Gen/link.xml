@@ -13,6 +13,7 @@
 		<type fullname="NetWork.NetSocket" preserve="all"/>
 		<type fullname="GameClient.InvokeManager" preserve="all"/>
 		<type fullname="GameClient.LocalSettingManager" preserve="all"/>
+		<type fullname="GameClient.LogManager" preserve="all"/>
 		<type fullname="GameClient.LuaEventManager" preserve="all"/>
 		<type fullname="GameClient.LuaSocketEventManager" preserve="all"/>
 		<type fullname="GameClient.FrameTypeID" preserve="all"/>

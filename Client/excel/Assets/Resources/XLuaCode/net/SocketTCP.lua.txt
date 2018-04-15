@@ -123,6 +123,7 @@ end
 
 function SocketTCP:close( ... )
 	--printInfo("%s.close", self.name)
+	app.Logger:LogFormat('{0} close',self.name)
 	self.tcp:close();
 	if self.connectTimeTickScheduler then scheduler:RemoveInvoke(self.connectTimeTickScheduler) end
 	if self.tickScheduler then scheduler:RemoveInvoke(self.tickScheduler) end

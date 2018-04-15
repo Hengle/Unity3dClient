@@ -6,6 +6,7 @@
 app = app or {}
 -- ------------------Unity Engine---------------------------------------------
 app.Debugger = CS.UnityEngine.Debug
+app.Logger = CS.GameClient.LogManager.Instance()
 
 -- ------------------CSharp Deploy---------------------------------------------
 app.FrameManager = CS.GameClient.UIFrameLua

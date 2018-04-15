@@ -641,8 +641,26 @@ namespace XLua
         [MonoPInvokeCallback(typeof(LuaCSFunction))]
         internal static int LoadPbcCore(RealStatePtr L)
         {
-            GameClient.LogManager.Instance().LogFormat("<color=#00ff00>luaopen_protobuf_c !!!</color>");
-            return LuaAPI.luaopen_protobuf_c(L);
+            try
+            {
+                GameClient.LogManager.Instance().LogProcessFormat(1985,"<color=#00ff00>[protobuf] try call luaopen_protobuf_c !!!</color>");
+                int ret = LuaAPI.luaopen_protobuf_c(L);
+                if(1 != ret)
+                {
+                    GameClient.LogManager.Instance().LogProcessFormat(1985, "<color=#ff0000>[protobuf] call luaopen_protobuf_c failed code=[{0}]!!!</color>",ret);
+                }
+                else
+                {
+                    GameClient.LogManager.Instance().LogProcessFormat(1985, "<color=#00ff00>[protobuf] call luaopen_protobuf_c succeed code=[{0}]!!!</color>", ret);
+                }
+                return ret;
+            }
+            catch (Exception e)
+            {
+                GameClient.LogManager.Instance().LogProcessFormat(1985, "<color=#ff0000>[protobuf] call luaopen_protobuf_c failed !!!</color>");
+                GameClient.LogManager.Instance().LogProcessFormat(1985, "<color=#ff0000>[protobuf] exception : {0}</color>",e.ToString());
+            }
+            return -1;
         }
 
         [MonoPInvokeCallback(typeof(LuaCSFunction))]

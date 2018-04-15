@@ -32,16 +32,21 @@ end
 
 local function gotoLoginScene(errStr)
 	-- 验证失败，退出到登陆界面
+	print('gotoLoginScene')
+	--[[
 	local scene = display.getRunningScene()
 	if scene.name and scene.name ~= "LoginScene" then
 		cc.Director:getInstance():popToRootScene()
 		app:enterScene("LoginScene", {errStr})
 	end
+	--]]
 end
 
 
 local function gotoLobbyScene()
+	print('gotoLobbyScene')
 	-- 重连进入大厅
+	--[[
 	local scene = display.getRunningScene()
 	if scene.name ~= "LoginScene" and scene.name ~= "LobbyScene" and scene.name ~= "LobbyPrivateScene" then
 		cc.Director:getInstance():popToRootScene()
@@ -52,6 +57,7 @@ local function gotoLobbyScene()
 			app:enterScene("LobbyPrivateScene", {true})
 		end
 	end
+	--]]
 end
 
 
@@ -310,7 +316,9 @@ function GateNet.disconnect(typ)
 	param.reconnect = (typ == 4)
 	if param.gateSocket then
 		param.gateSocket:disconnect()
-		param.gateSocket:removeAllEventListener()
+		if param.gateSocket then
+			param.gateSocket:removeAllEventListener()
+		end
 		param.gateSocket = nil
 	end
 end

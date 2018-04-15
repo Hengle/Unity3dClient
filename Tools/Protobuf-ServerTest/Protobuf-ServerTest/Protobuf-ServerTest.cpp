@@ -3,6 +3,9 @@
 
 #include "stdafx.h"
 #include <WinSock2.h>
+#include <windows.h>
+#include <string>
+using namespace std;
 #define  PORT 8880  
 #include "LogItem.pb.h"
 
@@ -17,6 +20,10 @@ bool InitNetEnv()
 	}
 	return true;
 }
+
+string UTF8_2_GBK(string utf8Str);
+string GBK_2_UTF8(string gbkStr);
+string GetLogTypeString(int logType);
 
 DWORD WINAPI clientProc(
 	LPVOID lparam
@@ -47,9 +54,8 @@ DWORD WINAPI clientProc(
 		Protocol::LogItem _LogItem;
 		if (_LogItem.ParseFromArray(buf, ret))
 		{
-			printf("id = %d\n", _LogItem.logid());
-			printf("type = %d\n", (int)_LogItem.elogtype());
-			printf("name = %s\n", _LogItem.logvalue());
+			printf("[id = %06d][%s]\n", _LogItem.logid(), GetLogTypeString((int)_LogItem.elogtype()).c_str());
+			printf("name = %s\n\n", UTF8_2_GBK(_LogItem.logvalue()).c_str());
 		}
 		else
 		{
@@ -69,6 +75,73 @@ DWORD WINAPI clientProc(
 	}
 	closesocket(sockClient);
 	return 0;
+}
+
+string GetLogTypeString(int logType)
+{
+	switch (logType)
+	{
+	case  ((int)Protocol::LogItem_LogType_LT_NORMAL):
+	{
+		return "Normal";
+	}
+	break;
+	case  ((int)Protocol::LogItem_LogType_LT_WARNING):
+	{
+		return "Warning";
+	}
+	break;
+	case  ((int)Protocol::LogItem_LogType_LT_ERROR):
+	{
+		return "Error";
+	}
+	break;
+	case  ((int)Protocol::LogItem_LogType_LT_PROCESS):
+	{
+		return "Process";
+	}
+	break;
+	default:
+		break;
+	}
+	return "Normal";
+}
+
+//需要包含windows.h等头文件
+
+string GBK_2_UTF8(string gbkStr)
+{
+	string outUtf8 = "";
+	int n = MultiByteToWideChar(CP_ACP, 0, gbkStr.c_str(), -1, NULL, 0);
+	WCHAR *str1 = new WCHAR[n];
+	MultiByteToWideChar(CP_ACP, 0, gbkStr.c_str(), -1, str1, n);
+	n = WideCharToMultiByte(CP_UTF8, 0, str1, -1, NULL, 0, NULL, NULL);
+	char *str2 = new char[n];
+	WideCharToMultiByte(CP_UTF8, 0, str1, -1, str2, n, NULL, NULL);
+	outUtf8 = str2;
+	delete[]str1;
+	str1 = NULL;
+	delete[]str2;
+	str2 = NULL;
+	return outUtf8;
+}
+
+
+string UTF8_2_GBK(string utf8Str)
+{
+	string outGBK = "";
+	int n = MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, NULL, 0);
+	WCHAR *str1 = new WCHAR[n];
+	MultiByteToWideChar(CP_UTF8, 0, utf8Str.c_str(), -1, str1, n);
+	n = WideCharToMultiByte(CP_ACP, 0, str1, -1, NULL, 0, NULL, NULL);
+	char *str2 = new char[n];
+	WideCharToMultiByte(CP_ACP, 0, str1, -1, str2, n, NULL, NULL);
+	outGBK = str2;
+	delete[] str1;
+	str1 = NULL;
+	delete[] str2;
+	str2 = NULL;
+	return outGBK;
 }
 
 int main()

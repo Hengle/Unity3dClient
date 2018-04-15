@@ -21,6 +21,7 @@ local function main()
 end
 
 function  Start()
+    app.Logger:LogFormat('<color=#00ff00>start ...</color>')
     --CS.UnityEngine.Debug.LogError("Start ...")
 end
 
