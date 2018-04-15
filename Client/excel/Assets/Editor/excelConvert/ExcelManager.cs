@@ -17,7 +17,8 @@ namespace npoi
 		public static string TABLE_LIST_CS_PATH = "/Scripts/00Common/";
 		public static string TXT_SAVE_PATH = "/Resources/Data/tmpTable/";
 		public static string TXT_ASSET_PATH = "Assets/Resources/Data/Table/";
-        public static string TXT_PB_PATH = "Assets/Resources/XLuaCode/protocol/";
+        public static string PB_TXT_SRC_PATH = "/../../PbProto/";
+        public static string PB_ASSET_DST_PATH = "Assets/Resources/XLuaCode/protocol/";
         public static string SHELL_CMD_PATH = "/../../shell_cmd/";
         public static string TABLE_SCRIPTS_PATH = "/Scripts/01TableScripts/";
         public static string TABLE_SCRIPTS_CCODE_PATH = "/../../CCode/";

@@ -75,9 +75,7 @@ namespace npoi
         [MenuItem("GameClient/PB/PbTxt2Asset")]
         public static void ConvertPbTxt2Asset()
         {
-            string path = "/Resources/XLuaCode/protocol/";
-            string filter = "*.txt";
-            ConvertDataPathTxt(path, filter, ExcelConfig.TXT_PB_PATH);
+            ConvertDataPathTxt(ExcelConfig.PB_TXT_SRC_PATH, @"*.txt", ExcelConfig.PB_ASSET_DST_PATH);
         }
         
         public static bool ConvertDataPathTxt(string path, string filter,string save_dir)
@@ -89,7 +87,7 @@ namespace npoi
 		public static bool ConvertAsset(string filter)
 		{
 			var dir = Path.GetFullPath (Application.dataPath + ExcelConfig.TXT_SAVE_PATH);
-            return ConvertAsset(dir,filter, ExcelConfig.TXT_SAVE_PATH);
+            return ConvertAsset(dir,filter, ExcelConfig.TXT_ASSET_PATH);
         }
 
 		[MenuItem("GameClient/TableConvert/LoadTableList")]
