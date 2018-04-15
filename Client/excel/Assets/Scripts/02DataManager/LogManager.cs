@@ -2,11 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Protocol;
+using XLua;
 
 namespace GameClient
 {
-    class LogManager : Singleton<LogManager>
+    [LuaCallCSharp]
+    class LogManager
     {
+        protected static LogManager ms_handle = null;
+        [LuaCallCSharp]
+        public static LogManager Instance()
+        {
+            if (null == ms_handle)
+            {
+                ms_handle = new LogManager();
+            }
+            return ms_handle;
+        }
+
         const int LogLimit = 256;
         List<LogItem> mLogItems = new List<LogItem>(LogLimit);
         List<LogItem> mCachedLogs = new List<LogItem>(LogLimit);
