@@ -30,7 +30,7 @@ DWORD WINAPI clientProc(
 	)
 {
 	SOCKET sockClient = (SOCKET)lparam;
-	char buf[1024];
+	char buf[10240];
 	while (TRUE)
 	{
 		memset(buf, 0, sizeof(buf));
@@ -59,7 +59,7 @@ DWORD WINAPI clientProc(
 		}
 		else
 		{
-			printf("parse error!");
+			//printf("parse error!");
 		}
 		/*
 		// ·¢ËÍÊý¾Ý  

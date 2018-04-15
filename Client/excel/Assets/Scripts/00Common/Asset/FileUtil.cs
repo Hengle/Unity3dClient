@@ -95,35 +95,41 @@ public class FileUtil
         return lSize;
     }
     [LuaCallCSharp]
-    public static byte[] ReadFileFromResource(string path)
+    public static byte[] ReadFileFromResource(string fileName)
     {
-        if(string.IsNullOrEmpty(path))
+        if(string.IsNullOrEmpty(fileName))
         {
             LogManager.Instance().LogErrorFormat("path is empty !");
             return new byte[0];
         }
 
-        string fullpath = Path.GetFullPath(Application.dataPath + "/Resources/" + path);
-
-        if (!File.Exists(fullpath))
+#if UNITY_EDITOR
+        fileName = Application.dataPath + "/Resources/" + fileName + ".txt";
+        if (File.Exists(fileName))
         {
-            LogManager.Instance().LogErrorFormat("<color=#ff0000>path error : {0}</color>",fullpath);
-            return new byte[0];
+            LogManager.Instance().LogProcessFormat(2000, "Load Lua Succeed [<color=#00ff00>{0}</color>]", fileName);
+            return File.ReadAllBytes(fileName);
         }
-
-        try
+        else
         {
-            var datas = File.ReadAllBytes(fullpath);
-            int len = null == datas ? 0 : datas.Length;
-            LogManager.Instance().LogFormat("<color=#00ff00> read {0} succeed ! length = {1} bytes !</color>", fullpath, len);
-            return datas;
+            LogManager.Instance().LogProcessFormat(2000, "Load Lua File {0} Failed !!!", fileName);
+            return null;
         }
-        catch(System.Exception e)
+#else
+        var assetInst = AssetLoader.Instance().LoadRes(fileName, typeof(TextAsset));
+        if (null != assetInst && null != assetInst.obj)
         {
-            LogManager.Instance().LogErrorFormat("<color=#ff0000>read error : {0}</color>", fullpath);
-            LogManager.Instance().LogErrorFormat("<color=#ff0000>read error : {0}</color>", e.ToString());
+            TextAsset file = assetInst.obj as TextAsset;
+            if (file != null)
+            {
+                LogManager.Instance().LogProcessFormat(2001, "load file <color=#00ff00>{0}</color> succeed ! length={1}", fileName, file.bytes.Length);
+                LogManager.Instance().LogProcessFormat(2001, "load file <color=#00ff00>{0}</color> succeed !",file.text);
+                return file.bytes;
+            }
         }
+#endif
 
+        LogManager.Instance().LogProcessFormat(2001, "can not load file {0}", fileName);
         return new byte[0];
     }
 
