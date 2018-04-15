@@ -101,7 +101,10 @@ function Message.unregisterHandle(name)
 end
 
 function Message.notifyScene(name, msg, ...)
-	local scene = display.getRunningScene()
+	print('scene_name = ' .. name)
+	print('msg = ' .. msg)
+	--local scene = display.getRunningScene()
+	--[[
 	if not scene then 
 		print("scene is nil, notify msg failed", name, msg)
 		return
@@ -110,7 +113,7 @@ function Message.notifyScene(name, msg, ...)
 		scene[name](scene, msg, ...)
 	else
 		-- print("notify scene failed", scene.name, "have no method:", name)
-	end
+	end--]]
 end
 
 return Message
