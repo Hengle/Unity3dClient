@@ -4,6 +4,8 @@ using System.IO;
 using System.Security.Cryptography;
 using XLua;
 using GameClient;
+using System.Text;
+using System;
 
 [LuaCallCSharp]
 public class FileUtil
@@ -94,6 +96,7 @@ public class FileUtil
 
         return lSize;
     }
+
     [LuaCallCSharp]
     public static byte[] ReadFileFromResource(string fileName)
     {
@@ -103,33 +106,18 @@ public class FileUtil
             return new byte[0];
         }
 
-#if UNITY_EDITOR
-        fileName = Application.dataPath + "/Resources/" + fileName + ".txt";
-        if (File.Exists(fileName))
-        {
-            LogManager.Instance().LogProcessFormat(2000, "Load Lua Succeed [<color=#00ff00>{0}</color>]", fileName);
-            return File.ReadAllBytes(fileName);
-        }
-        else
-        {
-            LogManager.Instance().LogProcessFormat(2000, "Load Lua File {0} Failed !!!", fileName);
-            return null;
-        }
-#else
-        var assetInst = AssetLoader.Instance().LoadRes(fileName, typeof(TextAsset));
+        var assetInst = AssetLoader.Instance().LoadRes(fileName, typeof(AssetBinary));
         if (null != assetInst && null != assetInst.obj)
         {
-            TextAsset file = assetInst.obj as TextAsset;
+            AssetBinary file = assetInst.obj as AssetBinary;
             if (file != null)
             {
-                LogManager.Instance().LogProcessFormat(2001, "load file <color=#00ff00>{0}</color> succeed ! length={1}", fileName, file.bytes.Length);
-                LogManager.Instance().LogProcessFormat(2001, "load file <color=#00ff00>{0}</color> succeed !",file.text);
-                return file.bytes;
+                LogManager.Instance().LogProcessFormat(2001, "load file <color=#00ff00>{0}</color> succeed ! length={1}", fileName, file.m_DataBytes.Length);
+                return file.m_DataBytes;
             }
         }
-#endif
 
-        LogManager.Instance().LogProcessFormat(2001, "can not load file {0}", fileName);
+        LogManager.Instance().LogProcessFormat(2001, "load file <color=#ff0000>{0}</color> failed !", fileName);
         return new byte[0];
     }
 

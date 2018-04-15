@@ -28,49 +28,69 @@ namespace npoi
 		[MenuItem("GameClient/TableConvert/Txt2Asset")]
 		public static void ConvertAsset()
 		{
-			ConvertAsset ("*.txt");
+            var dir = Path.GetFullPath(Application.dataPath + ExcelConfig.TXT_SAVE_PATH);
+            ConvertAsset(dir, "*.txt", ExcelConfig.TXT_SAVE_PATH);
 		}
+
+        public static bool ConvertAsset(string dir,string filter,string save_dir)
+        {
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            string[] strList = Directory.GetFiles(dir, filter, SearchOption.TopDirectoryOnly);
+            for (int i = 0; i < strList.Length; ++i)
+            {
+                var txtPath = strList[i];
+                var name = Path.GetFileNameWithoutExtension(txtPath);
+                try
+                {
+                    var assetPath = save_dir + name + ".asset";
+                    AssetBinary asset = ScriptableSingleton<AssetBinary>.CreateInstance<AssetBinary>();
+                    asset.m_DataBytes = File.ReadAllBytes(txtPath);
+
+                    if (File.Exists(assetPath))
+                    {
+                        AssetBinary oldAsset = AssetDatabase.LoadAssetAtPath<AssetBinary>(assetPath);
+                        oldAsset.m_DataBytes = asset.m_DataBytes;
+                        EditorUtility.SetDirty(oldAsset);
+                        AssetDatabase.SaveAssets();
+                    }
+                    else
+                    {
+                        AssetDatabase.CreateAsset(asset, assetPath);
+                    }
+                    Debug.LogFormat("<color=#00ff00>convert <color=#ffff00>{0}.asset</color> succeed !</color>", name);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogErrorFormat(e.ToString());
+                    Debug.LogErrorFormat("<color=#ff0000>convert <color=#ffff00>{0}.asset</color> failed !</color>", name);
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        [MenuItem("GameClient/PB/PbTxt2Asset")]
+        public static void ConvertPbTxt2Asset()
+        {
+            string path = "/Resources/XLuaCode/protocol/";
+            string filter = "*.txt";
+            ConvertDataPathTxt(path, filter, ExcelConfig.TXT_PB_PATH);
+        }
+        
+        public static bool ConvertDataPathTxt(string path, string filter,string save_dir)
+        {
+            var dir = Path.GetFullPath(Application.dataPath + path);
+            return ConvertAsset(dir, filter,save_dir);
+        }
 
 		public static bool ConvertAsset(string filter)
 		{
 			var dir = Path.GetFullPath (Application.dataPath + ExcelConfig.TXT_SAVE_PATH);
-			if (!Directory.Exists (dir)) 
-			{
-				Directory.CreateDirectory (dir);
-			}
-			var save_dir = ExcelConfig.TXT_ASSET_PATH;
-			string[] strList = Directory.GetFiles (dir, filter, SearchOption.TopDirectoryOnly);
-			for (int i = 0; i < strList.Length; ++i) 
-			{
-				var txtPath = strList [i];
-				var name = Path.GetFileNameWithoutExtension (txtPath);
-				try
-				{
-					var assetPath = save_dir + name + ".asset";
-					AssetBinary asset = ScriptableSingleton<AssetBinary>.CreateInstance<AssetBinary> ();
-					asset.m_DataBytes = File.ReadAllBytes (txtPath);
-
-					if (File.Exists (assetPath)) {
-						AssetBinary oldAsset = AssetDatabase.LoadAssetAtPath<AssetBinary> (assetPath);
-						oldAsset.m_DataBytes = asset.m_DataBytes;
-						EditorUtility.SetDirty (oldAsset);
-						AssetDatabase.SaveAssets ();
-					} 
-					else 
-					{
-						AssetDatabase.CreateAsset (asset, assetPath);
-					}
-					Debug.LogFormat ("<color=#00ff00>convert <color=#ffff00>{0}.asset</color> succeed !</color>", name);
-					return true;
-				}
-				catch(System.Exception e) 
-				{
-					Debug.LogErrorFormat (e.ToString ());
-					Debug.LogErrorFormat ("<color=#ff0000>convert <color=#ffff00>{0}.asset</color> failed !</color>", name);
-				}
-			}
-			return false;
-		}
+            return ConvertAsset(dir,filter, ExcelConfig.TXT_SAVE_PATH);
+        }
 
 		[MenuItem("GameClient/TableConvert/LoadTableList")]
 		public static void ConvertTableListScriptCS()
