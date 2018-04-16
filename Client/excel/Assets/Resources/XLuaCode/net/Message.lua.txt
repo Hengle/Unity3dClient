@@ -15,18 +15,18 @@ end
 
 
 --TODO: auto generate below code
-registerProto("XLuaCode/Protocol/game.pb")
-registerProto("XLuaCode/Protocol/user.pb")
-registerProto("XLuaCode/Protocol/HkFiveCard.pb")
-registerProto("XLuaCode/Protocol/NN100.pb")
-registerProto("XLuaCode/Protocol/TBNN.pb")
-registerProto("XLuaCode/Protocol/HLNN.pb")
-registerProto("XLuaCode/Protocol/TexasPoker.pb")
-registerProto("XLuaCode/Protocol/Baccarat.pb")
-registerProto("XLuaCode/Protocol/XZMJ.pb")
-registerProto("XLuaCode/Protocol/CatchFish.pb")
-registerProto("XLuaCode/Protocol/ShiSanShui.pb")
-registerProto("XLuaCode/Protocol/MaJiang.pb")
+registerProto("XLuaCode/protocol/game")
+registerProto("XLuaCode/protocol/user")
+registerProto("XLuaCode/protocol/HkFiveCard")
+registerProto("XLuaCode/protocol/NN100")
+registerProto("XLuaCode/protocol/TBNN")
+registerProto("XLuaCode/protocol/HLNN")
+registerProto("XLuaCode/protocol/TexasPoker")
+registerProto("XLuaCode/protocol/Baccarat")
+registerProto("XLuaCode/protocol/XZMJ")
+registerProto("XLuaCode/protocol/CatchFish")
+registerProto("XLuaCode/protocol/ShiSanShui")
+registerProto("XLuaCode/protocol/MaJiang")
 
 local dispatch_handler = {}
 local current = ""

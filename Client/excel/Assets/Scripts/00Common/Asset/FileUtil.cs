@@ -4,6 +4,8 @@ using System.IO;
 using System.Security.Cryptography;
 using XLua;
 using GameClient;
+using System.Text;
+using System;
 
 [LuaCallCSharp]
 public class FileUtil
@@ -94,36 +96,28 @@ public class FileUtil
 
         return lSize;
     }
+
     [LuaCallCSharp]
-    public static byte[] ReadFileFromResource(string path)
+    public static byte[] ReadFileFromResource(string fileName)
     {
-        if(string.IsNullOrEmpty(path))
+        if(string.IsNullOrEmpty(fileName))
         {
             LogManager.Instance().LogErrorFormat("path is empty !");
             return new byte[0];
         }
 
-        string fullpath = Path.GetFullPath(Application.dataPath + "/Resources/" + path);
-
-        if (!File.Exists(fullpath))
+        var assetInst = AssetLoader.Instance().LoadRes(fileName, typeof(AssetBinary));
+        if (null != assetInst && null != assetInst.obj)
         {
-            LogManager.Instance().LogErrorFormat("<color=#ff0000>path error : {0}</color>",fullpath);
-            return new byte[0];
+            AssetBinary file = assetInst.obj as AssetBinary;
+            if (file != null)
+            {
+                LogManager.Instance().LogProcessFormat(2001, "load file <color=#00ff00>{0}</color> succeed ! length={1}", fileName, file.m_DataBytes.Length);
+                return file.m_DataBytes;
+            }
         }
 
-        try
-        {
-            var datas = File.ReadAllBytes(fullpath);
-            int len = null == datas ? 0 : datas.Length;
-            LogManager.Instance().LogFormat("<color=#00ff00> read {0} succeed ! length = {1} bytes !</color>", fullpath, len);
-            return datas;
-        }
-        catch(System.Exception e)
-        {
-            LogManager.Instance().LogErrorFormat("<color=#ff0000>read error : {0}</color>", fullpath);
-            LogManager.Instance().LogErrorFormat("<color=#ff0000>read error : {0}</color>", e.ToString());
-        }
-
+        LogManager.Instance().LogProcessFormat(2001, "load file <color=#ff0000>{0}</color> failed !", fileName);
         return new byte[0];
     }
 

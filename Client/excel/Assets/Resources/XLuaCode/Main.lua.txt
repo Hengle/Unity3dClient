@@ -6,10 +6,16 @@ require(".functions")
 require(".debug")
 
 function __G__TRACKBACK__(msg)
+--[=[
     print("----------------------------------------")
     print("LUA ERROR: " .. tostring(msg) .. "\n")
     print(debug.traceback())
     print("----------------------------------------")
+--]=]
+	local items = debug.traceback()
+	for k,v in ipairs(items) do
+	app.Logger.LogProcessFormat(5000,tostring(v))
+	end
     return msg
 end
 

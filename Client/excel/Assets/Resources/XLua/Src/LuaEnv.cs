@@ -425,10 +425,12 @@ namespace XLua
 
                 // A pre-wrapped exception - just rethrow it (stack trace of InnerException will be preserved)
                 Exception ex = err as Exception;
+                if(ex != null) GameClient.LogManager.Instance().LogProcessFormat(5000,"<color=#ff0000>{0}</color>",ex.ToString());
                 if (ex != null) throw ex;
 
                 // A non-wrapped Lua error (best interpreted as a string) - wrap it and throw it
                 if (err == null) err = "Unknown Lua Error";
+                GameClient.LogManager.Instance().LogProcessFormat(5000, "<color=#ff0000>{0}</color>", err.ToString());
                 throw new LuaException(err.ToString());
 #if THREAD_SAFE || HOTFIX_ENABLE
             }
