@@ -1,0 +1,467 @@
+syntax = "proto2";
+package user;
+
+
+// 代码风格
+// 消息名：使用骆驼风格的大小写命名，即单词首字母大写
+// 字段名：全部小写
+// 枚举名：使用骆驼风格的大小写命名
+// 枚举值：全部大写，使用下划线分隔
+
+
+message NoticeInfo {
+	required int32 id = 1;
+	required int32 infotype = 2;
+	required int32 gameid = 3;  // useless now
+	required string content = 4;
+	optional int32 userid = 5;  // 0:system
+	optional string nickname = 6;
+	optional string endtime = 7;
+}
+
+
+// once for all
+message NoticeSyncPack {
+	repeated NoticeInfo pack = 1;
+}
+
+
+message UserInfoReq {
+	required int32 uid = 1;
+}
+
+
+message UserInfoRep {
+	optional int32 uid = 1;
+	optional string nickname = 2;
+	optional int32 money = 3;
+	optional string gold = 4;
+	optional int32 exp = 5;
+	optional int32 vipexp = 6;
+	optional int32 sex = 7;  //1-female; 2-male
+	optional string imageid = 8;
+	optional int32 havesecondpwd = 9;
+	optional int32 isbinding = 10;
+	optional int32 honor = 11 [default = -1]; //NOTE: 返回默认0时，则客户端接收为nil !!!
+	optional string bankgold = 12;
+	optional string diamond = 13;
+	optional string avatarurl = 14;
+	optional string ipaddr = 15;
+}
+
+
+// 修改自己用户信息
+message ModifyUserInfoReq {
+	optional string nickname = 1;
+	optional int32 sex = 2;  //1-female; 2-male
+	optional string imageid = 3;
+}
+
+
+message ModifyUserInfoRep {
+	// 0-成功；1-性别数据有误；2-imageid太长；3-昵称太长；
+	required int32 result = 1;
+}
+
+
+// 修改登录密码
+message ModifyLoginPasswordReq {
+	required string old_pwd = 1;
+	required string new_pwd = 2;
+}
+
+
+// 0-成功；1-失败；
+message ModifyLoginPasswordRep {
+	required int32 result = 1;
+	required string new_pwd = 2;
+}
+
+
+message CheckReconnectReq {
+}
+
+
+message CheckReconnectRep {
+	required int32 roomid = 1;
+	required int32 tableid = 2;
+	required int32 seatid = 3;
+	required bool private = 4;
+}
+
+
+// 获取房间配置
+message RoomListReq {
+}
+
+
+message RoomListRep {
+	message RoomPlayers {
+		required int32 roomid = 1;
+		required int32 count = 2;
+	}
+	required string config = 1;
+	repeated RoomPlayers players = 2;
+}
+
+
+message EnterRoomReq {
+	required int32 roomid = 1;
+}
+
+
+message EnterRoomRep {
+	required int32 result = 1; // 0成功，1失败
+	optional int32 roomid = 3; // at other room gaming...
+}
+
+
+// 创建／进入私局前请求，是否需要直接返回已有私局
+message PrivateInfoReq {
+	//HACK: 不可使用 optional, 赋值为false时该值被忽略，整个msg为nil
+	required bool onlygameinfo = 1; // 仅请求私局游戏列表信息
+}
+
+
+message PrivateInfoRep {
+	message GameInfo {
+		required int32 gameid = 1;
+		repeated int32 roundopt = 2;  // 可选对局数目
+		repeated int32 diamonds = 3;  // 对应扣除钻石数
+		repeated int32 params = 9; // 其他参数
+	}
+	// 如果 pid ~= 0 则客户端直接进入该私局
+	required int32 privateid = 1;
+	repeated GameInfo infos = 9;
+}
+
+
+message CreatePrivateReq {
+	message GameConf {
+		required int32 round = 1; // 游戏局数
+		optional bool forothers = 3; // 是否为他人代开, useless now.
+		//TODO: others 
+		repeated int32 params = 9; // 其他参数
+	}
+	required int32 gameid = 1;
+	optional GameConf conf = 2;
+}
+
+
+message CreatePrivateRep {
+	required int32 result = 1; // 0:成功
+	optional int32 privateid = 2; //私人号
+}
+
+
+// 开房信息查询
+message CreatePrivateInfoReq {
+}
+
+
+message CreatePrivateInfoRep {
+	message PlayerInfo {
+		required int32 uid = 1;
+		required string name = 2;
+	}
+	message GameInfo {
+		required int32 gameid = 1;
+		required int32 privateid = 2;
+		required int32 curround = 3; // 当前第几局, 0为未开局
+		required int32 allround = 4; // 总局数
+		repeated int32 params = 5; // 其他参数
+		required string createtime = 6;
+		repeated PlayerInfo players = 9;
+	}
+	repeated GameInfo infos = 1;
+}
+
+
+message EnterPrivateReq {
+	required int32 privateid = 1; // 无需指定房间id
+}
+
+
+message EnterPrivateRep {
+	required int32 result = 1; // 0成功，1失败
+	optional int32 roomid = 2; // player current roomid
+	optional int32 privateid = 3;
+}
+
+
+message PrivateHistoryReq {
+	required int32 gameid = 1;
+	optional bool ishost = 2;
+}
+
+message PrivateHistoryRep {
+	message PlayerInfo {
+		required int32 seat = 1;
+		required int32 uid = 2;
+		required string name = 3;
+		required int32 score = 4;
+		optional string avatarurl = 5;
+	}
+	message BriefInfo {
+		required int32 id = 1;  // index of DB private game table.
+		required int32 privateid = 2;
+		required int32 hostuid = 3;
+		required string hostname = 4;
+		required int32 curround = 5;
+		required int32 maxround = 6;
+		required string starttime = 7;
+		required string endtime = 8;
+		repeated PlayerInfo players = 9;
+	}
+	required int32 gameid = 1;
+	repeated BriefInfo infos = 9;
+}
+
+
+message PrivateHistoryDetailReq {
+	required int32 id = 1;  // index of DB private game table.
+}
+
+message PrivateHistoryDetailRep {
+	message RoundInfo {
+		required int32 round = 1;
+		required string players = 2;
+		required string scores = 3;
+		required string recordtime = 4;
+	}
+	required int32 id = 1;
+	repeated RoundInfo infos = 9;
+}
+
+
+message PrivateReplayReq {
+	required int32 id = 1;  // index of DB private game table.
+	required int32 round = 2;
+}
+
+message PrivateReplayRep {
+	required int32 id = 1;
+	required int32 round = 2;
+	required string data = 3;
+}
+
+
+// 玩家人数请求
+message PlayersAmountReq {
+	required int32 game_id = 1;
+}
+
+
+message PlayersAmountRep {
+	message Info{
+		required int32 room_id = 1;
+		required int32 amount = 2;
+	}
+	repeated Info info = 1;
+}
+
+
+message CheckSecondPwdReq {
+	required string pwd = 1;
+}
+
+
+//0成功 1密码有误 2未设置二级密码 99未知操作
+message CheckSecondPwdRep {
+	required int32 result = 1;
+}
+
+
+message SetSecondPwdReq {
+	optional string oldpwd = 1;
+	required string newpwd = 2;
+}
+
+
+//0成功 1新密码有误 2老密码有误 99未知操作
+message SetSecondPwdRep {
+	required int32 result = 1;
+}
+
+
+//0:获取信息 1:存钱  2:取钱
+message BankOperateReq {
+	required int32 optype = 1;
+	optional string gold = 2;
+	optional string pwd = 3;
+}
+
+
+//0成功 1未验证二级密码 2钱数有误 3二级密码错误 4未设置二级密码 99未知操作
+message BankOperateRep {
+	required int32 result = 1;
+	optional string gold = 2;
+	optional string bankgold = 3;
+}
+
+
+//1:请求绑定  2:请求解绑
+message BindingDeviceReq {
+	required int32 optype = 1;
+	optional string key = 2;
+	optional string pwd = 3;
+}
+
+
+//赠送金币
+message GiveGoldReq {
+	required int32 uid = 1;
+	required string gold = 2;
+	required string pwd = 3;
+}
+
+
+//0:成功 1:uid不存在 2:金币数额错误 3:密码不对
+message GiveGoldRep {
+	required int32 result = 1;
+	optional string bankgold = 2;
+	optional string subgold = 3;
+	optional string fee = 4;
+	optional string time = 5;
+}
+
+
+message GoldGaveLogReq {
+	required int32 pageidx = 1;
+}
+
+
+message GoldGaveLogRep {
+	message Log {
+		required int32 fromuid = 1;
+		required int32 touid = 2;
+		required string gold = 3;
+		required string datetime = 4;
+	}
+	required int32 result = 1;
+	optional int32 pageidx = 2;
+	optional int32 pagesum =3;
+	repeated Log logs = 4;
+}
+
+
+//0成功 1密码或key错误 2 数据错误 3 绑定的时候已经绑定过  4 解绑的时候没有绑定 5操作频繁
+message BindingDeviceRep {
+	required int32 result = 1;
+}
+
+
+// 触发充值
+message RechargeReq {
+	required int32 orderid = 1;
+}
+
+
+// 充值结果
+message RechargeRep {
+	required int32 result = 1;
+}
+
+
+message SignInInfoReq {
+}
+
+
+message SignInInfoRep {
+	message Item {
+		required string kind = 2;
+		required int32 value = 3;
+	}
+	message DayCfg {
+		required int32 day = 1;
+		repeated Item items = 2;
+	}
+	required int32 result = 1;
+	required int32 daycnt = 2;
+	required bool signin = 3;
+	required bool insure = 4;
+	repeated DayCfg cfgs = 5;
+}
+
+
+message SignInReq {
+}
+
+
+message SignInRep {
+	message Item {
+		required string kind = 2;
+		required int32 value = 3;
+	}
+	required int32 result = 1;
+	optional int32 daycnt = 2;
+	repeated Item items = 3;
+}
+
+
+message InsureReq {
+}
+
+
+message InsureRep {
+	required int32 result = 1;
+	required int32 gold = 2;
+}
+
+
+message SharedRewardReq {
+}
+
+
+message SharedRewardRep {
+	required int32 gold = 1;
+}
+
+
+message ExchangeCodeReq {
+	required string code = 1;
+}
+
+
+message ExchangeCodeRep {
+	required int32 result = 1;
+}
+
+
+message HonorExchangeGoldReq {
+}
+
+
+message HonorExchangeGoldRep {
+	required int32 result = 1;
+	required string honor = 2;
+	required string gold = 3;
+}
+
+
+// 玩家聊天喊话
+message UserShoutReq {
+	required string content = 1;
+}
+
+
+message UserShoutRep {
+	required int32 result = 1;
+}
+
+
+// 发布公告请求 -- 需要后台审核通过
+message PublishNoticeReq {
+	required string content = 1;
+	required int32 days = 2;  // 公告有效天数
+}
+
+
+message PublishNoticeRep {
+	required int32 result = 1;
+}
+
+
+message UpdateAvatarUrl {
+	required string url = 1;
+}

@@ -1,0 +1,137 @@
+syntax = "proto2";
+package PPL;
+
+
+message GameConf {
+    required int32 session = 1;
+    required int32 roomgold = 2;
+    required int32 optimecd = 3;
+    required int32 taxrate = 4;
+    repeated int32 params = 5;
+}
+
+
+message CallStart {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3; // 4 cards
+    }
+    required int32 session = 1;
+    required int32 optime = 2;
+    required int32 basescore = 3;
+    repeated PlayerInfo players = 9;
+}
+
+
+message CallReq {
+    required int32 session = 1;
+    required bool callbanker = 2;
+}
+
+
+message CallSync {
+    required int32 session = 1;
+    required int32 seat = 2;
+    required bool callbanker = 3;
+}
+
+
+message MultiStart {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3; // 4 cards
+    }
+    required int32 session = 1;
+    required int32 optime = 2; // do multi operate
+    required int32 bankerseat = 3;
+    repeated PlayerInfo players = 9;
+}
+
+
+message MultiReq {
+    required int32 session = 1;
+    required int32 multi = 2;
+}
+
+
+message MultiSync {
+    required int32 session = 1;
+    required int32 seat = 2;
+    required int32 multi = 3;
+}
+
+
+message SortStart {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3; // 5 cards
+    }
+    required int32 session = 1;
+    required int32 optime = 2; // do sort operate
+    repeated PlayerInfo players = 9;
+}
+
+
+message SortReq {
+    required int32 session = 1;
+    repeated int32 cards = 2;
+}
+
+
+message SortSync {
+    required int32 session = 1;
+    required int32 seat = 2;
+}
+
+
+message GameEnd {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3;
+        required int32 cardtype = 4;
+        required int32 goldchange = 5;
+        // 以下用于牌局结束后显示
+        repeated int32 records = 10;  // 通杀、通赔、牛牛、无牛、胜利次数
+        required int32 totalscore = 11;  // 总成绩
+    }
+    required int32 session = 1;
+    repeated PlayerInfo players = 2;
+}
+
+
+message SyncGameInfo {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3;
+        required bool called = 4;
+        required bool finished = 5;
+        required int32 multi = 6;
+    }
+    required int32 session = 1;
+    required int32 status = 2;
+    required int32 optime = 3;
+    required int32 basescore = 4;
+    required int32 bankerseat = 5;
+    repeated PlayerInfo players = 9;
+}
+
+
+// 方便起见，同 GameEnd
+message PrivateOver {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3;
+        required int32 cardtype = 4;
+        required int32 goldchange = 5;
+        repeated int32 records = 10;  // 通杀、通赔、牛牛、无牛、胜利次数
+        required int32 totalscore = 11;  // 总成绩
+    }
+    required int32 session = 1;
+    repeated PlayerInfo players = 2;
+}

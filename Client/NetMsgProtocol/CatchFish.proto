@@ -1,0 +1,82 @@
+syntax = "proto2";
+package CatchFish;
+
+//所有的game包协议必须带有session字段
+
+message Point {
+	required int32 x = 1;
+	required int32 y = 2;	
+}
+
+message Line {
+	required int32 kind = 1;
+	required int32 duration = 2;
+	required Point start = 3;
+	required Point finish = 4;	
+}
+
+message Fish {
+	required int32 kind = 1;
+	required int32 id = 2;
+	required int32 gold = 3;
+}
+
+message FishLine {
+	required int32 time = 1;
+	required Fish fish = 2;
+	required Line line = 3;
+}
+
+message SyncFishery {
+	required int32 session = 1;
+	required int32 score = 2;
+	required int32 index = 3;
+}
+
+message ShootBullet {
+	required int32 session = 1;
+	required int32 seat = 2;
+	required int32 bulletid = 3;
+	required Point aim = 4;
+}
+
+message CastNet {
+	required int32 session = 1;
+	required int32 seat = 2;
+	required int32 bulletid = 3;
+	required int32 fishid = 4;
+}
+
+message CatchFish {
+	required int32 session = 1;
+	required int32 seat = 2;
+	required Fish fish = 3;
+	required int32 gold = 4;
+	required string totle = 5;
+}
+
+message FishArray {
+	required int32 session = 1;
+	repeated FishLine fish = 2;
+}
+
+message FishGroup {
+	required int32 session = 1;
+	repeated int32 style = 2;
+	required int32 time = 3;
+	repeated Fish fish = 4;
+	required Line line = 5;
+}
+
+message SelectCannon {
+	required int32 session = 1;
+	required int32 seat = 2;
+	required int32 cannon = 3;
+}
+
+message PlayerInfo {
+	required int32 session = 1;
+	required int32 seat = 2;
+	required int32 cannon = 3;
+	required string gold = 4;
+}
