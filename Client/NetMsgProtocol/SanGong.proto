@@ -1,0 +1,121 @@
+syntax = "proto2";
+package SanGong;
+
+/// only sub message
+message PlayerCards {
+	required int32 uid = 1;
+	required int32 seatid = 2;
+	repeated int32 cardids = 3;
+	required int32 banker_status = 4;
+	required int32 bet = 5;
+	repeated string reserve_bets = 6;
+	required int32 card_type = 7;
+    required string gain = 8;
+    required int32 open_tag = 9;	//	open card tag. 0: not open; 1: opened;
+}
+
+/// sync game info
+message SyncGameInfo {
+	required int32 session = 1;
+	required int32 status = 2;	//	1: no playing; 2: select banker; 3: ask bets; 4: deal cards; 5: open cards;
+	required int32 timeout = 3;
+	required int32 max_timeout = 4;
+	required int32 banker = 5;
+	repeated PlayerCards player_cards = 6;
+}
+
+/// game begin
+message GameBegin {
+	required int32 session = 1;
+	repeated PlayerCards player_cards = 2;
+}
+
+/// select banker
+// broadcast
+message RobBanker {
+	required int32 session = 1;
+	required int32 timeout = 2;
+	required int32 max_timeout = 3;
+	repeated PlayerCards player_cards = 4;
+}
+
+// broadcast
+message PollBanker {
+	required int32 session = 1;
+	required int32 timeout = 2;
+	required int32 max_timeout = 3;
+	repeated PlayerCards player_cards = 4;
+}
+
+message BankerReq {
+	required int32 session = 1;
+	required int32 opvalue = 2; // 1:rob banker；2:give up
+}
+
+message BankerRep {
+	required int32 session = 1;
+	required int32 seatid = 2;
+	required int32 status = 3; // 1:rob banker；2:give up
+}
+
+message UpdateBanker {
+	required int32 session = 1;
+	required int32 seatid = 2;
+}
+
+/// ask bets
+message AskBetsBegin {
+	required int32 session = 1;
+	required int32 timeout = 2;
+	required int32 max_timeout = 3;
+	repeated int32 reserve_bets = 4;
+}
+
+message AskBetsReq {
+	required int32 session = 1;
+	required int32 bet_index = 2;
+}
+
+message AskBetsRep {
+	required int32 session = 1;
+	required int32 result = 2; // 1:success; 2: fail
+	optional int32 seatid = 3;
+	optional int32 bet = 4;
+}
+
+/// deal card
+message DealCard {
+	required int32 session = 1;
+	required int32 timeout = 2;
+	required int32 max_timeout = 3;
+	repeated PlayerCards player_cards = 4;
+}
+
+/// open card
+message OpenCardReq {
+	required int32 session = 1;
+}
+
+message OpenCardRep {
+	required int32 session = 1;
+	required int32 seatid = 2;
+}
+
+message OpenCard {
+	required int32 session = 1;
+	required int32 timeout = 2;
+	required int32 max_timeout = 3;
+	repeated PlayerCards player_cards = 4;
+}
+
+/// result
+message GameEnd {
+	message PlayerInfo {
+		required int32 uid = 1;
+    	required string nickname = 2;
+    	required string gain = 3;
+    	required int32 card_type = 4;
+	}
+	required int32 session = 1;
+	repeated PlayerInfo player_infos = 2;
+}

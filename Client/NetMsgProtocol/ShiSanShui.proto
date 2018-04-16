@@ -1,0 +1,72 @@
+syntax = "proto2";
+package ShiSanShui;
+
+
+message GameConf {
+    required int32 session = 1;
+    required int32 roomgold = 2;
+    required int32 optimecd = 3;
+    required int32 taxrate = 4;
+}
+
+
+message GameStart {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3;
+    }
+    required int32 session = 1;
+    required int32 optime = 2;
+    required int32 basescore = 3;
+    repeated PlayerInfo players = 9;
+}
+
+
+message FinishedReq {
+    required int32 session = 1;
+    repeated int32 cards = 2;
+}
+
+
+message FinishedSync {
+    required int32 session = 1;
+    required int32 seat = 2;
+}
+
+
+message GameEnd {
+    message DaoInfo {
+        repeated int32 cards = 1;
+        required int32 ctype = 2;
+        required int32 score = 3;
+    }
+    message FireGun {
+        required int32 seat = 1; // seat==0 全垒打
+        required int32 score = 2; // >0:自己为开枪者,seat为目标， <0:自己为受枪者,seat为攻击源头
+    }
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3;
+        required int32 goldc = 4;
+        repeated DaoInfo daos = 9;
+        repeated FireGun fires = 10;
+    }
+    required int32 session = 1;
+    repeated PlayerInfo players = 9;
+}
+
+
+message SyncGameInfo {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3;
+        required bool finished = 4;
+    }
+    required int32 session = 1;
+    required int32 optime = 2;
+    required int32 basescore = 3;
+    repeated PlayerInfo players = 9;
+}

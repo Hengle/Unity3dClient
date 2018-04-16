@@ -1,0 +1,62 @@
+syntax = "proto2";
+package Baccarat;
+
+// broadcast
+message GameStatusNtf {
+	required int32 session = 1;
+	optional int32 timeout = 2;
+    optional int32 status = 3;  // 1-shuffle; 2-chip in; 3-open card;
+	repeated int32 betcount = 4; // size: 5
+	repeated int32 yourbets = 5; // size: 5
+    repeated int32 xian_cardids = 6;     // size: 0-3
+    optional int32 xian_point = 7;
+    repeated int32 zhuang_cardids = 8;     // size: 0-3
+    optional int32 zhuang_point = 9;
+    required int32 result = 10; // 三位：百位表示输赢 3闲 4和 5庄，十位表示闲对 0无闲对 1有闲对，个位表示庄对 0无庄对 2有庄对 
+    optional string yourbet = 11;
+    optional string yourgain = 12;
+    optional string yourgold = 13;
+}
+
+// sync history
+message History {
+    required int32 session = 1;
+    required int32 mode = 2; // 1全部 2增量
+    repeated int32 history = 3;
+}
+
+
+// just send this request
+message AskBet {
+    required int32 session = 1;
+	optional int32 opidx = 2; // 1闲对 2庄对 3闲 4和 5庄
+	optional int32 opval = 3;
+}
+
+
+// broadcast when start bet or someone bet.
+message UpdateBetInfo {
+	required int32 session = 1;
+    optional int32 opuid = 2; // last bet player
+    optional int32 opidx = 3; // 1闲对 2庄对 3闲 4和 5庄
+	optional int32 opval = 4;
+	repeated int32 betcount = 5; // size: 5
+}
+
+message ShowCard {
+	required int32 session = 1;
+    optional int32 timeout = 2;
+    repeated int32 xian_cardids = 3;     // size: 0-3
+    optional int32 xian_point = 4;
+    repeated int32 zhuang_cardids = 5;     // size: 0-3
+    optional int32 zhuang_point = 6;
+    required int32 result = 7; // 三位：百位表示输赢 3闲 4和 5庄，十位表示闲对 0无闲对 1有闲对，个位表示庄对 0无庄对 2有庄对 
+}
+
+message GameEnd {
+    required int32 session = 1;
+    optional string yourbet = 2;
+    optional string yourgain = 3;
+	optional string yourgold = 4;
+}
+

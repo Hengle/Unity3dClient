@@ -1,0 +1,244 @@
+syntax = "proto2";
+package game;
+
+
+// 代码风格
+//消息名：使用骆驼风格的大小写命名，即单词首字母大写
+//字段名：全部小写
+//枚举名：使用骆驼风格的大小写命名
+//枚举值：全部大写，使用下划线分隔
+
+//所有的game包协议必须带有session字段
+
+
+message ServerStop { // 服务器维护
+	required int32 session = 1;
+}
+
+
+message SetSession { // table session
+	required int32 session = 1;
+}
+
+
+message RoomSession {
+	required int32 session = 1;
+}
+
+
+message RoomInfo {
+	message PlayerInfo {
+		required int32 seat = 1;
+		required int32 uid = 2;
+		required string name = 3;
+		required string gold = 4;
+		required int32 ready = 5;
+		optional int32 sex = 6;
+		optional string avatarurl = 7;
+	}
+	message TableInfo {
+		required int32 table = 1;
+		required int32 state = 2;
+		repeated PlayerInfo player = 3;
+	}
+	required int32 session = 1;
+	repeated TableInfo tableinfos = 2;
+}
+
+
+message PrivateRoomInfo {
+	message PlayerInfo {
+		required int32 seat = 1;
+		required int32 uid = 2;
+		required string name = 3;
+		required string gold = 4;
+		required int32 ready = 5;
+		optional int32 sex = 6;
+		optional string avatarurl = 7;
+	}
+	required int32 session = 1;
+	required int32 privateid = 2;
+	required int32 hostuid = 3;
+	required int32 seats = 4;
+	required int32 curround = 5; // 当前第几局, 0为未开局
+	required int32 allround = 6; // 预期总局数
+	required int32 initscore = 7;
+	repeated int32 params = 8; // 同 user.CreatePrivateReq
+	repeated PlayerInfo players = 9;
+	optional int32 paymode = 10;  // 1:房主支付 2:AA游戏
+	optional int32 diamond = 11;  // 房费
+}
+
+
+// 如果无法立即解散，则系统询问其他玩家
+message PrivateDismissReq {
+	required int32 session = 1;
+}
+
+// 解散成功则通知所有桌上玩家
+message PrivateDismissRep {
+	required int32 session = 1;
+	required int32 result = 2;  // 0:解散成功 1:询问其他玩家 2:玩家拒绝
+	optional int32 uid = 3;		// 0:系统解散（游戏结束）
+	optional string name = 4;
+}
+
+// 系统询问玩家是否同意解散
+message PrivateDismissAsk {
+	required int32 session = 1;
+	required int32 uid = 2;  // 发起解散者
+	required string name = 3;
+}
+
+// 玩家反馈，系统记录
+message PrivateDismissAns {
+	required int32 session = 1;
+	required bool agree = 2;
+}
+
+
+message TableStateInfo {
+	message PlayerInfo {
+		required int32 seat = 1;
+		required int32 uid = 2;
+		required string name = 3;
+		required string gold = 4;
+		required int32 ready = 5;
+		optional int32 sex = 6;
+		optional string avatarurl = 7;
+		optional string ipaddr = 8;
+	}
+	required int32 session = 1;
+	required int32 table = 2;
+	required int32 state = 3;
+	repeated PlayerInfo player = 4;
+}
+
+
+message TableSitdown {
+	message PlayerInfo {
+		required int32 uid = 1;
+		required string name = 2;
+		required string gold = 3;
+		optional int32 sex = 4;
+		optional string avatarurl = 5;
+		optional string ipaddr = 6;
+	}
+	required int32 session = 1;
+	required int32 table = 2;
+	required int32 seat = 3;
+	required PlayerInfo player = 4;
+}
+
+message TableSitup {
+	required int32 session = 1;
+	required int32 table = 2;
+	required int32 seat = 3;
+}
+
+
+message SeatReady {
+	required int32 session = 1;
+	required int32 table = 2;
+	required int32 seat = 3;
+}
+
+
+message TableStateStart {
+	required int32 session = 1;
+	required int32 table = 2;
+}
+
+message TableStateEnd {
+	required int32 session = 1;
+	required int32 table = 2;
+}
+
+
+message SitdownReq {
+	message TableRule {
+		optional double minwinrate = 1;
+		optional double maxfleerate = 2;
+		optional int32 minscore = 3;
+		optional int32 maxscore = 4;
+		optional bool noblackman = 5;
+		optional bool nosameip = 6;
+		optional string pwd = 7;
+	}
+	required int32 session = 1;
+	required int32 table = 2;
+	required int32 seat = 3;
+	optional string sitpwd = 4;
+	optional TableRule rule = 5;
+}
+
+message SitdownRep {
+	required int32 session = 1;
+	required int32 result = 2;
+	required int32 table = 3;
+	required int32 seat = 4;
+	optional int32 watching = 5;
+}
+
+
+message SitupReq {
+	required int32 session = 1;
+}
+
+message SitupRep {
+	required int32 session = 1;
+	required int32 result = 2;
+}
+
+
+message LeaveRoomReq {
+	required int32 session = 1;
+}
+
+message LeaveRoomRep {
+	required int32 session = 1;
+	required int32 result = 2;
+}
+
+
+message ReadyReq {
+	required int32 session = 1;
+}
+
+message ReadyRep {
+	required int32 session = 1;
+	required int32 result = 2;
+}
+
+
+message UserOffline {
+	required int32 session = 1;
+	required int32 seat = 2;
+	required int32 uid = 3;
+}
+
+message UserOnline {
+	required int32 session = 1;
+	required int32 seat = 2;
+	required int32 uid = 3;
+}
+
+
+message ChatReq {
+	required int32 session = 1;
+	required int32 typ = 2;  // 1:文字，2:表情，3:常用语，4:语音
+	optional string words = 3;  // 文字
+	optional int32 idx = 4;  // 表情/常用语 索引
+}
+
+message ChatRep {
+	required int32 session = 1;
+	required int32 result = 2;  // 0:成功(则为广播)，1:失败(仅自己接收)
+	required int32 table = 3;
+	required int32 seat = 4;
+	required int32 uid = 5;  // 语音通过此id下载
+	required int32 typ = 6;  // 1:文字，2:表情，3:常用语，4:语音
+	optional string words = 7;  // 文字
+	optional int32 idx = 8;  // 表情/常用语 索引
+}
+

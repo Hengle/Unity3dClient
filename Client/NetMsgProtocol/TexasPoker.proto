@@ -1,0 +1,101 @@
+syntax = "proto2";
+package TexasPoker;
+
+// optype 1:加注 2:跟注 3:弃牌 4:过牌 5:全下
+
+
+message GameConf {
+	required int32 session = 1;
+	required int32 roomgold = 2;
+	required int32 basechip = 3;
+	required int32 maxchip = 4;
+	required int32 optimecd = 5;
+	required int32 taxrate = 6;
+}
+
+
+message GameStart {
+	message PlayerInfo {
+    	required int32 uid = 1;
+    	required int32 seat = 2;
+		optional int32 curchip = 3; // blind chip
+  	}
+	required int32 session = 1;
+	repeated int32 handcards = 2; // size: 2
+	required int32 bankerseat = 3;
+	repeated PlayerInfo players = 4;
+	required int32 opseat = 5;
+	required int32 optime = 6;
+	repeated int32 addoption = 7;
+	optional int32 secret = 8; // for robot only
+}
+
+
+message OperateReq {
+	required int32 session = 1;
+	optional int32 optype = 2;
+	optional int32 opvalue = 3;
+}
+
+
+// 操作返回，操作成功则群发同步
+// 		游戏开始，广播大小盲注下注
+message OperateRep {
+	required int32 session = 1;
+	optional int32 opseat = 2;
+	optional int32 optype = 3;
+	optional int32 opvalue = 4;
+	optional int32 curchip = 5;
+	optional int32 nextseat = 6;
+	repeated int32 oplist = 7;
+	optional int32 optime = 8;
+	optional int32 secret = 9; // for robot only
+}
+
+
+// 亮公共牌
+message UpdatePublicCard {
+	required int32 session = 1;
+	repeated int32 cards = 2;
+	optional int32 opseat = 3;
+	optional int32 optime = 4;
+	optional int32 secret = 5; // for robot only
+}
+
+
+// 游戏结束：结算
+message GameEnd {
+	message PlayerInfo {
+		required int32 uid = 1;
+		required int32 seat = 2;
+		repeated int32 cards = 3;
+		required int32 cardtype = 4;
+		required int32 goldchange = 5;
+	}
+	required int32 session = 1;
+	repeated PlayerInfo players = 7;
+}
+
+
+// 同步游戏信息：重连，旁观，坐下空桌（游戏中）
+message SyncGameInfo {
+	message PlayerInfo {
+    	required int32 uid = 1;
+    	required int32 seat = 2;
+		required bool ingame = 3;
+		required bool fold = 4;
+		optional bool allin = 5;
+		optional int32 prechip = 6;
+		optional int32 curchip = 7;
+    	repeated int32 cards = 8;
+  	}
+	required int32 session = 1;
+	required int32 status = 2;
+	repeated int32 pubcards = 3;
+	required int32 opseat = 4;
+	repeated int32 oplist = 5;
+	required int32 optime = 6;
+	repeated int32 addoption = 7;
+	repeated PlayerInfo players = 8;
+}
+

@@ -1,0 +1,60 @@
+syntax = "proto2";
+package TBNN;
+
+
+message GameConf {
+    required int32 session = 1;
+    required int32 roomgold = 2;
+    required int32 optimecd = 3;
+    required int32 taxrate = 4;
+}
+
+
+message GameStart {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3;
+    }
+    required int32 session = 1;
+    required int32 optime = 2;
+    repeated PlayerInfo players = 3;
+}
+
+
+message FinishedReq {
+    required int32 session = 1;
+    repeated int32 cards = 2;
+}
+
+
+message FinishedSync {
+    required int32 session = 1;
+    required int32 seat = 2;
+}
+
+
+message GameEnd {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3;
+        required int32 cardtype = 4;
+        required int32 goldchange = 5;
+    }
+    required int32 session = 1;
+    repeated PlayerInfo players = 2;
+}
+
+
+message SyncGameInfo {
+    message PlayerInfo {
+        required int32 uid = 1;
+        required int32 seat = 2;
+        repeated int32 cards = 3;
+        required bool finished = 4;
+    }
+    required int32 session = 1;
+    required int32 optime = 2;
+    repeated PlayerInfo players = 3;
+}
