@@ -108,6 +108,12 @@ public class EditorTool
         AssetDatabase.Refresh();
     }
 
+    [MenuItem("GameClient/Scene/Login", false)]
+    static public void SwitchSceneToLogin()
+    {
+        GameClient.EventManager.Instance().SendEvent(GameClient.ClientEvent.CE_CHANGE_SCENE, GameClient.SceneType.ST_LOGIN);
+    }
+
     [MenuItem("XLua/Txt2Lua(方便Lua编辑器读)", false)]
     static public void Txt2Lua()
     {

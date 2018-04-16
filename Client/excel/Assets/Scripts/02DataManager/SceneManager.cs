@@ -5,35 +5,24 @@ using UnityEngine.Events;
 
 namespace GameClient
 {
-	class SceneManager : Singleton<SceneManager>
-	{
-        public enum SceneType
-        {
-            ST_INVALID = -1,
-            ST_LOGIN = 0,
-        }
-        SceneType eCurrent = SceneType.ST_INVALID;
-        SceneType eTo = SceneType.ST_INVALID;
-        UnityAction onSceneChangeFinish = null;
-        bool _loading = false;
-        bool Loading
-        {
-            get
-            {
-                return _loading;
-            }
-            set
-            {
-                _loading = value;
+    public enum SceneType
+    {
+        ST_INVALID = -1,
+        ST_LOGIN = 0,
+        ST_COUNT,
+    }
 
-                if(_loading)
-                {
-                    _OpenLoadingFrame();
-                }
-                else
-                {
-                    _CloseLoadingFrame();
-                }
+    class SceneManager : Singleton<SceneManager>
+	{
+        public delegate IScene EActionCreate();
+        EActionCreate[] mActions = new EActionCreate[(int)SceneType.ST_COUNT];
+        Scene[] mScenes = new Scene[(int)SceneType.ST_COUNT];
+
+        public void RegisterScene(SceneType eScene, EActionCreate cb)
+        {
+            if(eScene > SceneType.ST_INVALID && eScene < SceneType.ST_COUNT)
+            {
+                mActions[(int)eScene] = cb;
             }
         }
 
@@ -49,49 +38,84 @@ namespace GameClient
 
         public bool Initialize()
 		{
-			return true;
+            return true;
 		}
 
-		public void SwitchSceneTo(SceneType eSceneType,IEnumerator co, UnityAction cb)
-		{
-            if (eSceneType == eCurrent)
-            {
-                return;
-            }
+        void _OnChangeScene(object argv)
+        {
+            SceneType eScene = (SceneType)argv;
+            SwitchScene(eScene);
+        }
 
-            if (Loading)
+        Scene mScene = null;
+        Coroutine coSwith = null;
+        public void SwitchScene(SceneType eSceneType)
+        {
+            try
             {
-                return;
+                LogManager.Instance().LogProcessFormat(8888, "<color=#00ff00>SwitchScene Scene !!!</color>");
+                EventManager.Instance().UnRegisterEvent(ClientEvent.CE_CHANGE_SCENE, _OnChangeScene);
+                EventManager.Instance().RegisterEvent(ClientEvent.CE_CHANGE_SCENE, _OnChangeScene);
+                if (null != coSwith)
+                {
+                    GameFrameWork.FrameWorkHandle.StopCoroutine(coSwith);
+                    coSwith = null;
+                }
+                coSwith = GameFrameWork.FrameWorkHandle.StartCoroutine(AnsySwitchScene(eSceneType));
             }
-
-            if(null != co)
+            catch (System.Exception e)
             {
-                eTo = eSceneType;
-                Clear(false);
-                Loading = true;
-                onSceneChangeFinish = cb;
-                GameFrameWork.FrameWorkHandle.StartCoroutine(StartChangeScene(co));
+                LogManager.Instance().LogErrorFormat("<color=#ff0000>SwitchScene Scene Failed!!! {0}</color>", eSceneType);
+                LogManager.Instance().LogErrorFormat("<color=#ff0000>SwitchScene Err {0}</color>", e.ToString());
             }
         }
 
-        IEnumerator StartChangeScene(IEnumerator co)
+        public IEnumerator AnsySwitchScene(SceneType eSceneType)
         {
-            eCurrent = SceneType.ST_INVALID;
-            yield return new WaitForEndOfFrame();
-
-            yield return co;
-
-            eCurrent = eTo;
-            eTo = SceneType.ST_INVALID;
-
-            yield return new WaitForEndOfFrame();
-            Loading = false;
-
-            if (null != onSceneChangeFinish)
+            if (null != mScene)
             {
-                onSceneChangeFinish.Invoke();
-                onSceneChangeFinish = null;
+                mScene.OnExit();
+
+                while (mScene.GetAction() != SceneAction.SA_EXITED)
+                {
+                    yield return new WaitForSecondsRealtime(0.10f);
+                }
+                mScene.SetAction(SceneAction.SA_INVALID);
+                mScene = null;
             }
+
+            if (null == mActions[(int)eSceneType])
+            {
+                LogManager.Instance().LogProcessFormat(8888,"<color=#ff00ff>switch scene{0} failed !!!</color>", eSceneType);
+                coSwith = null;
+                yield break;
+            }
+
+            mScenes[(int)eSceneType] = mActions[(int)eSceneType].Invoke() as Scene;
+
+            mScene = mScenes[(int)eSceneType];
+            if(null == mScene)
+            {
+                LogManager.Instance().LogProcessFormat(8888, "<color=#ff00ff>create scene{0} failed !!! mScene is null !!!</color>", eSceneType);
+                coSwith = null;
+                yield break;
+            }
+
+            mScene.OnEnter();
+
+            while (mScene.GetAction() != SceneAction.SA_RUNNING && mScene.GetAction() != SceneAction.SA_INVALID)
+            {
+                yield return new WaitForSecondsRealtime(0.10f);
+            }
+
+            if(mScene.GetAction() == SceneAction.SA_INVALID)
+            {
+                LogManager.Instance().LogProcessFormat(8888, "<color=#ff00ff>create scene{0} failed !!! mScene action is SA_INVALID !!!</color>", eSceneType);
+                coSwith = null;
+                yield break;
+            }
+
+            coSwith = null;
         }
 
         public void Clear(bool bGlobal)
@@ -99,17 +123,18 @@ namespace GameClient
             AudioManager.Instance().Clear();
             InvokeManager.Instance().Clear(bGlobal);
             UIManager.Instance().CloseAllFrames();
+            if(bGlobal)
+            {
+                EventManager.Instance().Clear();
+            }
             AsyncLoadTaskManager.Instance().ClearAllAsyncTasks();
         }
 
         public void ExitGame()
         {
+            EventManager.Instance().UnRegisterEvent(ClientEvent.CE_CHANGE_SCENE, _OnChangeScene);
             Clear(true);
             TableManager.Instance().ClearAll();
-            eCurrent = SceneType.ST_INVALID;
-            eTo = SceneType.ST_INVALID;
-            onSceneChangeFinish = null;
-            _loading = false;
         }
 
 		public void UnInitialize()
