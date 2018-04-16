@@ -41,16 +41,16 @@
       <file leaf-file-name="SocketTCP.lua.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/net/SocketTCP.lua.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2875">
-              <caret line="125" column="47" selection-start-line="125" selection-start-column="47" selection-end-line="125" selection-end-column="47" />
+            <state relative-caret-position="689">
+              <caret line="156" column="16" lean-forward="true" selection-start-line="156" selection-start-column="16" selection-end-line="156" selection-end-column="16" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="protobuf.lua.txt" pinned="false" current-in-tab="true">
+      <file leaf-file-name="protobuf.lua.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/net/protobuf.lua.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
+            <state relative-caret-position="942">
               <caret line="489" column="34" selection-start-line="489" selection-start-column="34" selection-end-line="489" selection-end-column="34" />
             </state>
           </provider>
@@ -59,17 +59,17 @@
       <file leaf-file-name="Message.lua.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/net/Message.lua.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
+            <state relative-caret-position="220">
               <caret line="10" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GateNet.lua.txt" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GateNet.lua.txt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/net/GateNet.lua.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="966">
-              <caret line="42" column="3" selection-start-line="42" selection-start-column="3" selection-end-line="42" selection-end-column="3" />
+            <state relative-caret-position="718">
+              <caret line="135" lean-forward="true" selection-start-line="135" selection-end-line="135" />
             </state>
           </provider>
         </entry>
@@ -87,8 +87,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>base64</find>
-      <find>Player</find>
       <find>register</find>
       <find>AvatarConfig</find>
       <find>RoomConfig</find>
@@ -117,6 +115,8 @@
       <find>Debugger</find>
       <find />
       <find>print</find>
+      <find>tostring</find>
+      <find>lastHearTime</find>
     </findStrings>
     <dirStrings>
       <dir>I:\Unity3dClient\Client\excel\Assets\Resources\XLuaCode\net</dir>
@@ -152,7 +152,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="238" />
     <option name="y" value="153" />
     <option name="width" value="1400" />
@@ -276,15 +276,15 @@
       <workItem from="1523498387718" duration="1796000" />
       <workItem from="1523763188146" duration="3473000" />
       <workItem from="1523778652855" duration="668000" />
-      <workItem from="1523848324284" duration="357000" />
+      <workItem from="1523848324284" duration="2919000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37927000" />
+    <option name="totallyTimeSpent" value="40489000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1176" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -303,6 +303,7 @@
       <window_info id="Designer" order="2" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25989583" />
       <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Find" order="1" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
@@ -314,7 +315,6 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -565,13 +565,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/net/GateNet.lua.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="966">
-          <caret line="42" column="3" selection-start-line="42" selection-start-column="3" selection-end-line="42" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/protocol/Baccarat.pb.txt" />
     <entry file="file://$PROJECT_DIR$/net/web.lua.txt">
       <provider selected="true" editor-type-id="text-editor">
@@ -580,24 +573,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/net/protobuf.lua.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="942">
+          <caret line="489" column="34" selection-start-line="489" selection-start-column="34" selection-end-line="489" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/net/SocketTCP.lua.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2875">
-          <caret line="125" column="47" selection-start-line="125" selection-start-column="47" selection-end-line="125" selection-end-column="47" />
+        <state relative-caret-position="689">
+          <caret line="156" column="16" lean-forward="true" selection-start-line="156" selection-start-column="16" selection-end-line="156" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/net/Message.lua.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
+        <state relative-caret-position="220">
           <caret line="10" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/net/protobuf.lua.txt">
+    <entry file="file://$PROJECT_DIR$/net/GateNet.lua.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="489" column="34" selection-start-line="489" selection-start-column="34" selection-end-line="489" selection-end-column="34" />
+        <state relative-caret-position="718">
+          <caret line="135" lean-forward="true" selection-start-line="135" selection-end-line="135" />
         </state>
       </provider>
     </entry>
