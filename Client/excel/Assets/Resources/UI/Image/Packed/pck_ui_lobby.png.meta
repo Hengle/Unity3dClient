@@ -1,0 +1,334 @@
+fileFormatVersion: 2
+guid: 15c391d305389dd49bb766afe63febef
+timeCreated: 1523779566
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: btn_zjm_agent
+    21300002: btn_zjm_announcement
+    21300004: btn_zjm_bank
+    21300006: btn_zjm_begin
+    21300008: btn_zjm_duihuan
+    21300010: btn_zjm_game_1
+    21300012: btn_zjm_intercalate
+    21300014: btn_zjm_public_num
+    21300016: btn_zjm_recharge
+    21300018: btn_zjm_tx_gold_add
+    21300020: btn_zjm_vip
+    21300022: btn_zjm_vip_1
+    21300024: img_zjm_broadcast
+    21300026: img_zjm_di_kuang_1
+    21300028: img_zjm_di_kuang_2
+    21300030: img_zjm_ding_kuang
+    21300032: img_zjm_gold
+    21300034: img_zjm_gold_kuang
+    21300036: img_zjm_tx_name_bg
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: btn_zjm_agent
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 288
+        width: 156
+        height: 85
+      alignment: 9
+      pivot: {x: 0.49358973, y: 0.58235294}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_announcement
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 357
+        width: 110
+        height: 77
+      alignment: 9
+      pivot: {x: 0.4909091, y: 0.53896105}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_bank
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 255
+        width: 112
+        height: 79
+      alignment: 9
+      pivot: {x: 0.5, y: 0.47468355}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_begin
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 375
+        width: 334
+        height: 92
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_duihuan
+      rect:
+        serializedVersion: 2
+        x: 878
+        y: 210
+        width: 108
+        height: 72
+      alignment: 9
+      pivot: {x: 0.4814815, y: 0.5833333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_game_1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 4
+        width: 334
+        height: 506
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_intercalate
+      rect:
+        serializedVersion: 2
+        x: 961
+        y: 436
+        width: 53
+        height: 74
+      alignment: 9
+      pivot: {x: 0.4811321, y: 0.5135135}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_public_num
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 64
+        width: 67
+        height: 72
+      alignment: 9
+      pivot: {x: 0.48507464, y: 0.5277778}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_recharge
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 203
+        width: 146
+        height: 97
+      alignment: 9
+      pivot: {x: 0.49315068, y: 0.38659793}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_tx_gold_add
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 138
+        width: 71
+        height: 70
+      alignment: 9
+      pivot: {x: 0.5140845, y: 0.4857143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_vip
+      rect:
+        serializedVersion: 2
+        x: 881
+        y: 284
+        width: 136
+        height: 71
+      alignment: 9
+      pivot: {x: 0.4632353, y: 0.58450705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_zjm_vip_1
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 254
+        width: 102
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_zjm_broadcast
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 469
+        width: 621
+        height: 41
+      alignment: 9
+      pivot: {x: 0.5032206, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_zjm_di_kuang_1
+      rect:
+        serializedVersion: 2
+        x: 674
+        y: 336
+        width: 205
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 48, y: 14, z: 22, w: 16}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_zjm_di_kuang_2
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 302
+        width: 162
+        height: 71
+      alignment: 9
+      pivot: {x: 0.5, y: 0.471831}
+      border: {x: 45, y: 30, z: 35, w: 25}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_zjm_ding_kuang
+      rect:
+        serializedVersion: 2
+        x: 486
+        y: 197
+        width: 89
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 15, y: 30, z: 10, w: 20}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_zjm_gold
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 210
+        width: 75
+        height: 76
+      alignment: 9
+      pivot: {x: 0.48666668, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_zjm_gold_kuang
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 186
+        width: 83
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 25, y: 20, z: 25, w: 20}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_zjm_tx_name_bg
+      rect:
+        serializedVersion: 2
+        x: 674
+        y: 413
+        width: 236
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 25, y: 20, z: 130, w: 20}
+      outline: []
+      tessellationDetail: -1
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

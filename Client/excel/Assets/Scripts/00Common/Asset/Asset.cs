@@ -685,7 +685,9 @@ public class AssetInst
             m_AssetDesc = null;
         }
         else
-            LogManager.Instance().LogErrorFormat("Game object has been released two times!");
+        {
+            ///LogManager.Instance().LogErrorFormat("Game object has been released two times!");
+        }
 
         m_InstanceID = ~0;
     }

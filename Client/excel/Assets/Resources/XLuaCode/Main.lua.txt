@@ -1,5 +1,6 @@
 -- main entrance/collectgarbage setting
 require(".init")
+require(".debug")
 require(".app.FrameConfig")
 require("protobuf")
 require(".functions")
