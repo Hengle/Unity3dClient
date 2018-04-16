@@ -9,6 +9,7 @@ namespace GameClient
     {
         ST_INVALID = -1,
         ST_LOGIN = 0,
+        ST_BATTLE_FISH,
         ST_COUNT,
     }
 

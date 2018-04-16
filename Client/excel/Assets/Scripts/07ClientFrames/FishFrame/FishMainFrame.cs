@@ -29,6 +29,11 @@ namespace GameClient
             }
 		}
 
+        public override bool needLuaBehavior()
+        {
+            return false;
+        }
+
         void _OnClickClose()
         {
             UIManager.Instance().CloseFrame(this);

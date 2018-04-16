@@ -111,6 +111,7 @@ namespace GameClient
             LogManager.Instance().LogProcessFormat(8000, "<color=#00ff00>GlobalDataManager Initialized succeed !</color>");
 
             SceneManager.Instance().RegisterScene(SceneType.ST_LOGIN, CreateLoginScene);
+            SceneManager.Instance().RegisterScene(SceneType.ST_BATTLE_FISH, FishScene.CreateFishScene);
 
             SceneManager.Instance().SwitchScene(SceneType.ST_LOGIN);
         }

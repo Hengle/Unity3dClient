@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameClient
 {
-    interface IScene
+    public interface IScene
     {
         void OnEnter();
         void OnUpdate();
