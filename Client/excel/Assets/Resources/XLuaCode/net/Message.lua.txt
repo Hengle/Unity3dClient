@@ -5,7 +5,12 @@ local Msgprotocol = require ".net.Msgprotocol"
 
 local function registerProto(path)
 	local buffer = CS.FileUtil.ReadFileFromResource(path)
-	protobuf.register(buffer)
+	--protobuf.register(buffer)
+	local ok = pcall(protobuf.register, buffer)
+	if not ok then
+		printError("registerProto err! path:%s, lasterr:%s", path, protobuf.lasterror())
+	end
+
 end
 
 
@@ -33,13 +38,8 @@ function Message.sendMessage(name, msg)
 		return
 	end
 
-	local ok,data
-	ok, data = pcall(protobuf.encode, name, msg)
-	if not ok then
-		print("protobuf.encode error! failed:"..tostring(data))
-	end
-    --local data = protobuf.encode(name, msg)
-    print("send message "..name)
+    local data = protobuf.encode(name, msg)
+    print("send message "..name..data)
 	if Message.net and Message.net.sendData then
 		Message.net.sendData(string.char(math.floor(id/256)%256) .. string.char(id%256) .. data)
 	end

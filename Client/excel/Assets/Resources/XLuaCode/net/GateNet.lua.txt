@@ -122,11 +122,15 @@ local function heartbeat()
 			scheduler:RemoveInvoke(param.scheduler)
 			param.scheduler = nil
 		end
+
+		print("hb, not param.isAuth or not param.isConnected, isAuth:"..param.isAuth.."isConnected:"..param.isConnected)
 		return
 	end
 
 	if param.lastHearTime + 60 < os.time() then
 		GateNet.disconnect(4)  -- will reconnect
+
+		printError("hb, param.lastHearTime + 60 < os.time()")
 		return
 	end
 

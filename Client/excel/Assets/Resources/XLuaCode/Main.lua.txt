@@ -3,6 +3,7 @@ require(".init")
 require(".app.FrameConfig")
 require("protobuf")
 require(".functions")
+require(".debug")
 
 function __G__TRACKBACK__(msg)
     print("----------------------------------------")
