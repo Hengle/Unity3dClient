@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(GameClient.ClientFrame);
-			Utils.BeginObjectRegister(type, L, translator, 0, 15, 3, 0);
+			Utils.BeginObjectRegister(type, L, translator, 0, 17, 3, 0);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "getFrameId", _m_getFrameId);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "getFrameTypeId", _m_getFrameTypeId);
@@ -38,6 +38,8 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetText", _m_SetText);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetImage", _m_SetImage);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetObject", _m_GetObject);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "AddChildFrame", _m_AddChildFrame);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "CloseChildFrame", _m_CloseChildFrame);
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "FrameID", _g_get_FrameID);
@@ -556,6 +558,62 @@ namespace XLua.CSObjectWrap
                     
                     
                     return 1;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_AddChildFrame(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                GameClient.ClientFrame __cl_gen_to_be_invoked = (GameClient.ClientFrame)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    GameClient.IFrame frame = (GameClient.IFrame)translator.GetObject(L, 2, typeof(GameClient.IFrame));
+                    
+                    __cl_gen_to_be_invoked.AddChildFrame( frame );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_CloseChildFrame(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                GameClient.ClientFrame __cl_gen_to_be_invoked = (GameClient.ClientFrame)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    GameClient.IFrame frame = (GameClient.IFrame)translator.GetObject(L, 2, typeof(GameClient.IFrame));
+                    
+                    __cl_gen_to_be_invoked.CloseChildFrame( frame );
+                    
+                    
+                    
+                    return 0;
                 }
                 
             } catch(System.Exception __gen_e) {
