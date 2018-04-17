@@ -3,6 +3,8 @@ local UserMessage = {}
 local Message = require(".net.Message")
 local Msgprotocol = require(".net.Msgprotocol")
 
+local RoomConfig = require(".app.config.RoomConfig")
+
 --local crypt = require("crypt")
 
 --local util = require("app.Common.util")
@@ -12,20 +14,19 @@ local Msgprotocol = require(".net.Msgprotocol")
 --local RoomConfig = require("app.config.RoomConfig")
 
 
---local Player = app.userdata.Player
---local Account = app.userdata.Account
+local Player = app.data.UserData.Player
+local Account = app.data.UserData.Account
 
 local _hookMap = {}
 local _last_msg = nil
 
 local CMD = {}
 
-
 function CMD.UserInfoRep(msg)
 	dump(msg,"UserMessage - CMD.UserInfoRep:")
-	--[[if Account.uid == msg.uid then
+	if Account.uid == msg.uid then
 		for k,v in pairs(msg) do
-			app.userdata.Player[k] = v
+			Player[k] = v
 		end
 	end
 	
@@ -33,13 +34,12 @@ function CMD.UserInfoRep(msg)
 	local url = msg.avatarurl
 	if url and #url > 0 then
 		--AvatarConfig:getAvatarByUrl(msg.uid, url)
-	end]]--
+	end
 end
 
 
 function CMD.RoomListRep(msg)
-	dump(msg, "UserMessage - CMD.RoomListRep:")
-	--[[local newConfig = assert(loadstring(msg.config))()
+	local newConfig = assert(load(msg.config))()
     newConfig = checktable(newConfig)
     for _, config in ipairs(RoomConfig) do
         config.room = {}
@@ -57,7 +57,7 @@ function CMD.RoomListRep(msg)
         table.sort(config.room, function(v1, v2) 
             return v1.roomid < v2.roomid 
         end)
-    end]]--
+    end
 end
 
 

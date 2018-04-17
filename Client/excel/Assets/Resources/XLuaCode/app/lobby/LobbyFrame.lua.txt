@@ -2,10 +2,12 @@
 local LobbyFrame = {}
 
 local UserMessage = require(".net.UserMessage")
+local roomMgr = require(".app.room.RoomManager")
 
 local Player = app.data.UserData.Player
 local Account = app.data.UserData.Account
 
+local Gameid_fish = 107
 
 function LobbyFrame.OnOpenFrame()
 	UserMessage.send("UserInfoReq", {uid=Account.uid}, handler(self,self.UserInfoRep))
@@ -25,7 +27,8 @@ function LobbyFrame.OnOpenFrame()
 end
 
 LobbyFrame.onClickFishGame = function()
-
+	--roomMgr:init(Gameid_fish,nil)
+	app.FrameManager.OpenFrameLua(app._FrameList.RoomFrame)
 end
 
 LobbyFrame.onClickQuickStart = function()
@@ -62,8 +65,13 @@ function LobbyFrame.OnCloseFrame()
 end
 
 -- ----------------------------控制代码----------------------------------------
+
+function LobbyFrame.loadRoomConfig()
+
+end
+
 --TODO:UserInfoRep RoomListRep
-function LobbyFrame.UserInfoRep(msg, oldmsg)
+function LobbyFrame:UserInfoRep(msg, oldmsg)
 	dump(msg, "LobbyFrame.UserInfoRep:")
 	if msg.uid == Player.uid then
 		--[[self:changeAvatar()
@@ -73,7 +81,7 @@ function LobbyFrame.UserInfoRep(msg, oldmsg)
 	end
 end
 
-function LobbyFrame.RoomListRep(msg)
+function LobbyFrame:RoomListRep(msg)
 	dump(msg, "LobbyFrame.RoomListRep:")
 	--self:loadRoomConfig()
 	--self:setBurthenMark()
