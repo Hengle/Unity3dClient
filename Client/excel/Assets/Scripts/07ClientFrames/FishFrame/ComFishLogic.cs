@@ -133,6 +133,11 @@ namespace GameClient
             EventManager.Instance().RegisterEvent(ClientEvent.CE_CREATE_FISH, _OnCreateFish);
         }
 
+        private void OnDestroy()
+        {
+            EventManager.Instance().UnRegisterEvent(ClientEvent.CE_CREATE_FISH, _OnCreateFish);
+        }
+
         protected void _OnCreateFish(object argv)
         {
             FishData data = argv as FishData;
