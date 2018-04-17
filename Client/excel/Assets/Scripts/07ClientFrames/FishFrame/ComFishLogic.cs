@@ -63,32 +63,32 @@ namespace GameClient
         List<FishBody> _recycles = new List<FishBody>(16);
         List<FishBody> _actived = new List<FishBody>(16);
 
-        public void createFish(ulong guid,int iResId,int tag,float elapsed, ulong tick)
+        public void createFish(FishData data)
         {
-            var fishItem = TableManager.Instance().GetTableItem<ProtoTable.FishTable>(iResId);
+            var fishItem = TableManager.Instance().GetTableItem<ProtoTable.FishTable>(data.fishItem.ID);
             if (null == fishItem)
             {
-                LogManager.Instance().LogErrorFormat("can not create fish with resId = {0}", iResId);
+                LogManager.Instance().LogErrorFormat("can not create fish with resId = {0}", data.fishItem.ID);
                 return;
             }
 
             GameObject goFish = AssetLoader.Instance().LoadRes(fishItem.Prefab, typeof(GameObject)).obj as GameObject;
             if (null == goFish)
             {
-                LogManager.Instance().LogErrorFormat("can not create fish first frame res is null ! resId = {0} name = {1}", iResId, fishItem.Desc);
+                LogManager.Instance().LogErrorFormat("can not create fish first frame res is null ! resId = {0} name = {1}", data.fishItem.ID, fishItem.Desc);
                 return;
             }
             ComSpriteItems sprite = goFish.GetComponent<ComSpriteItems>();
             if (null == sprite)
             {
-                LogManager.Instance().LogErrorFormat("can not create fish first frame ComSpriteItems is null ! resId = {0} name = {1}", iResId, fishItem.Desc);
+                LogManager.Instance().LogErrorFormat("can not create fish first frame ComSpriteItems is null ! resId = {0} name = {1}", data.fishItem.ID, fishItem.Desc);
                 return;
             }
 
             int findIndex = -1;
             for (int i = 0; i < _recycles.Count; ++i)
             {
-                if (_recycles[i].resId == iResId)
+                if (_recycles[i].resId == data.fishItem.ID)
                 {
                     findIndex = i;
                     break;
@@ -110,19 +110,19 @@ namespace GameClient
             {
                 fishBody = _recycles[findIndex];
                 _recycles.RemoveAt(findIndex);
-                fishBody.guid = guid;
+                fishBody.guid = (ulong)data.fish_id;
                 fishBody.OnCreate(fishLayer);
             }
 
             if (null != fishBody)
             {
-                fishBody.guid = guid;
-                fishBody.resId = iResId;
+                fishBody.guid = (ulong)data.fish_id;
+                fishBody.resId = data.fishItem.ID;
                 fishBody.action.Play();
                 fishBody.action.loops = -1;
-                fishBody.tag = tag;
-                fishBody.tick_count = tick;
-                fishBody.elapsed = elapsed;
+                fishBody.tag = data.tag;
+                fishBody.tick_count = data.tick_count;
+                fishBody.elapsed = data.elapsed;
                 fishBody.moveAction.Start();
                 _actived.Add(fishBody);
             }
@@ -143,7 +143,7 @@ namespace GameClient
             FishData data = argv as FishData;
             if(null != data)
             {
-                createFish((ulong)data.fish_id, data.fishItem.ID,data.tag,data.elapsed,data.tick_count);
+                createFish(data);
 
                 FishDataManager.Instance().Release(data);
             }
