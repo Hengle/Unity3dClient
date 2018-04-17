@@ -1,0 +1,14 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_room.png (1024 x 1024)
+# $TexturePacker:SmartUpdate:6f2f2192451e66625edd3135f6b7f087:fa17d70f039cfc27ff8f9888cd62a325:62de76a749d60e0f96e66514473e9b84$
+#
+
+fish_room_10bei;2;655;333;367;0.515015015015015;0.5
+fish_room_1bei;307;27;299;301;0.5434782608695652;0.606312292358804
+fish_room_2bei;2;5;303;323;0.4603960396039604;0.5681114551083591
+fish_room_5bei;2;330;323;323;0.46904024767801855;0.5681114551083591

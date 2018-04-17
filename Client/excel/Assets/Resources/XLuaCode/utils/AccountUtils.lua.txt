@@ -5,7 +5,7 @@
 ---
 local AccountUtils = {}
 
-local crypt = CS.Common.DESEncrypt
+local account_history_upper = 10
 
 function AccountUtils.addAccountHistory(history, account, password)
     if not account or account == "" then return end
@@ -24,74 +24,65 @@ function AccountUtils.addAccountHistory(history, account, password)
     old = old or {account = account, password = password}
     table.insert(history, 1, old)
 
-    for i=11,#history do
+    for i = account_history_upper + 1,#history do
         table.remove(history)
     end
 
     return history
 end
 
-local account_history_upper = 10
-
 function AccountUtils.saveAccountHistory(history)
     if not history then return end
 
-    local writeablePath = CS.GameClient.LocalSettingManager.getPersistentPath("/account_history")
-    print("CSharp getPersistentPath():", writeablePath)
+    local content = app.FileManager:GetJasonString(app._FileList.AccountInfo)
+    if not content then return end
 
-    local file = io.open(writeablePath, "w+")
-    if not file then return end
-
-    --file:write(tostring(util.getVersion()) .. "\n")
-
+    content = string.format(content,(tostring(util.getVersion()) .. "\n"))
     for i,v in ipairs(history) do
         if i > account_history_upper then
             break
         end
 
         local record = history[i]
-        file:write(record.account .. "=" .. record.password .. "\n")--[[util.encodePwd()]]--
+        content = string.format(content,(record.account .. "=" .. record.password .. "\n"))
     end
-    file:close()
+    app.FileManager:SaveJasonString(app._FileList.AccountInfo, content)
 end
 
 function AccountUtils.readAccountHistory()
-    _AccountHistory = {} -- TODO
+    _AccountHistory = {}
 
-    local writeablePath = CS.GameClient.LocalSettingManager.GetJasonString("/account_history")
-    print("CSharp getPersistentPath():", writeablePath)
-
-    local file = io.open(writeablePath, "r")
+    local content = app.FileManager:GetJasonString(app._FileList.AccountInfo)
     if not file then
-        file = io.open(writeablePath, "w")
-        file:close()
         return _AccountHistory
     end
 
-    --local clear, checked
-    for line in file:lines() do
-        --[[if not checked then
+    local checked
+    local lines = string.split(content,'\n')
+    for line in lines do
+        if not checked then
             if line ~= util.getVersion() then
-                clear = true
                 break
             end
             checked = true
-        end]]--
+        end
 
         local account, password = string.match(line, "([^=]*)=(.*)")
         if account and account ~= "" then
             table.insert(_AccountHistory, {
                 account = account,
-                password = password--[[util.decodePwd()]]--
+                password = password,
             })
         end
     end
-    file:close()
 
     return _AccountHistory
 end
 
 -- ----------------------------------------------------------------------------------------------------
+
+local crypt = CS.Common.DESEncrypt
+
 
 local PASSWORD_CRYPT_KEY = "gqs7rm0y"
 

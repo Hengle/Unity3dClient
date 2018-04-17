@@ -7,3 +7,4 @@ app.util = app.util or {}
 app.util.AccountUtils       = require(".utils.AccountUtils")
 app.util.JsonUtils          = require(".utils.JsonUtils")
 app.util.NumericUtils       = require(".utils.NumericUtils")
+app.util.ToolUtils          = require(".utils.ToolUtils")
