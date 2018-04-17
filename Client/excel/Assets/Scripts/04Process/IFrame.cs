@@ -25,5 +25,7 @@ namespace GameClient
         void SetText(string objName, string value);
         void SetImage(string objName, string path);
         Object GetObject(string objName);
+        void AddChildFrame(IFrame frame);
+        void CloseChildFrame(IFrame frame);
     }
 }
