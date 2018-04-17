@@ -103,8 +103,16 @@ namespace GameClient
             };
 
             float kSpeed = FishConfig.kSpeed;
-            FishCommonLogic.BuildBezier(points, 3, ref move_points_, fish_speed_ * kSpeed, FishSpeedType.FISHSPEED_LEVEL0);
+            FishCommonLogic.BuildBezier(points, ref move_points_);
+            //FishCommonLogic.BuildBezier(points, 3, ref move_points_, fish_speed_ * kSpeed, FishSpeedType.FISHSPEED_LEVEL0);
             duration_ = kSpeed * move_points_.Count;
+            /*
+            for (int i = 0; i < move_points_.Count; ++i)
+            {
+                LogManager.Instance().LogFormat("<color=#00ff00>[point[{0}]]:[{1},{2}]</color>", i, move_points_[i].position_.x, move_points_[i].position_.y);
+            }
+            LogManager.Instance().LogFormat("<color=#00ff00>[duration_:{0}]</color>", duration_);
+            */
         }
 
         public FishActionFishMoveBezier(float fish_speed, Vector2 start, Vector2 c1, Vector2 end, FishSpeedType speedType) : base(0)

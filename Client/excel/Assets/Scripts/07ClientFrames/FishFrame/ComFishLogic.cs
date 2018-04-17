@@ -19,28 +19,27 @@ namespace GameClient
             public float elapsed;
             public ulong tick_count;
 
+            public FishSprite fishSprite;
             public ProtoTable.FishTable fishItem;
-            public GameObject self;
-            public ComSpriteItems action;
             public FishActionFishMove moveAction;
 
             public void OnCreate(GameObject root)
             {
-                Utility.AttachTo(self, root);
-                self.CustomActive(true);
+                Utility.AttachTo(fishSprite.self, root);
+                fishSprite.self.CustomActive(true);
             }
 
             public void OnRecycle(GameObject root)
             {
-                Utility.AttachTo(self, root);
-                self.CustomActive(false);
+                Utility.AttachTo(fishSprite.self, root);
+                fishSprite.self.CustomActive(false);
             }
 
             public void SetPosition(Vector2 pos)
             {
-                if(null != self && null != self.transform)
+                if(null != fishSprite.self && null != fishSprite.self.transform)
                 {
-                    (self.transform as RectTransform).anchoredPosition = pos;
+                    (fishSprite.self.transform as RectTransform).anchoredPosition = pos;
                 }
             }
 
@@ -65,26 +64,6 @@ namespace GameClient
 
         public void createFish(FishData data)
         {
-            var fishItem = TableManager.Instance().GetTableItem<ProtoTable.FishTable>(data.fishItem.ID);
-            if (null == fishItem)
-            {
-                LogManager.Instance().LogErrorFormat("can not create fish with resId = {0}", data.fishItem.ID);
-                return;
-            }
-
-            GameObject goFish = AssetLoader.Instance().LoadRes(fishItem.Prefab, typeof(GameObject)).obj as GameObject;
-            if (null == goFish)
-            {
-                LogManager.Instance().LogErrorFormat("can not create fish first frame res is null ! resId = {0} name = {1}", data.fishItem.ID, fishItem.Desc);
-                return;
-            }
-            ComSpriteItems sprite = goFish.GetComponent<ComSpriteItems>();
-            if (null == sprite)
-            {
-                LogManager.Instance().LogErrorFormat("can not create fish first frame ComSpriteItems is null ! resId = {0} name = {1}", data.fishItem.ID, fishItem.Desc);
-                return;
-            }
-
             int findIndex = -1;
             for (int i = 0; i < _recycles.Count; ++i)
             {
@@ -98,12 +77,16 @@ namespace GameClient
             FishBody fishBody = null;
             if (-1 == findIndex)
             {
+                var fishSprite = FishScene.createFishFromPool(data.fishItem.ID);
+                if (null == fishSprite)
+                {
+                    return;
+                }
+
                 fishBody = new FishBody();
-                fishBody.self = goFish;
-                Image img = sprite.sprite;
+                fishBody.fishSprite = fishSprite;
+                Image img = fishSprite.action.sprite;
                 img.raycastTarget = false;
-                fishBody.action = sprite;
-                fishBody.action.sprite = img;
                 fishBody.OnCreate(fishLayer);
             }
             else
@@ -118,8 +101,8 @@ namespace GameClient
             {
                 fishBody.guid = (ulong)data.fish_id;
                 fishBody.resId = data.fishItem.ID;
-                fishBody.action.Play();
-                fishBody.action.loops = -1;
+                fishBody.fishSprite.action.Play();
+                fishBody.fishSprite.action.loops = -1;
                 fishBody.tag = data.tag;
                 fishBody.tick_count = data.tick_count;
                 fishBody.elapsed = data.elapsed;
@@ -167,8 +150,16 @@ namespace GameClient
                     if(null != action)
                     {
                         action.Step(Time.deltaTime);
-                        Vector2 position = action.FishMoveTo(action.elapsed());
-                        _actived[i].SetPosition(position);
+                        //Vector2 position = action.FishMoveTo(action.elapsed());
+                        _actived[i].SetPosition(action.position());
+                    }
+
+                    if(action.IsDone())
+                    {
+                        _actived[i].OnRecycle(recycleRoot);
+                        _recycles.Add(_actived[i]);
+                        _actived.RemoveAt(i--);
+                        continue;
                     }
                 }
             }

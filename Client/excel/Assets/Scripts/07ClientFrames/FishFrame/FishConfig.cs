@@ -10,6 +10,7 @@ namespace GameClient
         public const float kSpeed = 1.0f / kFPS;  // 速度
         public const float kScreenWidth = 1366.0f;
         public const float kScreenHeight = 768.0f;
+        public const int fish_pre_load_count = 5;
     }
 
     class FishCommonLogic
@@ -35,6 +36,37 @@ namespace GameClient
         public static float CalcDistance(float x1, float y1, float x2, float y2)
         {
             return Mathf.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+        }
+
+        public static Vector2 BezierCurve(Vector2 P0, Vector2 P1, Vector2 P2, float t)
+        {
+            Vector2 B = Vector2.zero;
+            float t1 = (1 - t) * (1 - t);
+            float t2 = t * (1 - t);
+            float t3 = t * t;
+            B = P0 * t1 + 2 * t2 * P1 + t3 * P2;
+            return B;
+        }
+
+        public static void BuildBezier(Vector2[] points, ref List<MovePoint> move_points)
+        {
+            if (null == move_points)
+            {
+                move_points = new List<MovePoint>();
+            }
+
+            if (points.Length == 3)
+            {
+                float t = 0.0f;
+                while(t < 1.0f)
+                {
+                    Vector2 point = BezierCurve(points[0], points[1], points[2], t);
+                    MovePoint mp = new MovePoint();
+                    mp.position_ = point;
+                    move_points.Add(mp);
+                    t += 0.01f;
+                }
+            }
         }
 
         public static void BuildBezier(Vector2[] points, int points_count, ref List<MovePoint> move_points, float distance, FishSpeedType speedType)
@@ -105,6 +137,11 @@ namespace GameClient
                 }
 
                 t += 0.001f;
+            }
+
+            for(int i = 0; i < move_points.Count; ++i)
+            {
+                LogManager.Instance().LogFormat("<color=#00ff00>[point[{0}]]:[{1},{2}]</color>", i, move_points[i].position_.x, move_points[i].position_.y);
             }
         }
 
