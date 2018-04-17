@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # import variables
-. ./../_variables.sh
+./_variables.sh
 
 protofiles=`ls | grep [.]proto`
 rm -rf *.pb
