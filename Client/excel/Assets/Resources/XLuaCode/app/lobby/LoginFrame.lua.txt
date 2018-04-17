@@ -7,6 +7,7 @@ local UserMessage = require(".net.UserMessage")
 
 local roomMgr = require(".app.room.RoomManager")
 
+local Account = app.data.UserData.Account
 local AccountUtils = app.util.AccountUtils
 local json = app.util.JsonUtils
 
@@ -78,7 +79,11 @@ function LoginFrame.loginCallback(err,res)
 		CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
 
 		local resTable = web.FromResData(res)
-		print("resTable.uid = "..resTable.uid)
+		dump(resTable, "LoginFrame.loginCallback resTable:")
+
+		Account.uid = tonumber(resTable.uid)
+		Account.token = resTable.token--[[crypt.base64decode()]]--
+		Account.secret = resTable.secret
 
 		--全局保存
 		--app.userdata.Account.uid = resTable.uid
@@ -132,6 +137,10 @@ function LoginFrame:auth(params)
 			local msg = json.encode(params)
 			--regMsg = CS.Common.DESEncrypt.MyEncode(regMsg,msg)
 			--regMsg = numeric.tohex(regMsg)
+
+			Account.account = params.account
+			Account.password = params.password
+			Account.channel = params.channel
 
 			local postValues =
 			{

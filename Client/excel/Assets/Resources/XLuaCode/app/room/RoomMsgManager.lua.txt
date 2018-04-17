@@ -21,6 +21,8 @@ local gameid = nil
 local roomid = nil
 local gamekey = ""
 
+local room_session = 0
+local table_session = 0
 local game_scene = nil
 local max_player = nil
 local max_seats = nil
