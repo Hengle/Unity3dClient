@@ -50,7 +50,7 @@ namespace GameClient
             return (FrameLayer)frameItem.Layer;
         }
 
-        public void openFrame(int iId = -1, int type = 1, object userData = null)
+        public void openFrame(int iId = -1, int type = 1, object userData = null,GameObject parent = null)
         {
             LogManager.Instance().LogProcessFormat(9000, "try open frame {0}!", type);
 
@@ -91,7 +91,11 @@ namespace GameClient
                 return;
             }
 
-            Utility.AttachTo(root, GlobalDataManager.Instance().uiConfig.goLayers[(int)getLayer()]);
+            if(null == parent)
+            {
+                parent = GlobalDataManager.Instance().uiConfig.goLayers[(int)getLayer()];
+            }
+            Utility.AttachTo(root, parent);
 
             mScriptBinder = root.GetComponent<ComScriptBinder>();
             mLuaBehavior = root.GetComponent<LuaBehaviour>();

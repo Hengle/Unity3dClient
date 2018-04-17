@@ -12,7 +12,7 @@ namespace GameClient
         int getFrameId();
         int getFrameTypeId();
         int getFrameHashCode();
-        void openFrame(int iId, int type,object userData);
+        void openFrame(int iId, int type,object userData, GameObject parent);
         void closeFrame();
         FrameLayer getLayer();
         string getPrefabPath();

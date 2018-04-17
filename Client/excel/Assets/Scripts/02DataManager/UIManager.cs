@@ -23,7 +23,7 @@ namespace GameClient
             return (frameId & 0xFFFF) | ((frameTypeId & 0xFFFF) << 16);
         }
 
-        public IFrame OpenFrame<T>(int frameTypeId,object userData = null,int frameId = -1) where T : IFrame , new()
+        public IFrame OpenFrame<T>(int frameTypeId,object userData = null,int frameId = -1,GameObject parent = null) where T : IFrame , new()
         {
             int iKey = MakeFrameHashCode(frameId, frameTypeId);
             IFrame frame = null;
@@ -43,11 +43,11 @@ namespace GameClient
                 frame = new T();
                 mActiveFrames.Add(iKey, frame);
             }
-            frame.openFrame(frameId, frameTypeId, userData);
+            frame.openFrame(frameId, frameTypeId, userData, parent);
             return frame;
         }
 
-        public IFrame OpenFrameLua(int frameTypeId, object userData = null, int frameId = -1)
+        public IFrame OpenFrameLua(int frameTypeId, object userData = null, int frameId = -1, GameObject parent = null)
         {
             int iKey = MakeFrameHashCode(frameId, frameTypeId);
             IFrame frame = null;
@@ -67,7 +67,7 @@ namespace GameClient
                 frame = new ClientFrame();
                 mActiveFrames.Add(iKey, frame);
             }
-            frame.openFrame(frameId, frameTypeId, userData);
+            frame.openFrame(frameId, frameTypeId, userData, parent);
             return frame;
         }
 
