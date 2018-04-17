@@ -169,8 +169,9 @@ namespace XLua.CSObjectWrap
                     int iId = LuaAPI.xlua_tointeger(L, 2);
                     int type = LuaAPI.xlua_tointeger(L, 3);
                     object userData = translator.GetObject(L, 4, typeof(object));
+                    UnityEngine.GameObject parent = (UnityEngine.GameObject)translator.GetObject(L, 5, typeof(UnityEngine.GameObject));
                     
-                    __cl_gen_to_be_invoked.openFrame( iId, type, userData );
+                    __cl_gen_to_be_invoked.openFrame( iId, type, userData, parent );
                     
                     
                     

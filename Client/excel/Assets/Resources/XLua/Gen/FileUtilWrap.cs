@@ -190,9 +190,9 @@ namespace XLua.CSObjectWrap
             
                 
                 {
-                    string path = LuaAPI.lua_tostring(L, 1);
+                    string fileName = LuaAPI.lua_tostring(L, 1);
                     
-                        byte[] __cl_gen_ret = FileUtil.ReadFileFromResource( path );
+                        byte[] __cl_gen_ret = FileUtil.ReadFileFromResource( fileName );
                         LuaAPI.lua_pushstring(L, __cl_gen_ret);
                     
                     

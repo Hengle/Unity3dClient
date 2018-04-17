@@ -21,10 +21,11 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(NetWork.NetSocket);
-			Utils.BeginObjectRegister(type, L, translator, 0, 7, 19, 17);
+			Utils.BeginObjectRegister(type, L, translator, 0, 8, 19, 17);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Connect", _m_Connect);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "DisConnect", _m_DisConnect);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "TryReconnect", _m_TryReconnect);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnConnected", _m_OnConnected);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Close", _m_Close);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Send", _m_Send);
@@ -249,6 +250,33 @@ namespace XLua.CSObjectWrap
                 {
                     
                     __cl_gen_to_be_invoked.DisConnect(  );
+                    
+                    
+                    
+                    return 0;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_TryReconnect(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                NetWork.NetSocket __cl_gen_to_be_invoked = (NetWork.NetSocket)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    
+                    __cl_gen_to_be_invoked.TryReconnect(  );
                     
                     
                     

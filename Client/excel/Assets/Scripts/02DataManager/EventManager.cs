@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameClient
 {
-    class EventManager : Singleton<EventManager>
+    public class EventManager : Singleton<EventManager>
     {
         protected EventRouter<ClientEvent> eventRouter = new EventRouter<ClientEvent>();
 
@@ -21,6 +21,11 @@ namespace GameClient
         public void SendEvent(ClientEvent ce,object param = null)
         {
             eventRouter.BroadCastEvent(ce, param);
+        }
+
+        public void Clear()
+        {
+            eventRouter.ClearAllEvents();
         }
     }
 }

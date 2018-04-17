@@ -108,6 +108,18 @@ public class EditorTool
         AssetDatabase.Refresh();
     }
 
+    [MenuItem("GameClient/Scene/ST_LOGIN", false)]
+    static public void SwitchSceneToLogin()
+    {
+        GameClient.EventManager.Instance().SendEvent(GameClient.ClientEvent.CE_CHANGE_SCENE, GameClient.SceneType.ST_LOGIN);
+    }
+
+    [MenuItem("GameClient/Scene/ST_BATTLE_FISH", false)]
+    static public void SwitchSceneToFish()
+    {
+        GameClient.EventManager.Instance().SendEvent(GameClient.ClientEvent.CE_CHANGE_SCENE, GameClient.SceneType.ST_BATTLE_FISH);
+    }
+
     [MenuItem("XLua/Txt2Lua(方便Lua编辑器读)", false)]
     static public void Txt2Lua()
     {

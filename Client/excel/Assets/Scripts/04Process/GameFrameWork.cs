@@ -110,10 +110,36 @@ namespace GameClient
             }
             LogManager.Instance().LogProcessFormat(8000, "<color=#00ff00>GlobalDataManager Initialized succeed !</color>");
 
-            SceneManager.Instance().SwitchSceneTo(SceneManager.SceneType.ST_LOGIN, _LoadAllResource(), _OnLoadFinish);
+            SceneManager.Instance().RegisterScene(SceneType.ST_LOGIN, CreateLoginScene);
+            SceneManager.Instance().RegisterScene(SceneType.ST_BATTLE_FISH, FishScene.CreateFishScene);
+
+            SceneManager.Instance().SwitchScene(SceneType.ST_LOGIN);
         }
 
-        void _OnLoadFinish()
+        IScene CreateLoginScene()
+        {
+            Scene scene = new Scene();
+            scene.onBeginLoading = _OnBeginLoading;
+            scene.onEndLoading = _OnEndLoading;
+            scene.onRunning = null;
+            scene.itExit = null;
+            scene.itEnter = _LoadAllResource(scene);
+            scene.onEnter = _OnEnter;
+            scene.onExit = _OnExit;
+            return scene;
+        }
+
+        void _OnBeginLoading()
+        {
+            UIManager.Instance().OpenFrame<LoadingFrame>(7);
+        }
+
+        void _OnEndLoading()
+        {
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_FINISH);
+        }
+
+        void _OnEnter()
         {
             luaEnv.DoString(luaScript.text, "GameFrameWork");
 
@@ -127,7 +153,12 @@ namespace GameClient
             }
         }
 
-        IEnumerator _LoadAllResource()
+        void _OnExit()
+        {
+            SceneManager.Instance().Clear(false);
+        }
+
+        IEnumerator _LoadAllResource(Scene scene)
         {
             EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "加载AssetLoader...");
             EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS,0.0f);
@@ -172,6 +203,11 @@ namespace GameClient
 
             EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 1.0f);
             yield return new WaitForEndOfFrame();
+            if(null != scene)
+            {
+                scene.SetAction(SceneAction.SA_READY_RUNNING);
+            }
+            LogManager.Instance().LogProcessFormat(8003, "<color=#00ff00>_LoadAllResource  Co Aborted !!!!</color>");
         }
 
         private void Update()
