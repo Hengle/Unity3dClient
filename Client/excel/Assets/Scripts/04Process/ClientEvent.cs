@@ -18,6 +18,9 @@ namespace GameClient
         CE_ON_SET_LOADING_SUB_PROCESS,
         CE_ON_SET_LOADING_FINISH,
         CE_CHANGE_SCENE,
+
+        CE_CREATE_FISH,
+
         CE_LUA_EVENT_START = 64,
         CE_FIXED_END = 128,
 

@@ -43,6 +43,13 @@ namespace ProtoTable
       get { return _Interval; }
       set { _Interval = value; }
     }
+    private int _Speed;
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"Speed", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
+    public int Speed
+    {
+      get { return _Speed; }
+      set { _Speed = value; }
+    }
     public void Parse(ProtoBuf.ProtoReader source){
         int fieldNumber = 0;
         while ((fieldNumber = source.ReadFieldHeader()) > 0)
@@ -70,6 +77,11 @@ namespace ProtoTable
             case 4:   //Interval LABEL_REQUIRED TYPE_SINT32  ZigZag
                     source.Hint(ProtoBuf.WireType.SignedVariant); 
                     Interval = source.ReadInt32();
+                    break;
+                    
+            case 5:   //Speed LABEL_REQUIRED TYPE_SINT32  ZigZag
+                    source.Hint(ProtoBuf.WireType.SignedVariant); 
+                    Speed = source.ReadInt32();
                     break;
                     
             }

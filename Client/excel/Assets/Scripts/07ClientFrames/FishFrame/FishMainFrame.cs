@@ -21,12 +21,12 @@ namespace GameClient
             {
                 mbtnQuit.onClick.AddListener(_OnClickClose);
             }
-            if(null != mcomLogic)
-            {
-                mcomLogic.createFish(1001, 1);
-                mcomLogic.createFish(1002, 2);
-                mcomLogic.createFish(1003, 3);
-            }
+            //if(null != mcomLogic)
+            //{
+            //    mcomLogic.createFish(1001, 1);
+            //    mcomLogic.createFish(1002, 2);
+            //    mcomLogic.createFish(1003, 3);
+            //}
 		}
 
         public override bool needLuaBehavior()

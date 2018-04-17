@@ -15,9 +15,14 @@ namespace GameClient
             public ulong guid;
             public int resId;
 
+            public int tag;
+            public float elapsed;
+            public ulong tick_count;
+
             public ProtoTable.FishTable fishItem;
             public GameObject self;
             public ComSpriteItems action;
+            public FishActionFishMove moveAction;
 
             public void OnCreate(GameObject root)
             {
@@ -38,11 +43,27 @@ namespace GameClient
                     (self.transform as RectTransform).anchoredPosition = pos;
                 }
             }
+
+            public void Update()
+            {
+                if(null != moveAction)
+                {
+                    moveAction.Step(Time.deltaTime);
+                }
+            }
+
+            public void MoveTo()
+            {
+                if (null != moveAction)
+                {
+                    moveAction.FishMoveTo(elapsed);
+                }
+            }
         }
         List<FishBody> _recycles = new List<FishBody>(16);
         List<FishBody> _actived = new List<FishBody>(16);
 
-        public void createFish(ulong guid,int iResId)
+        public void createFish(ulong guid,int iResId,int tag,float elapsed, ulong tick)
         {
             var fishItem = TableManager.Instance().GetTableItem<ProtoTable.FishTable>(iResId);
             if (null == fishItem)
@@ -95,12 +116,31 @@ namespace GameClient
 
             if (null != fishBody)
             {
-                fishBody.SetPosition(new Vector2(UnityEngine.Random.Range(-20, 20), UnityEngine.Random.Range(-20, 20)));
                 fishBody.guid = guid;
                 fishBody.resId = iResId;
                 fishBody.action.Play();
                 fishBody.action.loops = -1;
+                fishBody.tag = tag;
+                fishBody.tick_count = tick;
+                fishBody.elapsed = elapsed;
+                fishBody.moveAction.Start();
                 _actived.Add(fishBody);
+            }
+        }
+
+        void Awake()
+        {
+            EventManager.Instance().RegisterEvent(ClientEvent.CE_CREATE_FISH, _OnCreateFish);
+        }
+
+        protected void _OnCreateFish(object argv)
+        {
+            FishData data = argv as FishData;
+            if(null != data)
+            {
+                createFish((ulong)data.fish_id, data.fishItem.ID,data.tag,data.elapsed,data.tick_count);
+
+                FishDataManager.Instance().Release(data);
             }
         }
 
@@ -113,7 +153,19 @@ namespace GameClient
         // Update is called once per frame
         void Update()
         {
-
+            for(int i = 0; i < _actived.Count; ++i)
+            {
+                if(null != _actived[i])
+                {
+                    var action = _actived[i].moveAction;
+                    if(null != action)
+                    {
+                        action.Step(Time.deltaTime);
+                        Vector2 position = action.FishMoveTo(action.elapsed());
+                        _actived[i].SetPosition(position);
+                    }
+                }
+            }
         }
     }
 }

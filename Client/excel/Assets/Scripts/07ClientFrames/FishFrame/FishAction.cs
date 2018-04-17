@@ -23,7 +23,7 @@ namespace GameClient
     //typedef List<MovePoint> MovePointVector;
 
     //------------------------------------------------------------------------------
-    class FishActionFishMove : FishActionInterval
+    public class FishActionFishMove : FishActionInterval
     {
         public FishActionFishMove(float duration) : base(duration)
         { }
@@ -502,5 +502,130 @@ namespace GameClient
         protected Vector2 control2_;
         float fish_speed_;
         List<MovePoint> move_points_;
+    };
+
+    //------------------------------------------------------------------------------
+    class FishActionFishMoveFoshou : FishActionFishMove
+    {
+        public FishActionFishMoveFoshou(float fish_speed, Vector2 start, Vector2 end) : base(1)
+        {
+            start_ = start;
+            end_ = end;
+            fish_speed_ = fish_speed;
+            position_ = start_;
+
+            Vector2 delta = new Vector2(end_.x - start_.x, end_.y - start_.y);
+            float length = delta.magnitude;
+            if (length > 0)
+            {
+                if (delta.y >= 0)
+                {
+                    angle_ = Mathf.Acos(delta.x / length);
+                }
+                else
+                {
+                    angle_ = -Mathf.Acos(delta.x / length);
+                }
+            }
+            dx_ = Mathf.Cos(angle_);
+            dy_ = Mathf.Sign(angle_);
+            duration_ = length / fish_speed_;
+        }
+        //virtual ~FishActionFishMoveFoshou();
+
+        public override bool IsDone()
+        {
+            return false;
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            position_ = start_;
+        }
+
+        public override void Step(float dt)
+        {
+            elapsed_ += dt * speed_;
+            position_.x += fish_speed_ * dt * dx_ * speed_;
+            position_.y += fish_speed_ * dt * dy_ * speed_;
+            if (elapsed_ < duration_)
+                return;
+
+            if (position_.x < 0.0f)
+            {
+                position_.x = -position_.x;
+                dx_ = -dx_;
+                angle_ = -angle_;
+            }
+            if (position_.x > FishConfig.kScreenWidth)
+            {
+                position_.x = FishConfig.kScreenWidth - (position_.x - FishConfig.kScreenWidth);
+                dx_ = -dx_;
+                angle_ = -angle_;
+            }
+            if (position_.y < 0.0f)
+            {
+                position_.y = -position_.y;
+                dy_ = -dy_;
+                angle_ = M_PI - angle_;
+            }
+            if (position_.y > FishConfig.kScreenHeight)
+            {
+                position_.y = FishConfig.kScreenHeight - (position_.y - FishConfig.kScreenHeight);
+                dy_ = -dy_;
+                angle_ = M_PI - angle_;
+            }
+        }
+
+        public override Vector2 FishMoveTo(float elapsed)
+        {
+            Vector2 move_to = position_;
+            float dx = dx_, dy = dy_;
+            if (elapsed_ + elapsed < duration_)
+            {
+                move_to.x += fish_speed_ * elapsed * dx * speed_;
+                move_to.y += fish_speed_ * elapsed * dy * speed_;
+                return move_to;
+            }
+            else
+            {
+                float kSpeed = FishConfig.kSpeed;
+                int count = (int)(elapsed / kSpeed);
+                while ((count--) > 0)
+                {
+                    move_to.x += fish_speed_ * kSpeed * dx * speed_;
+                    move_to.y += fish_speed_ * kSpeed * dy * speed_;
+
+                    if (move_to.x < 0.0f)
+                    {
+                        move_to.x = -move_to.x;
+                        dx = -dx;
+                    }
+                    if (move_to.x > FishConfig.kScreenWidth)
+                    {
+                        move_to.x = FishConfig.kScreenWidth - (move_to.x - FishConfig.kScreenWidth);
+                        dx = -dx;
+                    }
+                    if (move_to.y < 0.0f)
+                    {
+                        move_to.y = -move_to.y;
+                        dy = -dy;
+                    }
+                    if (move_to.y > FishConfig.kScreenHeight)
+                    {
+                        move_to.y = FishConfig.kScreenHeight - (move_to.y - FishConfig.kScreenHeight);
+                        dy = -dy;
+                    }
+                }
+                return move_to;
+            }
+        }
+
+        protected Vector2 start_;
+        protected Vector2 end_;
+        protected float fish_speed_;
+        protected float dx_;
+        protected float dy_;
     };
 }

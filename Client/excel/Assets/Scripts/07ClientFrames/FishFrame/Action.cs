@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameClient
 {
-    class FishAction
+    public class FishAction
     {
         protected static float M_PI = Mathf.PI;
         protected static float M_PI_2 = Mathf.PI * 0.50f;
@@ -159,7 +159,7 @@ namespace GameClient
 
     //------------------------------------------------------------------------------
     //扩展了一个duration
-    class FishActionFinitTime : FishAction
+    public class FishActionFinitTime : FishAction
     {
         public FishActionFinitTime(float duration) : base()
         {
@@ -173,7 +173,7 @@ namespace GameClient
     };
     //------------------------------------------------------------------------------
 
-    class FishActionInterval : FishActionFinitTime
+    public class FishActionInterval : FishActionFinitTime
     {
         public FishActionInterval(float duration) : base(duration)
         {

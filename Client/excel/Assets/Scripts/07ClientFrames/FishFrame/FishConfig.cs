@@ -8,6 +8,8 @@ namespace GameClient
     {
         public const int kFPS = 60;              // 帧率
         public const float kSpeed = 1.0f / kFPS;  // 速度
+        public const float kScreenWidth = 1366.0f;
+        public const float kScreenHeight = 768.0f;
     }
 
     class FishCommonLogic
@@ -338,7 +340,7 @@ namespace GameClient
         }
     }
 
-    enum BulletKind
+    public enum BulletKind
     {
         BULLET_2_NORMAL = 0,
         BULLET_3_NORMAL,
@@ -349,7 +351,7 @@ namespace GameClient
 
         BULLET_KIND_COUNT
     };
-    enum TraceType
+    public enum TraceType
     {
         TRACE_SPPEND_CHANGE_ONE = 0,
         TRACE_SPPEND_CHANGE_TWO = 1,
@@ -361,7 +363,7 @@ namespace GameClient
         TRACE_SPPEND_CHANGE_EIGHT = 7,
         TRACE_SPPEND_CHANGE_NINE = 8
     };
-    enum FishSpeedType
+    public enum FishSpeedType
     {
         FISHSPEED_LEVEL0 = 0,
         FISHSPEED_LEVEL1,
@@ -370,7 +372,7 @@ namespace GameClient
         FISHSPEED_LEVEL4,
         FISHSPEED_LEVEL5,
     };
-    enum SceneKind
+    public enum SceneKind
     {
         SCENE_1 = 0,
         SCENE_2,
@@ -380,5 +382,44 @@ namespace GameClient
         SCENE_6,
 
         SCENE_COUNT
+    };
+    public enum FishKind
+    {
+        FISH_WONIUYU = 0,         // 蜗牛鱼
+        FISH_LVCAOYU,             // 绿草鱼
+        FISH_HUANGCAOYU,          // 黄草鱼
+        FISH_DAYANYU,             // 大眼鱼
+        FISH_HUANGBIANYU,         // 黄边鱼
+        FISH_XIAOCHOUYU,          // 小丑鱼
+        FISH_XIAOCIYU,            // 小刺鱼
+        FISH_LANYU,               // 蓝鱼
+        FISH_DENGLONGYU,          // 灯笼鱼
+        FISH_HAIGUI,              // 海龟
+        FISH_HUABANYU,            // 花斑鱼
+        FISH_HUDIEYU,             // 蝴蝶鱼
+        FISH_KONGQUEYU,           // 孔雀鱼
+        FISH_JIANYU,              // 剑鱼
+        FISH_BIANFUYU,            // 蝙蝠鱼
+        FISH_YINSHA,              // 银鲨
+        FISH_JINSHA,              // 金鲨
+        FISH_BAWANGJING,          // 霸王鲸
+        FISH_JINCHAN,             // 金蝉
+        FISH_SHENXIANCHUAN,       // 神仙船
+        FISH_MEIRENYU,            // 美人鱼
+        FISH_XIAOQINGLONG,        // 小青龙
+        FISH_XIAOYINLONG,         // 小银龙
+        FISH_XIAOJINLONG,         // 小金龙
+        FISH_SWK,                 // 孙悟空
+        FISH_YUWANGDADI,          // 玉皇大帝
+        FISH_FOSHOU,              // 佛手
+        FISH_BGLU,                // 炼丹炉
+        FISH_DNTG,                // 大闹天宫 (FISH_WONIUYU-FISH_HAIGUI)
+        FISH_YJSD,                // 一箭双雕
+        FISH_YSSN,                // 一石三鸟
+        FISH_QJF,                 // 全家福
+        FISH_YUQUN,               // 鱼群 (FISH_WONIUYU-FISH_HAIGUI)
+        FISH_CHAIN,               // 闪电鱼 (FISH_WONIUYU-FISH_LANYU) 连 (FISH_WONIUYU-FISH_DENGLONGYU)
+
+        FISH_KIND_COUNT
     };
 }
