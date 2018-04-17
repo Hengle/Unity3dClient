@@ -1,0 +1,92 @@
+syntax = "proto2";
+package LKPY;
+
+//所有的game包协议必须带有session字段
+
+message UserFireReq {
+	required int32 session = 1;
+    required int32 bulletIdTemp = 2;
+    required int32 tickCount = 3;
+    required int32 angle = 4;
+    required int32 lockFishId = 5;
+    required int32 bulletMulriple = 6;
+}
+
+message UserFireRep {
+	required int32 session = 1;
+    required int32 tickCount = 2;
+    required int16 chairId = 3;
+    required int32 bulletId = 4;
+    required int32 angle = 5;
+    required bool bulletDouble = 6;
+    required int32 bulletMulriple = 7;
+    required int32 lockFishId = 8;
+    required bool isRobot = 9;
+    required int32 userRobotCharId = 10;
+}
+
+message ExchangeFishScoreReq {
+	required int32 session = 1;
+    required int64 score = 2;
+}
+
+message ExchangeFishScoreRep {
+	required int32 session = 1;
+    required int32 chairId = 2;
+    required int64 swapFishScore = 3;
+    required int64 exchangeFishScore = 4;
+}
+
+message SceneFishSync {
+	message enum FishKind {
+		FISH_WONIUYU = 0;         // 蜗牛鱼
+		FISH_LVCAOYU = 1;             // 绿草鱼
+		FISH_HUANGCAOYU = 2;          // 黄草鱼
+		FISH_DAYANYU = 3;             // 大眼鱼
+		FISH_HUANGBIANYU = 4;         // 黄边鱼
+		FISH_XIAOCHOUYU = 5;          // 小丑鱼
+		FISH_XIAOCIYU = 6;            // 小刺鱼
+		FISH_LANYU = 7;               // 蓝鱼
+		FISH_DENGLONGYU = 8;          // 灯笼鱼
+		FISH_HAIGUI = 9;              // 海龟
+		FISH_HUABANYU = 10;            // 花斑鱼
+		FISH_HUDIEYU = 11;             // 蝴蝶鱼
+		FISH_KONGQUEYU = 12;           // 孔雀鱼
+		FISH_JIANYU = 13;              // 剑鱼
+		FISH_BIANFUYU = 14;            // 蝙蝠鱼
+		FISH_YINSHA = 15;              // 银鲨
+		FISH_JINSHA = 16;              // 金鲨
+		FISH_BAWANGJING = 17;          // 霸王鲸
+		FISH_JINCHAN = 18;             // 金蝉		鱼王
+		FISH_SHENXIANCHUAN = 19;       // 神仙船	大四喜
+		FISH_MEIRENYU = 20;            // 美人鱼
+		FISH_XIAOQINGLONG = 21;        // 小青龙
+		FISH_XIAOYINLONG = 22;         // 小银龙
+		FISH_XIAOJINLONG = 23;         // 小金龙
+		FISH_SWK = 24;                 // 李逵		孙悟空
+		FISH_YUWANGDADI = 25;          // 企鹅		玉皇大帝
+		FISH_FOSHOU = 26;              // 水浒传	佛手
+		FISH_BGLU = 27;                // 忠义堂	炼丹炉
+		FISH_DNTG = 28;                // 大闹天宫 (FISH_WONIUYU-FISH_HAIGUI)	去掉
+		FISH_YJSD = 29;                // 一箭双雕
+		FISH_YSSN = 30;                // 一石三鸟
+		FISH_QJF = 31;                 // 全家福
+		FISH_YUQUN = 32;               // 鱼群 (FISH_WONIUYU-FISH_HAIGUI)		去掉
+		FISH_CHAIN = 33;               // 闪电鱼 (FISH_WONIUYU-FISH_LANYU) 连 (FISH_WONIUYU-FISH_DENGLONGYU)
+
+		FISH_KIND_COUNT = 34;
+	}
+
+	required int32 session = 1;
+	required int32 fishId = 2;
+	required 
+	 
+  FishKind fish_kind;
+  Position position[4];
+  int position_count;
+  int tag;
+  float elapsed;
+  DWORD tick_count;
+}
+SUB_S_SCENE_FISH
+
