@@ -88,11 +88,11 @@ namespace GameClient
 
             if (chairId < 3)
             {
-                for (int j = 0; j < cmd.position_count && j < cmd.position.Length; ++j)
-                {
-                    cmd.position[j].x = FishConfig.kScreenWidth - cmd.position[j].x;
-                    cmd.position[j].y = FishConfig.kScreenHeight - cmd.position[j].y;
-                }
+                //for (int j = 0; j < cmd.position_count && j < cmd.position.Length; ++j)
+                //{
+                //    cmd.position[j].x = FishConfig.kScreenWidth - cmd.position[j].x;
+                //    cmd.position[j].y = FishConfig.kScreenHeight - cmd.position[j].y;
+                //}
             }
 
             var fishItem = TableManager.Instance().GetTableItem<ProtoTable.FishTable>((int)cmd.fish_kind);

@@ -123,6 +123,7 @@ namespace GameClient
                 fishBody.tag = data.tag;
                 fishBody.tick_count = data.tick_count;
                 fishBody.elapsed = data.elapsed;
+                fishBody.moveAction = data.action;
                 fishBody.moveAction.Start();
                 _actived.Add(fishBody);
             }

@@ -27,6 +27,15 @@ namespace GameClient
             //    mcomLogic.createFish(1002, 2);
             //    mcomLogic.createFish(1003, 3);
             //}
+            CMD_S_SceneFish cmd = new CMD_S_SceneFish();
+            cmd.fish_id = 100050;
+            cmd.fish_kind =  FishKind.FISH_HUANGBIANYU;
+            cmd.elapsed = 0;
+            cmd.position = new Vector2[] { new Vector2 (0, 0), new Vector2(100, 10), new Vector2(150, 350)};
+            cmd.position_count = 3;
+            cmd.tag = 0;
+            cmd.tick_count = 0;
+            FishDataManager.Instance().ExecuteCmd(cmd);
 		}
 
         public override bool needLuaBehavior()
