@@ -4,13 +4,24 @@
 --- DateTime: 2018/4/17 9:28
 ---
 local RoomFrame = {}
+local barFrame = nil
 
 function RoomFrame.OnOpenFrame()
+    local attachNode = self.frame:GetObject('pnl_bar_frame')
+    barFrame = app.FrameManager.OpenFrameLua(app._FrameList.BarFrame,nil,-1,attachNode)
+    self.frame:AddChildFrame(barFrame);
+    self.frame:GetObject('btn_room_1').onClick:AddListener(RoomFrame.onClickRoom1)
+    --[[self.frame:GetObject('btn_room_2').onClick:AddListener(RoomFrame.onClickRoom2)
+    self.frame:GetObject('btn_room_3').onClick:AddListener(RoomFrame.onClickRoom3)
+    self.frame:GetObject('btn_room_4').onClick:AddListener(RoomFrame.onClickRoom4)]]--
+end
+
+RoomFrame.onClickRoom1 = function()
 
 end
 
-
 function RoomFrame.OnCloseFrame()
+    barFrame = nil
 end
 
 return RoomFrame

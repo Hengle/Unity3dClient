@@ -3,9 +3,11 @@
 --- Created by asus.
 --- DateTime: 2018/4/15 19:57
 ---
-
-
 local RoomMsgManager = {}
+
+local RoomConfig = require(".app.config.RoomConfig")
+
+local message = require(".net.Message")
 
 local player_info = {}
 local table_states = {}
@@ -16,6 +18,10 @@ local userMsg = {}	-- from server
 local roomMsg = {}	-- from client table
 
 local handlers = {game=gameMsg, user=userMsg, room=roomMsg}
+
+local table_id = 0
+local seat_id = 0
+local watching = false
 
 local gameid = nil
 local roomid = nil
@@ -38,6 +44,52 @@ function RoomMsgManager:EnterRoomRep(msg)
 end
 
 -- ------------------------------ game msg ------------------------------
+function gameMsg.RoomSession(msg)
+    print("get room session:", msg.session)
+    room_session = msg.session
+end
+
+function gameMsg.SetSession(msg)
+    print("get table session:", msg.session)
+    table_session = msg.session
+end
+
+function gameMsg.SitdownRep(msg)
+    print("sit down result:" .. msg.result .. " table session:" .. table_session .. " tableid:" .. msg.table)
+    if msg.result ~= 0 then
+        local conf = RoomConfig:getGameConfig(gameid)
+        if conf.quick then
+            message.sendMessage("game.v", {session=room_session})
+        end
+        --[[local scene = display.getRunningScene()
+        local error_str = util.error(msg.result)
+        if error_str and string.len(error_str) > 0 then
+            errorLayer.new(error_str):addTo(scene)
+        end]]--
+        return
+    end
+
+    table_id = msg.table
+    seat_id = msg.seat
+    watching = (msg.watching == 1)
+    if game_scene ~= nil then
+        print("loading game scene:", game_scene)
+        --TODO 拉起捕鱼界面
+        --app.FrameManager.OpenFrameLua(game_scene)
+
+        -- add send room id and game id
+        if max_seats ~= nil then
+
+
+
+
+
+
+
+        end
+    end
+end
+
 function gameMsg.RoomInfo(msg)
     dump(msg)
 end

@@ -27,7 +27,6 @@ function LobbyFrame.OnOpenFrame()
 end
 
 LobbyFrame.onClickFishGame = function()
-	--roomMgr:init(Gameid_fish,nil)
 	app.FrameManager.OpenFrameLua(app._FrameList.RoomFrame)
 end
 

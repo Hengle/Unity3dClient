@@ -94,7 +94,7 @@ local config = {
     {
         gameid = 107,
         name = "李逵劈鱼",
-        scene = "CatchFishScene",
+        scene = app.FrameManager.FishMainFrame,
         icon = "CatchFish",
         popular = 2,
         quick = true,  -- 快速坐下/站起，不展示房间桌子情况
