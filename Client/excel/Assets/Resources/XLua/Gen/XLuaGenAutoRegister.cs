@@ -47,6 +47,8 @@ namespace XLua.CSObjectWrap
 				
 				translator.DelayWrapLoader(typeof(GameClient.LuaSocketEventManager), GameClientLuaSocketEventManagerWrap.__Register);
 				
+				translator.DelayWrapLoader(typeof(GameClient.SceneManager), GameClientSceneManagerWrap.__Register);
+				
 				translator.DelayWrapLoader(typeof(GameClient.FrameTypeID), GameClientFrameTypeIDWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(GameClient.ClientFrame), GameClientClientFrameWrap.__Register);
