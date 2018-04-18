@@ -4,20 +4,47 @@
 --- DateTime: 2018/4/17 9:28
 ---
 local RoomFrame = {}
+
+local RoomConfig = require(".app.config.RoomConfig")
+
+local UserMessage = require(".net.UserMessage")
+
+local roomMgr = require(".app.room.RoomManager")
+
+local Gameid_fish = 107
+
 local barFrame = nil
 
 function RoomFrame.OnOpenFrame()
     local attachNode = self.frame:GetObject('pnl_bar_frame')
     barFrame = app.FrameManager.OpenFrameLua(app._FrameList.BarFrame,nil,-1,attachNode)
     self.frame:AddChildFrame(barFrame);
-    self.frame:GetObject('btn_room_1').onClick:AddListener(RoomFrame.onClickRoom1)
+
+    local gameConfig = RoomConfig:getGameConfig(Gameid_fish)
+    dump(gameConfig, "RoomFrame.OnOpenFrame:")
+    assert(gameConfig)
+
+    for _,config in ipairs(gameConfig.room) do
+        local roomid = (config.roomid) % 100 + 1
+        self.frame:GetObject("btn_room_"..roomid).onClick:AddListener(function()
+        roomMgr:init(Gameid_fish,config.roomid)
+        UserMessage.send("EnterRoomReq", {roomid=config.roomid}, function(msg)
+            roomMgr:EnterRoomRep(msg)
+        end)
+    end)
+    end
+    --self.frame:GetObject('btn_room_1').onClick:AddListener(RoomFrame.onClickRoom1)
     --[[self.frame:GetObject('btn_room_2').onClick:AddListener(RoomFrame.onClickRoom2)
     self.frame:GetObject('btn_room_3').onClick:AddListener(RoomFrame.onClickRoom3)
     self.frame:GetObject('btn_room_4').onClick:AddListener(RoomFrame.onClickRoom4)]]--
 end
 
 RoomFrame.onClickRoom1 = function()
-
+    local roomid = 10700
+    roomMgr:init(Gameid_fish, roomid)
+    UserMessage.send("EnterRoomReq", {roomid=roomid}, function(msg)
+        roomMgr:EnterRoomRep(msg)
+    end)
 end
 
 function RoomFrame.OnCloseFrame()

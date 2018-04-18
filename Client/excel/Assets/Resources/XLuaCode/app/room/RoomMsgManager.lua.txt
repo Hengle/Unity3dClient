@@ -9,6 +9,10 @@ local RoomConfig = require(".app.config.RoomConfig")
 
 local message = require(".net.Message")
 
+local _Player = app.data.UserData.Player
+
+local roomScene = nil
+
 local player_info = {}
 local table_states = {}
 
@@ -38,9 +42,38 @@ function RoomMsgManager:EnterRoomRep(msg)
     dump(msg, "RoomMsgManager EnterRoomRep:")
     --print("enter room result:" .. msg.result)
         if msg.result ~= 0 then
-        
+            local roomid = msg.roomid
+            local err_str = string.format(util.error(msg.result), RoomConfig:getFullName(roomid))
+            print("RoomMsgManager  EnterRoomRep Error: ", err_str)
+        end
+
+    for tableid, t in pairs(player_info) do
+        for seatid, p in pairs(t) do
+            if p.uid == _Player.uid then
+                -- reconnect to the old place
+                printf("reconnect to table:%d seat:%d", tableid, seatid)
+                message.sendMessage("game.SitdownReq", {
+                    session = room_session,
+                    table = tableid,
+                    seat = seatid,
+                    -- rule = _Player.roomRule, -- reconnect is unnecessary
+                })
+                return
+            end
+        end
     end
-    
+    print("RoomScene gameid:" .. gameid .. " roomid:" .. roomid)
+
+    local conf = RoomConfig:getGameConfig(gameid)
+    if conf.quick then
+        message.sendMessage("game.SitdownReq", {
+            session = room_session,
+            table = 0,
+            seat = 0,
+        })
+        return
+    end
+
 end
 
 -- ------------------------------ game msg ------------------------------
@@ -55,12 +88,15 @@ function gameMsg.SetSession(msg)
 end
 
 function gameMsg.SitdownRep(msg)
+    dump(msg,"RoomMsgManager gameMsg.SitdownRep: ");
     print("sit down result:" .. msg.result .. " table session:" .. table_session .. " tableid:" .. msg.table)
     if msg.result ~= 0 then
         local conf = RoomConfig:getGameConfig(gameid)
         if conf.quick then
-            message.sendMessage("game.v", {session=room_session})
+            message.sendMessage("game.LeaveRoomReq", {session=room_session})
         end
+        local error_str = app.util.ToolUtils.error(msg.result)
+
         --[[local scene = display.getRunningScene()
         local error_str = util.error(msg.result)
         if error_str and string.len(error_str) > 0 then
@@ -74,24 +110,93 @@ function gameMsg.SitdownRep(msg)
     watching = (msg.watching == 1)
     if game_scene ~= nil then
         print("loading game scene:", game_scene)
-        --TODO 拉起捕鱼界面
+        --TODO: 拉起捕鱼界面
         --app.FrameManager.OpenFrameLua(game_scene)
 
         -- add send room id and game id
         if max_seats ~= nil then
 
 
-
-
-
-
-
         end
     end
 end
 
-function gameMsg.RoomInfo(msg)
+function gameMsg.SitupRep(msg)
     dump(msg)
+end
+
+function gameMsg.RoomInfo(msg)
+    dump(msg, "RoomMsgManager gameMsg.RoomInfo: ")
+    --[[dump(msg, "gameMsg.RoomInfo !!!", 8)
+    if msg.session ~= room_session then
+        return
+    end
+
+    if roomScene then
+        for tableid, t in pairs(player_info) do
+            for seatid, _ in pairs(t) do
+                roomScene:playerSeat(tableid, seatid, nil)
+                roomScene:SeatReady(tableid, seatid, false)
+            end
+        end
+    end
+    player_info = {}
+	table_states = {}
+
+    for _, t in ipairs(msg.tableinfos) do
+        for _, v in ipairs(t.player) do
+            local p = {
+                uid = v.uid,
+                name = v.name,
+                gold = v.gold,
+                ready = v.ready,
+                sex = v.sex,
+                avatarurl = v.avatarurl,
+            }
+            msgMgr:add_seat_player(t.table, v.seat, p)
+        end
+        printf("set table:%d state:%d", t.table, t.state)
+        msgMgr:set_table_state(t.table, t.state)
+        if roomScene then
+            for _, v in ipairs(t.player) do
+                roomScene:playerSeat(t.table, v.seat, v)
+                roomScene:SeatReady(t.table, v.seat, v.ready>0)
+            end
+            roomScene:tableState(t.table, t.state)
+        end
+    end]]--
+end
+
+function gameMsg.TableSitdown(msg)
+    dump(msg, "RoomMsgManager gameMsg.TableSitdown: ")
+    if msg.session == room_session then
+        local p = {
+            uid = msg.player.uid,
+            name = msg.player.name,
+            gold = msg.player.gold,
+            ready = 0,
+            sex = msg.player.sex,
+            avatarurl = msg.player.avatarurl,
+        }
+        msgMgr:add_seat_player(msg.table, msg.seat, p)
+        if roomScene then
+            roomScene:playerSeat(msg.table, msg.seat, msg.player)
+        end
+    elseif msg.session == table_session then
+        if msg.table == table_id then
+            message.dispatchCurrent("room.EnterGame", {
+                seat = msg.seat,
+                player = {
+                    uid = msg.player.uid,
+                    name = msg.player.name,
+                    gold = msg.player.gold,
+                    ready = 0,
+                    sex = msg.player.sex,
+                    avatarurl = msg.player.avatarurl,
+                }
+            })
+        end
+    end
 end
 
 -- ------------------------------ message manager ------------------------------
@@ -144,3 +249,236 @@ function msgMgr:setGameConfig(conf)
 end]]--
 
 return RoomMsgManager
+
+
+--TODO:ROOMLIST
+--[[do
+    local ret= {
+        [1] = {
+            tables=60,
+            seats=4,
+            maxRoomPlayer=500,
+            seatslayout = {
+                [1] = {
+                    [1]=1,
+                    [2]=2,
+                    [3]=3,
+                    [4]=4},
+                [2] = {
+                    [1]=1,
+                    [2]=2,
+                    [3]=4},
+                [3] = {
+                    [1]=1,
+                    [2]=3}
+            },
+            gamekey="XZMJ",
+            name="血战到底",
+            gold=1000,
+            roomid=10100,
+            gameid=101,
+            layout = {
+                lock = {
+                    posx=240,
+                    posy=170,
+                    icon="Image/Common/Table/Image_Table_Lock.png"
+                },
+                name={
+                    [1]={
+                        id=1,
+                        posy=90,
+                        point="left",
+                        posx=272},
+                    [2]={
+                        id=2,
+                        posy=220,
+                        point="center",
+                        posx=302},
+                    [3]={
+                        id=3,
+                        posy=270,
+                        point="right",
+                        posx=152},
+                    [4]={
+                        id=4,
+                        posy=140,
+                        point="center",
+                        posx=122}},
+                table={
+                    posx=212,
+                    posy=180,
+                    idle="Image/XZMJ/Image_Table_Unplay.png",
+                    busy="Image/XZMJ/Image_Table_Playing.png"},
+                height=360,
+                seat={
+                    [1]={
+                        id=1,
+                        posy=90,
+                        icon="Image/XZMJ/Image_chair_down.png",
+                        posx=212},
+                    [2]={
+                        id=2,
+                        posy=180,
+                        icon="Image/XZMJ/Image_chair_right.png",
+                        posx=302},
+                    [3]={
+                        id=3,
+                        posy=270,
+                        icon="Image/XZMJ/Image_chair_up.png",
+                        posx=212},
+                    [4]={
+                        id=4,
+                        posy=180,
+                        icon="Image/XZMJ/Image_chair_left.png",
+                        posx=122}},
+                hand={
+                    [1]={
+                        id=1,
+                        posy=110,
+                        icon="Image/Common/Table/Image_Ready.png",
+                        posx=272},
+                    [2]={
+                        id=2,
+                        posy=240,
+                        icon="Image/Common/Table/Image_Ready.png",
+                        posx=302},
+                    [3]={
+                        id=3,
+                        posy=290,
+                        icon="Image/Common/Table/Image_Ready.png",
+                        posx=152},
+                    [4]={
+                        id=4,
+                        posy=120,
+                        icon="Image/Common/Table/Image_Ready.png",
+                        posx=122}
+                },
+                width=426
+            }
+        },
+        [2]={
+            tables=60,
+            seats=4,
+            maxRoomPlayer=500,
+            seatslayout={
+                [1]={
+                    [1]=1,
+                    [2]=2,
+                    [3]=3,
+                    [4]=4},
+                [2]={
+                    [1]=1,
+                    [2]=2,
+                    [3]=4},
+                [3]={
+                    [1]=1,
+                    [2]=3}
+            },
+            gamekey="XLMJ",
+            name="血流成河",
+            gold=1000,
+            roomid=10101,
+            gameid=101,
+            layout={
+                lock={
+                    posx=240,
+                    posy=170,
+                    icon="Image/Common/Table/Image_Table_Lock.png"},
+                name={
+                    [1]={
+                        id=1,
+                        posy=90,
+                        point="left",
+                        posx=272},
+                    [2]={
+                        id=2,
+                        posy=220,
+                        point="center",
+                        posx=302},
+                    [3]={
+                        id=3,
+                        posy=270,
+                        point="right",
+                        posx=152},
+                    [4]={
+                        id=4,
+                        posy=140,
+                        point="center",
+                        posx=122}},
+                table={
+                    posx=212,
+                    posy=180,
+                    idle="Image/XZMJ/Image_Table_Unplay.png",
+                    busy="Image/XZMJ/Image_Table_Playing.png"
+                },
+                height=360,
+                seat={
+                    [1]={
+                        id=1,
+                        posy=90,
+                        icon="Image/XZMJ/Image_chair_down.png",
+                        posx=212},
+                    [2]={
+                        id=2,
+                        posy=180,
+                        icon="Image/XZMJ/Image_chair_right.png",
+                        posx=302},
+                    [3]={
+                        id=3,
+                        posy=270,
+                        icon="Image/XZMJ/Image_chair_up.png",
+                        posx=212},
+                    [4]={
+                        id=4,
+                        posy=180,
+                        icon="Image/XZMJ/Image_chair_left.png",
+                        posx=122}
+                },
+                hand={
+                    [1]={
+                        id=1,
+                        posy=110,
+                        icon="Image/Common/Table/Image_Ready.png",
+                        posx=272},
+                    [2]={
+                        id=2,
+                        posy=240,
+                        icon="Image/Common/Table/Image_Ready.png",
+                        posx=302},
+                    [3]={
+                        id=3,
+                        posy=290,
+                        icon="Image/Common/Table/Image_Ready.png",
+                        posx=152},
+                    [4]={
+                        id=4,
+                        posy=120,
+                        icon="Image/Common/Table/Image_Ready.png",
+                        posx=122}
+                },
+                width=426
+            }
+        }
+    }
+    return ret
+end]]--
+
+--[[{
+    "players" = {
+        1 = {
+    "count"  = 0
+    "roomid" = 10100},
+    2 = {
+    "roomid" = 10101},
+    3 = {
+    "roomid" = 10199}
+    },
+}]]--
+
+--[["LoginFrame.loginCallback resTable:" = {
+"result" = "0"
+"secret" = "NXLimUM9lnuYYYDeEuPRzt8SpaDZg+JSgGV97I5LuUaYP53VV8ZdWs6NyHPRSUr75ETZUOSPqO/+PH5va/xXgPi8Tk61opg8"
+"sign"   = "qcKopMAqngpH2vnzGttkzNZVJ+0="
+"token"  = "w0G2MyBTVdM="
+"uid"    = "100001"
+}]]--

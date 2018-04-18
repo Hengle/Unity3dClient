@@ -7,8 +7,6 @@ local roomMgr = require(".app.room.RoomManager")
 local Player = app.data.UserData.Player
 local Account = app.data.UserData.Account
 
-local Gameid_fish = 107
-
 function LobbyFrame.OnOpenFrame()
 	UserMessage.send("UserInfoReq", {uid=Account.uid}, handler(self,self.UserInfoRep))
 	UserMessage.send("RoomListReq", handler(self, self.RoomListRep))
