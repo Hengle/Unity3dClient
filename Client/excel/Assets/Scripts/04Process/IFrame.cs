@@ -17,6 +17,7 @@ namespace GameClient
         FrameLayer getLayer();
         string getPrefabPath();
         bool needLuaBehavior();
+        FrameState getFrameState();
 
         void RegisterEvent(int eventId, LuaEvent handler);
         void UnRegisterEvent(int eventId, LuaEvent handler);

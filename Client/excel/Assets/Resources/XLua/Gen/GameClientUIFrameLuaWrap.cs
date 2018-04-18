@@ -85,6 +85,20 @@ namespace XLua.CSObjectWrap
             
 			    int __gen_param_count = LuaAPI.lua_gettop(L);
             
+                if(__gen_param_count == 4&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 1)&& translator.Assignable<object>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)&& translator.Assignable<UnityEngine.GameObject>(L, 4)) 
+                {
+                    int frameTypeId = LuaAPI.xlua_tointeger(L, 1);
+                    object userData = translator.GetObject(L, 2, typeof(object));
+                    int frameId = LuaAPI.xlua_tointeger(L, 3);
+                    UnityEngine.GameObject parent = (UnityEngine.GameObject)translator.GetObject(L, 4, typeof(UnityEngine.GameObject));
+                    
+                        GameClient.IFrame __cl_gen_ret = GameClient.UIFrameLua.OpenFrameLua( frameTypeId, userData, frameId, parent );
+                        translator.PushAny(L, __cl_gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
                 if(__gen_param_count == 3&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 1)&& translator.Assignable<object>(L, 2)&& LuaTypes.LUA_TNUMBER == LuaAPI.lua_type(L, 3)) 
                 {
                     int frameTypeId = LuaAPI.xlua_tointeger(L, 1);

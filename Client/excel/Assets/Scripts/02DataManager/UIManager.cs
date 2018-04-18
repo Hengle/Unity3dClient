@@ -77,15 +77,18 @@ namespace GameClient
             if(mActiveFrames.ContainsKey(iHashCode))
             {
                 IFrame frame = mActiveFrames[iHashCode];
-                mActiveFrames.Remove(iHashCode);
-                mCachedFrames.Add(iHashCode,frame);
-                frame.closeFrame();
+                if(frame.getFrameState() != FrameState.FS_CLOSED)
+                {
+                    mActiveFrames.Remove(iHashCode);
+                    mCachedFrames.Add(iHashCode, frame);
+                    frame.closeFrame();
+                }
             }
         }
 
         public void CloseFrame<T>(T frame) where T : IFrame, new()
         {
-            if(null != frame)
+            if(null != frame && frame.getFrameState() != FrameState.FS_CLOSED)
             {
                 int iHashCode = frame.getFrameHashCode();
                 mActiveFrames.Remove(iHashCode);
@@ -96,18 +99,40 @@ namespace GameClient
 
         public void CloseAllFrames()
         {
+            var framePools = GamePool.ListPool<IFrame>.Get();
+
             var enumerator = mActiveFrames.GetEnumerator();
             while(enumerator.MoveNext())
             {
-                IFrame frame = enumerator.Current.Value;
-                if(null != frame)
+                framePools.Add(enumerator.Current.Value);
+            }
+            for(int i = 0; i < framePools.Count; ++i)
+            {
+                IFrame frame = framePools[i];
+                if (null != frame && frame.getFrameState() != FrameState.FS_CLOSED)
                 {
                     int iHashCode = frame.getFrameHashCode();
                     mCachedFrames.Add(iHashCode, frame);
                     frame.closeFrame();
                 }
             }
+
+            GamePool.ListPool<IFrame>.Release(framePools);
+
+            framePools.Clear();
+            if (mActiveFrames.Count > 0)
+            {
+                enumerator = mActiveFrames.GetEnumerator();
+                while(enumerator.MoveNext())
+                {
+                    var frame = enumerator.Current.Value;
+                    LogManager.Instance().LogErrorFormat("<color=#ff0000>frame has not been closed yet ! type id = {0} !!", frame.getFrameTypeId());
+                    framePools.Add(frame);
+                }
+            }
             mActiveFrames.Clear();
+
+            GamePool.ListPool<IFrame>.Release(framePools);
         }
 
         protected Dictionary<int, IFrame> mActiveFrames = new Dictionary<int, IFrame>();

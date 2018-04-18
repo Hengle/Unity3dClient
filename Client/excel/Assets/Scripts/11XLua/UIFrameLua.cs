@@ -8,9 +8,9 @@ namespace GameClient
     [LuaCallCSharp]
     class UIFrameLua
     {
-        public static IFrame OpenFrameLua(int frameTypeId, object userData = null, int frameId = -1)
+        public static IFrame OpenFrameLua(int frameTypeId, object userData = null, int frameId = -1,GameObject parent = null)
         {
-            return UIManager.Instance().OpenFrameLua(frameTypeId, userData, frameId);
+            return UIManager.Instance().OpenFrameLua(frameTypeId, userData, frameId,parent);
         }
 
         public static void CloseFrameLua(int frameTypeId, int frameId = -1)

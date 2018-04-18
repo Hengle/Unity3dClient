@@ -55,6 +55,8 @@ namespace XLua.CSObjectWrap
 				
 				translator.DelayWrapLoader(typeof(GameClient.FrameLayer), GameClientFrameLayerWrap.__Register);
 				
+				translator.DelayWrapLoader(typeof(GameClient.FrameState), GameClientFrameStateWrap.__Register);
+				
 				translator.DelayWrapLoader(typeof(GameClient.ComUIListBinderItems), GameClientComUIListBinderItemsWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(Scripts.UI.ComUIListScript), ScriptsUIComUIListScriptWrap.__Register);

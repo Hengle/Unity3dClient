@@ -20,6 +20,11 @@ namespace GameClient
             return frameTypeId;
         }
 
+        public FrameState getFrameState()
+        {
+            return frameState;
+        }
+
         public int getFrameHashCode()
         {
             return iHashCode;
@@ -53,7 +58,7 @@ namespace GameClient
         public void openFrame(int iId = -1, int type = 1, object userData = null,GameObject parent = null)
         {
             LogManager.Instance().LogProcessFormat(9000, "try open frame {0}!", type);
-
+            this.frameState = FrameState.FS_OPENING;
             this.frameId = iId;
             this.frameTypeId = type;
             this.iHashCode = UIManager.Instance().MakeFrameHashCode(iId, type);
@@ -123,10 +128,13 @@ namespace GameClient
             }
 
             _OnOpenFrame();
+
+            this.frameState = FrameState.FS_OPEN;
         }
 
         public void closeFrame()
         {
+            this.frameState = FrameState.FS_CLOSING;
             LogManager.Instance().LogProcessFormat(9000, "close frame {0} !", frameTypeId);
 
             _OnCloseFrame();
@@ -157,6 +165,7 @@ namespace GameClient
             userData = null;
             frameItem = null;
 			Resources.UnloadUnusedAssets ();
+            this.frameState = FrameState.FS_CLOSED;
         }
 
         #region lua_event_wrap
@@ -405,6 +414,7 @@ namespace GameClient
         int frameId = -1;
         int frameTypeId = -1;
         int iHashCode = 0;
+        FrameState frameState = FrameState.FS_INVALID;
         protected object userData = null;
         protected GameObject root = null;
         protected ProtoTable.FrameTypeTable frameItem = null;
