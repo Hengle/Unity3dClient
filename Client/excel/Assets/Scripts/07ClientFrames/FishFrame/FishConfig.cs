@@ -38,47 +38,114 @@ namespace GameClient
             return Mathf.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
         }
 
+        /// <summary>
+        /// 两阶贝塞尔曲线
+        /// </summary>
+        /// <param name="P0"></param>
+        /// <param name="P1"></param>
+        /// <param name="P2"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public static Vector2 BezierCurve(Vector2 P0, Vector2 P1, Vector2 P2, float t)
         {
             Vector2 B = Vector2.zero;
             float t1 = (1 - t) * (1 - t);
             float t2 = t * (1 - t);
             float t3 = t * t;
-            B = P0 * t1 + 2 * t2 * P1 + t3 * P2;
+            B = P0 * t1  + 2 * P1 * t2 + P2 * t3;
             return B;
         }
 
-        public static void BuildBezier(Vector2[] points, ref List<MovePoint> move_points)
+        /// <summary>
+        /// 三阶贝塞尔曲线
+        /// </summary>
+        /// <param name="P0"></param>
+        /// <param name="P1"></param>
+        /// <param name="P2"></param>
+        /// <param name="P3"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static Vector2 BezierCurve(Vector2 P0, Vector2 P1, Vector2 P2, Vector2 P3, float t)
+        {
+            Vector2 B = Vector2.zero;
+            float t1 = (1 - t) * (1 - t) * (1 - t);
+            float t2 = t * (1 - t) * (1 - t);
+            float t3 = t * t * (1 - t);
+            float t4 = t * t * t;
+            B = P0 * t1 + 3 * P1 * t2 + 3 * P2 * t3  + P3 * t4;
+            return B;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="move_points"></param>
+        /// <param name="min_distance">鱼单帧能移动的距离，用来过滤无效的采样点</param>
+        /// <param name="speedType">强制重复插点类型</param>
+        /// <param name="step">采样精度</param>
+        public static void BuildBezier(Vector2[] points, ref List<MovePoint> move_points,float min_distance, FishSpeedType speedType = FishSpeedType.FISHSPEED_LEVEL0,float step = 0.001f)
         {
             if (null == move_points)
             {
                 move_points = new List<MovePoint>(100);
             }
+
             move_points.Clear();
 
-            if (points.Length == 3)
+            if (points.Length >= 3 && points.Length <=4)
             {
                 float t = 0.0f;
                 while (t < 1.0f)
                 {
-                    Vector2 point = BezierCurve(points[0], points[1], points[2], t);
-                    MovePoint mp = new MovePoint();
-                    mp.position_ = point;
-                    move_points.Add(mp);
-                    t += 0.01f;
+                    Vector2 point = Vector2.zero;
+
+                    if(points.Length == 3)
+                    {
+                        point = BezierCurve(points[0], points[1], points[2], t);
+                    }
+                    else
+                    {
+                        point = BezierCurve(points[0], points[1], points[2], points[3], t);
+                    }
+
+                    if(move_points.Count <= 0)
+                    {
+                        move_points.Add(new MovePoint {  position_ = point, angle_ = 0});
+
+                        for (int i = 0; i < (int)speedType; ++i)
+                        {
+                            move_points.Add(new MovePoint { position_ = point, angle_ = 0 });
+                        }
+                    }
+                    else
+                    {
+                        MovePoint back_point = move_points[move_points.Count - 1];
+                        Vector2 back_pos = back_point.position_;
+                        Vector2 vector = point - back_pos;
+                        back_point.angle_ = Mathf.Atan2(vector.y, vector.x);
+                        //modify angle for force push_point
+                        for(int i = 1; i <= (int)speedType;++i)
+                        {
+                            int modifyIndex = move_points.Count - 1 - i;
+                            if(modifyIndex >= 0)
+                            {
+                                move_points[move_points.Count - 1].angle_ = back_point.angle_;
+                            }
+                        }
+
+                        if (vector.magnitude >= min_distance)
+                        {
+                            move_points.Add(new MovePoint { position_ = point, angle_ = back_point.angle_ });
+
+                            for(int i = 0; i < (int)speedType; ++i)
+                            {
+                                move_points.Add(new MovePoint { position_ = point, angle_ = back_point.angle_ });
+                            }
+                        }
+                    }
+                    t += step;
                 }
-            }
-
-            for(int i = 1; i < move_points.Count; ++i)
-            {
-                Vector2 vec = move_points[i].position_ - move_points[i - 1].position_;
-                float angle = Mathf.Atan2(vec.y, vec.x);
-                move_points[i - 1].angle_ = angle;
-            }
-
-            if(move_points.Count > 1)
-            {
-                move_points[move_points.Count - 1].angle_ = move_points[move_points.Count - 2].angle_;
             }
         }
 

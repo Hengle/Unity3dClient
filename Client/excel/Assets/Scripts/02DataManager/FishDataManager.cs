@@ -104,7 +104,7 @@ namespace GameClient
                 return;
             }
 
-            float speed = fishItem.Speed * 0.01f;
+            float speed = fishItem.Speed * 0.001f;
 
             FishActionFishMove action = null;
             if (cmd.fish_kind == FishKind.FISH_FOSHOU)
@@ -118,11 +118,12 @@ namespace GameClient
                     action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>(16) as FishActionFishMove;
                     FishActionFishMoveBezier actionBezier = action as FishActionFishMoveBezier;
                     actionBezier.Create(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y), new Vector2(cmd.position[2].x, cmd.position[2].y));
-                    //action = new FishActionFishMoveBezier(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y), new Vector2(cmd.position[2].x, cmd.position[2].y));
                 }
                 else if (cmd.position_count == 4)
                 {
-                    action = new FishActionFishMoveBezier(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y), new Vector2(cmd.position[2].x, cmd.position[2].y), new Vector2(cmd.position[3].x, cmd.position[3].y));
+                    action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>(16) as FishActionFishMove;
+                    FishActionFishMoveBezier actionBezier = action as FishActionFishMoveBezier;
+                    actionBezier.Create(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y), new Vector2(cmd.position[2].x, cmd.position[2].y), new Vector2(cmd.position[3].x, cmd.position[3].y));
                 }
                 else
                 {

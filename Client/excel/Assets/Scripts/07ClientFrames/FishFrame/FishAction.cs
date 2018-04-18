@@ -112,8 +112,24 @@ namespace GameClient
                 end
             };
 
+            FishCommonLogic.BuildBezier(points, ref move_points_, fish_speed * FishConfig.kSpeed);
+            duration_ = FishConfig.kSpeed * move_points_.Count;
+        }
+
+        public void Create(float fish_speed, Vector2 start, Vector2 c1, Vector2 c2, Vector2 end)
+        {
+            elapsed_ = 0.0f;
+            stop_ = false;
+            start_ = start;
+            end_ = end;
+            control1_ = c1;
+            control2_ = c2;
+            fish_speed_ = fish_speed;
+            position_ = start_;
+            Vector2[] points =
+            { start, c1, c2, end };
             float kSpeed = FishConfig.kSpeed;
-            FishCommonLogic.BuildBezier(points, ref move_points_);
+            FishCommonLogic.BuildBezier(points, ref move_points_, fish_speed * FishConfig.kSpeed);
             duration_ = kSpeed * move_points_.Count;
         }
 
@@ -133,7 +149,7 @@ namespace GameClient
             };
 
             float kSpeed = FishConfig.kSpeed;
-            FishCommonLogic.BuildBezier(points, ref move_points_);
+            //FishCommonLogic.BuildBezier(points, ref move_points_);
             //FishCommonLogic.BuildBezier(points, 3, ref move_points_, fish_speed_ * kSpeed, FishSpeedType.FISHSPEED_LEVEL0);
             duration_ = kSpeed * move_points_.Count;
             /*

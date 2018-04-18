@@ -30,6 +30,7 @@ tpsheetFileNames:
 - Assets/Resources/UI/Image/Packed/pck_ui_fish_main.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_lobby.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_number00.tpsheet
+- Assets/Resources/UI/Image/Packed/pck_ui_room.tpsheet
 textureFileNames:
 - Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_0.png
 - Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_1.png
@@ -60,7 +61,9 @@ textureFileNames:
 - Assets/Resources/UI/Image/Packed/pck_ui_fish_main.png
 - Assets/Resources/UI/Image/Packed/pck_ui_lobby.png
 - Assets/Resources/UI/Image/Packed/pck_ui_number00.png
+- Assets/Resources/UI/Image/Packed/pck_ui_room.png
 normalmapFileNames:
+- 
 - 
 - 
 - 
