@@ -4,20 +4,20 @@
 --local PopWinOK = require("app.layers.PopWinOK")
 
 --local consts = require("app.games.LKPY.constants")
---local vars = require("app.games.LKPY.variables")
---local util = require("app.games.LKPY.util")
+local vars = require("app.games.LKPY.variables")
+local util = require("app.games.LKPY.util")
 
 --local scheduler = vars.scheduler
 --local TIME_GAP = consts.TIME_GAP
 
---local _toSubSeatId = util.toSubSeatId
+local _toSubSeatId = util.toSubSeatId
 --local _suitAndNumber = util.suitAndNumber
 
 -- init on InitGameScenes
 --local _session = nil
 
 -- NOTE: initialize belows in init()
---local scene = nil
+local scene = nil
 --local uiSettings = nil
 --local uiTableInfos = nil
 --local uiOperates = nil
@@ -34,73 +34,27 @@ local lkpyMsg = {}
 
 local handlers = {game=gameMsg, room=roomMsg, LKPY=lkpyMsg}
 
-
-function msgMgr:init(tableScene)
-	--scene = tableScene
-
-	--uiSettings = require("app.Games.HkFiveCard.uiSettings")
-	--uiTableInfos = require("app.Games.HkFiveCard.uiTableInfos")
-	--uiOperates = require("app.Games.HkFiveCard.uiOperates")
-	--uiResults = require("app.Games.HkFiveCard.uiResults")
-	--uiPlayerInfos = require("app.Games.HkFiveCard.uiPlayerInfos")
-
-	--playerMgr = require("app.Games.HkFiveCard.playerMgr")
-	--cardMgr = require("app.Games.HkFiveCard.cardMgr")
-	--jettonMgr = require("app.Games.HkFiveCard.jettonMgr")
-end
-
-function msgMgr:clear()
-	
-end
-
 -- ------------------------------ room msg ------------------------------
 function roomMsg.InitGameScenes(msg)
-	--luadump(msg, "InitGameScenes:", 8)
-	--util.setMyServerSeat(msg.seat)
-	--_session = msg.session
-	--vars.watching = msg.watching
-	--vars.players = {}
+	--dump(msg, "LKPY roomMsg.InitGameScenes:", 8)
+	util.setMyServerSeat(msg.seat)
+	_session = msg.session
+	vars.watching = msg .watching
+	vars.players = {}
 end
 
 function roomMsg.EnterGame(msg)
-	-- dump(msg)
-	--local seatId = _toSubSeatId(msg.seat)
-	--local player = msg.player
+	dump(msg, "LKPY roomMsg.EnterGame:")
+	local seatId = _toSubSeatId(msg.seat)
+	local player = msg.player
 	--playerMgr:playerSeatDown(seatId, player.name, checkint(player.gold))
-	--f not vars.watching then -- if onlooker receive this msg, game already started.
-		--playerMgr:playerReady(seatId, player.ready~=0)
+	--if not vars.watching then -- if onlooker receive this msg, game already started.
+	--	playerMgr:playerReady(seatId, player.ready~=0)
 	--end
 end
 
-function roomMsg.StartPrivateGame(msg)
-	--[=[
-	if scene then
-		scene:StartPrivateGame()
-	end
-	--]=]
-end
-
-
-function roomMsg.EndPrivateGame(msg)
-	--[=[
-	local info = {}
-	for k,v in pairs(vars.players) do
-		info[k] = {
-			name = v.name,
-			score = v.gold - msg.initscore,
-		}
-	end
-
-	local PrivateEndLayer = require("app.layers.Private.PrivateEndLayer")
-	PrivateEndLayer.new(info):addTo(scene)
-	uiSettings:setAskForExit(false)
-	--]=]
-end
-
-
 function roomMsg.LeaveGame(msg)
-	--[=[
-	-- dump(msg)
+	--dump(msg, "LKPY roomMsg.LeaveGame:")
 	print("roomMsg.LeaveGame:" .. msg.seat)
 	local seatId = _toSubSeatId(msg.seat)
 
@@ -111,29 +65,23 @@ function roomMsg.LeaveGame(msg)
 		return
 	end
 
-	playerMgr:playerLeave(seatId)
-	--]=]
+	--playerMgr:playerLeave(seatId)
 end
 
-function roomMsg.ReadyRep(msg) -- personally
-	--[=[
-	-- dump(msg)
+function roomMsg.ReadyRep(msg)
+	--dump(msg, "LKPY roomMsg.ReadyRep:")
 	print("room msg: ready response...", msg.result)
 	if msg.result ~= 0 then
-		-- dump(msg)
 		print("ready failed!!!")
 		return
 	end
-	-- playerMgr:playerReady(1, true) -- room.ready will send yet
-	--]=]
 end
 
-function roomMsg.Ready(msg) -- boardcast
-	--[=[
+function roomMsg.Ready(msg)
+	--dump(msg, "LKPY roomMsg.Ready:")
 	printf("room msg: seat_%d ready !", msg.seat)
 	local seatId = _toSubSeatId(msg.seat)
-	playerMgr:playerReady(seatId, true)
-	--]=]
+	--playerMgr:playerReady(seatId, true)
 end
 
 
@@ -295,46 +243,47 @@ end
 
 
 -- ------------------------------ msg manager ------------------------------
+function msgMgr:init(tableScene)
+	scene = tableScene
+
+	--uiSettings = require("app.Games.HkFiveCard.uiSettings")
+	--uiTableInfos = require("app.Games.HkFiveCard.uiTableInfos")
+	--uiOperates = require("app.Games.HkFiveCard.uiOperates")
+	--uiResults = require("app.Games.HkFiveCard.uiResults")
+	--uiPlayerInfos = require("app.Games.HkFiveCard.uiPlayerInfos")
+
+	--playerMgr = require("app.Games.HkFiveCard.playerMgr")
+	--cardMgr = require("app.Games.HkFiveCard.cardMgr")
+	--jettonMgr = require("app.Games.HkFiveCard.jettonMgr")
+end
+
+function msgMgr:clear()
+end
+
 function msgMgr:sendMsg(name, msg)
-	--[=[
 	msg.session = _session
 	message.sendMessage(name, msg)
-	--]=]
 end
 
 function msgMgr:sendLeaveGame()
-	--[=[
 	message.dispatchGame("room.LeaveGame")
 	scene = nil
-	--]=]
 end
 
 function msgMgr:sendExitTable()
-	--[=[
 	message.dispatchGame("room.ExitTable")
 	scene = nil
-	--]=]
 end
 
 function msgMgr:sendReadyRequest()
-	--[=[
 	message.dispatchGame("room.ReadyReq")
-	--]=]
-end
-
-function msgMgr:sendOpReq(msg)
-	--[=[
-	self:sendMsg("HkFiveCard.OperateReq", msg)
-	--]=]
 end
 
 function msgMgr:dispatch(name, msg)
-	--[=[
 	if scene == nil then
 		print("this msgMgr's scene is nil !!!", name)
 		return
 	end
-	--]=]
 
 	local clsName, funcName = name:match "([^.]*).(.*)"
 	-- printf("msg %s got %s:%s", name, clsName, funcName)

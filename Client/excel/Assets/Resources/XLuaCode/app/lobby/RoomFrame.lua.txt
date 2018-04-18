@@ -33,10 +33,7 @@ function RoomFrame.OnOpenFrame()
         end)
     end)
     end
-    --self.frame:GetObject('btn_room_1').onClick:AddListener(RoomFrame.onClickRoom1)
-    --[[self.frame:GetObject('btn_room_2').onClick:AddListener(RoomFrame.onClickRoom2)
-    self.frame:GetObject('btn_room_3').onClick:AddListener(RoomFrame.onClickRoom3)
-    self.frame:GetObject('btn_room_4').onClick:AddListener(RoomFrame.onClickRoom4)]]--
+
 end
 
 RoomFrame.onClickRoom1 = function()

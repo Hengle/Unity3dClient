@@ -39,6 +39,7 @@ function  Update()
 end
 
 function OnDestroy()
+    --TODO UserMessage.unRegister()
     --CS.UnityEngine.Debug.LogError("OnDestroy ...")
 end
 

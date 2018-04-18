@@ -30,6 +30,7 @@ local watching = false
 local gameid = nil
 local roomid = nil
 local gamekey = ""
+local game_config = {}
 
 local room_session = 0
 local table_session = 0
@@ -96,7 +97,7 @@ function gameMsg.SitdownRep(msg)
             message.sendMessage("game.LeaveRoomReq", {session=room_session})
         end
         local error_str = app.util.ToolUtils.error(msg.result)
-
+        printError("gameMsg.SitdownRep Error:",error_str)
         --[[local scene = display.getRunningScene()
         local error_str = util.error(msg.result)
         if error_str and string.len(error_str) > 0 then
@@ -108,15 +109,36 @@ function gameMsg.SitdownRep(msg)
     table_id = msg.table
     seat_id = msg.seat
     watching = (msg.watching == 1)
+
+    CS.GameClient.SceneManager.Instance():SwitchScene(1)
+
     if game_scene ~= nil then
         print("loading game scene:", game_scene)
         --TODO: 拉起捕鱼界面
-        --app.FrameManager.OpenFrameLua(game_scene)
-
         -- add send room id and game id
         if max_seats ~= nil then
-
-
+            local pos = (table_id-1) % (#max_seats) + 1
+            message.dispatchCurrent("room.InitGameScenes", {
+                session = table_session,
+                seat = seat_id,
+                max_player = max_seats[pos],
+                watching = watching,
+                roomid = roomid,
+                gameid = gameid,
+                gamekey = gamekey,
+                config = game_config
+            })
+        else
+            message.dispatchCurrent("room.InitGameScenes", {
+                session = table_session,
+                seat = seat_id,
+                max_player = max_player,
+                watching = watching,
+                roomid = roomid,
+                gameid = gameid,
+                gamekey = gamekey,
+                config = game_config
+            })
         end
     end
 end
