@@ -6,10 +6,12 @@
 app = app or {}
 -- ------------------Unity Engine---------------------------------------------
 app.Debugger = CS.UnityEngine.Debug
-app.Logger = CS.GameClient.LogManager.Instance()
 
 -- ------------------CSharp Deploy---------------------------------------------
 app.FrameManager = CS.GameClient.UIFrameLua
 app.MessageBoxFrame = CS.GameClient.MessageBoxFrame
+app.Logger = CS.GameClient.LogManager.Instance()
+app.FileManager = CS.GameClient.LocalSettingManager
 
 require(".initUtils")
+require(".initData")

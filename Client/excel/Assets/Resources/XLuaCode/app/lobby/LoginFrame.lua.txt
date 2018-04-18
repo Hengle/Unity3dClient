@@ -2,16 +2,23 @@
 local LoginFrame = {}
 
 local GateNet = require(".net.GateNet")
-local AccountUtils = app.util.AccountUtils
-local json = app.util.JsonUtils
 local web = require(".net.web")
 local UserMessage = require(".net.UserMessage")
 
-LoginFrame.accountHistory = nil
+local roomMgr = require(".app.room.RoomManager")
+
+local Account = app.data.UserData.Account
+local AccountUtils = app.util.AccountUtils
+local json = app.util.JsonUtils
 
 function LoginFrame.OnOpenFrame()
-	--self.accountHistory = AccountUtils.readAccountHistory()
+	GateNet.disconnect()
 
+	--[[local accountHistory = AccountUtils.readAccountHistory()
+	if self.accountHistory[1] then
+		self.frame:GetObject('account').text = self.accountHistory[1].account
+		self.frame:GetObject('password').text = self.accountHistory[1].password
+	end]]--
 	--DEMO
 	self.frame:GetObject('account').text = '13867486001'
 	self.frame:GetObject('password').text = 'il15958589125'
@@ -47,10 +54,6 @@ end
 
 -- ----------------------------------------控制代码--------------------------------------------------
 
-function LoginFrame:initAccountList()
-
-end
-
 function LoginFrame:checkLoginInput(account, password)
 	local err
 	if not account or #account == 0 then
@@ -76,7 +79,11 @@ function LoginFrame.loginCallback(err,res)
 		CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
 
 		local resTable = web.FromResData(res)
-		print("resTable.uid = "..resTable.uid)
+		dump(resTable, "LoginFrame.loginCallback resTable:")
+
+		Account.uid = tonumber(resTable.uid)
+		Account.token = resTable.token--[[crypt.base64decode()]]--
+		Account.secret = resTable.secret
 
 		--全局保存
 		--app.userdata.Account.uid = resTable.uid
@@ -94,6 +101,25 @@ function LoginFrame.loginCallback(err,res)
 			print("UserMessage.send(UserInfoReq)")
 			UserMessage.send("UserInfoReq", {uid=resTable.uid})
 
+			-- 断线重连
+			UserMessage.send("CheckReconnectReq", function(msg)
+				if msg.roomid == 0 then
+					app.FrameManager.OpenFrameLua(app._FrameList.LobbyFrame)
+				else
+					if msg.private then
+						print("reconnect to private game")
+						UserMessage.EnterPrivateReq(msg.tableid)
+					else
+						print("reconnect to normal game")
+						UserMessage.send("RoomListReq", function()
+							roomMgr:init(math.floor(msg.roomid/100), msg.roomid)
+							UserMessage.send("EnterRoomReq", {roomid=msg.roomid}, function(m)
+								roomMgr:EnterRoomRep(m)
+							end)
+						end)
+					end
+				end
+			end)
 		end)
 	else
 		CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
@@ -111,6 +137,10 @@ function LoginFrame:auth(params)
 			local msg = json.encode(params)
 			--regMsg = CS.Common.DESEncrypt.MyEncode(regMsg,msg)
 			--regMsg = numeric.tohex(regMsg)
+
+			Account.account = params.account
+			Account.password = params.password
+			Account.channel = params.channel
 
 			local postValues =
 			{

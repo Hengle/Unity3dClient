@@ -35,7 +35,8 @@ namespace GameClient
 
         public static void OnRelease(FishData x)
         {
-
+            x.action = null;
+            x.fishItem = null;
         }
 
         public FishDataPool():base(OnGet,OnRelease)
@@ -78,6 +79,7 @@ namespace GameClient
 
         public void ExecuteCmd(CMD_S_SceneFish cmd)
         {
+            /*
             LogManager.Instance().LogProcessFormat(10002000, "<color=#00ff00>ExecuteCmd CMD_S_SceneFish !!!</color>");
             LogManager.Instance().LogProcessFormat(10002000, "<color=#00ff00>fish_id:{0} fish_kind:{1} fish_pos_count:{2}</color>", cmd.fish_id,cmd.fish_kind, cmd.position_count);
             for(int i = 0; i < cmd.position_count && i < cmd.position.Length; ++i)
@@ -85,14 +87,14 @@ namespace GameClient
                 LogManager.Instance().LogProcessFormat(10002000, "<color=#00ff00>fish_pos[{0}]={1}</color>", i, cmd.position[i]);
             }
             LogManager.Instance().LogProcessFormat(10002000, "<color=#00ff00>fish_tag:{0} fish_elapsed:{1} fish_tick_count:{2}</color>", cmd.tag,cmd.elapsed,cmd.tick_count);
-
+            */
             if (chairId < 3)
             {
-                for (int j = 0; j < cmd.position_count && j < cmd.position.Length; ++j)
-                {
-                    cmd.position[j].x = FishConfig.kScreenWidth - cmd.position[j].x;
-                    cmd.position[j].y = FishConfig.kScreenHeight - cmd.position[j].y;
-                }
+                //for (int j = 0; j < cmd.position_count && j < cmd.position.Length; ++j)
+                //{
+                //    cmd.position[j].x = FishConfig.kScreenWidth - cmd.position[j].x;
+                //    cmd.position[j].y = FishConfig.kScreenHeight - cmd.position[j].y;
+                //}
             }
 
             var fishItem = TableManager.Instance().GetTableItem<ProtoTable.FishTable>((int)cmd.fish_kind);
@@ -102,7 +104,7 @@ namespace GameClient
                 return;
             }
 
-            float speed = fishItem.Speed * 0.001f;
+            float speed = fishItem.Speed * 0.01f;
 
             FishActionFishMove action = null;
             if (cmd.fish_kind == FishKind.FISH_FOSHOU)
@@ -113,7 +115,10 @@ namespace GameClient
             {
                 if (cmd.position_count == 3)
                 {
-                    action = new FishActionFishMoveBezier(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y), new Vector2(cmd.position[2].x, cmd.position[2].y));
+                    action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>(16) as FishActionFishMove;
+                    FishActionFishMoveBezier actionBezier = action as FishActionFishMoveBezier;
+                    actionBezier.Create(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y), new Vector2(cmd.position[2].x, cmd.position[2].y));
+                    //action = new FishActionFishMoveBezier(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y), new Vector2(cmd.position[2].x, cmd.position[2].y));
                 }
                 else if (cmd.position_count == 4)
                 {

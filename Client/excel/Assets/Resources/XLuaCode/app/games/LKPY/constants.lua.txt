@@ -1,0 +1,59 @@
+local consts = {
+
+	MAX_PLAYER_NUM = 5,
+
+}
+
+consts.TIME_GAP = {
+	THROW_JETS = 0.3,
+	PUSH_JETTON = 0.5,
+	JETS_TO_POOL = 0.35,
+	POOL_TO_PLAYER = 0.1,
+	SEND_CARD = 0.25,
+	CARD_FLY = 0.18	,
+}
+
+consts.PATH = {
+	-- button image file path
+	BTN_CCDOWN_NORMAL = 'res/Image/HkFiveCard/button/button_ccdown_norma.png',
+	BTN_CCDOWN_PRESSED = 'res/Image/HkFiveCard/button/button_ccdown_selected.png',
+	BTN_CCUP_NORMAL = 'res/Image/HkFiveCard/button/button_ccup_norma.png',
+	BTN_CCUP_PRESSED = 'res/Image/HkFiveCard/button/button_ccup_selected.png',
+	BTN_SOUND_NORMAL = 'res/Image/HkFiveCard/button/button_sound_normal.png',
+	BTN_SOUND_PRESSED = 'res/Image/HkFiveCard/button/button_sound_selected.png',
+	BTN_MUTE_NORMAL = 'res/Image/HkFiveCard/button/button_mute_normal.png',
+	BTN_MUTE_PRESSED = 'res/Image/HkFiveCard/button/button_mute_selected.png',
+
+	-- sprite image file path
+	IMG_DEFAULT = "res/Default/Sprite.png",
+	IMG_SHOW_HAND = 'res/Image/HkFiveCard/gameui/image_show_hand.png',
+	IMG_WAITING_WORDS = 'res/Image/HkFiveCard/gameui/img_GameUI_WaitPlayer.png',
+	IMG_WAITING_DOT = 'res/Image/HkFiveCard/gameui/img_GameUI_WaitDian.png',
+	IMG_READY = 'res/Image/HkFiveCard/gameui/img_GameUI_ready.png', 
+	IMG_RESULT_WIN = 'res/Image/HkFiveCard/gameresult/RESULT_WIN.png',
+	IMG_RESULT_LOSE = 'res/Image/HkFiveCard/gameresult/RESULT_LOSE.png',
+
+	-- image packed file path
+	IMGS_ACTION_BG = 'res/Image/HkFiveCard/gameui/image_action_back.png',
+	IMGS_ACTION_FONT ='res/Image/HkFiveCard/gameui/image_action_font.png',
+	IMGS_CARD_TYPE = 'res/Image/HkFiveCard/gameui/image_card_type.png',
+	IMGS_TIME_NUM = 'res/Image/HkFiveCard/gameui/img_GameUI_Time_Number.png',
+	IMGS_JETTON = 'res/Image/HkFiveCard/gameui/JETTON_VIEW.png',
+	IMGS_CARD = 'res/Image/HkFiveCard/card/img_card.png',
+
+	-- sound file path
+	WAV_SEND_CARD = 'res/Sound/HkFiveCard/SEND_CARD.wav',
+	WAV_GAME_START = 'res/Sound/HkFiveCard/GAME_START.wav',
+	WAV_GAME_END = 'res/Sound/HkFiveCard/GAME_END.wav',
+	WAV_GAME_WARN = 'res/Sound/HkFiveCard/GAME_WARN.wav',
+	WAV_GAME_WIN = 'res/Sound/HkFiveCard/GAME_WIN.wav',
+	WAV_GAME_LOSE = 'res/Sound/HkFiveCard/GAME_LOSE.wav',
+	WAV_NO_RAISE = 'res/Sound/HkFiveCard/NO_ADD.wav',
+	WAV_RAISE_SCORE = 'res/Sound/HkFiveCard/ADD_SCORE.wav',
+	WAV_FOLLOW = 'res/Sound/HkFiveCard/FOLLOW.wav',
+	WAV_SHOW_HAND = 'res/Sound/HkFiveCard/SHOW_HAND.wav',
+	WAV_GIVE_UP = 'res/Sound/HkFiveCard/GIVE_UP.wav',
+}
+
+
+return consts

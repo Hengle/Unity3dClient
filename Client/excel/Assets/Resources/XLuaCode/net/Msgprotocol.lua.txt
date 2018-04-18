@@ -270,7 +270,8 @@ protoIDs[11122] = "MaJiang.AllowOutEx"
 protoIDs[11123] = "MaJiang.AllowCombinEx"
 protoIDs[11124] = "MaJiang.ShowCard"
 protoIDs[11125] = "MaJiang.PrivateOver"
-
+----------------------------------------------------------------------------
+protoIDs[11201] = "LKPY.CreateFish"
 
 -- -----------------------------------------------------------------------
 local ret = {}

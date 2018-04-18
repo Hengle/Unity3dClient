@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using XLua;
 
 namespace GameClient
 {
@@ -13,8 +14,19 @@ namespace GameClient
         ST_COUNT,
     }
 
-    class SceneManager : Singleton<SceneManager>
+    [LuaCallCSharp]
+    class SceneManager
 	{
+        protected static SceneManager ms_handle = null;
+        public static SceneManager Instance()
+        {
+            if (null == ms_handle)
+            {
+                ms_handle = new SceneManager();
+            }
+            return ms_handle;
+        }
+
         public delegate IScene EActionCreate();
         EActionCreate[] mActions = new EActionCreate[(int)SceneType.ST_COUNT];
         Scene[] mScenes = new Scene[(int)SceneType.ST_COUNT];
@@ -46,6 +58,12 @@ namespace GameClient
         {
             SceneType eScene = (SceneType)argv;
             SwitchScene(eScene);
+        }
+
+        [LuaCallCSharp]
+        public void SwitchScene(int iSceneId)
+        {
+            SwitchScene((SceneType)iSceneId);
         }
 
         Scene mScene = null;

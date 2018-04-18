@@ -47,7 +47,7 @@ namespace GameClient
             return frame;
         }
 
-        public IFrame OpenFrameLua(int frameTypeId, object userData = null, int frameId = -1, GameObject parent = null)
+        public IFrame OpenFrame(int frameTypeId, object userData = null, int frameId = -1, GameObject parent = null)
         {
             int iKey = MakeFrameHashCode(frameId, frameTypeId);
             IFrame frame = null;
@@ -71,15 +71,18 @@ namespace GameClient
             return frame;
         }
 
-        public void CloseFrameLua(int frameTypeId, int frameId = -1)
+        public void CloseFrame(int frameTypeId, int frameId = -1)
         {
             int iHashCode = MakeFrameHashCode(frameId, frameTypeId);
             if(mActiveFrames.ContainsKey(iHashCode))
             {
                 IFrame frame = mActiveFrames[iHashCode];
-                mActiveFrames.Remove(iHashCode);
-                mCachedFrames.Add(iHashCode,frame);
-                frame.closeFrame();
+                if(frame.getFrameState() != FrameState.FS_CLOSED)
+                {
+                    mActiveFrames.Remove(iHashCode);
+                    mCachedFrames.Add(iHashCode, frame);
+                    frame.closeFrame();
+                }
             }
         }
 
@@ -87,24 +90,26 @@ namespace GameClient
         {
             if(null != frame)
             {
-                int iHashCode = frame.getFrameHashCode();
-                mActiveFrames.Remove(iHashCode);
-                mCachedFrames.Add(iHashCode,frame);
-                frame.closeFrame();
+                CloseFrame(frame.getFrameTypeId(), frame.getFrameId());
             }
         }
 
         public void CloseAllFrames()
         {
+            var pools = GamePool.ListPool<IFrame>.Get();
+
             var enumerator = mActiveFrames.GetEnumerator();
             while(enumerator.MoveNext())
             {
                 IFrame frame = enumerator.Current.Value;
+                pools.Add(frame);
+            }
+            for(int i = 0; i < pools.Count; ++i)
+            {
+                var frame = pools[i];
                 if(null != frame)
                 {
-                    int iHashCode = frame.getFrameHashCode();
-                    mCachedFrames.Add(iHashCode, frame);
-                    frame.closeFrame();
+                    CloseFrame(frame.getFrameTypeId(),frame.getFrameId());
                 }
             }
             mActiveFrames.Clear();

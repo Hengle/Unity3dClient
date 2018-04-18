@@ -8,7 +8,7 @@ namespace GameClient
     {
         public MovePoint()
         {
-            angle_ = 0;
+
         }
 
         public MovePoint(Vector2 position, float angle)
@@ -19,6 +19,10 @@ namespace GameClient
 
         public Vector2 position_;
         public float angle_;
+        public void setAngle(float angle)
+        {
+            this.angle_ = angle;
+        }
     };
     //typedef List<MovePoint> MovePointVector;
 
@@ -87,6 +91,32 @@ namespace GameClient
     //------------------------------------------------------------------------------
     class FishActionFishMoveBezier : FishActionFishMove
     {
+        public FishActionFishMoveBezier():base(0)
+        {
+
+        }
+
+        public void Create(float fish_speed, Vector2 start, Vector2 c1, Vector2 end)
+        {
+            elapsed_ = 0.0f;
+            stop_ = false;
+            start_ = start;
+            end_ = end;
+            control1_ = c1;
+            fish_speed_ = fish_speed;
+            position_ = start_;
+            Vector2[] points =
+            {
+                start,
+                c1,
+                end
+            };
+
+            float kSpeed = FishConfig.kSpeed;
+            FishCommonLogic.BuildBezier(points, ref move_points_);
+            duration_ = kSpeed * move_points_.Count;
+        }
+
         public FishActionFishMoveBezier(float fish_speed, Vector2 start, Vector2 c1, Vector2 end)
                 : base(0)
         {
@@ -103,8 +133,16 @@ namespace GameClient
             };
 
             float kSpeed = FishConfig.kSpeed;
-            FishCommonLogic.BuildBezier(points, 3, ref move_points_, fish_speed_ * kSpeed, FishSpeedType.FISHSPEED_LEVEL0);
+            FishCommonLogic.BuildBezier(points, ref move_points_);
+            //FishCommonLogic.BuildBezier(points, 3, ref move_points_, fish_speed_ * kSpeed, FishSpeedType.FISHSPEED_LEVEL0);
             duration_ = kSpeed * move_points_.Count;
+            /*
+            for (int i = 0; i < move_points_.Count; ++i)
+            {
+                LogManager.Instance().LogFormat("<color=#00ff00>[point[{0}]]:[{1},{2}]</color>", i, move_points_[i].position_.x, move_points_[i].position_.y);
+            }
+            LogManager.Instance().LogFormat("<color=#00ff00>[duration_:{0}]</color>", duration_);
+            */
         }
 
         public FishActionFishMoveBezier(float fish_speed, Vector2 start, Vector2 c1, Vector2 end, FishSpeedType speedType) : base(0)
@@ -463,13 +501,14 @@ namespace GameClient
                 MovePoint point1 = move_points_[idx];
                 MovePoint point2 = move_points_[idx + 1];
                 position_ = point1.position_ * (1.0f - diff) + point2.position_ * diff;
-                angle_ = point1.angle_ * (1.0f - diff) + point2.angle_ * diff;
-                if (Mathf.Abs(point1.angle_ - point2.angle_) > M_PI)
-                    angle_ = point1.angle_;
+                //angle_ = point1.angle_ * (1.0f - diff) + point2.angle_ * diff;
+                //if (Mathf.Abs(point1.angle_ - point2.angle_) > M_PI)
+                angle_ = point1.angle_;
             }
             else
             {
                 position_ = move_points_[idx].position_;
+                angle_ = move_points_[idx].angle_;
             }
         }
 

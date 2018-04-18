@@ -27,6 +27,7 @@ registerProto("XLuaCode/protocol/XZMJ")
 registerProto("XLuaCode/protocol/CatchFish")
 registerProto("XLuaCode/protocol/ShiSanShui")
 registerProto("XLuaCode/protocol/MaJiang")
+registerProto("XLuaCode/protocol/LKPY")
 
 local dispatch_handler = {}
 local current = ""

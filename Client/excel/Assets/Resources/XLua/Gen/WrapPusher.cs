@@ -38,6 +38,7 @@ namespace XLua
 				translator.RegisterPushAndGetAndUpdate<NetWork.HttpRequestStatus>(translator.PushNetWorkHttpRequestStatus, translator.Get, translator.UpdateNetWorkHttpRequestStatus);
 				translator.RegisterPushAndGetAndUpdate<GameClient.FrameTypeID>(translator.PushGameClientFrameTypeID, translator.Get, translator.UpdateGameClientFrameTypeID);
 				translator.RegisterPushAndGetAndUpdate<GameClient.FrameLayer>(translator.PushGameClientFrameLayer, translator.Get, translator.UpdateGameClientFrameLayer);
+				translator.RegisterPushAndGetAndUpdate<GameClient.FrameState>(translator.PushGameClientFrameState, translator.Get, translator.UpdateGameClientFrameState);
 			
 			}
         }
@@ -910,6 +911,90 @@ namespace XLua
             }
         }
         
+        int GameClientFrameState_TypeID = -1;
+		int GameClientFrameState_EnumRef = -1;
+        
+        public void PushGameClientFrameState(RealStatePtr L, GameClient.FrameState val)
+        {
+            if (GameClientFrameState_TypeID == -1)
+            {
+			    bool is_first;
+                GameClientFrameState_TypeID = getTypeId(L, typeof(GameClient.FrameState), out is_first);
+				
+				if (GameClientFrameState_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(GameClient.FrameState));
+				    GameClientFrameState_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, GameClientFrameState_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, GameClientFrameState_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for GameClient.FrameState ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, GameClientFrameState_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out GameClient.FrameState val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != GameClientFrameState_TypeID)
+				{
+				    throw new Exception("invalid userdata for GameClient.FrameState");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for GameClient.FrameState");
+                }
+				val = (GameClient.FrameState)e;
+                
+            }
+            else
+            {
+                val = (GameClient.FrameState)objectCasters.GetCaster(typeof(GameClient.FrameState))(L, index, null);
+            }
+        }
+		
+        public void UpdateGameClientFrameState(RealStatePtr L, int index, GameClient.FrameState val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != GameClientFrameState_TypeID)
+				{
+				    throw new Exception("invalid userdata for GameClient.FrameState");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for GameClient.FrameState ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
         
 		// table cast optimze
 		
@@ -993,6 +1078,12 @@ namespace XLua
 				translator.PushGameClientFrameLayer(L, array[index]);
 				return true;
 			}
+			else if (type == typeof(GameClient.FrameState[]))
+			{
+			    GameClient.FrameState[] array = obj as GameClient.FrameState[];
+				translator.PushGameClientFrameState(L, array[index]);
+				return true;
+			}
             return false;
 		}
 		
@@ -1068,6 +1159,12 @@ namespace XLua
 			else if (type == typeof(GameClient.FrameLayer[]))
 			{
 			    GameClient.FrameLayer[] array = obj as GameClient.FrameLayer[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(GameClient.FrameState[]))
+			{
+			    GameClient.FrameState[] array = obj as GameClient.FrameState[];
 				translator.Get(L, obj_idx, out array[array_idx]);
 				return true;
 			}

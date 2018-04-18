@@ -14,7 +14,15 @@ namespace GameClient
         TOP,
         COUNT,
     }
-
+    [LuaCallCSharp]
+    public enum FrameState
+    {
+        FS_INVALID = 0,
+        FS_OPENING,
+        FS_OPEN,
+        FS_CLOSING,
+        FS_CLOSED,
+    }
 
     public class ComUIConfig : MonoBehaviour
     {
