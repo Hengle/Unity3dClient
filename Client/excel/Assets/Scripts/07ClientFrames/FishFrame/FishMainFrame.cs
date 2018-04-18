@@ -27,13 +27,13 @@ namespace GameClient
             //    mcomLogic.createFish(1002, 2);
             //    mcomLogic.createFish(1003, 3);
             //}
-            InvokeManager.Instance().InvokeRepeate(this, 1.0f, _OnCreateFish, false);
+            InvokeManager.Instance().InvokeRepeate(this, 2.0f, _OnCreateFish, false);
 		}
 
         int m_cmd = 100050;
         void _OnCreateFish()
         {
-            for(int i = 0; i < 10; ++i)
+            for(int i = 0; i < 5; ++i)
             {
                 CMD_S_SceneFish cmd = new CMD_S_SceneFish();
                 cmd.fish_id = ++m_cmd;

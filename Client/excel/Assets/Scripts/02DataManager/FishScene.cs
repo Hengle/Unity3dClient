@@ -40,12 +40,40 @@ namespace GameClient
             {
                 if(null != mFishPools[iIndex])
                 {
-                    var pool = mFishPools[iIndex];
-                    if(pool.Count > 0)
+                    var fishPool = mFishPools[iIndex];
+                    if(fishPool.Count > 1)
                     {
-                        var fish = pool[0];
-                        pool.RemoveAt(0);
+                        var fish = fishPool[0];
+                        fishPool.RemoveAt(0);
                         return fish;
+                    }
+                    else
+                    {
+                        var fishItem = TableManager.Instance().GetTableItem<ProtoTable.FishTable>(kind_id);
+                        if (null == fishItem)
+                        {
+                            LogManager.Instance().LogErrorFormat("<color=#ff0000>can not find fish kind_id = {0} !!!</color>", kind_id);
+                            return null;
+                        }
+
+                        GameObject goFish = GameObject.Instantiate(fishPool[0].self) as GameObject;
+                        if (null == goFish)
+                        {
+                            LogManager.Instance().LogErrorFormat("can not create fish res is null ! resId = {0} name = {1}", fishItem.ID, fishItem.Desc);
+                            return null;
+                        }
+
+                        ComSpriteItems sprite = goFish.GetComponent<ComSpriteItems>();
+                        if (null == sprite)
+                        {
+                            LogManager.Instance().LogErrorFormat("can not create fish ComSpriteItems is null ! resId = {0} name = {1}", fishItem.ID, fishItem.Desc);
+                            return null;
+                        }
+
+                        goFish.CustomActive(false);
+
+                        var fishSprite = new FishSprite { kind_id = fishItem.ID, self = goFish, action = sprite };
+                        return fishSprite;
                     }
                 }
             }
@@ -117,14 +145,14 @@ namespace GameClient
                         GameObject goFish = AssetLoader.Instance().LoadRes(fishItem.Prefab, typeof(GameObject)).obj as GameObject;
                         if (null == goFish)
                         {
-                            LogManager.Instance().LogErrorFormat("can not create fish first frame res is null ! resId = {0} name = {1}", fishItem.ID, fishItem.Desc);
+                            LogManager.Instance().LogErrorFormat("can not create fish res is null ! resId = {0} name = {1}", fishItem.ID, fishItem.Desc);
                             scene.SetAction(SceneAction.SA_INVALID);
                             yield break;
                         }
                         ComSpriteItems sprite = goFish.GetComponent<ComSpriteItems>();
                         if (null == sprite)
                         {
-                            LogManager.Instance().LogErrorFormat("can not create fish first frame ComSpriteItems is null ! resId = {0} name = {1}", fishItem.ID, fishItem.Desc);
+                            LogManager.Instance().LogErrorFormat("can not create fish ComSpriteItems is null ! resId = {0} name = {1}", fishItem.ID, fishItem.Desc);
                             scene.SetAction(SceneAction.SA_INVALID);
                             yield break;
                         }
@@ -137,7 +165,7 @@ namespace GameClient
                         ComSpriteItems sprite = goFish.GetComponent<ComSpriteItems>();
                         if (null == sprite)
                         {
-                            LogManager.Instance().LogErrorFormat("can not create fish first frame ComSpriteItems is null ! resId = {0} name = {1}", fishItem.ID, fishItem.Desc);
+                            LogManager.Instance().LogErrorFormat("can not create fish ComSpriteItems is null ! resId = {0} name = {1}", fishItem.ID, fishItem.Desc);
                             scene.SetAction(SceneAction.SA_INVALID);
                             yield break;
                         }

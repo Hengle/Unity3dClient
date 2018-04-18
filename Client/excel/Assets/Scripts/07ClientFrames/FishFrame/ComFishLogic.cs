@@ -43,6 +43,14 @@ namespace GameClient
                 }
             }
 
+            public void SetAngle(float angle)
+            {
+                if (null != fishSprite.self && null != fishSprite.self.transform)
+                {
+                    (fishSprite.self.transform as RectTransform).localEulerAngles = new Vector3(0, 0, angle * Mathf.Rad2Deg);
+                }
+            }
+
             public void Update()
             {
                 if(null != moveAction)
@@ -152,11 +160,14 @@ namespace GameClient
                         action.Step(Time.deltaTime);
                         //Vector2 position = action.FishMoveTo(action.elapsed());
                         _actived[i].SetPosition(action.position());
+                        _actived[i].SetAngle(action.angle());
                     }
 
                     if(action.IsDone())
                     {
                         _actived[i].OnRecycle(recycleRoot);
+                        FishAction.ThrowActionToPoll(_actived[i].moveAction);
+                        _actived[i].moveAction = null;
                         _recycles.Add(_actived[i]);
                         _actived.RemoveAt(i--);
                         continue;

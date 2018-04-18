@@ -8,6 +8,56 @@ namespace GameClient
     {
         protected static float M_PI = Mathf.PI;
         protected static float M_PI_2 = Mathf.PI * 0.50f;
+        protected static Dictionary<System.Type, List<FishAction>> mActionPools = new Dictionary<System.Type, List<FishAction>>();
+        public static FishAction CreateActionFromPool<T>(int count = 100) where T : FishAction ,new()
+        {
+            if(count < 0)
+            {
+                count = 8;
+            }
+
+            var type = typeof(T);
+
+            if (!mActionPools.ContainsKey(type))
+            {
+                mActionPools.Add(type, new List<FishAction>(count));
+            }
+
+            FishAction action = null;
+
+            var pool = mActionPools[type];
+            if(pool.Count > 0)
+            {
+                action = pool[0];
+                pool.RemoveAt(0);
+            }
+            else
+            {
+                action = new T();
+            }
+
+            return action;
+        }
+        public static void ThrowActionToPoll(FishAction action)
+        {
+            if(null == action)
+            {
+                return;
+            }
+
+            System.Type type = action.GetType();
+            if (!mActionPools.ContainsKey(type))
+            {
+                return;
+            }
+
+            var actions = mActionPools[type];
+            if (null != actions)
+            {
+                actions.Add(action);
+            }
+        }
+
         public static float fmodf(float x, float y)
         {
             if (y < 1e-6)
