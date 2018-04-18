@@ -390,7 +390,7 @@ namespace GameClient
             if(null != mFrames && null != frame && mFrames.Contains(frame))
             {
                 mFrames.Remove(frame);
-                UIManager.Instance().CloseFrameLua(frame.getFrameTypeId(),frame.getFrameId());
+                UIManager.Instance().CloseFrame(frame.getFrameTypeId(),frame.getFrameId());
             }
         }
 
@@ -403,7 +403,7 @@ namespace GameClient
                     IFrame frame = mFrames[i];
                     if(null != frame)
                     {
-                        UIManager.Instance().CloseFrameLua(frame.getFrameTypeId(), frame.getFrameId());
+                        UIManager.Instance().CloseFrame(frame.getFrameTypeId(), frame.getFrameId());
                     }
                 }
                 mFrames.Clear();
