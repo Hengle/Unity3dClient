@@ -30,6 +30,11 @@ namespace GameClient
             return iHashCode;
         }
 
+        public object getUserData()
+        {
+            return userData;
+        }
+
         public virtual bool needLuaBehavior()
         {
             return true;
@@ -146,7 +151,8 @@ namespace GameClient
             _AutoUnRegisterAllLuaEvents();
             _AutoUnRegisterAllEvents();
             _CancelAllInvokes();
-            if(null != mScriptBinder)
+            userData = null;
+            if (null != mScriptBinder)
             {
                 mScriptBinder.StopAllCoroutines();
                 mScriptBinder.DestroyWithFrame();
@@ -162,7 +168,6 @@ namespace GameClient
                 GameObject.Destroy(root);
                 root = null;
             }
-            userData = null;
             frameItem = null;
 			Resources.UnloadUnusedAssets ();
             this.frameState = FrameState.FS_CLOSED;

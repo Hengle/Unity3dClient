@@ -17,7 +17,7 @@ function RoomFrame.OnOpenFrame()
 end
 
 RoomFrame.onClickRoom1 = function()
-
+    CS.GameClient.SceneManager.Instance():SwitchScene(1)
 end
 
 function RoomFrame.OnCloseFrame()
