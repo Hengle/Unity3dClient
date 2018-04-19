@@ -27,26 +27,29 @@ namespace GameClient
             //    mcomLogic.createFish(1002, 2);
             //    mcomLogic.createFish(1003, 3);
             //}
-            InvokeManager.Instance().InvokeRepeate(this, 2.0f, _OnCreateFish, false);
+            InvokeManager.Instance().Invoke(this, 5.0f, _OnCreateFish);
+            //InvokeManager.Instance().InvokeRepeate(this, 5.0f, _OnCreateFish, false);
 		}
 
         int m_cmd = 100050;
         void _OnCreateFish()
         {
-            for(int i = 0; i < 5; ++i)
+            for(int i = 0; i < 1; ++i)
             {
                 CMD_S_SceneFish cmd = new CMD_S_SceneFish();
                 cmd.fish_id = ++m_cmd;
                 cmd.fish_kind = (FishKind)(1 + UnityEngine.Random.Range(0, 21));
                 cmd.elapsed = 0;
+                cmd.fish_kind = FishKind.FISH_FOSHOU;
                 cmd.position = new Vector2[]
                 {
                 new Vector2(UnityEngine.Random.Range(0, FishConfig.kScreenWidth), UnityEngine.Random.Range(0, FishConfig.kScreenHeight)),
                 new Vector2(UnityEngine.Random.Range(0, FishConfig.kScreenWidth), UnityEngine.Random.Range(0, FishConfig.kScreenHeight)),
-                new Vector2(UnityEngine.Random.Range(0, FishConfig.kScreenWidth), UnityEngine.Random.Range(0, FishConfig.kScreenHeight))
+                //new Vector2(UnityEngine.Random.Range(0, FishConfig.kScreenWidth), UnityEngine.Random.Range(0, FishConfig.kScreenHeight)),
+                //new Vector2(UnityEngine.Random.Range(0, FishConfig.kScreenWidth), UnityEngine.Random.Range(0, FishConfig.kScreenHeight))
                 };
 
-                cmd.position_count = 3;
+                cmd.position_count = cmd.position.Length;
                 cmd.tag = 0;
                 cmd.tick_count = 0;
 

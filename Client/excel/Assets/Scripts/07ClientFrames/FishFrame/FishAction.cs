@@ -41,6 +41,21 @@ namespace GameClient
     //------------------------------------------------------------------------------
     class FishActionFishMoveLinear : FishActionFishMove
     {
+        public FishActionFishMoveLinear() : base(0)
+        {
+            start_ = Vector2.zero;
+            end_ = Vector2.zero;
+            fish_speed_ = 0.0f;
+        }
+
+        public void Create(float fish_speed, Vector2 start, Vector2 end)
+        {
+            duration_ = 0;
+            start_ = start;
+            end_ = end;
+            fish_speed_ = fish_speed;
+        }
+
         public FishActionFishMoveLinear(float fish_speed, Vector2 start, Vector2 end) : base(0)
         {
             start_ = start;
@@ -562,6 +577,39 @@ namespace GameClient
     //------------------------------------------------------------------------------
     class FishActionFishMoveFoshou : FishActionFishMove
     {
+        public FishActionFishMoveFoshou():base(1)
+        {
+            start_ = Vector2.zero;
+            end_ = Vector2.zero;
+            fish_speed_ = 0.0f;
+            position_ = start_;
+        }
+
+        public void Create(float fish_speed, Vector2 start, Vector2 end)
+        {
+            start_ = start;
+            end_ = end;
+            fish_speed_ = fish_speed;
+            position_ = start_;
+
+            Vector2 delta = new Vector2(end_.x - start_.x, end_.y - start_.y);
+            float length = delta.magnitude;
+            if (length > 0)
+            {
+                if (delta.y >= 0)
+                {
+                    angle_ = Mathf.Acos(delta.x / length);
+                }
+                else
+                {
+                    angle_ = -Mathf.Acos(delta.x / length);
+                }
+            }
+            dx_ = Mathf.Cos(angle_);
+            dy_ = Mathf.Sin(angle_);
+            duration_ = length / fish_speed_;
+        }
+
         public FishActionFishMoveFoshou(float fish_speed, Vector2 start, Vector2 end) : base(1)
         {
             start_ = start;
@@ -583,7 +631,7 @@ namespace GameClient
                 }
             }
             dx_ = Mathf.Cos(angle_);
-            dy_ = Mathf.Sign(angle_);
+            dy_ = Mathf.Sin(angle_);
             duration_ = length / fish_speed_;
         }
         //virtual ~FishActionFishMoveFoshou();
