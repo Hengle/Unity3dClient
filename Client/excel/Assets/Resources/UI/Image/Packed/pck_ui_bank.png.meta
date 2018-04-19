@@ -1,0 +1,516 @@
+fileFormatVersion: 2
+guid: 31afbe7f2e9bf8e40927670f3b57ec64
+timeCreated: 1524131547
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: btn_bank_cancel
+    21300002: btn_bank_down
+    21300004: btn_bank_off
+    21300006: btn_bank_up
+    21300008: btn_personal_off
+    21300010: btn_ty_blue
+    21300012: btn_ty_green
+    21300014: btn_ty_small_green
+    21300016: btn_ty_tabs_1
+    21300018: btn_ty_tabs_2
+    21300020: btn_ty_yellow
+    21300022: icon_coffer
+    21300024: img_bank_down_kuang_1
+    21300026: img_bank_down_kuang_10
+    21300028: img_bank_down_kuang_2
+    21300030: img_bank_down_kuang_3
+    21300032: img_bank_nei_kuang
+    21300034: img_bar
+    21300036: img_bar_bg
+    21300038: img_bar_dot
+    21300040: img_tips_bg_di_1
+    21300042: img_tips_bg_di_2
+    21300044: img_tips_bg_di_3
+    21300046: img_tips_bg_di_4
+    21300048: img_tips_bg_neikuang_1
+    21300050: img_tips_bg_neikuang_2
+    21300052: img_tips_bg_neikuang_3
+    21300054: img_tips_bg_neikuang_4
+    21300056: img_tips_bt_bg_left
+    21300058: img_tips_bt_bg_right
+    21300060: img_tips_personal_bg_left
+    21300062: img_tips_personal_bg_right
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: btn_bank_cancel
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 885
+        width: 52
+        height: 53
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4811321}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_bank_down
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 439
+        width: 74
+        height: 39
+      alignment: 9
+      pivot: {x: 0.5135135, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_bank_off
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 396
+        width: 75
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_bank_up
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 398
+        width: 74
+        height: 39
+      alignment: 9
+      pivot: {x: 0.5135135, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_personal_off
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 137
+        width: 62
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_ty_blue
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 427
+        width: 145
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_ty_green
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 480
+        width: 221
+        height: 71
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_ty_small_green
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 469
+        width: 85
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_ty_tabs_1
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 575
+        width: 169
+        height: 70
+      alignment: 9
+      pivot: {x: 0.50591713, y: 0.4857143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_ty_tabs_2
+      rect:
+        serializedVersion: 2
+        x: 340
+        y: 503
+        width: 145
+        height: 70
+      alignment: 9
+      pivot: {x: 0.58965516, y: 0.4857143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_ty_yellow
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 441
+        width: 182
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: icon_coffer
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 838
+        width: 46
+        height: 45
+      alignment: 9
+      pivot: {x: 0.45652175, y: 0.54444444}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_bank_down_kuang_1
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 375
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_bank_down_kuang_10
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 309
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_bank_down_kuang_2
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 332
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_bank_down_kuang_3
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 330
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_bank_nei_kuang
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 507
+        width: 98
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 22, y: 0, z: 25, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_bar
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 995
+        width: 477
+        height: 27
+      alignment: 9
+      pivot: {x: 0.5020964, y: 0.5}
+      border: {x: 19, y: 0, z: 20, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_bar_bg
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 435
+        width: 79
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 15, y: 0, z: 16, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_bar_dot
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 940
+        width: 54
+        height: 53
+      alignment: 9
+      pivot: {x: 0.46296296, y: 0.5377358}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_bg_di_1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 305
+        width: 120
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_bg_di_2
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 319
+        width: 120
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_bg_di_3
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 183
+        width: 120
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_bg_di_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 197
+        width: 120
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_bg_neikuang_1
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 266
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 34, y: 27, z: 18, w: 27}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_bg_neikuang_2
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 264
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 22, y: 21, z: 23, w: 19}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_bg_neikuang_3
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 200
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 26, y: 22, z: 22, w: 22}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_bg_neikuang_4
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 198
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 23, y: 26, z: 24, w: 17}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_bt_bg_left
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 599
+        width: 336
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_bt_bg_right
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 553
+        width: 336
+        height: 44
+      alignment: 9
+      pivot: {x: 0.5, y: 0.52272725}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_personal_bg_left
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 821
+        width: 449
+        height: 172
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 29, z: 0, w: 100}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_tips_personal_bg_right
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 647
+        width: 448
+        height: 172
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 31, z: 0, w: 103}
+      outline: []
+      tessellationDetail: -1
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
