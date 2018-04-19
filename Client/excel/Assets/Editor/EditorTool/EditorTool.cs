@@ -152,4 +152,62 @@ public class EditorTool
 
         AssetDatabase.Refresh();
     }
+
+    [MenuItem("GameClient/Xml/XmlToAsset")]
+    static public void Xml2Asset()
+    {
+        var path = Path.GetFullPath(Application.dataPath + "/../../Xml");
+        var files = Directory.GetFiles(path, "*.xml");
+        var save_dir = Path.GetFullPath(Application.dataPath + "/Resources/Xml/");
+
+        try
+        {
+            if (!Directory.Exists(save_dir))
+            {
+                Directory.CreateDirectory(save_dir);
+            }
+
+            for (int i = 0; i < files.Length; ++i)
+            {
+                var name = Path.GetFileNameWithoutExtension(files[i]);
+                var assetPath = "Assets/Resources/Xml/" + name + ".asset";
+                try
+                {
+                    AssetBinary asset = ScriptableSingleton<AssetBinary>.CreateInstance<AssetBinary>();
+                    asset.m_DataBytes = File.ReadAllBytes(files[i]);
+
+                    if (File.Exists(assetPath))
+                    {
+                        AssetBinary oldAsset = AssetDatabase.LoadAssetAtPath<AssetBinary>(assetPath);
+                        oldAsset.m_DataBytes = asset.m_DataBytes;
+                        EditorUtility.SetDirty(oldAsset);
+                        AssetDatabase.SaveAssets();
+                    }
+                    else
+                    {
+                        AssetDatabase.CreateAsset(asset, assetPath);
+                    }
+                    UnityEngine.Debug.LogFormat("<color=#00ff00>convert xml {0} to asset failed !!!</color>", assetPath);
+                }
+                catch(System.Exception e)
+                {
+                    UnityEngine.Debug.LogErrorFormat("<color=#ff0000>convert xml {0} to asset failed !!!</color>", assetPath);
+                    UnityEngine.Debug.LogErrorFormat("<color=#ff0000>{0}</color>", e.ToString());
+                }
+            }
+
+            UnityEngine.Debug.LogFormat("<color=#00ff00>convert xml to asset succeed !!!</color>");
+        }
+        catch (System.Exception e)
+        {
+            UnityEngine.Debug.LogError("<color=#ff0000>convert xml to asset failed !!!</color>");
+            UnityEngine.Debug.LogErrorFormat("<color=#ff0000>{0}</color>",e.ToString());
+        }
+    }
+
+    [MenuItem("GameClient/Xml/Read")]
+    public static void ReadXml()
+    {
+        GameClient.XmlReader.Read(new PathNormalList());
+    }
 }

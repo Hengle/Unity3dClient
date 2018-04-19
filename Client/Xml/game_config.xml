@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<GameConfig>
+	<!-- 金币和渔币的兑换(金币:渔币) exchangeCount:每次兑换数量 -->
+	<ScoreExchange exchange_ratio="1:1" exchange_count="100000" />
+
+	<!-- 炮的倍数 -->
+	<CannonMulriple min_multiple="100" max_multiple="9999" />
+	
+	<!-- game_stock:初始库存,revenue：抽水(千分之) -->
+	<GameStock game_stock="180000000" revenue="0" >
+		<key stockScore="0" increaseProbability="0.60" />
+		<key stockScore="5000000" increaseProbability="0.70" />
+		<key stockScore="10000000" increaseProbability="0.75" />
+        <key stockScore="20000000" increaseProbability="0.80" />
+		<key stockScore="40000000" increaseProbability="1.05" />
+        <key stockScore="60000000" increaseProbability="1.10" />
+        <key stockScore="100000000" increaseProbability="1.00" />
+        <key stockScore="150000000" increaseProbability="1.20" />
+		<key stockScore="200000000" increaseProbability="1.40" />
+		<key stockScore="250000000" increaseProbability="1.60" />
+	</GameStock>
+			<!-- 机器人死鱼率 -->
+	<AndroidConfig capture_probability="2.0" fire_interval="0.40" win_multi="1" noticeMulti="1.0" />
+
+	<!-- EveryOneWinPer:单个玩家控制 -->
+	<EveryOneWinPer winPercent="1.00" probeJudgePercent="1.0" maxLoseGold="10000000" loseBaseMulti="0"/>
+
+	<FishConfig>
+		<!-- mulriple:鱼的倍数 layer:鱼的深度 speed:鱼的速度(speed/second) capture_probability:捕获概率 bounding_radius:包围盒半径 bounding_count:包围盒的个数 distribute_interval:生成鱼的间隔 distribute_count:生成鱼的数量 path:路径 -->
+		<Fish kind="0" name="蜗牛鱼" mulriple="2" layer="1" speed="75" capture_probability="0.25" bounding_radius="12.0" bounding_count="3" distribute_interval="10.0" distribute_count ="3" path="path.xml" />
+		<Fish kind="1" name="绿草鱼" mulriple="2" layer="4" speed="70" capture_probability="0.25" bounding_radius="10.0" bounding_count="3" distribute_interval="11.0" distribute_count ="3" path="path.xml" />
+		<Fish kind="2" name="黄草鱼" mulriple="3" layer="4" speed="75" capture_probability="0.165" bounding_radius="17.0" bounding_count="2" distribute_interval="12.0" distribute_count ="0" path="path.xml" />
+		<Fish kind="3" name="大眼鱼" mulriple="4" layer="0" speed="70" capture_probability="0.125" bounding_radius="19.0" bounding_count="2" distribute_interval="17.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="4" name="黄边鱼" mulriple="5" layer="3" speed="71" capture_probability="0.1" bounding_radius="15.0" bounding_count="3" distribute_interval="20.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="5" name="小丑鱼" mulriple="6" layer="4" speed="72" capture_probability="0.083" bounding_radius="38.0" bounding_count="1" distribute_interval="20" distribute_count ="1" path="path.xml" />
+		<Fish kind="6" name="小刺鱼" mulriple="7" layer="1" speed="73" capture_probability="0.0714" bounding_radius="22.0" bounding_count="2" distribute_interval="18" distribute_count ="1" path="path.xml" />
+		<Fish kind="7" name="蓝鱼" mulriple="8" layer="2" speed="70" capture_probability="0.0625" bounding_radius="27.0" bounding_count="2" distribute_interval="19" distribute_count ="1" path="path.xml" />
+		<Fish kind="8" name="灯笼鱼" mulriple="9" layer="5" speed="70" capture_probability="0.0555" bounding_radius="35.0" bounding_count="1" distribute_interval="20" distribute_count ="1" path="path.xml" />
+		<Fish kind="9" name="海龟" mulriple="10" layer="5" speed="65" capture_probability="0.05" bounding_radius="53.5" bounding_count="1" distribute_interval="21" distribute_count ="4" path="path.xml" />
+		<Fish kind="10" name="花斑鱼" mulriple="12" layer="2" speed="70" capture_probability="0.0417" bounding_radius="41.5" bounding_count="1" distribute_interval="18" distribute_count ="1" path="path.xml" />
+		<Fish kind="11" name="蝴蝶鱼" mulriple="15" layer="2" speed="65" capture_probability="0.0333" bounding_radius="53.0" bounding_count="1" distribute_interval="18" distribute_count ="1" path="path.xml" />
+		<Fish kind="12" name="孔雀鱼" mulriple="18" layer="4" speed="60" capture_probability="0.0278" bounding_radius="30.0" bounding_count="3" distribute_interval="15" distribute_count ="1" path="path.xml" />
+		<Fish kind="13" name="剑鱼" mulriple="20" layer="6" speed="60" capture_probability="0.025" bounding_radius="30.0" bounding_count="4" distribute_interval="8.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="14" name="蝙蝠鱼" mulriple="25" layer="4" speed="50" capture_probability="0.02" bounding_radius="70.0" bounding_count="1" distribute_interval="16.5" distribute_count ="1" path="path.xml" />
+		<Fish kind="15" name="银鲨" mulriple="30" layer="4" speed="120" capture_probability="0.015" bounding_radius="32.0" bounding_count="4" distribute_interval="35.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="16" name="金鲨" mulriple="35" layer="3" speed="120" capture_probability="0.014" bounding_radius="32.0" bounding_count="4" distribute_interval="45.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="17" name="霸王鲸" mulriple="0" layer="3" speed="140" capture_probability="0.006" bounding_radius="69.0" bounding_count="3" distribute_interval="35.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="18" name="金蝉" mulriple="12" layer="1" speed="50" capture_probability="0.04" bounding_radius="51.0" bounding_count="1" distribute_interval="15.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="19" name="神仙船" mulriple="24" layer="1" speed="40" capture_probability="0.02" bounding_radius="51.0" bounding_count="4" distribute_interval="50.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="20" name="美人鱼" mulriple="100" layer="1" speed="40" capture_probability="1.100" bounding_radius="41.0" bounding_count="4" distribute_interval="100.0" distribute_count ="0" path="path.xml" />
+		<Fish kind="21" name="小青龙" mulriple="150" layer="3" speed="50" capture_probability="0.004" bounding_radius="38.0" bounding_count="1" distribute_interval="40.0" distribute_count ="0" path="path.xml" />
+		<Fish kind="22" name="小银龙" mulriple="200" layer="3" speed="40" capture_probability="0.003" bounding_radius="38.0" bounding_count="1" distribute_interval="80.0" distribute_count ="0" path="path.xml" />
+		<Fish kind="23" name="小金龙" mulriple="0" layer="3" speed="50" capture_probability="0.0013" bounding_radius="38.0" bounding_count="1" distribute_interval="105.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="24" name="孙悟空" mulriple="0" layer="0" speed="80" capture_probability="0.0023" bounding_radius="87.5" bounding_count="1" distribute_interval="70.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="25" name="玉皇大帝" mulriple="320" layer="0" speed="100" capture_probability="0.0013" bounding_radius="96.0" bounding_count="1" distribute_interval="140.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="26" name="佛手" mulriple="0" layer="1" speed="50" capture_probability="0.0003" bounding_radius="64.0" bounding_count="1" distribute_interval="120.0" distribute_count ="0" path="path_foshou.xml" />
+		<Fish kind="27" name="炼丹炉" mulriple="0" layer="1" speed="45" capture_probability="0.015,0.015,0.015" bounding_radius="40.0" bounding_count="2" distribute_interval="56.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="28" name="大闹天宫" mulriple="0" layer="0" speed="40" capture_probability="0.02,0.02,0.02,0.02,0.02,0.015,0.02,0.02,0.02,0.015" bounding_radius="30.0" bounding_count="0" distribute_interval="36.0" distribute_count ="0" path="path.xml" />
+		<Fish kind="29" name="一箭双雕" mulriple="0" layer="0" speed="50" capture_probability="0.02,0.02,0.02,0.02,0.02" bounding_radius="77.0" bounding_count="1" distribute_interval="30.0" distribute_count ="0" path="path.xml" />
+		<Fish kind="30" name="一石三鸟" mulriple="0" layer="0" speed="45" capture_probability="0.02,0.02,0.02,0.02,0.02,0.02" bounding_radius="81.0" bounding_count="1" distribute_interval="40.0" distribute_count ="0" path="path.xml" />
+		<Fish kind="31" name="全家福" mulriple="1" layer="0" speed="45" capture_probability="0.02" bounding_radius="150.0" bounding_count="1" distribute_interval="60.0" distribute_count ="0" path="path.xml" />
+		<Fish kind="32" name="鱼群" mulriple="8" layer="0" speed="32" capture_probability="0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02" bounding_radius="30.0" bounding_count="4" distribute_interval="28.0" distribute_count ="1" path="path.xml" />
+		<Fish kind="33" name="闪电鱼" mulriple="1" layer="0" speed="50" capture_probability="1.0,0.02,0.02,0.02,0.02,0.02,0.02,0.02,0.02" bounding_radius="20.0" bounding_count="1" distribute_interval="5.0" distribute_count ="1" path="path.xml" />
+	</FishConfig>
+
+	<BulletConfig>
+		<!-- speed:子弹的速度(speed/second) bounding_radius:包围盒半径 -->
+		<Bullet kind="0" name="2炮筒" speed="800" bounding_radius="15.5" />
+		<Bullet kind="1" name="3炮筒" speed="800" bounding_radius="14.0" />
+		<Bullet kind="2" name="4炮筒" speed="800" bounding_radius="15.5" />
+		<Bullet kind="3" name="2炮筒双倍" speed="1100" bounding_radius="26.0" />
+		<Bullet kind="4" name="3炮筒双倍" speed="1100" bounding_radius="21.5" />
+		<Bullet kind="5" name="4炮筒双倍" speed="1100" bounding_radius="26.0" />
+	</BulletConfig>
+</GameConfig>

@@ -27,5 +27,6 @@ namespace GameClient
     public class ComUIConfig : MonoBehaviour
     {
         public GameObject[] goLayers = new GameObject[(int)FrameLayer.COUNT];
+        public GameObject sceneRoot = null;
     }
 }

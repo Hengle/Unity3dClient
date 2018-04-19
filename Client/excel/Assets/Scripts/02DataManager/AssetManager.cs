@@ -40,6 +40,21 @@ namespace GameClient
 			return true;
 		}
 
+        public bool LoadHighPriorityTables()
+        {
+            Dictionary<Type, Dictionary<int, object>> tableDic = new Dictionary<Type, Dictionary<int, object>>();
+            tableDic.Clear();
+            Dictionary<int, object> table = null;
+            var type = typeof(ProtoTable.SceneTable);
+            if (!_LoadTable(type, ref table))
+            {
+                return false;
+            }
+            tableDic.Add(type,table);
+            TableManager.Instance().LoadTableResources(tableDic);
+            return true;
+        }
+
         public IEnumerator AnsyLoadAllTables()
         {
             Dictionary<Type, Dictionary<int, object>> tableDic = new Dictionary<Type, Dictionary<int, object>>();

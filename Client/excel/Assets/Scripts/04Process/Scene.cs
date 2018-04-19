@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XLua;
 
 namespace GameClient
 {
@@ -14,7 +15,8 @@ namespace GameClient
         SA_EXITED,
     }
 
-	public class Scene : IScene 
+    [LuaCallCSharp]
+    public class Scene : IScene 
 	{
         SceneAction _state = SceneAction.SA_INVALID;
         public IEnumerator itEnter = null;
@@ -26,6 +28,9 @@ namespace GameClient
         public EAction onEndLoading = null;
         Coroutine coEnter = null;
         Coroutine coExit = null;
+        protected int _ID = -1;
+        protected LuaSceneBehavior mSceneBehavior = null;
+        protected ProtoTable.SceneTable sceneItem = null;
 
         public void Reset()
         {
@@ -39,6 +44,30 @@ namespace GameClient
             onEndLoading = null;
             coEnter = null;
             coExit = null;
+            mSceneBehavior = null;
+            sceneItem = null;
+            _ID = -1;
+        }
+
+        public int GetID()
+        {
+            return _ID;
+        }
+
+        public string GetName()
+        {
+            if(null != sceneItem)
+            {
+                return sceneItem.Desc;
+            }
+            return "[Scene:Unknown]";
+        }
+
+        public bool Create(int iId)
+        {
+            _ID = iId;
+            sceneItem = TableManager.Instance().GetTableItem<ProtoTable.SceneTable>(iId);
+            return null != sceneItem;
         }
 
         public void SetAction(SceneAction eAction)
@@ -100,12 +129,24 @@ namespace GameClient
             coEnter = null;
 
             yield return new WaitForEndOfFrame();
+            LogManager.Instance().LogProcessFormat(8888, "Execute LuaSceneBehavior [OnEnter] ...");
+            if(null != mSceneBehavior)
+            {
+                mSceneBehavior.OnOpenScene(this);
+            }
+
+            yield return new WaitForEndOfFrame();
             LogManager.Instance().LogProcessFormat(8888, "Execute Action [Running] ...");
             _state = SceneAction.SA_RUNNING;
         }
 
         IEnumerator _AnsyExit()
         {
+            if (null != mSceneBehavior)
+            {
+                mSceneBehavior.OnCloseScene();
+            }
+
             if (null != onExit)
             {
                 onExit.Invoke();
@@ -121,6 +162,12 @@ namespace GameClient
             itExit = null;
 
             yield return new WaitForEndOfFrame();
+
+            if (null != mSceneBehavior)
+            {
+                mSceneBehavior.DestroyWithScene();
+            }
+            mSceneBehavior = null;
 
             coExit = null;
             Reset();
@@ -138,6 +185,21 @@ namespace GameClient
             _state = SceneAction.SA_ON_EXIT;
             LogManager.Instance().LogProcessFormat(8888, "Execute Action [OnExit] ...");
             coExit = GameFrameWork.FrameWorkHandle.StartCoroutine(_AnsyExit());
+        }
+
+        public void ExitGame()
+        {
+            if(null != mSceneBehavior)
+            {
+                mSceneBehavior.OnCloseScene();
+                mSceneBehavior.DestroyWithScene();
+                mSceneBehavior = null;
+            }
+        }
+
+        public void SetSceneBehavior(LuaSceneBehavior behavior)
+        {
+            mSceneBehavior = behavior;
         }
 
         public void OnUpdate()

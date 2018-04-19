@@ -9,7 +9,7 @@ namespace GameClient
         protected static float M_PI = Mathf.PI;
         protected static float M_PI_2 = Mathf.PI * 0.50f;
         protected static Dictionary<System.Type, List<FishAction>> mActionPools = new Dictionary<System.Type, List<FishAction>>();
-        public static FishAction CreateActionFromPool<T>(int count = 100) where T : FishAction ,new()
+        public static T CreateActionFromPool<T>(int count = 100) where T : FishAction ,new()
         {
             if(count < 0)
             {
@@ -36,7 +36,7 @@ namespace GameClient
                 action = new T();
             }
 
-            return action;
+            return action as T;
         }
         public static void ThrowActionToPoll(FishAction action)
         {

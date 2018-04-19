@@ -113,6 +113,12 @@ namespace GameClient
             SceneManager.Instance().RegisterScene(SceneType.ST_LOGIN, CreateLoginScene);
             SceneManager.Instance().RegisterScene(SceneType.ST_BATTLE_FISH, FishScene.CreateFishScene);
 
+            if(!AssetManager.Instance().LoadHighPriorityTables())
+            {
+                LogManager.Instance().LogProcessFormat(8000, "<color=#ff0000>AssetManager LoadHighPriorityTables failed !</color>");
+                return;
+            }
+
             SceneManager.Instance().SwitchScene(SceneType.ST_LOGIN);
         }
 

@@ -109,25 +109,29 @@ namespace GameClient
             FishActionFishMove action = null;
             if (cmd.fish_kind == FishKind.FISH_FOSHOU)
             {
-                action = new FishActionFishMoveFoshou(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y));
+                action = FishAction.CreateActionFromPool<FishActionFishMoveFoshou>(16);
+                FishActionFishMoveFoshou actionFoshou = action as FishActionFishMoveFoshou;
+                actionFoshou.Create(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y));
             }
             else
             {
-                if (cmd.position_count == 3)
+                if (cmd.position.Length == 3)
                 {
-                    action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>(16) as FishActionFishMove;
+                    action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>(16);
                     FishActionFishMoveBezier actionBezier = action as FishActionFishMoveBezier;
                     actionBezier.Create(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y), new Vector2(cmd.position[2].x, cmd.position[2].y));
                 }
-                else if (cmd.position_count == 4)
+                else if (cmd.position.Length == 4)
                 {
-                    action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>(16) as FishActionFishMove;
+                    action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>(16);
                     FishActionFishMoveBezier actionBezier = action as FishActionFishMoveBezier;
                     actionBezier.Create(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y), new Vector2(cmd.position[2].x, cmd.position[2].y), new Vector2(cmd.position[3].x, cmd.position[3].y));
                 }
                 else
                 {
-                    action = new FishActionFishMoveLinear(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y));
+                    action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>(16);
+                    FishActionFishMoveLinear actionLine = action as FishActionFishMoveLinear;
+                    actionLine.Create(speed, new Vector2(cmd.position[0].x, cmd.position[0].y), new Vector2(cmd.position[1].x, cmd.position[1].y));
                 }
             }
 

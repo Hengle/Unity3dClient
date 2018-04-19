@@ -8,8 +8,8 @@ namespace GameClient
 {
     public enum SceneType
     {
-        ST_INVALID = -1,
-        ST_LOGIN = 0,
+        ST_INVALID = 0,
+        ST_LOGIN = 1,
         ST_BATTLE_FISH,
         ST_COUNT,
     }
@@ -103,14 +103,45 @@ namespace GameClient
                 mScene = null;
             }
 
-            if (null == mActions[(int)eSceneType])
+            int sceneId = (int)eSceneType;
+            var sceneItem = TableManager.Instance().GetTableItem<ProtoTable.SceneTable>(sceneId);
+            if(null == sceneItem)
             {
-                LogManager.Instance().LogProcessFormat(8888,"<color=#ff00ff>switch scene{0} failed !!!</color>", eSceneType);
+                LogManager.Instance().LogProcessFormat(8888, "<color=#ff00ff>create scene{0} failed !!! sceneId can not found in sceneTable !!!</color>", sceneId);
                 coSwith = null;
                 yield break;
             }
 
-            mScenes[(int)eSceneType] = mActions[(int)eSceneType].Invoke() as Scene;
+            GameObject goScene = AssetLoader.Instance().LoadRes(sceneItem.Prefab,typeof(GameObject)).obj as GameObject;
+            if(null == goScene)
+            {
+                LogManager.Instance().LogProcessFormat(8888, "<color=#ff00ff>load scene {0} failed !!! sceneId = {1}!!!</color>", sceneItem.Desc, sceneId);
+                coSwith = null;
+                yield break;
+            }
+
+#if UNITY_EDITOR
+            goScene.name = string.Format("[SCENE]:[{0}]", sceneItem.Desc);
+#endif
+            Utility.AttachTo(goScene, GlobalDataManager.Instance().uiConfig.sceneRoot);
+            goScene.transform.SetAsFirstSibling();
+
+            var sceneBehavior = goScene.GetComponent<LuaSceneBehavior>();
+            if(null == sceneBehavior)
+            {
+                LogManager.Instance().LogProcessFormat(8888, "<color=#ff00ff>load scene {0} failed !!! missing LuaSceneBehavior script !!!</color>", sceneItem.Desc, sceneId);
+                coSwith = null;
+                yield break;
+            }
+
+            if(null != mActions[(int)eSceneType])
+            {
+                mScenes[(int)eSceneType] = mActions[(int)eSceneType].Invoke() as Scene;
+            }
+            else
+            {
+                mScenes[(int)eSceneType] = new Scene();
+            }
 
             mScene = mScenes[(int)eSceneType];
             if(null == mScene)
@@ -120,6 +151,14 @@ namespace GameClient
                 yield break;
             }
 
+            if(!mScene.Create(sceneId))
+            {
+                LogManager.Instance().LogProcessFormat(8888, "<color=#ff00ff>create scene{0} failed !!! </color>", sceneId);
+                coSwith = null;
+                yield break;
+            }
+
+            mScene.SetSceneBehavior(sceneBehavior);
             mScene.OnEnter();
 
             while (mScene.GetAction() != SceneAction.SA_RUNNING && mScene.GetAction() != SceneAction.SA_INVALID)
@@ -151,6 +190,11 @@ namespace GameClient
 
         public void ExitGame()
         {
+            if(null != mScene)
+            {
+                mScene.ExitGame();
+                mScene = null;
+            }
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_CHANGE_SCENE, _OnChangeScene);
             Clear(true);
             TableManager.Instance().ClearAll();
