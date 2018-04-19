@@ -166,6 +166,8 @@ namespace GameClient
             if (null != mSceneBehavior)
             {
                 mSceneBehavior.DestroyWithScene();
+                mSceneBehavior.transform.SetParent(null);
+                GameObject.Destroy(mSceneBehavior.gameObject);
             }
             mSceneBehavior = null;
 

@@ -16,7 +16,7 @@ namespace GameClient
                 case SceneKind.SCENE_1:
                     {
                         //if (me_chair_id < 3)
-                        //    BuildSceneFish6(me_chair_id);
+                            //BuildSceneFish6(me_chair_id);
                         //else
                         //    BuildSceneFish6Switch(me_chair_id);
                         break;
@@ -33,7 +33,7 @@ namespace GameClient
                     }
                 case SceneKind.SCENE_4:
                     {
-                        //BuildSceneFish1(me_chair_id);
+                        BuildSceneFish1(me_chair_id);
                         break;
                     }
                 case SceneKind.SCENE_5:
@@ -74,6 +74,7 @@ namespace GameClient
             action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
             (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
 
+            FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
             //TODO:
             //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
 
@@ -87,6 +88,7 @@ namespace GameClient
             SwitchViewPosition(me_chair_id, ref start, ref end);
             action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
             (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+            FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
             //TODO:
             //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
 
@@ -104,7 +106,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
-
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
             }
@@ -122,6 +124,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
             }
@@ -140,6 +143,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
             }
@@ -158,6 +162,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
             }
@@ -176,6 +181,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
             }
@@ -194,6 +200,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
             }
