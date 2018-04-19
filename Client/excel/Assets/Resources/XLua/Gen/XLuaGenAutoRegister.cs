@@ -55,6 +55,10 @@ namespace XLua.CSObjectWrap
 				
 				translator.DelayWrapLoader(typeof(GameClient.IFrame), GameClientIFrameWrap.__Register);
 				
+				translator.DelayWrapLoader(typeof(GameClient.IScene), GameClientISceneWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.Scene), GameClientSceneWrap.__Register);
+				
 				translator.DelayWrapLoader(typeof(GameClient.FrameLayer), GameClientFrameLayerWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(GameClient.FrameState), GameClientFrameStateWrap.__Register);
@@ -66,6 +70,8 @@ namespace XLua.CSObjectWrap
 				translator.DelayWrapLoader(typeof(GameClient.MessageBoxFrame), GameClientMessageBoxFrameWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(LuaBehaviour), LuaBehaviourWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(LuaSceneBehavior), LuaSceneBehaviorWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(GameClient.UIFrameLua), GameClientUIFrameLuaWrap.__Register);
 				
