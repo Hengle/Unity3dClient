@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<FishPath>
+	<!-- type:0(直线<2个点>) 1(二次贝塞尔曲线<3个点>) 2(三次贝塞尔曲线<4个点>) -->
+	<Path type="0">
+		<Position x="-300" y="271" />
+		<Position x="460" y="768" />
+	</Path>
+</FishPath>

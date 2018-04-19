@@ -128,6 +128,8 @@ namespace GameClient
         private void OnDestroy()
         {
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_CREATE_FISH, _OnCreateFish);
+            _recycles.Clear();
+            _actived.Clear();
         }
 
         protected void _OnCreateFish(object argv)

@@ -110,7 +110,7 @@ function gameMsg.SitdownRep(msg)
     seat_id = msg.seat
     watching = (msg.watching == 1)
 
-    CS.GameClient.SceneManager.Instance():SwitchScene(1)
+    CS.GameClient.SceneManager.Instance():SwitchScene(2)
 
     if game_scene ~= nil then
         print("loading game scene:", game_scene)

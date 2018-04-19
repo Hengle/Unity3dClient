@@ -8,6 +8,7 @@ namespace GameClient
 	{
         UnityEngine.UI.Button mbtnQuit;
         GameClient.ComFishLogic mcomLogic;
+        PathNormalList path = null;
 
         protected override void _InitScriptBinder()
         {
@@ -21,34 +22,22 @@ namespace GameClient
             {
                 mbtnQuit.onClick.AddListener(_OnClickClose);
             }
-            //if(null != mcomLogic)
-            //{
-            //    mcomLogic.createFish(1001, 1);
-            //    mcomLogic.createFish(1002, 2);
-            //    mcomLogic.createFish(1003, 3);
-            //}
-            InvokeManager.Instance().Invoke(this, 5.0f, _OnCreateFish);
-            //InvokeManager.Instance().InvokeRepeate(this, 5.0f, _OnCreateFish, false);
+
+            path = AssetLoader.Instance().LoadRes("Xml/path", typeof(PathNormalList)).obj as PathNormalList;
+            InvokeManager.Instance().InvokeRepeate(this, 2.0f, _OnCreateFish, false);
 		}
 
         int m_cmd = 100050;
         void _OnCreateFish()
         {
-            for(int i = 0; i < 1; ++i)
+            for(int i = 0; i < 5; ++i)
             {
                 CMD_S_SceneFish cmd = new CMD_S_SceneFish();
                 cmd.fish_id = ++m_cmd;
                 cmd.fish_kind = (FishKind)(1 + UnityEngine.Random.Range(0, 21));
                 cmd.elapsed = 0;
-                cmd.fish_kind = FishKind.FISH_FOSHOU;
-                cmd.position = new Vector2[]
-                {
-                new Vector2(UnityEngine.Random.Range(0, FishConfig.kScreenWidth), UnityEngine.Random.Range(0, FishConfig.kScreenHeight)),
-                new Vector2(UnityEngine.Random.Range(0, FishConfig.kScreenWidth), UnityEngine.Random.Range(0, FishConfig.kScreenHeight)),
-                //new Vector2(UnityEngine.Random.Range(0, FishConfig.kScreenWidth), UnityEngine.Random.Range(0, FishConfig.kScreenHeight)),
-                //new Vector2(UnityEngine.Random.Range(0, FishConfig.kScreenWidth), UnityEngine.Random.Range(0, FishConfig.kScreenHeight))
-                };
-
+                int pathId = UnityEngine.Random.Range(0, path.pathes.Length - 1);
+                cmd.position = path.pathes[pathId].positions;
                 cmd.position_count = cmd.position.Length;
                 cmd.tag = 0;
                 cmd.tick_count = 0;
