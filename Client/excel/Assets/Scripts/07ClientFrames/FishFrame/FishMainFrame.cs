@@ -24,8 +24,15 @@ namespace GameClient
             }
 
             path = AssetLoader.Instance().LoadRes("Xml/path", typeof(PathNormalList)).obj as PathNormalList;
-            InvokeManager.Instance().InvokeRepeate(this, 2.0f, _OnCreateFish, false);
+
+            InvokeManager.Instance().Invoke(this, 3.0f, _BuildFishScene4);
+            //InvokeManager.Instance().InvokeRepeate(this, 10.0f, _BuildFishScene4, false);
 		}
+
+        void _BuildFishScene4()
+        {
+            FishSceneManager.Instance().BuildSceneFish(SceneKind.SCENE_4, 0);
+        }
 
         int m_cmd = 100050;
         void _OnCreateFish()

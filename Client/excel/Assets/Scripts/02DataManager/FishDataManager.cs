@@ -50,6 +50,31 @@ namespace GameClient
         protected static FishDataManager ms_handle = null;
         private FishDataPool mFishDataPool = new FishDataPool();
 
+        public FishData Get()
+        {
+            return mFishDataPool.Get();
+        }
+
+        public void CreateFish(FishKind kind,int fish_id, FishActionFishMove action)
+        {
+            var fishItem = TableManager.Instance().GetTableItem<ProtoTable.FishTable>((int)kind + 1);
+            if (null == fishItem)
+            {
+                LogManager.Instance().LogErrorFormat("create fish failed !! which kind={0}:[id={1}] can not be found in fishtable !!!", kind, (int)kind + 1);
+                return;
+            }
+
+            var data = mFishDataPool.Get();
+            data.fish_id = fish_id;
+            data.action = action;
+            data.tag = 0;
+            data.elapsed = 0.0f;
+            data.tick_count = 0;
+            data.fishItem = fishItem;
+
+            EventManager.Instance().SendEvent(ClientEvent.CE_CREATE_FISH, data);
+        }
+
         public void Release(FishData data)
         {
             if(null != data)
