@@ -1,6 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+using System.IO;
 
 //#include "math_aide.h"
 //#include <math.h>
@@ -9,6 +14,48 @@ namespace GameClient
 {
     public class FishSceneManager : Singleton<FishSceneManager>
     {
+        FishActionAsset[] mAssets = new FishActionAsset[(int)SceneKind.SCENE_COUNT];
+        public void LoadAsset(SceneKind kind, FishActionAsset asset)
+        {
+            if(null != asset)
+            {
+                int iIndex = (int)kind;
+                if(iIndex >= 0 && iIndex < mAssets.Length)
+                {
+                    mAssets[iIndex] = asset;
+                }
+            }
+        }
+
+        public  void BuildFishScene6ToAsset(FishActionMoveBezier[] datas,string path = "Scene/Fish/fish_scene_6")
+        {
+            var fileName = Path.GetFileNameWithoutExtension(path);
+            var assetPath = "Assets/Resources/" + path + ".asset";
+
+            try
+            {
+                if (File.Exists(assetPath))
+                {
+                    FishActionAsset oldAsset = AssetDatabase.LoadAssetAtPath<FishActionAsset>(assetPath);
+                    oldAsset.pathes = datas;
+                    //oldAsset.pathes = _tmpPathes.ToArray();
+                    EditorUtility.SetDirty(oldAsset);
+                    AssetDatabase.SaveAssets();
+                }
+                else
+                {
+                    var assetData = ScriptableObject.CreateInstance<FishActionAsset>();
+                    assetData.pathes = datas;
+                    AssetDatabase.CreateAsset(assetData, assetPath);
+                }
+                Debug.LogFormat("<color=#00ff00>create asset {0} succeed !!!</color>", assetPath);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogErrorFormat(e.ToString());
+            }
+        }
+
         public void BuildSceneFish(SceneKind scene_kind, int me_chair_id)
         {
             switch (scene_kind)
@@ -16,7 +63,42 @@ namespace GameClient
                 case SceneKind.SCENE_1:
                     {
                         //if (me_chair_id < 3)
-                            //BuildSceneFish6(me_chair_id);
+                        FishActionAsset asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_6", typeof(FishActionAsset)).obj as FishActionAsset;
+                        if(null == asset)
+                        {
+#if UNITY_EDITOR
+                            DateTime start = DateTime.Now;
+                            List<FishActionMoveBezier> assetDatas = new List<FishActionMoveBezier>();
+                            BuildSceneFish6(me_chair_id, assetDatas);
+                            BuildFishScene6ToAsset(assetDatas.ToArray());
+                            DateTime end = DateTime.Now;
+                            TimeSpan ts = end - start;
+                            Debug.LogErrorFormat("BuildSceneFish6 delta = {0}", ts.TotalMilliseconds.ToString());
+#endif
+                        }
+                        else
+                        {
+                            DateTime start = DateTime.Now;
+                            for (int i = 0; i < asset.pathes.Length; ++i)
+                            {
+                                var current = asset.pathes[i];
+                                if(null != current)
+                                {
+                                    FishActionFishMoveBezier action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                                    action.Create(asset.pathes[i]._points);
+                                    //DateTime item_start = DateTime.Now;
+                                    FishDataManager.Instance().CreateFish(current._kind, current._fish_id, action);
+                                    //DateTime item_end = DateTime.Now;
+                                    //TimeSpan item_ts = item_end - item_start;
+                                    //Debug.LogErrorFormat("BuildSceneFish6 delta = <color=#00ff00>{0}</color> ms", item_ts.TotalMilliseconds.ToString());
+                                }
+                            }
+                            DateTime end = DateTime.Now;
+                            TimeSpan ts = end - start;
+                            Debug.LogErrorFormat("BuildSceneFish6 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
+                        }
+
+                        
                         //else
                         //    BuildSceneFish6Switch(me_chair_id);
                         break;
@@ -205,6 +287,860 @@ namespace GameClient
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
             }
         }
+        void BuildSceneFish6(int me_chair_id,List<FishActionMoveBezier> outAssetData = null)
+        {
+            List<MovePoint>[] movePointVector = new List<MovePoint>[300];//300
+            for(int i = 0; i < movePointVector.Length; ++i)
+            {
+                movePointVector[i] = new List<MovePoint>();
+            }
+            FishKind fish_kind;
+            int fish_id = 0;
+            int fish_pos_count = 0;
+            int fish_pos_count_temp = 0;
+            const float kFishSpeed = 120 * FishConfig.kSpeed;
+            const float kLFish1Rotate = (float)(720.0f * FishConfig.M_PI / 180.0f * 1 / 2);
+            const float kRotateSpeed = (float)(1.2f * FishConfig.M_PI / 180);
+            const float radiusLittle = FishConfig.kScreenHeight / 8;
+            const float radiusBig = FishConfig.kScreenHeight / 4;
+            float littleDistance = Mathf.Sqrt(FishConfig.kScreenWidth * FishConfig.kScreenWidth * 1.0f + FishConfig.kScreenHeight * FishConfig.kScreenHeight) / 2 - (Mathf.Sqrt(2 * radiusLittle * 2 * radiusLittle * 2 * 1.0f) - 2 * radiusLittle) / 2 - 2 * radiusLittle - radiusBig;
+            float littleDistanceLk = littleDistance + 2 * radiusLittle + 2 * radiusBig;
+            float littleSpeed = littleDistance / (radiusBig / kFishSpeed);
+            float littleSpeedLk = littleDistanceLk / (radiusBig / kFishSpeed);
+            Vector2[] fish_pos_start = new Vector2[20];
+            Vector2[] fish_pos_end = new Vector2[20];
+            Vector2[] fish_pos = new Vector2[40];
+            Vector2 center;
+            center.x = FishConfig.kScreenWidth / 2;
+            center.y = FishConfig.kScreenHeight / 2;
+            FishActionFishMove action = null;
+            fish_kind = FishKind.FISH_WONIUYU;
+            //TODO:
+            MathAide.BuildCircle(center.x, center.y, radiusBig, ref fish_pos,40);
+            float[] init_x = new float[2];
+            float[] init_y = new float[2];
+            int stopCount = 0;
+            int countTemp = 0;
+            for (int i = 0; i < 40; ++i)
+            {
+                init_x[0] = center.x;
+                init_y[0] = center.y;
+                init_x[1] = fish_pos[i].x;
+                init_y[1] = fish_pos[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id + i], kFishSpeed, stopCount);
+            }
+            stopCount = movePointVector[fish_id].Count;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+
+                MathAide.BuildCircle(center.x, center.y, radiusBig, ref fish_point, 40, rotate, kRotateSpeed);
+                for (int j = 0; j < 40; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+            countTemp = movePointVector[fish_id].Count;
+
+            int n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+
+                MathAide.BuildCircle(center.x - n, center.y, radiusBig,ref fish_point, 40, rotate, kRotateSpeed);
+                for (int j = 0; j < 40; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+
+            for (int i = 0; i < 40; ++i)
+            {
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+
+            fish_kind = FishKind.FISH_LVCAOYU;
+            fish_id += 40;
+            //TODO:
+            MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 9, ref fish_pos, 40);
+            for (int i = 0; i < 40; ++i)
+            {
+                init_x[0] = center.x;
+                init_y[0] = center.y;
+                init_x[1] = fish_pos[i].x;
+                init_y[1] = fish_pos[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id + i], kFishSpeed, stopCount);
+            }
+            stopCount = movePointVector[fish_id].Count;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 9,ref fish_point, 40, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 40; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x - n, center.y, radiusBig / 10 * 9, ref fish_point, 40, rotate, kRotateSpeed);
+                for (int j = 0; j < 40; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+            for (int i = 0; i < 40; ++i)
+            {
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_WONIUYU;
+            fish_id += 40;
+            //TODO:
+            MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 8, ref fish_pos, 30);
+            for (int i = 0; i < 30; ++i)
+            {
+                init_x[0] = center.x;
+                init_y[0] = center.y;
+                init_x[1] = fish_pos[i].x;
+                init_y[1] = fish_pos[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id + i], kFishSpeed, stopCount);
+            }
+            stopCount = movePointVector[fish_id].Count;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 8, ref fish_point, 30, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 30; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x - n, center.y, radiusBig / 10 * 8, ref fish_point, 30, rotate, kRotateSpeed);
+                for (int j = 0; j < 30; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+
+            for (int i = 0; i < 30; ++i)
+            {
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_LVCAOYU;
+            fish_id += 30;
+
+            //TODO:
+            MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 7, ref fish_pos, 30);
+            for (int i = 0; i < 30; ++i)
+            {
+                init_x[0] = center.x;
+                init_y[0] = center.y;
+                init_x[1] = fish_pos[i].x;
+                init_y[1] = fish_pos[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2,ref movePointVector[fish_id + i], kFishSpeed, stopCount);
+            }
+            stopCount = movePointVector[fish_id].Count;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 7, ref fish_point, 30, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 30; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x - n, center.y, radiusBig / 10 * 7, ref fish_point, 30, rotate, kRotateSpeed);
+                for (int j = 0; j < 30; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+            for (int i = 0; i < 30; ++i)
+            {
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_WONIUYU;
+            fish_id += 30;
+
+            //TODO:
+            MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 6, ref fish_pos, 20);
+            for (int i = 0; i < 20; ++i)
+            {
+                init_x[0] = center.x;
+                init_y[0] = center.y;
+                init_x[1] = fish_pos[i].x;
+                init_y[1] = fish_pos[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id + i], kFishSpeed, stopCount);
+            }
+            stopCount = movePointVector[fish_id].Count;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 6, ref fish_point, 20, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x - n, center.y, radiusBig / 10 * 6,ref fish_point, 20, rotate, kRotateSpeed);
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+            for (int i = 0; i < 20; ++i)
+            {
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_LVCAOYU;
+            fish_id += 20;
+
+            //TODO:
+            MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 5,ref fish_pos, 20);
+            for (int i = 0; i < 20; ++i)
+            {
+                init_x[0] = center.x;
+                init_y[0] = center.y;
+                init_x[1] = fish_pos[i].x;
+                init_y[1] = fish_pos[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2,ref movePointVector[fish_id + i], kFishSpeed, stopCount);
+            }
+            stopCount = movePointVector[fish_id].Count;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 5, ref fish_point, 20, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x - n, center.y, radiusBig / 10 * 5,ref fish_point, 20, rotate, kRotateSpeed);
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+            for (int i = 0; i < 20; ++i)
+            {
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_WONIUYU;
+            fish_id += 20;
+
+            //TODO:
+            MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 4,ref fish_pos, 10);
+            for (int i = 0; i < 10; ++i)
+            {
+                init_x[0] = center.x;
+                init_y[0] = center.y;
+                init_x[1] = fish_pos[i].x;
+                init_y[1] = fish_pos[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id + i], kFishSpeed, stopCount);
+            }
+            stopCount = movePointVector[fish_id].Count;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 4,ref fish_point, 10, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 10; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x - n, center.y, radiusBig / 10 * 4,ref fish_point, 10, rotate, kRotateSpeed);
+                for (int j = 0; j < 10; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+
+            for (int i = 0; i < 10; ++i)
+            {
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_LVCAOYU;
+            fish_id += 10;
+            //TODO:
+            MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 3,ref  fish_pos, 10);
+            for (int i = 0; i < 10; ++i)
+            {
+                init_x[0] = center.x;
+                init_y[0] = center.y;
+                init_x[1] = fish_pos[i].x;
+                init_y[1] = fish_pos[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id + i], kFishSpeed, stopCount);
+            }
+            stopCount = movePointVector[fish_id].Count;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x, center.y, radiusBig / 10 * 3, ref fish_point, 10, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 10; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(center.x - n, center.y, radiusBig / 10 * 3, ref fish_point, 10, rotate, kRotateSpeed);
+                for (int j = 0; j < 10; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+
+            for (int i = 0; i < 10; ++i)
+            {
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_HUANGCAOYU;
+            fish_id += 10;
+            //右上
+            //TODO:
+            MathAide.BuildCircle(FishConfig.kScreenWidth - radiusLittle, radiusLittle, radiusLittle, ref fish_pos_start, 20);
+            float angle = Mathf.Atan(FishConfig.kScreenWidth / FishConfig.kScreenHeight);
+            Vector2 centerRight;
+            centerRight.x = center.x + (radiusLittle + radiusBig) * Mathf.Cos(angle);
+            centerRight.y = center.y - (radiusLittle + radiusBig) * Mathf.Sin(angle);
+            //TODO:
+            MathAide.BuildCircle(centerRight.x, centerRight.y, radiusLittle,ref fish_pos_end, 20);
+            for (int i = 0; i < 20; ++i)
+            {
+                init_x[0] = fish_pos_start[i].x;
+                init_y[0] = fish_pos_start[i].y;
+                init_x[1] = fish_pos_end[i].x;
+                init_y[1] = fish_pos_end[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id + i], littleSpeed);
+            }
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(centerRight.x, centerRight.y, radiusLittle,ref fish_point, 20, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(centerRight.x - n, centerRight.y, radiusLittle, ref fish_point, 20, rotate, kRotateSpeed);
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+
+            for (int i = 0; i < 20; ++i)
+            {
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_DAYANYU;
+            fish_id += 20;
+            //左上
+            //TODO:
+            MathAide.BuildCircle(radiusLittle, radiusLittle, radiusLittle, ref fish_pos_start, 20);
+            centerRight.x = center.x - (radiusLittle + radiusBig) * Mathf.Cos(angle);
+            centerRight.y = center.y - (radiusLittle + radiusBig) * Mathf.Sin(angle);
+            //TODO:
+            MathAide.BuildCircle(centerRight.x, centerRight.y, radiusLittle, ref fish_pos_end, 20);
+            for (int i = 0; i < 20; ++i)
+            {
+                init_x[0] = fish_pos_start[i].x;
+                init_y[0] = fish_pos_start[i].y;
+                init_x[1] = fish_pos_end[i].x;
+                init_y[1] = fish_pos_end[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2,ref movePointVector[fish_id + i], littleSpeed);
+            }
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(centerRight.x, centerRight.y, radiusLittle, ref fish_point, 20, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(centerRight.x - n, centerRight.y, radiusLittle,ref fish_point, 20, rotate, kRotateSpeed);
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+
+            for (int i = 0; i < 20; ++i)
+            {
+                //action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_HUANGBIANYU;
+            fish_id += 20;
+            //左下
+            //TODO:
+            MathAide.BuildCircle(radiusLittle, FishConfig.kScreenHeight - radiusLittle, radiusLittle, ref fish_pos_start, 20);
+            centerRight.x = center.x - (radiusLittle + radiusBig) * Mathf.Cos(angle);
+            centerRight.y = center.y + (radiusLittle + radiusBig) * Mathf.Sin(angle);
+            //TODO:
+            MathAide.BuildCircle(centerRight.x, centerRight.y, radiusLittle,ref fish_pos_end, 20);
+            for (int i = 0; i < 20; ++i)
+            {
+                init_x[0] = fish_pos_start[i].x;
+                init_y[0] = fish_pos_start[i].y;
+                init_x[1] = fish_pos_end[i].x;
+                init_y[1] = fish_pos_end[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2,ref movePointVector[fish_id + i], littleSpeed);
+            }
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(centerRight.x, centerRight.y, radiusLittle, ref fish_point, 20, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(centerRight.x - n, centerRight.y, radiusLittle,ref fish_point, 20, rotate, kRotateSpeed);
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+
+            for (int i = 0; i < 20; ++i)
+            {
+                //action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_XIAOCHOUYU;
+            fish_id += 20;
+            //右下
+            //TODO:
+            MathAide.BuildCircle(FishConfig.kScreenWidth - radiusLittle, FishConfig.kScreenHeight - radiusLittle, radiusLittle, ref fish_pos_start, 20);
+            centerRight.x = center.x + (radiusLittle + radiusBig) * Mathf.Cos(angle);
+            centerRight.y = center.y + (radiusLittle + radiusBig) * Mathf.Sin(angle);
+            //TODO:
+            MathAide.BuildCircle(centerRight.x, centerRight.y, radiusLittle, ref fish_pos_end, 20);
+            for (int i = 0; i < 20; ++i)
+            {
+                init_x[0] = fish_pos_start[i].x;
+                init_y[0] = fish_pos_start[i].y;
+                init_x[1] = fish_pos_end[i].x;
+                init_y[1] = fish_pos_end[i].y;
+                //TODO:
+                MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id + i], littleSpeed);
+            }
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(centerRight.x, centerRight.y, radiusLittle,ref fish_point, 20, rotate, kRotateSpeed);
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint[] fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+                MathAide.BuildCircle(centerRight.x - n, centerRight.y, radiusLittle, ref fish_point, 20, rotate, kRotateSpeed);
+                for (int j = 0; j < 20; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+
+            for (int i = 0; i < 20; ++i)
+            {
+                //action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[fish_id + i]);
+                outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id + i, _kind = fish_kind, _points = movePointVector[fish_id + i] });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //TODO:
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_kind = FishKind.FISH_SWK;
+            fish_id += 20;
+            init_x[0] = FishConfig.kScreenWidth - radiusLittle;
+            init_y[0] = radiusLittle;
+            init_x[1] = center.x + (radiusLittle + radiusBig) * Mathf.Cos(angle);
+            init_y[1] = center.y - (radiusLittle + radiusBig) * Mathf.Sin(angle);
+            //TODO:
+            MathAide.BuildLinear(init_x, init_y, 2,ref movePointVector[fish_id], littleSpeed);
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                MovePoint movePoint = new MovePoint();
+                movePoint.position_.x = init_x[1];
+                movePoint.position_.y = init_y[1];
+                movePoint.angle_ = rotate;
+                movePointVector[fish_id].Add(movePoint);
+            }
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint movePoint = new MovePoint();
+                movePoint.position_.x = init_x[1] - n;
+                movePoint.position_.y = init_y[1];
+                movePoint.angle_ = rotate;
+                movePointVector[fish_id].Add(movePoint);
+                n += 1;
+            }
+            //action = new FishActionFishMoveBezier(movePointVector[fish_id]);
+            //TODO:
+            action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+            (action as FishActionFishMoveBezier).Create(movePointVector[fish_id]);
+            outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id, _kind = fish_kind, _points = movePointVector[fish_id] });
+            FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
+            //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            fish_kind = FishKind.FISH_SWK;
+            fish_id += 1;
+            init_x[0] = radiusLittle;
+            init_y[0] = radiusLittle;
+            init_x[1] = center.x - (radiusLittle + radiusBig) * Mathf.Cos(angle);
+            init_y[1] = center.y - (radiusLittle + radiusBig) * Mathf.Sin(angle);
+            //TODO:
+            MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id], littleSpeed);
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                MovePoint movePoint = new MovePoint();
+                movePoint.position_.x = init_x[1];
+                movePoint.position_.y = init_y[1];
+                movePoint.angle_ = rotate;
+                movePointVector[fish_id].Add(movePoint);
+            }
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint movePoint = new MovePoint();
+                movePoint.position_.x = init_x[1] - n;
+                movePoint.position_.y = init_y[1];
+                movePoint.angle_ = rotate;
+                movePointVector[fish_id].Add(movePoint);
+                n += 1;
+            }
+            //action = new FishActionFishMoveBezier(movePointVector[fish_id]);
+            action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+            (action as FishActionFishMoveBezier).Create(movePointVector[fish_id]);
+            outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id, _kind = fish_kind, _points = movePointVector[fish_id] });
+            FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
+            //TODO:
+            //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            fish_kind = FishKind.FISH_SWK;
+            fish_id += 1;
+            init_x[0] = radiusLittle;
+            init_y[0] = FishConfig.kScreenHeight - radiusLittle;
+            init_x[1] = center.x - (radiusLittle + radiusBig) * Mathf.Cos(angle);
+            init_y[1] = center.y + (radiusLittle + radiusBig) * Mathf.Sin(angle);
+            //TODO:
+            MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id], littleSpeed);
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                MovePoint movePoint = new MovePoint();
+                movePoint.position_.x = init_x[1];
+                movePoint.position_.y = init_y[1];
+                movePoint.angle_ = rotate;
+                movePointVector[fish_id].Add(movePoint);
+            }
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint movePoint = new MovePoint();
+                movePoint.position_.x = init_x[1] - n;
+                movePoint.position_.y = init_y[1];
+                movePoint.angle_ = rotate;
+                movePointVector[fish_id].Add(movePoint);
+                n += 1;
+            }
+            //action = new FishActionFishMoveBezier(movePointVector[fish_id]);
+            action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+            (action as FishActionFishMoveBezier).Create(movePointVector[fish_id]);
+            outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id, _kind = fish_kind, _points = movePointVector[fish_id] });
+            FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
+            //TODO:
+            //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            fish_kind = FishKind.FISH_SWK;
+            fish_id += 1;
+            init_x[0] = FishConfig.kScreenWidth - radiusLittle;
+            init_y[0] = FishConfig.kScreenHeight - radiusLittle;
+            init_x[1] = center.x + (radiusLittle + radiusBig) * Mathf.Cos(angle);
+            init_y[1] = center.y + (radiusLittle + radiusBig) * Mathf.Sin(angle);
+            //TODO:
+            MathAide.BuildLinear(init_x, init_y, 2,ref movePointVector[fish_id], littleSpeed);
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                if (movePointVector[fish_id].Count > countTemp)
+                    break;
+                MovePoint movePoint = new MovePoint();
+                movePoint.position_.x = init_x[1];
+                movePoint.position_.y = init_y[1];
+                movePoint.angle_ = rotate;
+                movePointVector[fish_id].Add(movePoint);
+            }
+            n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                MovePoint movePoint = new MovePoint();
+                movePoint.position_.x = init_x[1] - n;
+                movePoint.position_.y = init_y[1];
+                movePoint.angle_ = rotate;
+                movePointVector[fish_id].Add(movePoint);
+                n += 1;
+            }
+            //action = new FishActionFishMoveBezier(movePointVector[fish_id]);
+            action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+            (action as FishActionFishMoveBezier).Create(movePointVector[fish_id]);
+            outAssetData.Add(new FishActionMoveBezier { _fish_id = fish_id, _kind = fish_kind, _points = movePointVector[fish_id] });
+            FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
+            //TODO:
+            //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            fish_id += 1;
+        }
 
         void SwitchViewPosition(int me_chair_id,ref Vector2 start, ref Vector2 end)
         {
@@ -214,6 +1150,98 @@ namespace GameClient
             start.y = FishConfig.kScreenHeight - start.y;
             end.x = FishConfig.kScreenWidth - end.x;
             end.y = FishConfig.kScreenHeight - end.y;
+        }
+
+
+
+        void BuildSceneFish62(int me_chair_id)
+        {
+            List<MovePoint>[] movePointVector = new List<MovePoint>[300];//300
+            for (int i = 0; i < movePointVector.Length; ++i)
+            {
+                movePointVector[i] = new List<MovePoint>();
+            }
+            FishKind fish_kind;
+            int fish_id = 0;
+            const float kFishSpeed = 120 * FishConfig.kSpeed;
+            const float kLFish1Rotate = (float)(720.0f * FishConfig.M_PI / 180.0f * 1 / 2);
+            const float kRotateSpeed = (float)(1.2f * FishConfig.M_PI / 180);
+            const float radiusLittle = FishConfig.kScreenHeight / 8;
+            const float radiusBig = FishConfig.kScreenHeight / 4;
+            float littleDistance = Mathf.Sqrt(FishConfig.kScreenWidth * FishConfig.kScreenWidth * 1.0f + FishConfig.kScreenHeight * FishConfig.kScreenHeight) / 2 - (Mathf.Sqrt(2 * radiusLittle * 2 * radiusLittle * 2 * 1.0f) - 2 * radiusLittle) / 2 - 2 * radiusLittle - radiusBig;
+            float littleDistanceLk = littleDistance + 2 * radiusLittle + 2 * radiusBig;
+            float littleSpeed = littleDistance / (radiusBig / kFishSpeed);
+            float littleSpeedLk = littleDistanceLk / (radiusBig / kFishSpeed);
+            Vector2[] fish_pos_start = new Vector2[20];
+            Vector2[] fish_pos_end = new Vector2[20];
+            Vector2[] fish_pos = new Vector2[40];
+            MovePoint[] fish_point = new MovePoint[40];
+            for(int i = 0; i < fish_point.Length; ++i)
+            {
+                fish_point[i] = new MovePoint();
+            }
+            Vector2 center;
+            center.x = FishConfig.kScreenWidth / 2;
+            center.y = FishConfig.kScreenHeight / 2;
+            FishActionFishMove action = null;
+            fish_kind = FishKind.FISH_WONIUYU;
+            MathAide.BuildCircle(center.x, center.y, radiusBig, ref fish_pos, 40);
+            float[] init_x = new float[2];
+            float[] init_y = new float[2];
+            int stopCount = 0;
+            int countTemp = 0;
+            for (int i = 0; i < 40; ++i)
+            {
+                init_x[0] = center.x;
+                init_y[0] = center.y;
+                init_x[1] = fish_pos[i].x;
+                init_y[1] = fish_pos[i].y;
+                MathAide.BuildLinear(init_x, init_y, 2, ref movePointVector[fish_id + i], kFishSpeed, stopCount);
+            }
+            stopCount = movePointVector[fish_id].Count;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
+            {
+                fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+
+                MathAide.BuildCircle(center.x, center.y, radiusBig,ref fish_point, 40, rotate, kRotateSpeed);
+                for (int j = 0; j < 40; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+            }
+            countTemp = movePointVector[fish_id].Count;
+
+
+            int n = 0;
+            for (float rotate = 0.0f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
+            {
+                fish_point = new MovePoint[40];
+                for (int i = 0; i < fish_point.Length; ++i)
+                {
+                    fish_point[i] = new MovePoint();
+                }
+
+                MathAide.BuildCircle(center.x - n, center.y, radiusBig, ref fish_point, 40, rotate, kRotateSpeed);
+                for (int j = 0; j < 40; ++j)
+                {
+                    movePointVector[fish_id + j].Add(fish_point[j]);
+                }
+                n += 1;
+            }
+
+            for (int i = 0; i < 40; ++i)
+            {
+                //action = new FishActionFishMoveBezier(movePointVector[i]);
+                action = FishAction.CreateActionFromPool<FishActionFishMoveBezier>();
+                (action as FishActionFishMoveBezier).Create(movePointVector[i]);
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
         }
     }
 }
@@ -227,600 +1255,6 @@ namespace GameClient
 //{
 //}
 /*
-void SceneFishManager::BuildSceneFish6(int me_chair_id)
-{
-    MovePointVector movePointVector[300];
-    FishKind fish_kind;
-    int fish_id = 0;
-    int fish_pos_count = 0;
-    int fish_pos_count_temp = 0;
-    const float kFishSpeed = 120 * kSpeed;
-    const float kLFish1Rotate = 720.f * M_PI / 180.f * 1 / 2;
-    const float kRotateSpeed = 1.2f * M_PI / 180;
-    const float radiusLittle = kScreenHeight / 8;
-    const float radiusBig = kScreenHeight / 4;
-    float littleDistance = sqrt(kScreenWidth * kScreenWidth * 1.0f + kScreenHeight * kScreenHeight) / 2 - (sqrt(2 * radiusLittle * 2 * radiusLittle * 2 * 1.0f) - 2 * radiusLittle) / 2 - 2 * radiusLittle - radiusBig;
-    float littleDistanceLk = littleDistance + 2 * radiusLittle + 2 * radiusBig;
-    float littleSpeed = littleDistance / (radiusBig / kFishSpeed);
-    float littleSpeedLk = littleDistanceLk / (radiusBig / kFishSpeed);
-    hgeVector fish_pos_start[20];
-    hgeVector fish_pos_end[20];
-    hgeVector fish_pos[40];
-    MovePoint fish_point[40];
-    hgeVector center;
-    center.x = kScreenWidth / 2;
-    center.y = kScreenHeight / 2;
-    FishActionFishMove* action = NULL;
-    fish_kind = FISH_WONIUYU;
-    MathAide::BuildCircle(center.x, center.y, radiusBig, fish_pos, 40);
-    float init_x[2], init_y[2];
-    int stopCount = 0;
-    int countTemp = 0;
-    for (int i = 0; i < 40; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig, fish_point, 40, rotate, kRotateSpeed);
-        for (int j = 0; j < 40; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    countTemp = movePointVector[fish_id].size();
-    int n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x - n, center.y, radiusBig, fish_point, 40, rotate, kRotateSpeed);
-        for (int j = 0; j < 40; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 40; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_LVCAOYU;
-    fish_id += 40;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 9, fish_pos, 40);
-    for (int i = 0; i < 40; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 9, fish_point, 40, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 40; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x - n, center.y, radiusBig / 10 * 9, fish_point, 40, rotate, kRotateSpeed);
-        for (int j = 0; j < 40; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 40; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_WONIUYU;
-    fish_id += 40;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 8, fish_pos, 30);
-    for (int i = 0; i < 30; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 8, fish_point, 30, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 30; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x - n, center.y, radiusBig / 10 * 8, fish_point, 30, rotate, kRotateSpeed);
-        for (int j = 0; j < 30; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 30; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_LVCAOYU;
-    fish_id += 30;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 7, fish_pos, 30);
-    for (int i = 0; i < 30; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 7, fish_point, 30, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 30; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x - n, center.y, radiusBig / 10 * 7, fish_point, 30, rotate, kRotateSpeed);
-        for (int j = 0; j < 30; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 30; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_WONIUYU;
-    fish_id += 30;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 6, fish_pos, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 6, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x - n, center.y, radiusBig / 10 * 6, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_LVCAOYU;
-    fish_id += 20;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 5, fish_pos, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 5, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x - n, center.y, radiusBig / 10 * 5, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_WONIUYU;
-    fish_id += 20;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 4, fish_pos, 10);
-    for (int i = 0; i < 10; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 4, fish_point, 10, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 10; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x - n, center.y, radiusBig / 10 * 4, fish_point, 10, rotate, kRotateSpeed);
-        for (int j = 0; j < 10; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 10; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_LVCAOYU;
-    fish_id += 10;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 3, fish_pos, 10);
-    for (int i = 0; i < 10; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 3, fish_point, 10, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 10; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x - n, center.y, radiusBig / 10 * 3, fish_point, 10, rotate, kRotateSpeed);
-        for (int j = 0; j < 10; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 10; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_HUANGCAOYU;
-    fish_id += 10;
-    //右上
-    MathAide::BuildCircle(kScreenWidth - radiusLittle, radiusLittle, radiusLittle, fish_pos_start, 20);
-    float angle = atanf(kScreenWidth / kScreenHeight);
-    hgeVector centerRight;
-    centerRight.x = center.x + (radiusLittle + radiusBig) * cosf(angle);
-    centerRight.y = center.y - (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_pos_end, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = fish_pos_start[i].x;
-        init_y[0] = fish_pos_start[i].y;
-        init_x[1] = fish_pos_end[i].x;
-        init_y[1] = fish_pos_end[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], littleSpeed);
-    }
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x - n, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_DAYANYU;
-    fish_id += 20;
-    //左上
-    MathAide::BuildCircle(radiusLittle, radiusLittle, radiusLittle, fish_pos_start, 20);
-    centerRight.x = center.x - (radiusLittle + radiusBig) * cosf(angle);
-    centerRight.y = center.y - (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_pos_end, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = fish_pos_start[i].x;
-        init_y[0] = fish_pos_start[i].y;
-        init_x[1] = fish_pos_end[i].x;
-        init_y[1] = fish_pos_end[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], littleSpeed);
-    }
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x - n, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_HUANGBIANYU;
-    fish_id += 20;
-    //左下
-    MathAide::BuildCircle(radiusLittle, kScreenHeight - radiusLittle, radiusLittle, fish_pos_start, 20);
-    centerRight.x = center.x - (radiusLittle + radiusBig) * cosf(angle);
-    centerRight.y = center.y + (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_pos_end, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = fish_pos_start[i].x;
-        init_y[0] = fish_pos_start[i].y;
-        init_x[1] = fish_pos_end[i].x;
-        init_y[1] = fish_pos_end[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], littleSpeed);
-    }
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x - n, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_XIAOCHOUYU;
-    fish_id += 20;
-    //右下
-    MathAide::BuildCircle(kScreenWidth - radiusLittle, kScreenHeight - radiusLittle, radiusLittle, fish_pos_start, 20);
-    centerRight.x = center.x + (radiusLittle + radiusBig) * cosf(angle);
-    centerRight.y = center.y + (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_pos_end, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = fish_pos_start[i].x;
-        init_y[0] = fish_pos_start[i].y;
-        init_x[1] = fish_pos_end[i].x;
-        init_y[1] = fish_pos_end[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], littleSpeed);
-    }
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x - n, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_SWK;
-    fish_id += 20;
-    init_x[0] = kScreenWidth - radiusLittle;
-    init_y[0] = radiusLittle;
-    init_x[1] = center.x + (radiusLittle + radiusBig) * cosf(angle);
-    init_y[1] = center.y - (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id], littleSpeed);
-    MovePoint movePoint;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        movePoint.position_.x = init_x[1];
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        movePoint.position_.x = init_x[1] - n;
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-        n += 1;
-    }
-    action = new FishActionFishMoveBezier(movePointVector[fish_id]);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    fish_kind = FISH_SWK;
-    fish_id += 1;
-    init_x[0] = radiusLittle;
-    init_y[0] = radiusLittle;
-    init_x[1] = center.x - (radiusLittle + radiusBig) * cosf(angle);
-    init_y[1] = center.y - (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id], littleSpeed);
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        movePoint.position_.x = init_x[1];
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        movePoint.position_.x = init_x[1] - n;
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-        n += 1;
-    }
-    action = new FishActionFishMoveBezier(movePointVector[fish_id]);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    fish_kind = FISH_SWK;
-    fish_id += 1;
-    init_x[0] = radiusLittle;
-    init_y[0] = kScreenHeight - radiusLittle;
-    init_x[1] = center.x - (radiusLittle + radiusBig) * cosf(angle);
-    init_y[1] = center.y + (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id], littleSpeed);
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        movePoint.position_.x = init_x[1];
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        movePoint.position_.x = init_x[1] - n;
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-        n += 1;
-    }
-    action = new FishActionFishMoveBezier(movePointVector[fish_id]);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    fish_kind = FISH_SWK;
-    fish_id += 1;
-    init_x[0] = kScreenWidth - radiusLittle;
-    init_y[0] = kScreenHeight - radiusLittle;
-    init_x[1] = center.x + (radiusLittle + radiusBig) * cosf(angle);
-    init_y[1] = center.y + (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id], littleSpeed);
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        movePoint.position_.x = init_x[1];
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        movePoint.position_.x = init_x[1] - n;
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-        n += 1;
-    }
-    action = new FishActionFishMoveBezier(movePointVector[fish_id]);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    fish_id += 1;
-}
 void SceneFishManager::BuildSceneFish6Switch(int me_chair_id)
 {
     MovePointVector movePointVector[300];

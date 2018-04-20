@@ -16,14 +16,19 @@
 		<type fullname="GameClient.LogManager" preserve="all"/>
 		<type fullname="GameClient.LuaEventManager" preserve="all"/>
 		<type fullname="GameClient.LuaSocketEventManager" preserve="all"/>
+		<type fullname="GameClient.SceneManager" preserve="all"/>
 		<type fullname="GameClient.FrameTypeID" preserve="all"/>
 		<type fullname="GameClient.ClientFrame" preserve="all"/>
 		<type fullname="GameClient.IFrame" preserve="all"/>
+		<type fullname="GameClient.IScene" preserve="all"/>
+		<type fullname="GameClient.Scene" preserve="all"/>
 		<type fullname="GameClient.FrameLayer" preserve="all"/>
+		<type fullname="GameClient.FrameState" preserve="all"/>
 		<type fullname="GameClient.ComUIListBinderItems" preserve="all"/>
 		<type fullname="Scripts.UI.ComUIListScript" preserve="all"/>
 		<type fullname="GameClient.MessageBoxFrame" preserve="all"/>
 		<type fullname="LuaBehaviour" preserve="all"/>
+		<type fullname="LuaSceneBehavior" preserve="all"/>
 		<type fullname="GameClient.UIFrameLua" preserve="all"/>
 		
 	</assembly>

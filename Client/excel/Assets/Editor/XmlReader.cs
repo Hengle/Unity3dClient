@@ -131,5 +131,41 @@ namespace GameClient
                 Debug.LogErrorFormat(e.ToString());
             }
         }
+
+        public static void BeginScene()
+        {
+
+        }
+        public static void BuildFishScene6ToAsset(string path = "Scene/Fish/fish_scene_6")
+        {
+            var fileName = Path.GetFileNameWithoutExtension(path);
+            var assetPath = "Assets/Resources/" + path + ".asset";
+
+            try
+            {
+                if (File.Exists(assetPath))
+                {
+                    FishActionAsset oldAsset = AssetDatabase.LoadAssetAtPath<FishActionAsset>(assetPath);
+                    //oldAsset.pathes = _tmpPathes.ToArray();
+                    //EditorUtility.SetDirty(oldAsset);
+                    //AssetDatabase.SaveAssets();
+                }
+                else
+                {
+                    //var assetData = ScriptableObject.CreateInstance<PathNormalList>();
+                    //assetData.pathes = _tmpPathes.ToArray();
+                    //AssetDatabase.CreateAsset(assetData, assetPath);
+                }
+                Debug.LogFormat("<color=#00ff00>create asset {0} succeed !!!</color>", assetPath);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogErrorFormat(e.ToString());
+            }
+        }
+        public static void EndScene()
+        {
+
+        }
     }
 }
