@@ -25,7 +25,7 @@ namespace GameClient
 
             path = AssetLoader.Instance().LoadRes("Xml/path", typeof(PathNormalList)).obj as PathNormalList;
 
-            InvokeManager.Instance().Invoke(this, 3.0f, _BuildFishScene6);
+            InvokeManager.Instance().Invoke(this, 3.0f, _BuildFishScene1);
             //InvokeManager.Instance().InvokeRepeate(this, 10.0f, _BuildFishScene4, false);
 		}
 

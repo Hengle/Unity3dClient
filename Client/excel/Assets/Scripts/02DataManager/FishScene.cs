@@ -190,7 +190,7 @@ namespace GameClient
                     "Scene/Fish/fish_scene_6",
                     string.Empty,
                     string.Empty,
-                    string.Empty,
+                    "Scene/Fish/fish_scene_1",
                     string.Empty,
                     string.Empty,
                 };
@@ -204,7 +204,7 @@ namespace GameClient
                     FishActionAsset cur_scene_asset = AssetLoader.Instance().LoadRes(scene_path[j], typeof(FishActionAsset)).obj as FishActionAsset;
                     //FishActionAsset cur_scene_asset = AssetLoader.Instance().LoadRes(scene_path[i], typeof(FishActionAsset)).obj as FishActionAsset;
                     FishSceneManager.Instance().LoadAsset((SceneKind)j, cur_scene_asset);
-                    yield return new WaitForSecondsRealtime(0.10f);
+                    yield return new WaitForEndOfFrame();
                 }
                 else
                 {
@@ -247,6 +247,7 @@ namespace GameClient
                 }
                 mFishPools = null;
             }
+            FishSceneManager.Instance().ClearAssets();
         }
     }
 }

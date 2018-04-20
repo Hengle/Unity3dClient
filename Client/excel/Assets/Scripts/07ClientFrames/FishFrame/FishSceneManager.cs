@@ -26,6 +26,13 @@ namespace GameClient
                 }
             }
         }
+        public void ClearAssets()
+        {
+            for(int i = 0; i < mAssets.Length; ++i)
+            {
+                mAssets[i] = null;
+            }
+        }
 #if UNITY_EDITOR
         public void BuildFishScene6ToAsset(FishActionMoveBezier[] datas,string path = "Scene/Fish/fish_scene_6")
         {
@@ -46,6 +53,34 @@ namespace GameClient
                 {
                     var assetData = ScriptableObject.CreateInstance<FishActionAsset>();
                     assetData.pathes = datas;
+                    AssetDatabase.CreateAsset(assetData, assetPath);
+                }
+                Debug.LogFormat("<color=#00ff00>create asset {0} succeed !!!</color>", assetPath);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogErrorFormat(e.ToString());
+            }
+        }
+        public void BuildFishScene1ToAsset(FishActionMoveLiner[] datas, string path = "Scene/Fish/fish_scene_1")
+        {
+            var fileName = Path.GetFileNameWithoutExtension(path);
+            var assetPath = "Assets/Resources/" + path + ".asset";
+
+            try
+            {
+                if (File.Exists(assetPath))
+                {
+                    FishActionAsset oldAsset = AssetDatabase.LoadAssetAtPath<FishActionAsset>(assetPath);
+                    oldAsset.line_pathes = datas;
+                    //oldAsset.pathes = _tmpPathes.ToArray();
+                    EditorUtility.SetDirty(oldAsset);
+                    AssetDatabase.SaveAssets();
+                }
+                else
+                {
+                    var assetData = ScriptableObject.CreateInstance<FishActionAsset>();
+                    assetData.line_pathes = datas;
                     AssetDatabase.CreateAsset(assetData, assetPath);
                 }
                 Debug.LogFormat("<color=#00ff00>create asset {0} succeed !!!</color>", assetPath);
@@ -116,7 +151,40 @@ namespace GameClient
                     }
                 case SceneKind.SCENE_4:
                     {
-                        BuildSceneFish1(me_chair_id);
+                        FishActionAsset asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_1", typeof(FishActionAsset)).obj as FishActionAsset;
+                        if (null == asset)
+                        {
+#if UNITY_EDITOR
+                            DateTime start = DateTime.Now;
+                            List<FishActionMoveLiner> assetDatas = new List<FishActionMoveLiner>();
+                            BuildSceneFish1(me_chair_id, assetDatas);
+                            BuildFishScene1ToAsset(assetDatas.ToArray());
+                            DateTime end = DateTime.Now;
+                            TimeSpan ts = end - start;
+                            Debug.LogErrorFormat("BuildSceneFish6 delta = {0}", ts.TotalMilliseconds.ToString());
+#endif
+                        }
+                        else
+                        {
+                            DateTime start = DateTime.Now;
+                            for (int i = 0; i < asset.line_pathes.Length; ++i)
+                            {
+                                var current = asset.line_pathes[i];
+                                if (null != current)
+                                {
+                                    FishActionFishMoveLinear action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
+                                    action.Create(current._speed, current._start, current._end);
+                                    //DateTime item_start = DateTime.Now;
+                                    FishDataManager.Instance().CreateFish(current._kind, current._fish_id, action);
+                                    //DateTime item_end = DateTime.Now;
+                                    //TimeSpan item_ts = item_end - item_start;
+                                    //Debug.LogErrorFormat("BuildSceneFish6 delta = <color=#00ff00>{0}</color> ms", item_ts.TotalMilliseconds.ToString());
+                                }
+                            }
+                            DateTime end = DateTime.Now;
+                            TimeSpan ts = end - start;
+                            Debug.LogErrorFormat("BuildSceneFish1 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
+                        }
                         break;
                     }
                 case SceneKind.SCENE_5:
@@ -136,7 +204,7 @@ namespace GameClient
             }
         }
 
-        void BuildSceneFish1(int me_chair_id)
+        void BuildSceneFish1(int me_chair_id, List<FishActionMoveLiner> assetDatas)
         {
             const float kFishSpeed = 60.0f;
             Vector2 kBenchmarkPos = new Vector2(520.0f, FishConfig.kScreenHeight / 2.0f);
@@ -156,7 +224,7 @@ namespace GameClient
             SwitchViewPosition(me_chair_id, ref start, ref end);
             action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
             (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
-
+            assetDatas.Add(new FishActionMoveLiner { _fish_id = fish_id, _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end });
             FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
             //TODO:
             //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
@@ -171,6 +239,7 @@ namespace GameClient
             SwitchViewPosition(me_chair_id, ref start, ref end);
             action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
             (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+            assetDatas.Add(new FishActionMoveLiner { _fish_id = fish_id, _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end });
             FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
             //TODO:
             //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
@@ -189,6 +258,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _fish_id = fish_id, _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end });
                 FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
@@ -207,6 +277,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _fish_id = fish_id, _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end });
                 FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
@@ -226,6 +297,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _fish_id = fish_id, _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end });
                 FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
@@ -245,6 +317,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _fish_id = fish_id, _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end });
                 FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
@@ -264,6 +337,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _fish_id = fish_id, _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end });
                 FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
@@ -283,6 +357,7 @@ namespace GameClient
                 SwitchViewPosition(me_chair_id, ref start, ref end);
                 action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
                 (action as FishActionFishMoveLinear).Create(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _fish_id = fish_id, _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end });
                 FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
                 //TODO:
                 //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
