@@ -210,4 +210,26 @@ public class EditorTool
     {
         GameClient.XmlReader.Read(new PathNormalList());
     }
+
+    [MenuItem("GameClient/Fish/CreateAssetBunldesFish")]
+    static void CreateAssetBunldesFish()
+    {
+        string fishAssetPath = "Assets/StreamingAssets/AssetBundles/";
+        AssetBundleBuild[] buildBundles = new AssetBundleBuild[1];
+        //打包出来的资源包名字
+        buildBundles[0].assetBundleName = "fish_sprite";
+
+        //在Project视图中，选择要打包的对象 
+        Object[] selects = Selection.GetFiltered(typeof(Object), SelectionMode.DeepAssets);
+        string[] enemyAsset = new string[selects.Length];
+        for (int i = 0; i < selects.Length; i++)
+        {
+            enemyAsset[i] = AssetDatabase.GetAssetPath(selects[i]);
+        }
+        buildBundles[0].assetNames = enemyAsset;
+
+        BuildPipeline.BuildAssetBundles(fishAssetPath, buildBundles, BuildAssetBundleOptions.None, BuildTarget.Android);
+        //刷新
+        AssetDatabase.Refresh();
+    }
 }
