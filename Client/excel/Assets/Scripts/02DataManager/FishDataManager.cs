@@ -72,6 +72,11 @@ namespace GameClient
             data.tick_count = 0;
             data.fishItem = fishItem;
 
+            if (action.GetType() != typeof(FishActionFishMoveBezier))
+            {
+                Debug.LogErrorFormat("FishActionFishMoveBezier !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+
             EventManager.Instance().SendEvent(ClientEvent.CE_CREATE_FISH, data);
         }
 

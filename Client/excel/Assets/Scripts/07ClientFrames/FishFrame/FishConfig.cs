@@ -6,7 +6,7 @@ namespace GameClient
 {
     class FishConfig
     {
-        public const int kFPS = 30;              // 帧率
+        public const int kFPS = 60;              // 帧率
         public const float kSpeed = 1.0f / kFPS;  // 速度
         public const float kScreenWidth = 1366.0f;
         public const float kScreenHeight = 768.0f;

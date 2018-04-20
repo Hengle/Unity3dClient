@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace GameClient
 {
-    class MovePoint
+    [System.Serializable]
+    public class MovePoint
     {
         public MovePoint()
         {
@@ -19,10 +20,6 @@ namespace GameClient
 
         public Vector2 position_;
         public float angle_;
-        public void setAngle(float angle)
-        {
-            this.angle_ = angle;
-        }
     };
     //typedef List<MovePoint> MovePointVector;
 
@@ -505,6 +502,13 @@ namespace GameClient
 
 
         public FishActionFishMoveBezier(List<MovePoint> movePointVector) : base(0)
+        {
+            move_points_ = movePointVector;
+            float kSpeed = FishConfig.kSpeed;
+            duration_ = kSpeed * move_points_.Count;
+        }
+
+        public void Create(List<MovePoint> movePointVector)
         {
             move_points_ = movePointVector;
             float kSpeed = FishConfig.kSpeed;
