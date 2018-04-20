@@ -38,7 +38,7 @@ namespace GameClient
                 mLogItems.RemoveAt(0);
             }
         }
-        [Conditional("LOG_OPEN")]
+        //[Conditional("LOG_OPEN")]
         public void LogErrorFormat(string format, params object[] argvs)
         {
             var value = string.Format(format, argvs);
@@ -48,7 +48,7 @@ namespace GameClient
             PushLogToFile(LogItem.LogType.LT_ERROR, 0, value);
 #endif
         }
-        [Conditional("LOG_OPEN")]
+        //[Conditional("LOG_OPEN")]
         public void LogWarningFormat(string format, params object[] argvs)
         {
             var value = string.Format(format, argvs);
@@ -58,7 +58,7 @@ namespace GameClient
             PushLogToFile(LogItem.LogType.LT_WARNING, 0, value);
 #endif
         }
-        [Conditional("LOG_OPEN")]
+        //[Conditional("LOG_OPEN")]
         public void LogFormat(string format, params object[] argvs)
         {
             var value = string.Format(format, argvs);
@@ -68,7 +68,7 @@ namespace GameClient
             PushLogToFile(LogItem.LogType.LT_NORMAL, 0, value);
 #endif
         }
-        [Conditional("LOG_OPEN")]
+        //[Conditional("LOG_OPEN")]
         public void LogError(string format)
         {
 #if UNITY_EDITOR
@@ -77,7 +77,7 @@ namespace GameClient
             PushLogToFile(LogItem.LogType.LT_ERROR, 0, format);
 #endif
         }
-        [Conditional("LOG_OPEN")]
+        //[Conditional("LOG_OPEN")]
         public void LogWarning(string format)
         {
 #if UNITY_EDITOR
@@ -86,7 +86,7 @@ namespace GameClient
             PushLogToFile(LogItem.LogType.LT_WARNING, 0, format);
 #endif
         }
-        [Conditional("LOG_OPEN")]
+        //[Conditional("LOG_OPEN")]
         public void Log(string format)
         {
 #if UNITY_EDITOR
@@ -95,7 +95,7 @@ namespace GameClient
             PushLogToFile(LogItem.LogType.LT_NORMAL, 0, format);
 #endif
         }
-        [Conditional("LOG_OPEN")]
+        //[Conditional("LOG_OPEN")]
         public void LogProcessFormat(int Id, string format, params object[] argvs)
         {
             var value = string.Format(format, argvs);
@@ -106,7 +106,7 @@ namespace GameClient
 			PushLogToFile(LogItem.LogType.LT_PROCESS, Id, value);
 #endif
         }
-        [Conditional("LOG_OPEN")]
+        //[Conditional("LOG_OPEN")]
         public void LogProcess(int Id, string format)
         {
 #if UNITY_EDITOR
@@ -115,7 +115,7 @@ namespace GameClient
 			PushLogToFile(LogItem.LogType.LT_PROCESS, Id, format);
 #endif
         }
-        [Conditional("LOG_OPEN")]
+        //[Conditional("LOG_OPEN")]
         public void PushLogToFile(LogItem.LogType eLogType,int id,string value)
         {
             LogItem logItem = null;

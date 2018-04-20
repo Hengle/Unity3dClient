@@ -185,15 +185,17 @@ namespace GameClient
             yield return new WaitForEndOfFrame();
             EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.80f);
             EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "加载场景Asset...");
-            string[] scene_path = new string[(int)SceneKind.SCENE_COUNT]
+            string[] scene_path = new string[]
                 {
                     "Scene/Fish/fish_scene_6",
+                    "Scene/Fish/fish_scene_6r",
                     string.Empty,
                     string.Empty,
                     "Scene/Fish/fish_scene_1",
                     string.Empty,
                     string.Empty,
                 };
+            FishActionAsset[] scene_path_assets = new FishActionAsset[scene_path.Length];
             i = 1;
             for(int j = 0; j < scene_path.Length; ++j)
             {
@@ -203,7 +205,7 @@ namespace GameClient
                     EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_TITLE, string.Format("加载场景{0}...{1}/{2}", scene_path[j], i, scene_path.Length));
                     FishActionAsset cur_scene_asset = AssetLoader.Instance().LoadRes(scene_path[j], typeof(FishActionAsset)).obj as FishActionAsset;
                     //FishActionAsset cur_scene_asset = AssetLoader.Instance().LoadRes(scene_path[i], typeof(FishActionAsset)).obj as FishActionAsset;
-                    FishSceneManager.Instance().LoadAsset((SceneKind)j, cur_scene_asset);
+                    scene_path_assets[j] = cur_scene_asset;
                     yield return new WaitForEndOfFrame();
                 }
                 else
@@ -214,7 +216,8 @@ namespace GameClient
                 EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_PROCESS, fRadio);
                 ++i;
             }
-            
+            FishSceneManager.Instance().LoadAsset(scene_path_assets);
+
 
             EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "加载场景音乐...");
             AudioManager.Instance().PlaySound(1001);
