@@ -14,6 +14,19 @@ namespace GameClient
 {
     public class FishSceneManager : Singleton<FishSceneManager>
     {
+        FishActionAsset[] mAssets = new FishActionAsset[(int)SceneKind.SCENE_COUNT];
+        public void LoadAsset(SceneKind kind, FishActionAsset asset)
+        {
+            if(null != asset)
+            {
+                int iIndex = (int)kind;
+                if(iIndex >= 0 && iIndex < mAssets.Length)
+                {
+                    mAssets[iIndex] = asset;
+                }
+            }
+        }
+
         public  void BuildFishScene6ToAsset(FishActionMoveBezier[] datas,string path = "Scene/Fish/fish_scene_6")
         {
             var fileName = Path.GetFileNameWithoutExtension(path);

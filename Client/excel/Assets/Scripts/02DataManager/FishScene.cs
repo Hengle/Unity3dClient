@@ -177,13 +177,45 @@ namespace GameClient
                 EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_TITLE, string.Format("加载鱼...{0}/{1}", i, table.Count));
                 float fRadio = i * 1.0f / table.Count;
                 EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_PROCESS, fRadio);
-                EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.98f * fRadio);
+                EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.80f * fRadio);
                 ++i;
                 yield return new WaitForEndOfFrame();
             }
 
             yield return new WaitForEndOfFrame();
-            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.98f);
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.80f);
+            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "加载场景Asset...");
+            string[] scene_path = new string[(int)SceneKind.SCENE_COUNT]
+                {
+                    "Scene/Fish/fish_scene_6",
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                };
+            i = 1;
+            for(int j = 0; j < scene_path.Length; ++j)
+            {
+                float fRadio = i * 1.0f / table.Count;
+                if (!string.IsNullOrEmpty(scene_path[j]))
+                {
+                    EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_TITLE, string.Format("加载场景{0}...{1}/{2}", scene_path[j], i, scene_path.Length));
+                    FishActionAsset cur_scene_asset = AssetLoader.Instance().LoadRes(scene_path[j], typeof(FishActionAsset)).obj as FishActionAsset;
+                    //FishActionAsset cur_scene_asset = AssetLoader.Instance().LoadRes(scene_path[i], typeof(FishActionAsset)).obj as FishActionAsset;
+                    FishSceneManager.Instance().LoadAsset((SceneKind)j, cur_scene_asset);
+                    yield return new WaitForSecondsRealtime(0.10f);
+                }
+                else
+                {
+                    EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_TITLE, string.Format("加载场景...{0}/{1}", i, scene_path.Length));
+                }
+                EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.80f + 0.15f * fRadio);
+                EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_PROCESS, fRadio);
+                ++i;
+            }
+            
+
             EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "加载场景音乐...");
             AudioManager.Instance().PlaySound(1001);
 
