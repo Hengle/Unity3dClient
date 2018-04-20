@@ -26,8 +26,8 @@ namespace GameClient
                 }
             }
         }
-
-        public  void BuildFishScene6ToAsset(FishActionMoveBezier[] datas,string path = "Scene/Fish/fish_scene_6")
+#if UNITY_EDITOR
+        public void BuildFishScene6ToAsset(FishActionMoveBezier[] datas,string path = "Scene/Fish/fish_scene_6")
         {
             var fileName = Path.GetFileNameWithoutExtension(path);
             var assetPath = "Assets/Resources/" + path + ".asset";
@@ -55,6 +55,7 @@ namespace GameClient
                 Debug.LogErrorFormat(e.ToString());
             }
         }
+#endif
 
         public void BuildSceneFish(SceneKind scene_kind, int me_chair_id)
         {
