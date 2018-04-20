@@ -1,0 +1,19 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_personal.png (512 x 256)
+# $TexturePacker:SmartUpdate:0e88bd8d614f8a5dc3c38cab130b2953:248c5e1d83f6fca04422997cb0aa3d43:d82cd2a24d0862cedd0c1d15d87de96e$
+#
+
+btn_geren_guanzhu;2;2;179;80;0.5;0.5
+btn_geren_pitch_on;183;43;77;53;0.5;0.5
+img_QR_Code;446;214;40;40;0.5;0.5
+img_QR_Code_2;446;172;40;40;0.5;0.5
+img_QR_Code_3;446;130;40;40;0.5;0.5
+img_QR_Code_4;174;98;24;10;0.5;0.5
+img_geren_qq;320;120;124;134;0.5;0.5
+img_geren_txk;2;84;170;170;0.5;0.5
+img_geren_txk_1;174;110;144;144;0.5;0.5
