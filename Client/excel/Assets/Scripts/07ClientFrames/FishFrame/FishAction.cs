@@ -863,4 +863,158 @@ namespace GameClient
         private float fish_speed_;
         private int stage_;
 };
+
+    //------------------------------------------------------------------------------
+
+    class ActionScene4FishMove : FishActionFishMove
+    {
+        public ActionScene4FishMove():base(0)
+        {
+
+        }
+
+        public ActionScene4FishMove(Vector2 center, float radius, float rotate_duration, float start_angle, float rotate_angle, float move_duration, float fish_speed) : base(0)
+        {
+            center_ = center;
+            radius_ = radius;
+            rotate_duration_ = rotate_duration;
+            start_angle_ = start_angle;
+            rotate_angle_ = rotate_angle;
+            move_duration_ = move_duration;
+            fish_speed_ = fish_speed;
+            stage_ = -1;
+            angle_ = M_PI_2 + start_angle_;
+            if (radius == 0)
+                stage_ = 0;
+            position_.x = -500.0f;
+            position_.y = -500.0f;
+            save_position_.x = center_.x + radius_ * Mathf.Cos(start_angle_);
+            save_position_.y = center_.y + radius_ * Mathf.Sin(start_angle_);
+            if (stage_ != -1)
+                position_ = save_position_;
+            duration_ = rotate_duration_;
+        }
+
+        public void Create(Vector2 center, float radius, float rotate_duration, float start_angle, float rotate_angle, float move_duration, float fish_speed)
+        {
+            center_ = center;
+            radius_ = radius;
+            rotate_duration_ = rotate_duration;
+            start_angle_ = start_angle;
+            rotate_angle_ = rotate_angle;
+            move_duration_ = move_duration;
+            fish_speed_ = fish_speed;
+            stage_ = -1;
+            angle_ = M_PI_2 + start_angle_;
+            if (radius == 0)
+                stage_ = 0;
+            position_.x = -500.0f;
+            position_.y = -500.0f;
+            save_position_.x = center_.x + radius_ * Mathf.Cos(start_angle_);
+            save_position_.y = center_.y + radius_ * Mathf.Sin(start_angle_);
+            if (stage_ != -1)
+                position_ = save_position_;
+            duration_ = rotate_duration_;
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            angle_ = M_PI_2 + start_angle_;
+            duration_ = rotate_duration_;
+            position_.x = -500.0f;
+            position_.y = -500.0f;
+            save_position_.x = center_.x + radius_ * Mathf.Cos(start_angle_);
+            save_position_.y = center_.y + radius_ * Mathf.Sin(start_angle_);
+            if (stage_ != -1)
+                position_ = save_position_;
+        }
+
+        public override void Step(float dt)
+        {
+            elapsed_ += dt * speed_;
+            Update(Mathf.Min(1.0f, elapsed_ / duration_));
+            if (stage_ == 0 && elapsed_ >= duration_)
+            {
+                stage_ = 1;
+                elapsed_ -= duration_;
+                duration_ = move_duration_;
+                delta_.x = Mathf.Cos(angle_);
+                delta_.y = Mathf.Sin(angle_);
+            }
+            if (stage_ == 1)
+            {
+                position_.x += fish_speed_ * dt * delta_.x * speed_;
+                position_.y += fish_speed_ * dt * delta_.y * speed_;
+            }
+        }
+        public override void Update(float time)
+        {
+            if (stage_ != 1)
+            {
+                float angle = start_angle_ + rotate_angle_ * time;
+                save_position_.x = center_.x + radius_ * Mathf.Cos(angle);
+                save_position_.y = center_.y + radius_ * Mathf.Sin(angle);
+                if (stage_ == -1 && save_position_.x >= center_.x && save_position_.y >= center_.y)
+                {
+                    stage_ = 0;
+                }
+                if (stage_ != -1)
+                    position_ = save_position_;
+                angle_ = M_PI_2 + angle;
+            }
+        }
+
+        public override Vector2 FishMoveTo(float elapsed)
+        {
+            if (stage_ == 0)
+            {
+                if (elapsed_ + elapsed >= duration_)
+                {
+                    float angle = start_angle_ + rotate_angle_;
+                    Vector2 move_to = new Vector2(center_.x + radius_ * Mathf.Cos(angle), center_.y + radius_ * Mathf.Cos(angle));
+                    float el = elapsed_ + elapsed - duration_;
+                    int count = (int)(el / FishConfig.kSpeed);
+                    while ((count--) > 0)
+                    {
+                        move_to.x += fish_speed_ * FishConfig.kSpeed * delta_.x * speed_;
+                        move_to.y += fish_speed_ * FishConfig.kSpeed * delta_.y * speed_;
+                    }
+                    return move_to;
+                }
+                else
+                {
+                    float time = Mathf.Min(1.0f, (elapsed_ + elapsed) / duration_);
+                    float angle = start_angle_ + rotate_angle_ * time;
+                    return new Vector2(center_.x + radius_ * Mathf.Cos(angle), center_.y + radius_ * Mathf.Cos(angle));
+                }
+            }
+            else if (stage_ == 1)
+            {
+                int count = (int)(elapsed / FishConfig.kSpeed);
+                Vector2 move_to = position_;
+                while ((count--) > 0)
+                {
+                    move_to.x += fish_speed_ * FishConfig.kSpeed * delta_.x * speed_;
+                    move_to.y += fish_speed_ * FishConfig.kSpeed * delta_.y * speed_;
+                }
+                return move_to;
+            }
+            else
+            {
+                return new Vector2(-500.0f, -500.0f);
+            }
+        }
+
+        private Vector2 center_;
+        private float radius_;
+        private float rotate_duration_;
+        private float start_angle_;
+        private float rotate_angle_;
+        private float move_duration_;
+        private Vector2 delta_;
+        private float fish_speed_;
+        private int stage_;
+        private Vector2 save_position_;
+    };
 }

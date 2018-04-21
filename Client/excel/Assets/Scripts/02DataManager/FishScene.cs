@@ -192,7 +192,7 @@ namespace GameClient
                     string.Empty,
                     "Scene/Fish/fish_scene_3",
                     "Scene/Fish/fish_scene_1",
-                    string.Empty,
+                    "Scene/Fish/fish_scene_4",
                     "Scene/Fish/fish_scene_2",
                 };
             FishActionAsset[] scene_path_assets = new FishActionAsset[scene_path.Length];
