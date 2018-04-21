@@ -1,0 +1,16 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_login.png (1024 x 512)
+# $TexturePacker:SmartUpdate:282a31344f3607903da1e34566492bcc:320600c61ff029f7a059e6e42003c1b4:eca8d2fd70769541cae1a530e951a412$
+#
+
+btn_ty_orange;833;464;179;46;0.5;0.5
+img_dl_delete;2;46;36;34;0.5;0.5
+img_dl_neikuang;2;82;63;58;0.5;0.5
+img_dl_strip_bg;2;16;11;28;0.5;0.5
+img_dl_strip_la;15;16;9;28;0.5;0.5
+img_logo;2;142;829;368;0.5;0.5
