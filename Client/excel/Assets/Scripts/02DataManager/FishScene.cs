@@ -190,7 +190,7 @@ namespace GameClient
                     "Scene/Fish/fish_scene_6",
                     "Scene/Fish/fish_scene_6r",
                     string.Empty,
-                    string.Empty,
+                    "Scene/Fish/fish_scene_3",
                     "Scene/Fish/fish_scene_1",
                     string.Empty,
                     "Scene/Fish/fish_scene_2",

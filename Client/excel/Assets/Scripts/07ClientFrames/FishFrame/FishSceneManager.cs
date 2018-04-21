@@ -83,6 +83,34 @@ namespace GameClient
                 Debug.LogErrorFormat(e.ToString());
             }
         }
+        public void BuildFishScene3ToAsset(FishActionMoveScene3[] datas, string path = "Scene/Fish/fish_scene_3")
+        {
+            var fileName = Path.GetFileNameWithoutExtension(path);
+            var assetPath = "Assets/Resources/" + path + ".asset";
+
+            try
+            {
+                if (File.Exists(assetPath))
+                {
+                    FishActionAsset oldAsset = AssetDatabase.LoadAssetAtPath<FishActionAsset>(assetPath);
+                    oldAsset.scene3_pathes = datas;
+                    //oldAsset.pathes = _tmpPathes.ToArray();
+                    EditorUtility.SetDirty(oldAsset);
+                    AssetDatabase.SaveAssets();
+                }
+                else
+                {
+                    var assetData = ScriptableObject.CreateInstance<FishActionAsset>();
+                    assetData.scene3_pathes = datas;
+                    AssetDatabase.CreateAsset(assetData, assetPath);
+                }
+                Debug.LogFormat("<color=#00ff00>create asset {0} succeed !!!</color>", assetPath);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogErrorFormat(e.ToString());
+            }
+        }
 #endif
 
         public void BuildSceneFish(SceneKind scene_kind, int me_chair_id)
@@ -183,7 +211,44 @@ namespace GameClient
                     }
                 case SceneKind.SCENE_3:
                     {
-                        //BuildSceneFish3(me_chair_id);
+                        FishActionAsset asset = mAssets[3];
+                        if (null == asset)
+                        {
+                            asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_3", typeof(FishActionAsset)).obj as FishActionAsset;
+                        }
+                        if (null == asset)
+                        {
+#if UNITY_EDITOR
+                            DateTime start = DateTime.Now;
+                            List<FishActionMoveScene3> assetDatas = new List<FishActionMoveScene3>();
+                            BuildSceneFish3(me_chair_id, assetDatas);
+                            BuildFishScene3ToAsset(assetDatas.ToArray());
+                            DateTime end = DateTime.Now;
+                            TimeSpan ts = end - start;
+                            Debug.LogErrorFormat("BuildSceneFish3 delta = {0}", ts.TotalMilliseconds.ToString());
+#endif
+                        }
+                        else
+                        {
+                            DateTime start = DateTime.Now;
+                            for (int i = 0; i < asset.scene3_pathes.Length; ++i)
+                            {
+                                var current = asset.scene3_pathes[i];
+                                if (null != current)
+                                {
+                                    ActionScene3FishMove action = FishAction.CreateActionFromPool<ActionScene3FishMove>();
+                                    action.Create(current.center, current.radius, current.rotate_duration, current.start_angle, current.rotate_angle, current.move_duration, current.fish_speed);
+                                    //DateTime item_start = DateTime.Now;
+                                    FishDataManager.Instance().CreateFish(current._kind, current._fish_id, action);
+                                    //DateTime item_end = DateTime.Now;
+                                    //TimeSpan item_ts = item_end - item_start;
+                                    //Debug.LogErrorFormat("BuildSceneFish6 delta = <color=#00ff00>{0}</color> ms", item_ts.TotalMilliseconds.ToString());
+                                }
+                            }
+                            DateTime end = DateTime.Now;
+                            TimeSpan ts = end - start;
+                            Debug.LogErrorFormat("BuildSceneFish1 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
+                        }
                         break;
                     }
                 case SceneKind.SCENE_4:
@@ -235,46 +300,43 @@ namespace GameClient
                     }
                 case SceneKind.SCENE_6:
                     {
+                        FishActionAsset asset = mAssets[6];
+                        if (null == asset)
                         {
-                            FishActionAsset asset = mAssets[6];
-                            if (null == asset)
-                            {
-                                asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_2", typeof(FishActionAsset)).obj as FishActionAsset;
-                            }
-                            if (null == asset)
-                            {
+                            asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_2", typeof(FishActionAsset)).obj as FishActionAsset;
+                        }
+                        if (null == asset)
+                        {
 #if UNITY_EDITOR
-                                DateTime start = DateTime.Now;
-                                List<FishActionMoveLiner> assetDatas = new List<FishActionMoveLiner>();
-                                BuildSceneFish2(me_chair_id, assetDatas);
-                                BuildFishScene1ToAsset(assetDatas.ToArray(), "Scene/Fish/fish_scene_2");
-                                DateTime end = DateTime.Now;
-                                TimeSpan ts = end - start;
-                                Debug.LogErrorFormat("BuildSceneFish6 delta = {0}", ts.TotalMilliseconds.ToString());
+                            DateTime start = DateTime.Now;
+                            List<FishActionMoveLiner> assetDatas = new List<FishActionMoveLiner>();
+                            BuildSceneFish2(me_chair_id, assetDatas);
+                            BuildFishScene1ToAsset(assetDatas.ToArray(), "Scene/Fish/fish_scene_2");
+                            DateTime end = DateTime.Now;
+                            TimeSpan ts = end - start;
+                            Debug.LogErrorFormat("BuildSceneFish6 delta = {0}", ts.TotalMilliseconds.ToString());
 #endif
-                            }
-                            else
+                        }
+                        else
+                        {
+                            DateTime start = DateTime.Now;
+                            for (int i = 0; i < asset.line_pathes.Length; ++i)
                             {
-                                DateTime start = DateTime.Now;
-                                for (int i = 0; i < asset.line_pathes.Length; ++i)
+                                var current = asset.line_pathes[i];
+                                if (null != current)
                                 {
-                                    var current = asset.line_pathes[i];
-                                    if (null != current)
-                                    {
-                                        FishActionFishMoveLinear action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
-                                        action.Create(current._speed, current._start, current._end);
-                                        //DateTime item_start = DateTime.Now;
-                                        FishDataManager.Instance().CreateFish(current._kind, current._fish_id, action);
-                                        //DateTime item_end = DateTime.Now;
-                                        //TimeSpan item_ts = item_end - item_start;
-                                        //Debug.LogErrorFormat("BuildSceneFish6 delta = <color=#00ff00>{0}</color> ms", item_ts.TotalMilliseconds.ToString());
-                                    }
+                                    FishActionFishMoveLinear action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
+                                    action.Create(current._speed, current._start, current._end);
+                                    //DateTime item_start = DateTime.Now;
+                                    FishDataManager.Instance().CreateFish(current._kind, current._fish_id, action);
+                                    //DateTime item_end = DateTime.Now;
+                                    //TimeSpan item_ts = item_end - item_start;
+                                    //Debug.LogErrorFormat("BuildSceneFish6 delta = <color=#00ff00>{0}</color> ms", item_ts.TotalMilliseconds.ToString());
                                 }
-                                DateTime end = DateTime.Now;
-                                TimeSpan ts = end - start;
-                                Debug.LogErrorFormat("BuildSceneFish1 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
                             }
-                            break;
+                            DateTime end = DateTime.Now;
+                            TimeSpan ts = end - start;
+                            Debug.LogErrorFormat("BuildSceneFish1 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
                         }
                         break;
                     }
@@ -2272,83 +2334,111 @@ namespace GameClient
             //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
             ++fish_id;
         }
+
+        void BuildSceneFish3(int me_chair_id, List<FishActionMoveScene3> assetDatas)
+        {
+            const float kFishSpeed = 150.0f;
+            int fish_id = 0;
+            FishKind fish_kind;
+            FishActionFishMove action = null;
+            Vector2 center = new Vector2(FishConfig.kScreenWidth / 2.0f, FishConfig.kScreenHeight / 2.0f);
+            float radius;
+            float cell_radian;
+            float angle;
+
+            // 玉皇大帝
+            fish_kind = FishKind.FISH_YUWANGDADI;
+            //action = new ActionScene3FishMove(center, 0, 28.0f, me_chair_id < 3 ? (float)FishConfig.M_PI : 0, (float)(4 * FishConfig.M_PI + FishConfig.M_PI_2), 5.0f, kFishSpeed);
+            action = FishAction.CreateActionFromPool<ActionScene3FishMove>();
+            (action as ActionScene3FishMove).Create(center, 0, 28.0f, me_chair_id < 3 ? (float)FishConfig.M_PI : 0, (float)(4 * FishConfig.M_PI + FishConfig.M_PI_2), 5.0f, kFishSpeed);
+            assetDatas.Add(new FishActionMoveScene3 {_fish_id = fish_id,_kind = fish_kind, center = center, radius = 0.0f, rotate_duration = 28.0f, start_angle = me_chair_id < 3 ? (float)FishConfig.M_PI : 0, rotate_angle = (float)(4 * FishConfig.M_PI + FishConfig.M_PI_2), move_duration = 5.0f, fish_speed = kFishSpeed });
+            FishDataManager.Instance().CreateFish(fish_kind, fish_id, action);
+            //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            ++fish_id;
+
+            // 小丑鱼
+            fish_kind = FishKind.FISH_XIAOCHOUYU;
+            radius = 150.0f;
+            cell_radian = (float)(2 * FishConfig.M_PI / 10);
+            for (int i = 0; i < 10; ++i)
+            {
+                angle = i * cell_radian;
+                if (me_chair_id < 3)
+                    angle += (float)FishConfig.M_PI;
+                //action = new ActionScene3FishMove(center, radius, 27.0f, angle, (float)(4 * FishConfig.M_PI), 5.0f, kFishSpeed);
+
+                action = FishAction.CreateActionFromPool<ActionScene3FishMove>();
+                (action as ActionScene3FishMove).Create(center, radius, 27.0f, angle, (float)(4 * FishConfig.M_PI), 5.0f, kFishSpeed);
+                assetDatas.Add(new FishActionMoveScene3 { _fish_id = fish_id + i, _kind = fish_kind, center = center, radius = radius, rotate_duration = 27.0f, start_angle = angle, rotate_angle = (float)(4 * FishConfig.M_PI), move_duration = 5.0f, fish_speed = kFishSpeed });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 10;
+
+            // 大眼鱼
+            fish_kind = FishKind.FISH_DAYANYU;
+            radius = 150.0f + 52.0f + 42.0f;
+            cell_radian = (float)(2 * FishConfig.M_PI / 18);
+            for (int i = 0; i < 18; ++i)
+            {
+                angle = i * cell_radian;
+                if (me_chair_id < 3)
+                    angle += (float)FishConfig.M_PI;
+                //action = new ActionScene3FishMove(center, radius, 26.0f, angle, (float)(4 * FishConfig.M_PI - FishConfig.M_PI_2), 5.0f, kFishSpeed);
+
+                action = FishAction.CreateActionFromPool<ActionScene3FishMove>();
+                (action as ActionScene3FishMove).Create(center, radius, 26.0f, angle, (float)(4 * FishConfig.M_PI - FishConfig.M_PI_2), 5.0f, kFishSpeed);
+                assetDatas.Add(new FishActionMoveScene3 { _fish_id = fish_id + i, _kind = fish_kind, center = center, radius = radius, rotate_duration = 26.0f, start_angle = angle, rotate_angle = (float)(4 * FishConfig.M_PI - FishConfig.M_PI_2), move_duration = 5.0f, fish_speed = kFishSpeed });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 18;
+
+            // 黄草鱼
+            fish_kind = FishKind.FISH_HUANGCAOYU;
+            radius = 150.0f + 52.0f + 42.0f * 2 + 30;
+            cell_radian = (float)(2 * FishConfig.M_PI / 30);
+            for (int i = 0; i < 30; ++i)
+            {
+                angle = i * cell_radian;
+                if (me_chair_id < 3)
+                    angle += (float)FishConfig.M_PI;
+                //action = new ActionScene3FishMove(center, radius, 25.0f, angle,(float)(4 * FishConfig.M_PI - FishConfig.M_PI_2 * 2), 5.0f, kFishSpeed);
+
+                action = FishAction.CreateActionFromPool<ActionScene3FishMove>();
+                (action as ActionScene3FishMove).Create(center, radius, 25.0f, angle, (float)(4 * FishConfig.M_PI - FishConfig.M_PI_2 * 2), 5.0f, kFishSpeed);
+                assetDatas.Add(new FishActionMoveScene3 { _fish_id = fish_id + i, _kind = fish_kind, center = center, radius = radius, rotate_duration = 25.0f, start_angle = angle, rotate_angle = (float)(4 * FishConfig.M_PI - FishConfig.M_PI_2 * 2), move_duration = 5.0f, fish_speed = kFishSpeed });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 30;
+
+            // 蜗牛鱼
+            fish_kind = FishKind.FISH_WONIUYU;
+            radius = 150.0f + 52.0f + 42.0f * 2 + 30 * 2 + 35;
+            cell_radian = (float)(2 * FishConfig.M_PI / 30);
+            for (int i = 0; i < 30; ++i)
+            {
+                angle = i * cell_radian;
+                if (me_chair_id < 3)
+                    angle += (float)FishConfig.M_PI;
+                //action = new ActionScene3FishMove(center, radius, 24.0f, angle,(float)(4 * FishConfig.M_PI - FishConfig.M_PI_2 * 3), 5.0f, kFishSpeed);
+
+                action = FishAction.CreateActionFromPool<ActionScene3FishMove>();
+                (action as ActionScene3FishMove).Create(center, radius, 24.0f, angle, (float)(4 * FishConfig.M_PI - FishConfig.M_PI_2 * 3), 5.0f, kFishSpeed);
+                assetDatas.Add(new FishActionMoveScene3 { _fish_id = fish_id + i, _kind = fish_kind, center = center, radius = radius, rotate_duration = 24.0f, start_angle = angle, rotate_angle = (float)(4 * FishConfig.M_PI - FishConfig.M_PI_2 * 3), move_duration = 5.0f, fish_speed = kFishSpeed });
+                FishDataManager.Instance().CreateFish(fish_kind, fish_id + i, action);
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 30;
+        }
     }
 }
+
 
 /*
-void SceneFishManager::BuildSceneFish3(int me_chair_id)
-{
-    const float kFishSpeed = 150.f;
-    int fish_id = 0;
-    FishKind fish_kind;
-    FishActionFishMove* action = NULL;
-    const hgeVector center(kScreenWidth / 2.f, kScreenHeight / 2.f);
-    float radius;
-    float cell_radian;
-    float angle;
-
-    // 玉皇大帝
-    fish_kind = FISH_YUWANGDADI;
-    action = new ActionScene3FishMove(center, 0, 28.f, me_chair_id < 3 ? M_PI : 0, 4 * M_PI + M_PI_2, 5.f, kFishSpeed);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    ++fish_id;
-
-    // 小丑鱼
-    fish_kind = FISH_XIAOCHOUYU;
-    radius = 150.f;
-    cell_radian = 2 * M_PI / 10;
-    for (int i = 0; i < 10; ++i)
-    {
-        angle = i * cell_radian;
-        if (me_chair_id < 3)
-            angle += M_PI;
-        action = new ActionScene3FishMove(center, radius, 27.f, angle, 4 * M_PI, 5.f, kFishSpeed);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 10;
-
-    // 大眼鱼
-    fish_kind = FISH_DAYANYU;
-    radius = 150.f + 52.f + 42.f;
-    cell_radian = 2 * M_PI / 18;
-    for (int i = 0; i < 18; ++i)
-    {
-        angle = i * cell_radian;
-        if (me_chair_id < 3)
-            angle += M_PI;
-        action = new ActionScene3FishMove(center, radius, 26.f, angle, 4 * M_PI - M_PI_2, 5.f, kFishSpeed);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 18;
-
-    // 黄草鱼
-    fish_kind = FISH_HUANGCAOYU;
-    radius = 150.f + 52.f + 42.f * 2 + 30;
-    cell_radian = 2 * M_PI / 30;
-    for (int i = 0; i < 30; ++i)
-    {
-        angle = i * cell_radian;
-        if (me_chair_id < 3)
-            angle += M_PI;
-        action = new ActionScene3FishMove(center, radius, 25.f, angle, 4 * M_PI - M_PI_2 * 2, 5.f, kFishSpeed);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 30;
-
-    // 蜗牛鱼
-    fish_kind = FISH_WONIUYU;
-    radius = 150.f + 52.f + 42.f * 2 + 30 * 2 + 35;
-    cell_radian = 2 * M_PI / 30;
-    for (int i = 0; i < 30; ++i)
-    {
-        angle = i * cell_radian;
-        if (me_chair_id < 3)
-            angle += M_PI;
-        action = new ActionScene3FishMove(center, radius, 24.f, angle, 4 * M_PI - M_PI_2 * 3, 5.f, kFishSpeed);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 30;
-}
 
 void SceneFishManager::BuildSceneFish4(int me_chair_id)
 {
