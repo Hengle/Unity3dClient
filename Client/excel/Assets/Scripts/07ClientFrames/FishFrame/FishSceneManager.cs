@@ -235,7 +235,47 @@ namespace GameClient
                     }
                 case SceneKind.SCENE_6:
                     {
-                        //BuildSceneFish2(me_chair_id);
+                        {
+                            FishActionAsset asset = mAssets[6];
+                            if (null == asset)
+                            {
+                                asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_2", typeof(FishActionAsset)).obj as FishActionAsset;
+                            }
+                            if (null == asset)
+                            {
+#if UNITY_EDITOR
+                                DateTime start = DateTime.Now;
+                                List<FishActionMoveLiner> assetDatas = new List<FishActionMoveLiner>();
+                                BuildSceneFish2(me_chair_id, assetDatas);
+                                BuildFishScene1ToAsset(assetDatas.ToArray(), "Scene/Fish/fish_scene_2");
+                                DateTime end = DateTime.Now;
+                                TimeSpan ts = end - start;
+                                Debug.LogErrorFormat("BuildSceneFish6 delta = {0}", ts.TotalMilliseconds.ToString());
+#endif
+                            }
+                            else
+                            {
+                                DateTime start = DateTime.Now;
+                                for (int i = 0; i < asset.line_pathes.Length; ++i)
+                                {
+                                    var current = asset.line_pathes[i];
+                                    if (null != current)
+                                    {
+                                        FishActionFishMoveLinear action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
+                                        action.Create(current._speed, current._start, current._end);
+                                        //DateTime item_start = DateTime.Now;
+                                        FishDataManager.Instance().CreateFish(current._kind, current._fish_id, action);
+                                        //DateTime item_end = DateTime.Now;
+                                        //TimeSpan item_ts = item_end - item_start;
+                                        //Debug.LogErrorFormat("BuildSceneFish6 delta = <color=#00ff00>{0}</color> ms", item_ts.TotalMilliseconds.ToString());
+                                    }
+                                }
+                                DateTime end = DateTime.Now;
+                                TimeSpan ts = end - start;
+                                Debug.LogErrorFormat("BuildSceneFish1 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
+                            }
+                            break;
+                        }
                         break;
                     }
                 default:
@@ -2062,819 +2102,180 @@ namespace GameClient
             //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
             fish_id += 1;
         }
+
+        void BuildSceneFish2(int me_chair_id, List<FishActionMoveLiner> assetDatas)
+        {
+            const float kFishSpeed = 60.0f;
+            int fish_id = 0;
+            FishKind fish_kind;
+            FishActionFishMove action = null;
+            Vector2 start, end;
+            const float kOffset = 100.0f;
+            float sub_offset;
+
+            // 绿草鱼 16 * 4 // 200
+            sub_offset = 168.0f;
+            fish_kind = FishKind.FISH_LVCAOYU;
+            for (int i = 0; i < 16; ++i)
+            {
+                end.y = start.y = 150 + 12;
+                end.x = FishConfig.kScreenWidth + 60.0f;
+                start.x = -kOffset - sub_offset - i * 54;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id + i });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 16;
+            for (int i = 0; i < 16; ++i)
+            {
+                end.y = start.y = 150 + 12 + 100;
+                end.x = FishConfig.kScreenWidth + 60.0f;
+                start.x = -kOffset - sub_offset - i * 54;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id + i });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 16;
+            for (int i = 0; i < 16; ++i)
+            {
+                end.y = start.y = FishConfig.kScreenHeight - 150 - 100;
+                end.x = FishConfig.kScreenWidth + 60.0f;
+                start.x = -kOffset - sub_offset - i * 54;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id + i });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 16;
+            for (int i = 0; i < 16; ++i)
+            {
+                end.y = start.y = FishConfig.kScreenHeight - 150;
+                end.x = FishConfig.kScreenWidth + 60.0f;
+                start.x = -kOffset - sub_offset - i * 54;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id + i });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 16;
+
+            // 小刺鱼 10 + 10 + 3 + 3
+            fish_kind = FishKind.FISH_XIAOCIYU;
+            for (int i = 0; i < 10; ++i)
+            {
+                end.y = start.y = 150 + 12 + 50;
+                end.x = FishConfig.kScreenWidth + 150.0f;
+                start.x = -kOffset - i * 120;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id + i });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 10;
+            for (int i = 0; i < 10; ++i)
+            {
+                end.y = start.y = FishConfig.kScreenHeight - 150 - 50;
+                end.x = FishConfig.kScreenWidth + 150.0f;
+                start.x = -kOffset - i * 120;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id + i });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 10;
+            for (int i = 0; i < 3; ++i)
+            {
+                end.y = start.y = 150.0f + 12 + 50 + (i + 1) * 100;
+                end.x = FishConfig.kScreenWidth + 150.0f;
+                start.x = -kOffset;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id + i });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 3;
+            for (int i = 0; i < 3; ++i)
+            {
+                end.y = start.y = 150.0f + 12 + 50 + (i + 1) * 100;
+                end.x = FishConfig.kScreenWidth + 150.0f;
+                start.x = -kOffset - 9 * 120;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id + i });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 3;
+
+            // 大闹天宫 绿草鱼和小刺鱼
+            fish_kind = FishKind.FISH_DNTG;
+            end.y = start.y = 150 + 12;
+            end.x = FishConfig.kScreenWidth + 150.0f;
+            start.x = -kOffset - 256;
+            SwitchViewPosition(me_chair_id, ref start, ref end);
+            assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id });
+            //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+            //m_FishItemLayer->ActiveFish(fish_kind, fish_id, FISH_LVCAOYU, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            ++fish_id;
+            end.y = start.y = 150 + 40;
+            end.x = FishConfig.kScreenWidth + 150.0f;
+            start.x = -kOffset - 128;
+            SwitchViewPosition(me_chair_id, ref start, ref end);
+            //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+            assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id });
+            //m_FishItemLayer->ActiveFish(fish_kind, fish_id, FISH_XIAOCIYU, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            ++fish_id;
+
+            // 大眼鱼 4 + 4
+            fish_kind = FishKind.FISH_DAYANYU;
+            Vector2 center = new Vector2(-kOffset - sub_offset - 2 * 54, 150.0f + 12 + 50 + 165);
+            float radius = 50.0f;
+            float angle = 0.0f;
+            for (int i = 0; i < 4; ++i)
+            {
+                start.x = center.x + radius * Mathf.Cos(angle);
+                start.y = center.y + radius * Mathf.Sin(angle);
+                end.x = FishConfig.kScreenWidth + 150.0f;
+                end.y = start.y;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id + i});
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+                angle += (float)FishConfig.M_PI_2;
+            }
+            fish_id += 4;
+            center.x = -kOffset - sub_offset - 13 * 54;
+            angle = 0.0f;
+            for (int i = 0; i < 4; ++i)
+            {
+                start.x = center.x + radius * Mathf.Cos(angle);
+                start.y = center.y + radius * Mathf.Sin(angle);
+                end.x = FishConfig.kScreenWidth + 150.0f;
+                end.y = start.y;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id + i });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+                angle += (float)FishConfig.M_PI_2;
+            }
+            fish_id += 4;
+
+            // 悟空
+            fish_kind = FishKind.FISH_SWK;
+            end.y = start.y = FishConfig.kScreenHeight / 2.0f; //- 150 - 100;
+            end.x = FishConfig.kScreenWidth + 380.0f;
+            start.x = -kOffset - 620;
+            SwitchViewPosition(me_chair_id, ref start, ref end);
+            //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+            assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _speed = kFishSpeed, _start = start, _end = end, _fish_id = fish_id });
+            //m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            ++fish_id;
+        }
     }
 }
 
-//SceneFishManager::SceneFishManager(CCFishItemLayer* fish_manager, const ClientGameConfig& client_game_config)
-//	: m_FishItemLayer(fish_manager), game_config_(client_game_config)
-//{
-//}
-
-//SceneFishManager::~SceneFishManager()
-//{
-//}
 /*
-void SceneFishManager::BuildSceneFish6Switch(int me_chair_id)
-{
-    MovePointVector movePointVector[300];
-    FishKind fish_kind;
-    int fish_id = 0;
-    int fish_pos_count = 0;
-    int fish_pos_count_temp = 0;
-    const float kFishSpeed = 120 * kSpeed;
-    const float kLFish1Rotate = 720.f * M_PI / 180.f * 1 / 2;
-    const float kRotateSpeed = 1.2f * M_PI / 180;
-    const float radiusLittle = kScreenHeight / 8;
-    const float radiusBig = kScreenHeight / 4;
-    float littleDistance = sqrt(kScreenWidth * kScreenWidth * 1.0f + kScreenHeight * kScreenHeight) / 2 - (sqrt(2 * radiusLittle * 2 * radiusLittle * 2 * 1.0f) - 2 * radiusLittle) / 2 - 2 * radiusLittle - radiusBig;
-    float littleDistanceLk = littleDistance + 2 * radiusLittle + 2 * radiusBig;
-    float littleSpeed = littleDistance / (radiusBig / kFishSpeed);
-    float littleSpeedLk = littleDistanceLk / (radiusBig / kFishSpeed);
-    hgeVector fish_pos_start[20];
-    hgeVector fish_pos_end[20];
-    hgeVector fish_pos[40];
-    MovePoint fish_point[40];
-    hgeVector center;
-    center.x = kScreenWidth / 2;
-    center.y = kScreenHeight / 2;
-    FishActionFishMove* action = NULL;
-    fish_kind = FISH_WONIUYU;
-    MathAide::BuildCircle(center.x, center.y, radiusBig, fish_pos, 40);
-    float init_x[2], init_y[2];
-    int stopCount = 0;
-    int countTemp = 0;
-    int tempHalf = 0;
-    for (int i = 0; i < 40; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig, fish_point, 40, rotate, kRotateSpeed);
-        for (int j = 0; j < 40; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    countTemp = movePointVector[fish_id].size();
-    int n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x + n, center.y, radiusBig, fish_point, 40, rotate, kRotateSpeed);
-        for (int j = 0; j < 40; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 20;
-    for (int i = 0; i < 40; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[i]);
-        if (i + tempHalf < 40)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_LVCAOYU;
-    fish_id += 40;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 9, fish_pos, 40);
-    for (int i = 0; i < 40; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 9, fish_point, 40, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 40; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x + n, center.y, radiusBig / 10 * 9, fish_point, 40, rotate, kRotateSpeed);
-        for (int j = 0; j < 40; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 20;
-    for (int i = 0; i < 40; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 40)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_WONIUYU;
-    fish_id += 40;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 8, fish_pos, 30);
-    for (int i = 0; i < 30; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 8, fish_point, 30, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 30; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x + n, center.y, radiusBig / 10 * 8, fish_point, 30, rotate, kRotateSpeed);
-        for (int j = 0; j < 30; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 15;
-    for (int i = 0; i < 30; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 30)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_LVCAOYU;
-    fish_id += 30;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 7, fish_pos, 30);
-    for (int i = 0; i < 30; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 7, fish_point, 30, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 30; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x + n, center.y, radiusBig / 10 * 7, fish_point, 30, rotate, kRotateSpeed);
-        for (int j = 0; j < 30; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 15;
-    for (int i = 0; i < 30; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 30)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_WONIUYU;
-    fish_id += 30;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 6, fish_pos, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 6, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x + n, center.y, radiusBig / 10 * 6, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 10;
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 20)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_LVCAOYU;
-    fish_id += 20;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 5, fish_pos, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 5, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x + n, center.y, radiusBig / 10 * 5, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 10;
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 20)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_WONIUYU;
-    fish_id += 20;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 4, fish_pos, 10);
-    for (int i = 0; i < 10; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 4, fish_point, 10, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 10; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x + n, center.y, radiusBig / 10 * 4, fish_point, 10, rotate, kRotateSpeed);
-        for (int j = 0; j < 10; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 5;
-    for (int i = 0; i < 10; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 10)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_LVCAOYU;
-    fish_id += 10;
-    MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 3, fish_pos, 10);
-    for (int i = 0; i < 10; ++i)
-    {
-        init_x[0] = center.x;
-        init_y[0] = center.y;
-        init_x[1] = fish_pos[i].x;
-        init_y[1] = fish_pos[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], kFishSpeed, stopCount);
-    }
-    stopCount = movePointVector[fish_id].size();
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x, center.y, radiusBig / 10 * 3, fish_point, 10, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 10; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(center.x + n, center.y, radiusBig / 10 * 3, fish_point, 10, rotate, kRotateSpeed);
-        for (int j = 0; j < 10; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 5;
-    for (int i = 0; i < 10; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 10)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_HUANGCAOYU;
-    fish_id += 10;
-    //右上
-    MathAide::BuildCircle(radiusLittle, kScreenHeight - radiusLittle, radiusLittle, fish_pos_start, 20);
-    float angle = atanf(kScreenWidth / kScreenHeight);
-    hgeVector centerRight;
-    centerRight.x = center.x - (radiusLittle + radiusBig) * cosf(angle);
-    centerRight.y = center.y + (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_pos_end, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = fish_pos_start[i].x;
-        init_y[0] = fish_pos_start[i].y;
-        init_x[1] = fish_pos_end[i].x;
-        init_y[1] = fish_pos_end[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], littleSpeed);
-    }
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x + n, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 10;
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 20)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-
-    fish_kind = FISH_DAYANYU;
-    fish_id += 20;
-    //左上
-    MathAide::BuildCircle(kScreenWidth - radiusLittle, kScreenHeight - radiusLittle, radiusLittle, fish_pos_start, 20);
-    centerRight.x = center.x + (radiusLittle + radiusBig) * cosf(angle);
-    centerRight.y = center.y + (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_pos_end, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = fish_pos_start[i].x;
-        init_y[0] = fish_pos_start[i].y;
-        init_x[1] = fish_pos_end[i].x;
-        init_y[1] = fish_pos_end[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], littleSpeed);
-    }
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x + n, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 10;
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 20)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_HUANGBIANYU;
-    fish_id += 20;
-    //左下
-    MathAide::BuildCircle(kScreenWidth - radiusLittle, radiusLittle, radiusLittle, fish_pos_start, 20);
-    centerRight.x = center.x + (radiusLittle + radiusBig) * cosf(angle);
-    centerRight.y = center.y - (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_pos_end, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = fish_pos_start[i].x;
-        init_y[0] = fish_pos_start[i].y;
-        init_x[1] = fish_pos_end[i].x;
-        init_y[1] = fish_pos_end[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], littleSpeed);
-    }
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x + n, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 10;
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 20)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_XIAOCHOUYU;
-    fish_id += 20;
-    //右下
-    MathAide::BuildCircle(radiusLittle, radiusLittle, radiusLittle, fish_pos_start, 20);
-    centerRight.x = center.x - (radiusLittle + radiusBig) * cosf(angle);
-    centerRight.y = center.y - (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_pos_end, 20);
-    for (int i = 0; i < 20; ++i)
-    {
-        init_x[0] = fish_pos_start[i].x;
-        init_y[0] = fish_pos_start[i].y;
-        init_x[1] = fish_pos_end[i].x;
-        init_y[1] = fish_pos_end[i].y;
-        MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id + i], littleSpeed);
-    }
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        MathAide::BuildCircle(centerRight.x + n, centerRight.y, radiusLittle, fish_point, 20, rotate, kRotateSpeed);
-        for (int j = 0; j < 20; ++j)
-        {
-            movePointVector[fish_id + j].push_back(fish_point[j]);
-        }
-        n += 1;
-    }
-    tempHalf = 10;
-    for (int i = 0; i < 20; ++i)
-    {
-        action = new FishActionFishMoveBezier(movePointVector[fish_id + i]);
-        if (i + tempHalf < 20)
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i + tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        else
-            m_FishItemLayer->ActiveFish(fish_kind, fish_id + i - tempHalf, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_kind = FISH_SWK;
-    fish_id += 20;
-    init_x[0] = radiusLittle;
-    init_y[0] = kScreenHeight - radiusLittle;
-    init_x[1] = center.x - (radiusLittle + radiusBig) * cosf(angle);
-    init_y[1] = center.y + (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id], littleSpeed);
-    MovePoint movePoint;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        movePoint.position_.x = init_x[1];
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        movePoint.position_.x = init_x[1] + n;
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-        n += 1;
-    }
-    action = new FishActionFishMoveBezier(movePointVector[fish_id]);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    fish_kind = FISH_SWK;
-    fish_id += 1;
-    init_x[0] = kScreenWidth - radiusLittle;
-    init_y[0] = kScreenHeight - radiusLittle;
-    init_x[1] = center.x + (radiusLittle + radiusBig) * cosf(angle);
-    init_y[1] = center.y + (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id], littleSpeed);
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        movePoint.position_.x = init_x[1];
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        movePoint.position_.x = init_x[1] + n;
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-        n += 1;
-    }
-    action = new FishActionFishMoveBezier(movePointVector[fish_id]);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    fish_kind = FISH_SWK;
-    fish_id += 1;
-    init_x[0] = kScreenWidth - radiusLittle;
-    init_y[0] = radiusLittle;
-    init_x[1] = center.x + (radiusLittle + radiusBig) * cosf(angle);
-    init_y[1] = center.y - (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id], littleSpeed);
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        movePoint.position_.x = init_x[1];
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        movePoint.position_.x = init_x[1] + n;
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-        n += 1;
-    }
-    action = new FishActionFishMoveBezier(movePointVector[fish_id]);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    fish_kind = FISH_SWK;
-    fish_id += 1;
-    init_x[0] = radiusLittle;
-    init_y[0] = radiusLittle;
-    init_x[1] = center.x - (radiusLittle + radiusBig) * cosf(angle);
-    init_y[1] = center.y - (radiusLittle + radiusBig) * sinf(angle);
-    MathAide::BuildLinear(init_x, init_y, 2, movePointVector[fish_id], littleSpeed);
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 3; rotate += kRotateSpeed)
-    {
-        if (movePointVector[fish_id].size() > countTemp)
-            break;
-        movePoint.position_.x = init_x[1];
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-    }
-    n = 0;
-    for (float rotate = 0.f; rotate <= kLFish1Rotate * 4; rotate += kRotateSpeed)
-    {
-        movePoint.position_.x = init_x[1] + n;
-        movePoint.position_.y = init_y[1];
-        movePoint.angle_ = rotate;
-        movePointVector[fish_id].push_back(movePoint);
-        n += 1;
-    }
-    action = new FishActionFishMoveBezier(movePointVector[fish_id]);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    fish_id += 1;
-}
-void SceneFishManager::BuildSceneFish2(int me_chair_id)
-{
-    const float kFishSpeed = 60.0f;
-    int fish_id = 0;
-    FishKind fish_kind;
-    FishActionFishMove* action = NULL;
-    hgeVector start, end;
-    const float kOffset = 100.f;
-    float sub_offset;
-
-    // 绿草鱼 16 * 4 // 200
-    sub_offset = 168.f;
-    fish_kind = FISH_LVCAOYU;
-    for (int i = 0; i < 16; ++i)
-    {
-        end.y = start.y = 150 + 12;
-        end.x = kScreenWidth + 60.f;
-        start.x = -kOffset - sub_offset - i * 54;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 16;
-    for (int i = 0; i < 16; ++i)
-    {
-        end.y = start.y = 150 + 12 + 100;
-        end.x = kScreenWidth + 60.f;
-        start.x = -kOffset - sub_offset - i * 54;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 16;
-    for (int i = 0; i < 16; ++i)
-    {
-        end.y = start.y = kScreenHeight - 150 - 100;
-        end.x = kScreenWidth + 60.f;
-        start.x = -kOffset - sub_offset - i * 54;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 16;
-    for (int i = 0; i < 16; ++i)
-    {
-        end.y = start.y = kScreenHeight - 150;
-        end.x = kScreenWidth + 60.f;
-        start.x = -kOffset - sub_offset - i * 54;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 16;
-
-    // 小刺鱼 10 + 10 + 3 + 3
-    fish_kind = FISH_XIAOCIYU;
-    for (int i = 0; i < 10; ++i)
-    {
-        end.y = start.y = 150 + 12 + 50;
-        end.x = kScreenWidth + 150.f;
-        start.x = -kOffset - i * 120;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 10;
-    for (int i = 0; i < 10; ++i)
-    {
-        end.y = start.y = kScreenHeight - 150 - 50;
-        end.x = kScreenWidth + 150.f;
-        start.x = -kOffset - i * 120;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 10;
-    for (int i = 0; i < 3; ++i)
-    {
-        end.y = start.y = 150.f + 12 + 50 + (i + 1) * 100;
-        end.x = kScreenWidth + 150.f;
-        start.x = -kOffset;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 3;
-    for (int i = 0; i < 3; ++i)
-    {
-        end.y = start.y = 150.f + 12 + 50 + (i + 1) * 100;
-        end.x = kScreenWidth + 150.f;
-        start.x = -kOffset - 9 * 120;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 3;
-
-    // 大闹天宫 绿草鱼和小刺鱼
-    fish_kind = FISH_DNTG;
-    end.y = start.y = 150 + 12;
-    end.x = kScreenWidth + 150.f;
-    start.x = -kOffset - 256;
-    SwitchViewPosition(me_chair_id, &start, &end);
-    action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, FISH_LVCAOYU, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    ++fish_id;
-    end.y = start.y = 150 + 40;
-    end.x = kScreenWidth + 150.f;
-    start.x = -kOffset - 128;
-    SwitchViewPosition(me_chair_id, &start, &end);
-    action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, FISH_XIAOCIYU, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    ++fish_id;
-
-    // 大眼鱼 4 + 4
-    fish_kind = FISH_DAYANYU;
-    hgeVector center(-kOffset - sub_offset - 2 * 54, 150.f + 12 + 50 + 165);
-    float radius = 50.f;
-    float angle = 0.f;
-    for (int i = 0; i < 4; ++i)
-    {
-        start.x = center.x + radius * cos(angle);
-        start.y = center.y + radius * sin(angle);
-        end.x = kScreenWidth + 150.f;
-        end.y = start.y;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        angle += M_PI_2;
-    }
-    fish_id += 4;
-    center.x = -kOffset - sub_offset - 13 * 54;
-    angle = 0.f;
-    for (int i = 0; i < 4; ++i)
-    {
-        start.x = center.x + radius * cos(angle);
-        start.y = center.y + radius * sin(angle);
-        end.x = kScreenWidth + 150.f;
-        end.y = start.y;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-        angle += M_PI_2;
-    }
-    fish_id += 4;
-
-    // 悟空
-    fish_kind = FISH_SWK;
-    end.y = start.y = kScreenHeight / 2.0f; //- 150 - 100;
-    end.x = kScreenWidth + 380.f;
-    start.x = -kOffset - 620;
-    SwitchViewPosition(me_chair_id, &start, &end);
-    action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-    m_FishItemLayer->ActiveFish(fish_kind, fish_id, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    ++fish_id;
-}
-
 void SceneFishManager::BuildSceneFish3(int me_chair_id)
 {
     const float kFishSpeed = 150.f;
