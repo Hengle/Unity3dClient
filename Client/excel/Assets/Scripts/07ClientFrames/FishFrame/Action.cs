@@ -347,8 +347,33 @@ namespace GameClient
     //------------------------------------------------------------------------------
     class FishActionMoveTo : FishActionInterval
     {
+        public FishActionMoveTo():base(0)
+        {
+
+        }
         public FishActionMoveTo(float duration, Vector2 start, Vector2 end) : base(duration)
         {
+            position_ = start_;
+            delta_ = end - start;
+            float length = delta_.magnitude;
+            float rote;
+            if (length > 0)
+            {
+                if (delta_.y >= 0)
+                {
+                    rote = Mathf.Acos(delta_.x / length);
+                }
+                else
+                {
+                    rote = -Mathf.Acos(delta_.x / length);
+                }
+                angle_ = rote;
+            }
+        }
+
+        public void Create(float duration, Vector2 start, Vector2 end)
+        {
+            duration_ = duration;
             position_ = start_;
             delta_ = end - start;
             float length = delta_.magnitude;

@@ -50,13 +50,19 @@ namespace GameClient
             for (int i = 0; i < (int)SceneKind.SCENE_COUNT; ++i)
             {
                 SceneKind _scene = (SceneKind)(i);
-                InvokeManager.Instance().Invoke(this, i * 20.0f, ()=>
+                InvokeManager.Instance().Invoke(this, i * 20.0f, () =>
                 {
                     FishDataManager.Instance().CreateSwitchScene(_scene);
                 });
+                break;
             }
-            
+
             //InvokeManager.Instance().InvokeRepeate(this, 0.0f, 1, 10.0f, null, FishDataManager.Instance().CreateSwitchScene, null, false);
+
+            InvokeManager.Instance().Invoke(this, 15.0f, () =>
+            {
+                EventManager.Instance().SendEvent(ClientEvent.CE_FISH_LOCK_FISH, new object[] { 0,1 });
+            });
         }
 
         void _BuildFishScene1()
@@ -120,6 +126,17 @@ namespace GameClient
         void ChangeScreen()
         {
             FishDataManager.Instance().sceneAudioHandle = 0;
+            FishDataManager.Instance().ClearLockFish();
+            for(int i = 0; i < FishConfig.fish_player_count; ++i)
+            {
+                //隐藏所有锁住鱼的鱼线图
+                //for (int j = 0; j < 20; j++)
+                //{
+                //    m_FishLockLinespr[i][j] = Sprite::createWithSpriteFrame(cache->getSpriteFrameByName("LockLine.png"));
+                //    this->addChild(m_FishLockLinespr[i][j], 10000);
+                //    m_FishLockLinespr[i][j]->setVisible(false);
+                //}
+            }
 
             int fishScene = (int)FishDataManager.Instance().FishScene;
             int curBgIndex = (int)fishScene % FishDataManager.Instance().BgCount;
@@ -229,7 +246,7 @@ namespace GameClient
                 return;
             }
 
-            if (mfish_logic.LockFishInfo(lock_fish_id, ref lock_fish_kind, ref action_fish))
+            if (!mfish_logic.LockFishInfo(lock_fish_id, ref lock_fish_kind, ref action_fish))
             {
                 lock_fish_id = -1;
                 mfish_logic.SetLockFish(LogicChairID, -1, FishKind.FISH_KIND_COUNT, null);
