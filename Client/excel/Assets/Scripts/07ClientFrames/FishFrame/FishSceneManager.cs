@@ -14,8 +14,8 @@ namespace GameClient
 {
     public class FishSceneManager : Singleton<FishSceneManager>
     {
-        FishActionAsset[] mAssets = new FishActionAsset[0];
-        public void LoadAsset(FishActionAsset[] assets)
+        FishActionAsset[,] mAssets = new FishActionAsset[0,2];
+        public void LoadAsset(FishActionAsset[,] assets)
         {
             mAssets = assets;
         }
@@ -23,7 +23,8 @@ namespace GameClient
         {
             for(int i = 0; i < mAssets.Length; ++i)
             {
-                mAssets[i] = null;
+                mAssets[i,0] = null;
+                mAssets[i,1] = null;
             }
         }
 #if UNITY_EDITOR
@@ -121,7 +122,7 @@ namespace GameClient
                     {
                         if (me_chair_id < 3)
                         {
-                            FishActionAsset asset = mAssets[0];
+                            FishActionAsset asset = mAssets[0,0];
                             if(null == asset)
                             {
                                 asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_6", typeof(FishActionAsset)).obj as FishActionAsset;
@@ -132,7 +133,7 @@ namespace GameClient
                                 DateTime start = DateTime.Now;
                                 List<FishActionMoveBezier> assetDatas = new List<FishActionMoveBezier>();
                                 BuildSceneFish6(me_chair_id, assetDatas);
-                                BuildFishScene6ToAsset(assetDatas.ToArray());
+                                BuildFishScene6ToAsset(assetDatas.ToArray(), "Scene/Fish/fish_scene_6");
                                 DateTime end = DateTime.Now;
                                 TimeSpan ts = end - start;
                                 Debug.LogErrorFormat("BuildSceneFish6 delta = {0}", ts.TotalMilliseconds.ToString());
@@ -163,7 +164,7 @@ namespace GameClient
                         }
                         else
                         {
-                            FishActionAsset asset = mAssets[1];
+                            FishActionAsset asset = mAssets[0,1];
                             if(null == asset)
                             {
                                 asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_6r", typeof(FishActionAsset)).obj as FishActionAsset;
@@ -177,7 +178,7 @@ namespace GameClient
                                 BuildFishScene6ToAsset(assetDatas.ToArray(), "Scene/Fish/fish_scene_6r");
                                 DateTime end = DateTime.Now;
                                 TimeSpan ts = end - start;
-                                Debug.LogErrorFormat("BuildSceneFish6 delta = {0}", ts.TotalMilliseconds.ToString());
+                                Debug.LogErrorFormat("BuildSceneFish6r delta = {0}", ts.TotalMilliseconds.ToString());
 #endif
                             }
                             else
@@ -206,15 +207,74 @@ namespace GameClient
                     }
                 case SceneKind.SCENE_2:
                     {
-                        //BuildSceneFish5(me_chair_id);
+                        FishActionAsset asset = null;
+                        string scene_res_path = string.Empty;
+                        if (me_chair_id < 3)
+                        {
+                            scene_res_path = "Scene/Fish/fish_scene_5";
+                            asset = mAssets[1, 0];
+                        }
+                        else
+                        {
+                            scene_res_path = "Scene/Fish/fish_scene_5r";
+                            asset = mAssets[1, 1];
+                        }
+                        if (null == asset)
+                        {
+                            asset = AssetLoader.Instance().LoadRes(scene_res_path, typeof(FishActionAsset)).obj as FishActionAsset;
+                        }
+                        if (null == asset)
+                        {
+#if UNITY_EDITOR
+                            DateTime start = DateTime.Now;
+                            List<FishActionMoveLiner> assetDatas = new List<FishActionMoveLiner>();
+                            BuildSceneFish5(me_chair_id, assetDatas);
+                            BuildFishScene1ToAsset(assetDatas.ToArray(), scene_res_path);
+                            DateTime end = DateTime.Now;
+                            TimeSpan ts = end - start;
+                            Debug.LogErrorFormat("BuildSceneFish5 delta = {0}", ts.TotalMilliseconds.ToString());
+#endif
+                        }
+                        else
+                        {
+                            DateTime start = DateTime.Now;
+                            for (int i = 0; i < asset.line_pathes.Length; ++i)
+                            {
+                                var current = asset.line_pathes[i];
+                                if (null != current)
+                                {
+                                    FishActionFishMoveLinear action = FishAction.CreateActionFromPool<FishActionFishMoveLinear>();
+                                    action.Create(current._speed, current._start, current._end);
+                                    //DateTime item_start = DateTime.Now;
+                                    FishDataManager.Instance().CreateFish(current._kind, current._fish_id, action);
+                                    //DateTime item_end = DateTime.Now;
+                                    //TimeSpan item_ts = item_end - item_start;
+                                    //Debug.LogErrorFormat("BuildSceneFish6 delta = <color=#00ff00>{0}</color> ms", item_ts.TotalMilliseconds.ToString());
+                                }
+                            }
+                            DateTime end = DateTime.Now;
+                            TimeSpan ts = end - start;
+                            Debug.LogErrorFormat("BuildSceneFish5 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
+                        }
                         break;
                     }
                 case SceneKind.SCENE_3:
                     {
-                        FishActionAsset asset = mAssets[3];
+                        FishActionAsset asset = null;
+                        string scene_res_path = string.Empty;
+                        if (me_chair_id < 3)
+                        {
+                            scene_res_path = "Scene/Fish/fish_scene_3";
+                            asset = mAssets[2, 0];
+                        }
+                        else
+                        {
+                            scene_res_path = "Scene/Fish/fish_scene_3r";
+                            asset = mAssets[2, 1];
+                        }
                         if (null == asset)
                         {
-                            asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_3", typeof(FishActionAsset)).obj as FishActionAsset;
+                            asset = AssetLoader.Instance().LoadRes(scene_res_path, typeof(FishActionAsset)).obj as FishActionAsset;
                         }
                         if (null == asset)
                         {
@@ -222,7 +282,7 @@ namespace GameClient
                             DateTime start = DateTime.Now;
                             List<FishActionMoveScene3> assetDatas = new List<FishActionMoveScene3>();
                             BuildSceneFish3(me_chair_id, assetDatas);
-                            BuildFishScene3ToAsset(assetDatas.ToArray());
+                            BuildFishScene3ToAsset(assetDatas.ToArray(), scene_res_path);
                             DateTime end = DateTime.Now;
                             TimeSpan ts = end - start;
                             Debug.LogErrorFormat("BuildSceneFish3 delta = {0}", ts.TotalMilliseconds.ToString());
@@ -253,10 +313,22 @@ namespace GameClient
                     }
                 case SceneKind.SCENE_4:
                     {
-                        FishActionAsset asset = mAssets[4];
+                        FishActionAsset asset = null;
+                        string scene_res_path = string.Empty;
+                        if (me_chair_id < 3)
+                        {
+                            scene_res_path = "Scene/Fish/fish_scene_1";
+                            asset = mAssets[3, 0];
+                        }
+                        else
+                        {
+                            scene_res_path = "Scene/Fish/fish_scene_1r";
+                            asset = mAssets[3, 1];
+                        }
+
                         if(null == asset)
                         {
-                            asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_1", typeof(FishActionAsset)).obj as FishActionAsset;
+                            asset = AssetLoader.Instance().LoadRes(scene_res_path, typeof(FishActionAsset)).obj as FishActionAsset;
                         }
                         if (null == asset)
                         {
@@ -264,10 +336,10 @@ namespace GameClient
                             DateTime start = DateTime.Now;
                             List<FishActionMoveLiner> assetDatas = new List<FishActionMoveLiner>();
                             BuildSceneFish1(me_chair_id, assetDatas);
-                            BuildFishScene1ToAsset(assetDatas.ToArray());
+                            BuildFishScene1ToAsset(assetDatas.ToArray(), scene_res_path);
                             DateTime end = DateTime.Now;
                             TimeSpan ts = end - start;
-                            Debug.LogErrorFormat("BuildSceneFish6 delta = {0}", ts.TotalMilliseconds.ToString());
+                            Debug.LogErrorFormat("BuildSceneFish1 delta = {0}", ts.TotalMilliseconds.ToString());
 #endif
                         }
                         else
@@ -295,10 +367,21 @@ namespace GameClient
                     }
                 case SceneKind.SCENE_5:
                     {
-                        FishActionAsset asset = mAssets[5];
+                        FishActionAsset asset = null;
+                        string scene_res_path = string.Empty;
+                        if (me_chair_id < 3)
+                        {
+                            scene_res_path = "Scene/Fish/fish_scene_4";
+                            asset = mAssets[4, 0];
+                        }
+                        else
+                        {
+                            scene_res_path = "Scene/Fish/fish_scene_4r";
+                            asset = mAssets[4, 1];
+                        }
                         if (null == asset)
                         {
-                            asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_4", typeof(FishActionAsset)).obj as FishActionAsset;
+                            asset = AssetLoader.Instance().LoadRes(scene_res_path, typeof(FishActionAsset)).obj as FishActionAsset;
                         }
                         if (null == asset)
                         {
@@ -306,10 +389,10 @@ namespace GameClient
                             DateTime start = DateTime.Now;
                             List<FishActionMoveScene3> assetDatas = new List<FishActionMoveScene3>();
                             BuildSceneFish4(me_chair_id, assetDatas);
-                            BuildFishScene3ToAsset(assetDatas.ToArray(), "Scene/Fish/fish_scene_4");
+                            BuildFishScene3ToAsset(assetDatas.ToArray(), scene_res_path);
                             DateTime end = DateTime.Now;
                             TimeSpan ts = end - start;
-                            Debug.LogErrorFormat("BuildSceneFish34 delta = {0}", ts.TotalMilliseconds.ToString());
+                            Debug.LogErrorFormat("BuildSceneFish4 delta = {0}", ts.TotalMilliseconds.ToString());
 #endif
                         }
                         else
@@ -331,16 +414,27 @@ namespace GameClient
                             }
                             DateTime end = DateTime.Now;
                             TimeSpan ts = end - start;
-                            Debug.LogErrorFormat("BuildSceneFish1 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
+                            Debug.LogErrorFormat("BuildSceneFish4 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
                         }
                         break;
                     }
                 case SceneKind.SCENE_6:
                     {
-                        FishActionAsset asset = mAssets[6];
+                        FishActionAsset asset = null;
+                        string scene_res_path = string.Empty;
+                        if (me_chair_id < 3)
+                        {
+                            scene_res_path = "Scene/Fish/fish_scene_2";
+                            asset = mAssets[5, 0];
+                        }
+                        else
+                        {
+                            scene_res_path = "Scene/Fish/fish_scene_2r";
+                            asset = mAssets[5, 1];
+                        }
                         if (null == asset)
                         {
-                            asset = AssetLoader.Instance().LoadRes("Scene/Fish/fish_scene_2", typeof(FishActionAsset)).obj as FishActionAsset;
+                            asset = AssetLoader.Instance().LoadRes(scene_res_path, typeof(FishActionAsset)).obj as FishActionAsset;
                         }
                         if (null == asset)
                         {
@@ -348,10 +442,10 @@ namespace GameClient
                             DateTime start = DateTime.Now;
                             List<FishActionMoveLiner> assetDatas = new List<FishActionMoveLiner>();
                             BuildSceneFish2(me_chair_id, assetDatas);
-                            BuildFishScene1ToAsset(assetDatas.ToArray(), "Scene/Fish/fish_scene_2");
+                            BuildFishScene1ToAsset(assetDatas.ToArray(), scene_res_path);
                             DateTime end = DateTime.Now;
                             TimeSpan ts = end - start;
-                            Debug.LogErrorFormat("BuildSceneFish6 delta = {0}", ts.TotalMilliseconds.ToString());
+                            Debug.LogErrorFormat("BuildSceneFish2 delta = {0}", ts.TotalMilliseconds.ToString());
 #endif
                         }
                         else
@@ -373,7 +467,7 @@ namespace GameClient
                             }
                             DateTime end = DateTime.Now;
                             TimeSpan ts = end - start;
-                            Debug.LogErrorFormat("BuildSceneFish1 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
+                            Debug.LogErrorFormat("BuildSceneFish2 delta = <color=#00ff00>{0}</color> ms", ts.TotalMilliseconds.ToString());
                         }
                         break;
                     }
@@ -2569,94 +2663,86 @@ namespace GameClient
             }
             fish_id += 30;
         }
+
+        void BuildSceneFish5(int me_chair_id, List<FishActionMoveLiner> assetDatas)
+        {
+            float kFishSpeed = 50.0f;
+            int fish_id = 0;
+            FishKind fish_kind;
+            FishActionFishMove action = null;
+            Vector2 start, end;
+
+            // 蜗牛鱼 上50 下50
+            float hinterval = FishConfig.kScreenWidth / 13.0f;
+            float vinterval = FishConfig.kScreenHeight / 6.0f;
+            fish_kind = FishKind.FISH_WONIUYU;
+            for (int i = 0; i < 50; ++i)
+            {
+                start.x = hinterval + (hinterval + (hinterval / 5.0f)) * (i % 10);
+                start.y = -100.0f - (i / 10) * vinterval - (i % 3) * vinterval / 5.0f;
+                end.x = start.x;
+                end.y = FishConfig.kScreenHeight + 100.0f;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _fish_id = fish_id + i, _start = start, _end = end, _speed = kFishSpeed });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+
+            fish_id += 50;
+            for (int i = 0; i < 50; ++i)
+            {
+                start.x = hinterval + (hinterval + (hinterval / 5.0f)) * (i % 10) + hinterval / 2;
+                start.y = FishConfig.kScreenHeight + 100.0f + 4 * vinterval - (i / 10) * vinterval + (i % 3) * vinterval / 5.0f;
+                end.x = start.x;
+                end.y = -100.0f;
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _fish_id = fish_id + i, _start = start, _end = end, _speed = kFishSpeed });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 50;
+
+            // 蝙蝠鱼 银鲨 金鲨
+            kFishSpeed = 100.0f;
+            fish_kind = FishKind.FISH_BIANFUYU;
+            Vector2[] kFishStart1 = new Vector2[5]{ new Vector2(FishConfig.kScreenWidth + 200,FishConfig.kScreenHeight / 2.0f), new Vector2(FishConfig.kScreenWidth + 500,FishConfig.kScreenHeight / 2.0f - 50), new Vector2(FishConfig.kScreenWidth + 800,FishConfig.kScreenHeight / 2.0f + 60), new Vector2(FishConfig.kScreenWidth + 1100,FishConfig.kScreenHeight / 2.0f - 60), new Vector2(FishConfig.kScreenWidth + 1400,FishConfig.kScreenHeight / 2.0f - 60) };
+            Vector2[] kFishEnd1 = new Vector2[5] { new Vector2(-200, FishConfig.kScreenHeight / 2.0f), new Vector2(-200, FishConfig.kScreenHeight / 2.0f - 100), new Vector2(-200, FishConfig.kScreenHeight / 2.0f + 100), new Vector2(-200, FishConfig.kScreenHeight / 2.0f + 60), new Vector2(-200, FishConfig.kScreenHeight / 2.0f - 60) };
+            for (int i = 0; i < 5; ++i)
+            {
+                start = kFishStart1[i];
+                end = kFishEnd1[i];
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _fish_id = fish_id + i, _start = start, _end = end, _speed = kFishSpeed });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 5;
+            fish_kind = FishKind.FISH_YINSHA;
+            Vector2[] kFishStart2 = new Vector2[5]{ new Vector2(FishConfig.kScreenWidth + 200, FishConfig.kScreenHeight / 2.0f), new Vector2(FishConfig.kScreenWidth + 500, FishConfig.kScreenHeight / 2.0f - 50), new Vector2(FishConfig.kScreenWidth + 800, FishConfig.kScreenHeight / 2.0f + 60), new Vector2(FishConfig.kScreenWidth + 1100, FishConfig.kScreenHeight / 2.0f - 60), new Vector2(FishConfig.kScreenWidth + 1400, FishConfig.kScreenHeight / 2.0f - 60) };
+            Vector2[] kFishEnd2 = new Vector2[5]{ new Vector2(-200.0f, FishConfig.kScreenHeight - 100.0f), new Vector2(-300.0f, FishConfig.kScreenHeight + 1.0f), new Vector2(-400.0f, FishConfig.kScreenHeight + 100.0f), new Vector2(-500.0f, FishConfig.kScreenHeight + 60.0f), new Vector2(-600, FishConfig.kScreenHeight - 60.0f) };
+            for (int i = 0; i < 5; ++i)
+            {
+                start = kFishStart2[i];
+                end = kFishEnd2[i];
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _fish_id = fish_id + i, _start = start, _end = end, _speed = kFishSpeed });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 5;
+            fish_kind = FishKind.FISH_JINSHA;
+            Vector2[] kFishStart3 = new Vector2[5]{ new Vector2(FishConfig.kScreenWidth + 200, FishConfig.kScreenHeight / 2.0f), new Vector2(FishConfig.kScreenWidth + 500, FishConfig.kScreenHeight / 2.0f - 50), new Vector2(FishConfig.kScreenWidth + 800, FishConfig.kScreenHeight / 2.0f + 60), new Vector2(FishConfig.kScreenWidth + 1100, FishConfig.kScreenHeight / 2.0f - 60), new Vector2(FishConfig.kScreenWidth + 1400, FishConfig.kScreenHeight / 2.0f - 60) };
+            Vector2[] kFishEnd3 = new Vector2[5]{ new Vector2(-200, 100.0f), new Vector2(-300, 0), new Vector2(-400, -100), new Vector2(-500, -60), new Vector2(-600, 60) };
+            for (int i = 0; i < 5; ++i)
+            {
+                start = kFishStart3[i];
+                end = kFishEnd3[i];
+                SwitchViewPosition(me_chair_id, ref start, ref end);
+                //action = new FishActionFishMoveLinear(kFishSpeed, start, end);
+                assetDatas.Add(new FishActionMoveLiner { _kind = fish_kind, _fish_id = fish_id + i, _start = start, _end = end, _speed = kFishSpeed });
+                //m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
+            }
+            fish_id += 5;
+        }
     }
 }
-
-/*
-void SceneFishManager::BuildSceneFish5(int me_chair_id)
-{
-    float kFishSpeed = 50.0f;
-    int fish_id = 0;
-    FishKind fish_kind;
-    FishActionFishMove* action = NULL;
-    hgeVector start, end;
-
-    // 蜗牛鱼 上50 下50
-    float hinterval = kScreenWidth / 13.f;
-    float vinterval = kScreenHeight / 6.f;
-    fish_kind = FISH_WONIUYU;
-    for (int i = 0; i < 50; ++i)
-    {
-        start.x = hinterval + (hinterval + (hinterval / 5.f)) * (i % 10);
-        start.y = -100.f - (i / 10) * vinterval - (i % 3) * vinterval / 5.f;
-        end.x = start.x;
-        end.y = kScreenHeight + 100.f;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-
-    fish_id += 50;
-    for (int i = 0; i < 50; ++i)
-    {
-        start.x = hinterval + (hinterval + (hinterval / 5.f)) * (i % 10) + hinterval / 2;
-        start.y = kScreenHeight + 100.f + 4 * vinterval - (i / 10) * vinterval + (i % 3) * vinterval / 5.f;
-        end.x = start.x;
-        end.y = -100.f;
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 50;
-
-    // 蝙蝠鱼 银鲨 金鲨
-    kFishSpeed = 100.0f;
-    fish_kind = FISH_BIANFUYU;
-    const hgeVector kFishStart1[5] = { hgeVector(kScreenWidth + 200, kScreenHeight / 2.f), hgeVector(kScreenWidth + 500, kScreenHeight / 2.f - 50), hgeVector(kScreenWidth + 800, kScreenHeight / 2.f + 60), hgeVector(kScreenWidth + 1100, kScreenHeight / 2.f - 60), hgeVector(kScreenWidth + 1400, kScreenHeight / 2.f - 60) };
-    const hgeVector kFishEnd1[5] = { hgeVector(-200, kScreenHeight / 2.f), hgeVector(-200, kScreenHeight / 2.f - 100), hgeVector(-200, kScreenHeight / 2.f + 100), hgeVector(-200, kScreenHeight / 2.f + 60), hgeVector(-200, kScreenHeight / 2.f - 60) };
-    for (int i = 0; i < 5; ++i)
-    {
-        start = kFishStart1[i];
-        end = kFishEnd1[i];
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 5;
-    fish_kind = FISH_YINSHA;
-    const hgeVector kFishStart2[5] = { hgeVector(kScreenWidth + 200, kScreenHeight / 2.f), hgeVector(kScreenWidth + 500, kScreenHeight / 2.f - 50), hgeVector(kScreenWidth + 800, kScreenHeight / 2.f + 60), hgeVector(kScreenWidth + 1100, kScreenHeight / 2.f - 60), hgeVector(kScreenWidth + 1400, kScreenHeight / 2.f - 60) };
-    const hgeVector kFishEnd2[5] = { hgeVector(-200.f, kScreenHeight - 100.f), hgeVector(-300.f, kScreenHeight + 1.f), hgeVector(-400.f, kScreenHeight + 100.f), hgeVector(-500.f, kScreenHeight + 60.f), hgeVector(-600, kScreenHeight - 60.f) };
-    for (int i = 0; i < 5; ++i)
-    {
-        start = kFishStart2[i];
-        end = kFishEnd2[i];
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 5;
-    fish_kind = FISH_JINSHA;
-    const hgeVector kFishStart3[5] = { hgeVector(kScreenWidth + 200, kScreenHeight / 2.f), hgeVector(kScreenWidth + 500, kScreenHeight / 2.f - 50), hgeVector(kScreenWidth + 800, kScreenHeight / 2.f + 60), hgeVector(kScreenWidth + 1100, kScreenHeight / 2.f - 60), hgeVector(kScreenWidth + 1400, kScreenHeight / 2.f - 60) };
-    const hgeVector kFishEnd3[5] = { hgeVector(-200, 100.f), hgeVector(-300, 0), hgeVector(-400, -100), hgeVector(-500, -60), hgeVector(-600, 60) };
-    for (int i = 0; i < 5; ++i)
-    {
-        start = kFishStart3[i];
-        end = kFishEnd3[i];
-        SwitchViewPosition(me_chair_id, &start, &end);
-        action = new FishActionFishMoveLinear(kFishSpeed, start, end);
-        m_FishItemLayer->ActiveFish(fish_kind, fish_id + i, 0, game_config_.fish_bounding_radius[fish_kind], game_config_.fish_bounding_count[fish_kind], action);
-    }
-    fish_id += 5;
-}
-
-void SceneFishManager::SwitchViewPosition(int me_chair_id, hgeVector* start, hgeVector* end)
-{
-    if (me_chair_id >= 3)
-        return;
-    start->x = kScreenWidth - start->x;
-    start->y = kScreenHeight - start->y;
-    end->x = kScreenWidth - end->x;
-    end->y = kScreenHeight - end->y;
-}
-
-    */

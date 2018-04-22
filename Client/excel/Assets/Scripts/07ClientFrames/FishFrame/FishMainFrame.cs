@@ -25,13 +25,17 @@ namespace GameClient
 
             path = AssetLoader.Instance().LoadRes("Xml/path", typeof(PathNormalList)).obj as PathNormalList;
 
-            InvokeManager.Instance().Invoke(this, 3.0f, _BuildFishScene4);
+            //InvokeManager.Instance().Invoke(this, 3.0f, _BuildFishScene1);
             //InvokeManager.Instance().InvokeRepeate(this, 10.0f, _BuildFishScene4, false);
 		}
 
         void _BuildFishScene1()
         {
-            FishSceneManager.Instance().BuildSceneFish(SceneKind.SCENE_4, 0);
+            for(int i = 0; i < (int)SceneKind.SCENE_COUNT; ++i)
+            {
+                FishSceneManager.Instance().BuildSceneFish((SceneKind)i, 0);
+                FishSceneManager.Instance().BuildSceneFish((SceneKind)i, 3);
+            }
         }
 
         void _BuildFishScene6()
@@ -57,6 +61,11 @@ namespace GameClient
         void _BuildFishScene4()
         {
             FishSceneManager.Instance().BuildSceneFish(SceneKind.SCENE_5, 0);
+        }
+
+        void _BuildFishScene5()
+        {
+            FishSceneManager.Instance().BuildSceneFish(SceneKind.SCENE_2, 0);
         }
 
         int m_cmd = 100050;
