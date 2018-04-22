@@ -6,7 +6,11 @@
 local SafeBoxFrame = {}
 
 function SafeBoxFrame.OnOpenFrame()
+    self.frame:GetObject('btn_back').onClick:AddListener(SafeBoxFrame.onClickBack)
+end
 
+SafeBoxFrame.onClickBack = function()
+    app.FrameManager.CloseFrame(self.frame)
 end
 
 function SafeBoxFrame.OnCloseFrame()

@@ -7,31 +7,33 @@ local AccountSelectFrame = {}
 local maxAccountCount = 6
 local accountArray = {'nice','fuck','shenshaojun','wangzhe','dingjiaming'}
 
+AccountSelectFrame.accountList = nil
+
 function AccountSelectFrame.OnOpenFrame()
     --self.accountHistory = AccountUtils.readAccountHistory()
 
     self.frame:GetObject('btn_login_other').onClick:AddListener(AccountSelectFrame.onClickLoginOther)
+    self.frame:GetObject('btn_register').onClick:AddListener(AccountSelectFrame.onClickRegister)
+    self.frame:GetObject('btn_back').onClick:AddListener(AccountSelectFrame.onClickBack)
+    self.frame:GetObject('btn_login').onClick:AddListener(AccountSelectFrame.onClickLogin)
 
-
-
-    self.frame:GetObject("btnLoginOther").onClick:AddListener(AccountSelectFrame.onClickLoginOther)
-    self.frame:GetObject("btnRegister").onClick:AddListener(AccountSelectFrame.onClickRegister)
-    self.frame:GetObject("btnBack").onClick:AddListener(AccountSelectFrame.onClickBack)
-    self.frame:GetObject("btnConfirmLogin").onClick:AddListener(AccountSelectFrame.onClickConfirmLogin)
-
-    local accountList = self.frame:GetObject('accountList')
-    if accountList then
-        accountList:Initialize()
+    self.accountList = self.frame:GetObject('svw_account_list')
+    if self.accountList then
+        self.accountList:Initialize()
         local accountCount = ((#accountArray > maxAccountCount) and {maxAccountCount} or {#accountArray})[1]
         print("accountCount", accountCount)
-        accountList:SetElementAmount(accountCount)
-        accountList.mOnListElementVisible = function(index,binder)
+        self.accountList:SetElementAmount(accountCount)
+        self.accountList.mOnListElementVisible = function(index,binder)
 
             if index >= 0 and index < accountCount then
-                binder:GetObject('accountName').text = accountArray[index + 1]
-                binder:GetObject('btnDelete').onClick:RemoveListener(AccountSelectFrame.onClickDeleteAccount)
-                binder:GetObject('btnDelete').onClick:AddListener(AccountSelectFrame.onClickDeleteAccount)
+                binder:GetObject('txt_account_name').text = accountArray[index + 1]
+                binder:GetObject('btn_delete').onClick:RemoveListener(AccountSelectFrame.onClickDeleteAccount)
+                binder:GetObject('btn_delete').onClick:AddListener(AccountSelectFrame.onClickDeleteAccount)
             end
+        end
+
+        self.accountList.mOnListElementChangeDisplay = function(elementIndex, binder, bSelected)
+            self.frame:SetObjectStatus(binder,bSelected)
         end
 
         --[[accountList.mOnListElementChangeDisplay = function(elementIndex, binder, bSelected)
@@ -44,10 +46,6 @@ AccountSelectFrame.onClickLoginOther = function()
     app.FrameManager.OpenFrameLua(app._FrameList.AccountLoginFrame)
 end
 
-AccountSelectFrame.onClickDeleteAccount = function()
-    print("click callback invoked")
-end
-
 AccountSelectFrame.onClickRegister = function()
     app.FrameManager.OpenFrameLua(app._FrameList.AccountRegisterFrame)
 end
@@ -56,8 +54,12 @@ AccountSelectFrame.onClickBack = function()
     app.FrameManager.CloseFrame(self.frame)
 end
 
-AccountSelectFrame.onClickConfirmLogin = function()
+AccountSelectFrame.onClickLogin = function()
     --TODO 回传选定的账号给LoginFrame 并登录
+end
+
+AccountSelectFrame.onClickDeleteAccount = function()
+    print("click callback invoked")
 end
 
 function AccountSelectFrame.OnCloseFrame()
