@@ -6,22 +6,20 @@
 local AccountLoginFrame = {}
 
 function AccountLoginFrame.OnOpenFrame()
-    --self.frame:GetObject("btnRegister").onClick:AddListener(AccountRegisterFrame.onClickRegister)
-    self.frame:GetObject("btnLogin").onClick:AddListener(AccountLoginFrame.onClickLogin)
-    self.frame:GetObject("btnPasswordRetire").onClick:AddListener(AccountLoginFrame.onClickPasswordRetire)
-    self.frame:GetObject("btnClose").onClick:AddListener(AccountLoginFrame.onclickClose)
-
+    self.frame:GetObject('btn_login').onClick:AddListener(AccountLoginFrame.onClickLogin)
+    self.frame:GetObject('btn_password_Retrieve').onClick:AddListener(AccountLoginFrame.onClickPasswordRetrieve)
+    self.frame:GetObject('btn_back').onClick:AddListener(AccountLoginFrame.onclickBack)
 end
 
 AccountLoginFrame.onClickLogin = function()
-    --TODO 注册逻辑实现
+    --TODO 登录逻辑实现
 end
 
-AccountLoginFrame.onClickPasswordRetire = function()
+AccountLoginFrame.onClickPasswordRetrieve = function()
     app.FrameManager.OpenFrameLua(app._FrameList.PasswordRetrieveFrame)
 end
 
-AccountLoginFrame.onclickClose = function()
+AccountLoginFrame.onclickBack = function()
     app.FrameManager.CloseFrame(self.frame)
 end
 

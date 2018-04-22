@@ -10,6 +10,10 @@ local accountArray = {'nice','fuck','shenshaojun','wangzhe','dingjiaming'}
 function AccountSelectFrame.OnOpenFrame()
     --self.accountHistory = AccountUtils.readAccountHistory()
 
+    self.frame:GetObject('btn_login_other').onClick:AddListener(AccountSelectFrame.onClickLoginOther)
+
+
+
     self.frame:GetObject("btnLoginOther").onClick:AddListener(AccountSelectFrame.onClickLoginOther)
     self.frame:GetObject("btnRegister").onClick:AddListener(AccountSelectFrame.onClickRegister)
     self.frame:GetObject("btnBack").onClick:AddListener(AccountSelectFrame.onClickBack)
@@ -36,12 +40,12 @@ function AccountSelectFrame.OnOpenFrame()
     end
 end
 
-AccountSelectFrame.onClickDeleteAccount = function()
-    print("click callback invoked")
-end
-
 AccountSelectFrame.onClickLoginOther = function()
     app.FrameManager.OpenFrameLua(app._FrameList.AccountLoginFrame)
+end
+
+AccountSelectFrame.onClickDeleteAccount = function()
+    print("click callback invoked")
 end
 
 AccountSelectFrame.onClickRegister = function()

@@ -14,9 +14,7 @@ function LobbyFrame.OnOpenFrame()
 	barFrame = app.FrameManager.OpenFrameLua(app._FrameList.BarFrame,nil,-1,attachNode)
 	self.frame:AddChildFrame(barFrame)
 
-	self.frame:GetObject('txt_gold').text = '13867486001'
-
-	UserMessage.send("UserInfoReq", {uid=Account.uid}, handler(self,self.UserInfoRep))
+	--UserMessage.send("UserInfoReq", {uid=Account.uid}, handler(self,self.UserInfoRep))
 	UserMessage.send("RoomListReq", handler(self, self.RoomListRep))
 
 	self.frame:GetObject('btn_fish_game').onClick:AddListener(LobbyFrame.onClickFishGame)

@@ -20,21 +20,21 @@ function LoginFrame.OnOpenFrame()
 		self.frame:GetObject('password').text = self.accountHistory[1].password
 	end]]--
 	--DEMO
-	self.frame:GetObject('account').text = '13867486001'
-	self.frame:GetObject('password').text = 'il15958589125'
+	self.frame:GetObject('txt_account').text = '13867486001'
 	-- 添加按钮事件
-	self.frame:GetObject('btnLogin').onClick:AddListener(LoginFrame.OnClickLogin)
-	self.frame:GetObject("btnChangeAccount").onClick:AddListener(LoginFrame.onClickChangeAccount)
+	self.frame:GetObject('btn_start_game').onClick:AddListener(LoginFrame.onClickStartGame)
+	self.frame:GetObject('btn_change_account').onClick:AddListener(LoginFrame.onClickChangeAccount)
 end
 
 -- 点击切换账号事件
 LoginFrame.onClickChangeAccount = function()
-	app.FrameManager.OpenFrameLua(app._FrameList.AccSelectFrame)
+	app.FrameManager.OpenFrameLua(app._FrameList.AccountSelectFrame)
 end
 
--- 点击登陆按钮事件
-LoginFrame.OnClickLogin = function()
-	local account, password = self.frame:GetObject("account").text,self.frame:GetObject("password").text
+LoginFrame.onClickStartGame = function()
+	print("LoginFrame.onClickStartGame")
+	local account = self.frame:GetObject('txt_account').text
+	local password = 'il15958589125'
 
 	--local err = self:checkLoginInput(account,password)
 	--[[if err then

@@ -5,7 +5,14 @@
 ---
 local BarFrame = {}
 
+local UserMessage = require(".net.UserMessage")
+
+local Player = app.data.UserData.Player
+local Account = app.data.UserData.Account
+
 function BarFrame.OnOpenFrame()
+    UserMessage.send("UserInfoReq", {uid=Account.uid}, handler(self,self.UserInfoRep))
+
     self.frame:GetObject("btn_quick_start").onClick:AddListener(BarFrame.onClickQuickStart)
     self.frame:GetObject("btn_charge").onClick:AddListener(BarFrame.onClickCharge)
     self.frame:GetObject("btn_bank").onClick:AddListener(BarFrame.onClickBank)
@@ -50,8 +57,27 @@ end
 BarFrame.onClickAddgold = function()
 end
 
-
 function BarFrame.OnCloseFrame()
+end
+
+-- ----------------------------控制代码----------------------------------------
+
+function BarFrame:UserInfoRep(msg, oldmsg)
+    dump(msg, "LobbyFrame.UserInfoRep:")
+    if msg.uid == Player.uid then
+        self:moneyChanged()
+        self:nicknameChanged()
+        --[[self:changeAvatar()
+        self.f = true]]--
+    end
+end
+
+function BarFrame:moneyChanged()
+    self.frame:GetObject('txt_gold').text = Player.gold
+end
+
+function BarFrame:nicknameChanged()
+    self.frame:GetObject('txt_name').text = Player.nickname
 end
 
 return BarFrame

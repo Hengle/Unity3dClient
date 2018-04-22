@@ -33,7 +33,6 @@ function RoomFrame.OnOpenFrame()
         end)
     end)
     end
-
 end
 
 RoomFrame.onClickRoom1 = function()
