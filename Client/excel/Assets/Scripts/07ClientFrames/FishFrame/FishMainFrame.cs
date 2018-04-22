@@ -40,8 +40,11 @@ namespace GameClient
             //InvokeManager.Instance().InvokeRepeate(this, 10.0f, _BuildFishScene4, false);
 
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_CHANGE_SCENE, _OnChangeFishScene);
+            EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED,_OnPlayerScoreChanged);
 
-            for(int i = 0; i < (int)SceneKind.SCENE_COUNT; ++i)
+            _InitPlayerScores();
+
+            for (int i = 0; i < (int)SceneKind.SCENE_COUNT; ++i)
             {
                 SceneKind _scene = (SceneKind)(i);
                 InvokeManager.Instance().Invoke(this, i * 20.0f, ()=>
@@ -169,10 +172,35 @@ namespace GameClient
             ChangeScreen();
         }
 
+        protected void _InitPlayerScores()
+        {
+            for(int i = 0; i < FishConfig.fish_player_count;++i)
+            {
+                ComUINumber uiNumber = mScriptBinder.GetScript<ComUINumber>(string.Format("num_{0}", i));
+                if (null != uiNumber)
+                {
+                    uiNumber.Value = FishDataManager.Instance().GetPlayerScore(i);
+                }
+            }
+        }
+
+        protected void _OnPlayerScoreChanged(object argv)
+        {
+            int chairId = (int)argv;
+            long score = FishDataManager.Instance().GetPlayerScore(chairId);
+
+            ComUINumber uiNumber = mScriptBinder.GetScript<ComUINumber>(string.Format("num_{0}", chairId));
+            if(null != uiNumber)
+            {
+                uiNumber.Value = score;
+            }
+        }
+
         protected override sealed void _OnCloseFrame()
 		{
             InvokeManager.Instance().RemoveInvoke(this);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_CHANGE_SCENE, _OnChangeFishScene);
+            EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, _OnPlayerScoreChanged);
             FishDataManager.Instance().sceneAudioHandle = 0;
         }
 	}

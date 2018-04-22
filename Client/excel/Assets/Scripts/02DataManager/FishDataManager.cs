@@ -34,6 +34,19 @@ namespace GameClient
         public ulong tick_count;
     };
 
+    public struct CMD_S_UserFire
+    {
+        public ulong tick_count;
+        public short chair_id;
+        public int bullet_id;
+        public float angle;
+        public bool bullet_double;
+        public int bullet_mulriple;
+        public int lock_fish_id;
+        public bool isAndroidUser;
+        public ulong userAndroidCharId;
+    };
+
     public class FishData
     {
         public int fish_id;
@@ -110,10 +123,13 @@ namespace GameClient
             }
         }
 
+        long[] m_UserUpScore = new long[FishConfig.fish_player_count];
+
         public void Clear()
         {
             mFishScene = SceneKind.SCENE_1;
             mCanSend = false;
+            System.Array.Clear(m_UserUpScore, 0, m_UserUpScore.Length);
         }
 
         public FishData Get()
@@ -398,12 +414,123 @@ namespace GameClient
             mCanSend = false;
         }
 
+        void _UpDataUpScoreHitFish(int chairID, long UpScore)
+        {
+            if(chairID >= 0 && chairID < m_UserUpScore.Length)
+            {
+                m_UserUpScore[chairID] += UpScore;
+            }
+
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, chairID);
+        }
+
+        public long GetPlayerScore(int chairID)
+        {
+            if (chairID >= 0 && chairID < m_UserUpScore.Length)
+            {
+                return m_UserUpScore[chairID];
+            }
+            return 0;
+        }
+
+        public void ExecuteCmd(CMD_S_UserFire cmd)
+        {
+            int LogicChairID = SwitchChairID(cmd.chair_id);
+            BulletKind bullet_kind;
+            if (cmd.bullet_mulriple < 100)
+            {
+                bullet_kind = cmd.bullet_double ? BulletKind.BULLET_2_DOUBLE : BulletKind.BULLET_2_NORMAL;
+            }
+            else if (cmd.bullet_mulriple >= 100 && cmd.bullet_mulriple < 1000)
+            {
+                bullet_kind = cmd.bullet_double ? BulletKind.BULLET_3_DOUBLE : BulletKind.BULLET_3_NORMAL;
+            }
+            else if (cmd.bullet_mulriple >= 1000)
+            {
+                bullet_kind = cmd.bullet_double ? BulletKind.BULLET_4_DOUBLE : BulletKind.BULLET_4_NORMAL;
+            }
+            else
+                bullet_kind = BulletKind.BULLET_2_DOUBLE;
+
+            if (cmd.chair_id != FishDataManager.Instance().chairId)
+            {
+                _UpDataUpScoreHitFish(LogicChairID, -cmd.bullet_mulriple);
+
+                float angle = cmd.angle;
+                if (FishDataManager.Instance().chairId < 3)
+                {
+                    angle -= (float)FishConfig.M_PI;
+                }
+                int lock_fish_id = cmd.lock_fish_id;
+                FishKind lock_fish_kind = FishKind.FISH_KIND_COUNT;
+
+                FishActionInterval action_fish = null;
+                //m_FishCommonLayer->UpDataBeiLv(LogicChairID, cmd.bullet_mulriple, false);
+
+                //if (!m_FishItemLayer->LockFishInfo(lock_fish_id, &lock_fish_kind, &action_fish))
+                //{
+                //    lock_fish_id = -1;
+                //    m_FishItemLayer->SetLockFish(LogicChairID, -1, FISH_KIND_COUNT, 0);
+                //}
+                //else
+                //{
+                //    m_FishItemLayer->SetLockFish(LogicChairID, lock_fish_id, lock_fish_kind, action_fish);
+                //}
+                //m_FishCommonLayer->UserShoot(LogicChairID, angle, cmd.bullet_id, cmd.isAndroidUser, cmd.userAndroidCharId,
+                //    CCGameMyData::GetManager()->GetFishGameConfig().bullet_speed[bullet_kind], lock_fish_id, action_fish);
+            }
+            else
+            {
+                //TODO:
+                //m_TimeOverCount = 120;
+            }
+        }
+
         public void CreateSwitchScene(SceneKind scene)
         {
             CMD_S_SwitchScene kCmd = new CMD_S_SwitchScene();
             kCmd.next_scene = scene;
             kCmd.tick_count = 0;
             ExecuteCmd(kCmd);
+        }
+
+        int SwitchChairID(short nCurChairId)
+        {
+            int changChairID = nCurChairId;
+            switch (chairId)
+            {
+                case 0:
+                case 1:
+                case 2:
+                    {
+                        switch (nCurChairId)
+                        {
+                            case 0: return 0;
+                            case 1: return 1;
+                            case 2: return 2;
+                            case 3: return 3;
+                            case 4: return 4;
+                            case 5: return 5;
+                        }
+                        break;
+                    }
+                case 3:
+                case 4:
+                case 5:
+                    {
+                        switch (nCurChairId)
+                        {
+                            case 0: return 3;
+                            case 1: return 4;
+                            case 2: return 5;
+                            case 3: return 0;
+                            case 4: return 1;
+                            case 5: return 2;
+                        }
+                        break;
+                    }
+            }
+            return changChairID;
         }
     }
 }

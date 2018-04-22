@@ -10,8 +10,8 @@ namespace GameClient
         public string preFixed;
         public List<Image> imgPools = new List<Image>();
         bool bInitialize = false;
-        public int iValue = 0;
-        public int Value
+        public long iValue = 0;
+        public long Value
         {
             get
             {
@@ -42,11 +42,11 @@ namespace GameClient
             }
             m_bDirty = false;
 
-            int iCurValue = iValue;
+            long iCurValue = iValue;
             for (int i = 0; i < imgPools.Count; ++i)
             {
                 imgPools[imgPools.Count - i - 1].CustomActive(i == 0 || iCurValue > 0);
-                // imgPools[imgPools.Count - i - 1].sprite = AssetLoader.Instance().LoadRes(string.Format("{0}{1:D2}", preFixed, iCurValue % 10),typeof(Sprite)).obj as Sprite;
+                imgPools[imgPools.Count - i - 1].sprite = AssetLoader.Instance().LoadRes(string.Format("{0}{1:D1}", preFixed, iCurValue % 10),typeof(Sprite)).obj as Sprite;
                 Image img = imgPools[imgPools.Count - i - 1];
                 //ETCImageLoader.LoadSprite(ref img, string.Format("{0}{1:D2}", preFixed, iCurValue % 10));
                 iCurValue /= 10;
