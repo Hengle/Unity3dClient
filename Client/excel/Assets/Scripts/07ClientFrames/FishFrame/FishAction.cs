@@ -186,6 +186,19 @@ namespace GameClient
             duration_ = kSpeed * move_points_.Count;
         }
 
+        public void Create(float fish_speed, Vector2 start, Vector2 c1, Vector2 end, FishSpeedType speedType)
+        {
+            start_ = start;
+            end_ = end;
+            control1_ = c1;
+            fish_speed_ = fish_speed;
+            position_ = start_;
+            Vector2[] points = { start, c1, end };
+            float kSpeed = FishConfig.kSpeed;
+            FishCommonLogic.BuildBezier(points,ref move_points_, fish_speed_ * kSpeed, speedType);
+            duration_ = kSpeed * move_points_.Count;
+        }
+
 
         public FishActionFishMoveBezier(float fish_speed, Vector2 start, Vector2 c1, Vector2 c2, Vector2 end)
             : base(0)
@@ -238,6 +251,40 @@ namespace GameClient
             duration_ = kSpeed * move_points_.Count;
             
         }
+        public void Create(float fish_speed, Vector2 start, Vector2 c1, Vector2 end, int fish_order, TraceType traceType, bool isTrue)
+        {
+            end_ = end;
+            control1_ = c1;
+            fish_speed_ = fish_speed;
+            position_ = start_;
+            float[] init_x = new float[2];
+            float[] init_y = new float[2];
+            init_x[1] = start.x;
+            init_y[1] = start.y;
+            float kSpeed = FishConfig.kSpeed;
+            if (init_x[1] > 0)
+            {
+                init_x[0] = init_x[1] + fish_speed * fish_order * kSpeed * 3 * 20;
+            }
+            else
+                init_x[0] = init_x[1] - fish_speed * fish_order * kSpeed * 3 * 20;
+            init_y[0] = init_y[1];
+            start_ = new Vector2(init_x[0], init_y[0]);
+            Vector2[] points =
+            { start, c1, end };
+
+            List<MovePoint> movePointTemp = new List<MovePoint>(6);
+
+            if (fish_order != 0)
+                FishCommonLogic.BuildLinear(init_x, init_y, 2, ref move_points_, fish_speed_ * kSpeed);
+
+            FishCommonLogic.BuildBezier(points,ref movePointTemp, fish_speed_ * kSpeed, FishSpeedType.FISHSPEED_LEVEL0);
+            for (int i = 0; i < movePointTemp.Count; i++)
+            {
+                move_points_.Add(movePointTemp[i]);
+            }
+            duration_ = kSpeed * move_points_.Count;
+        }
 
         public FishActionFishMoveBezier(float fish_speed, Vector2 start, Vector2 c1, Vector2 c2, Vector2 end, float diatance):base(0)
         {
@@ -275,6 +322,231 @@ namespace GameClient
         }
 
         public FishActionFishMoveBezier(float fish_speed, Vector2 start, Vector2 c1, Vector2 end, int fish_order, TraceType traceType):base(0)
+        {
+            fish_speed_ = fish_speed;
+            Vector2[] points = new Vector2[3];
+            points[0] = start;
+            points[1] = c1;
+            points[2] = end;
+            float kSpeed = FishConfig.kSpeed;
+            fish_speed *= kSpeed * 2;
+            float[] speed_change_distance = new float[2];
+            float[] speed_change_mult = new float[2];
+            speed_change_distance[0] = 0.2f;
+            speed_change_distance[1] = 0.7f;
+            speed_change_mult[0] = 1.5f;
+            speed_change_mult[1] = 3;
+            int fish_distance = 3;
+            if (traceType == TraceType.TRACE_SPPEND_CHANGE_ONE)
+            {
+                if (fish_order == 1)
+                {
+                    points[0].x -= fish_speed * fish_distance * 3;
+                    points[0].y -= fish_speed * fish_distance;
+                    points[1].x -= fish_speed * fish_distance * 3 * 2;
+                    points[1].y -= fish_speed * fish_distance * 2;
+                    speed_change_distance[0] = 0.2f;
+                    speed_change_distance[1] = 0.5f;
+                    speed_change_mult[0] = 1.5f;
+                    speed_change_mult[1] = 2.3f;
+                }
+                else if (fish_order == 2)
+                {
+                    points[0].x += fish_speed * fish_distance * 6;
+                    points[0].y -= fish_speed * fish_distance * 3;
+                    points[1].x += fish_speed * fish_distance * 6 * 2;
+                    points[1].y -= fish_speed * fish_distance * 2 * 3;
+                    speed_change_distance[0] = 0.3f;
+                    speed_change_distance[1] = 0.6f;
+                    speed_change_mult[0] = 1.5f;
+                    speed_change_mult[1] = 2.5f;
+                }
+                else if (fish_order == 3)
+                {
+                    points[0].x -= fish_speed * fish_distance * 7;
+                    points[0].y += fish_speed * fish_distance * 3;
+                    points[1].x -= fish_speed * fish_distance * 7 * 2;
+                    points[1].y += fish_speed * fish_distance * 2 * 3;
+                    speed_change_distance[0] = 0.32f;
+                    speed_change_distance[1] = 0.68f;
+                    speed_change_mult[0] = 1.5f;
+                    speed_change_mult[1] = 2.2f;
+                }
+                else if (fish_order == 4)
+                {
+                    points[0].x += fish_speed * fish_distance * 6;
+                    points[0].y += fish_speed * fish_distance * 2;
+                    points[1].x += fish_speed * fish_distance * 6 * 2;
+                    points[1].y += fish_speed * fish_distance * 2 * 2;
+                    speed_change_distance[0] = 0.3f;
+                    speed_change_distance[1] = 0.6f;
+                    speed_change_mult[0] = 2;
+                    speed_change_mult[1] = 2;
+                }
+                else if (fish_order == 5)
+                {
+                    points[0].x += fish_speed * fish_distance * 3;
+                    points[0].y += fish_speed * fish_distance * 7;
+                    points[1].x += fish_speed * fish_distance * 3 * 2;
+                    points[1].y += fish_speed * fish_distance * 7 * 2;
+                    speed_change_distance[0] = 0.35f;
+                    speed_change_distance[1] = 0.6f;
+                    speed_change_mult[0] = 2;
+                    speed_change_mult[1] = 2;
+                }
+                else if (fish_order == 6)
+                {
+                    points[0].x -= fish_speed * fish_distance * 7;
+                    points[0].y += fish_speed * fish_distance * 4;
+                    points[1].x -= fish_speed * fish_distance * 7 * 2;
+                    points[1].y += fish_speed * fish_distance * 4 * 2;
+                    speed_change_distance[0] = 0.35f;
+                    speed_change_distance[1] = 0.55f;
+                    speed_change_mult[0] = 1.5f;
+                    speed_change_mult[1] = 2.3f;
+                }
+            }
+            else if (traceType == TraceType.TRACE_SPPEND_CHANGE_TWO)
+            {
+                if (fish_order == 1)
+                {
+                    points[0].x -= fish_speed * fish_distance * 3;
+                    points[0].y -= fish_speed * fish_distance;
+                    points[1].x -= fish_speed * fish_distance * 3 * 2;
+                    points[1].y -= fish_speed * fish_distance * 2;
+                }
+                else if (fish_order == 2)
+                {
+                    points[0].x += fish_speed * fish_distance * 4;
+                    points[0].y -= fish_speed * fish_distance * 6;
+                    points[1].x += fish_speed * fish_distance * 4 * 2;
+                    points[1].y -= fish_speed * fish_distance * 6 * 2;
+                    speed_change_distance[0] = 0.25f;
+                    speed_change_distance[1] = 0.65f;
+                    speed_change_mult[0] = 1.5f;
+                    speed_change_mult[1] = 2.3f;
+                }
+                else if (fish_order == 3)
+                {
+                    points[0].x -= fish_speed * fish_distance * 3;
+                    points[0].y += fish_speed * fish_distance * 7;
+                    points[1].x -= fish_speed * fish_distance * 3 * 2;
+                    points[1].y += fish_speed * fish_distance * 7 * 2;
+                    speed_change_distance[0] = 0.1f;
+                    speed_change_distance[1] = 0.68f;
+                    speed_change_mult[0] = 1.5f;
+                    speed_change_mult[1] = 2.1f;
+                }
+                else if (fish_order == 4)
+                {
+                    points[0].x += fish_speed * fish_distance * 3;
+                    points[0].y += fish_speed * fish_distance;
+                    points[1].x += fish_speed * fish_distance * 3 * 2;
+                    points[1].y += fish_speed * fish_distance * 2;
+                    speed_change_distance[0] = 0.3f;
+                    speed_change_distance[1] = 0.6f;
+                    speed_change_mult[0] = 2;
+                    speed_change_mult[1] = 2;
+                }
+                else if (fish_order == 5)
+                {
+                    points[0].x += fish_speed * fish_distance * 5;
+                    points[0].y += fish_speed * fish_distance * 4;
+                    points[1].x += fish_speed * fish_distance * 5 * 2;
+                    points[1].y += fish_speed * fish_distance * 4 * 2;
+                    speed_change_distance[0] = 0.35f;
+                    speed_change_distance[1] = 0.6f;
+                    speed_change_mult[0] = 1.8f;
+                    speed_change_mult[1] = 1.8f;
+                }
+                else if (fish_order == 6)
+                {
+                    points[0].x -= fish_speed * fish_distance * 7;
+                    points[0].y += fish_speed * fish_distance * 4;
+                    points[1].x -= fish_speed * fish_distance * 7 * 2;
+                    points[1].y += fish_speed * fish_distance * 4 * 2;
+                    speed_change_distance[0] = 0.4f;
+                    speed_change_distance[1] = 0.6f;
+                    speed_change_mult[0] = 1.5f;
+                    speed_change_mult[1] = 2.0f;
+                }
+            }
+            else if (traceType == TraceType.TRACE_SPPEND_CHANGE_THREE)
+            {
+                if (fish_order == 1)
+                {
+                    points[0].x -= fish_speed * fish_distance * 3;
+                    points[0].y -= fish_speed * fish_distance;
+                    points[1].x -= fish_speed * fish_distance * 3 * 2;
+                    points[1].y -= fish_speed * fish_distance * 2;
+                }
+                else if (fish_order == 2)
+                {
+                    points[0].x += fish_speed * fish_distance * 4;
+                    points[0].y -= fish_speed * fish_distance * 6;
+                    points[1].x += fish_speed * fish_distance * 4 * 2;
+                    points[1].y -= fish_speed * fish_distance * 6 * 2;
+
+                    speed_change_distance[0] = 0.3f;
+                    speed_change_distance[1] = 0.6f;
+                    speed_change_mult[0] = 1.5f;
+                    speed_change_mult[1] = 3.0f;
+                }
+                else if (fish_order == 3)
+                {
+                    points[0].x -= fish_speed * fish_distance * 3;
+                    points[0].y += fish_speed * fish_distance * 7;
+                    points[1].x -= fish_speed * fish_distance * 3 * 2;
+                    points[1].y += fish_speed * fish_distance * 7 * 2;
+
+                    speed_change_distance[0] = 0.32f;
+                    speed_change_distance[1] = 0.68f;
+                    speed_change_mult[0] = 1.5f;
+                    speed_change_mult[1] = 3;
+                }
+                else if (fish_order == 4)
+                {
+                    points[0].x += fish_speed * fish_distance * 3;
+                    points[0].y += fish_speed * fish_distance;
+                    points[1].x += fish_speed * fish_distance * 3 * 2;
+                    points[1].y += fish_speed * fish_distance * 2;
+
+                    speed_change_distance[0] = 0.3f;
+                    speed_change_distance[1] = 0.6f;
+                    speed_change_mult[0] = 2;
+                    speed_change_mult[1] = 2;
+                }
+                else if (fish_order == 5)
+                {
+                    points[0].x += fish_speed * fish_distance * 5;
+                    points[0].y += fish_speed * fish_distance * 4;
+                    points[1].x += fish_speed * fish_distance * 5 * 2;
+                    points[1].y += fish_speed * fish_distance * 4 * 2;
+                    speed_change_distance[0] = 0.35f;
+                    speed_change_distance[1] = 0.6f;
+                    speed_change_mult[0] = 2;
+                    speed_change_mult[1] = 2;
+                }
+                else if (fish_order == 6)
+                {
+                    points[0].x -= fish_speed * fish_distance * 7;
+                    points[0].y += fish_speed * fish_distance * 4;
+                    points[1].x -= fish_speed * fish_distance * 7 * 2;
+                    points[1].y += fish_speed * fish_distance * 4 * 2;
+                    speed_change_distance[0] = 0.35f;
+                    speed_change_distance[1] = 0.55f;
+                    speed_change_mult[0] = 1.5f;
+                    speed_change_mult[1] = 3;
+                }
+            }
+            start_ = points[0];
+            end_ = points[2];
+            control1_ = points[1];
+            position_ = points[0];
+            FishCommonLogic.BuildBezierChangeSpeed2(points, 3, ref move_points_, fish_speed_ * kSpeed, speed_change_distance, speed_change_mult, 2);
+            duration_ = kSpeed * move_points_.Count;
+        }
+        public void Create(float fish_speed, Vector2 start, Vector2 c1, Vector2 end, int fish_order, TraceType traceType)
         {
             fish_speed_ = fish_speed;
             Vector2[] points = new Vector2[3];

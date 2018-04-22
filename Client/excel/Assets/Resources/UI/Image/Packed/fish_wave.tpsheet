@@ -1,0 +1,12 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: fish_wave.png (1024 x 1024)
+# $TexturePacker:SmartUpdate:eeb1e312e5c08329515ea5690ab1629c:bab4fc41f45f555970714c3c6e08eda4:628c08d4c976bfdca0d4545b4c717dbe$
+#
+
+wave_1;450;122;438;900;0.5296803652968036;0.5
+wave_2;2;122;446;900;0.5201793721973094;0.5

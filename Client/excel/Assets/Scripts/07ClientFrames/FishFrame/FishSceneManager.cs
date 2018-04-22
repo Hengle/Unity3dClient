@@ -21,7 +21,7 @@ namespace GameClient
         }
         public void ClearAssets()
         {
-            for(int i = 0; i < mAssets.Length; ++i)
+            for(int i = 0; i < mAssets.Length/2; ++i)
             {
                 mAssets[i,0] = null;
                 mAssets[i,1] = null;

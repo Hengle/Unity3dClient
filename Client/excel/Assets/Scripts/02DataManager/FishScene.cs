@@ -213,7 +213,7 @@ namespace GameClient
                     {
                         EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_TITLE, string.Format("加载场景...{0}/{1}", i, scene_path.Length));
                     }
-                    EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.80f + 0.15f * fRadio);
+                    EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 0.80f + 0.20f * fRadio);
                     EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_SUB_PROCESS, fRadio);
                 }
                 ++i;
@@ -221,8 +221,8 @@ namespace GameClient
             FishSceneManager.Instance().LoadAsset(scene_path_assets);
 
 
-            EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "加载场景音乐...");
-            AudioManager.Instance().PlaySound(1001);
+            //EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_TITLE, "加载场景音乐...");
+            //AudioManager.Instance().PlaySound(1001);
 
             EventManager.Instance().SendEvent(ClientEvent.CE_ON_SET_LOADING_PROCESS, 1.0f);
             yield return new WaitForEndOfFrame();
