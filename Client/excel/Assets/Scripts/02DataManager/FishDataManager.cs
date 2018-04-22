@@ -87,6 +87,16 @@ namespace GameClient
                 "UI/Image/BG/fish_bg_3.png:fish_bg_3",
                 "UI/Image/BG/fish_bg_4.png:fish_bg_4",
             };
+        protected static string[] ms_cannon_Paths = new string[]
+        {
+            "UI/Image/Packed/pck_ui_fish_main.png:paoguan",
+            "UI/Image/Packed/pck_ui_fish_main.png:paoguan",
+            "UI/Image/Packed/pck_ui_fish_main.png:paoguan",
+            "UI/Image/Packed/pck_ui_fish_main.png:paoguan",
+            "UI/Image/Packed/pck_ui_fish_main.png:paoguan",
+            "UI/Image/Packed/pck_ui_fish_main.png:paoguan",
+            "UI/Image/Packed/pck_ui_fish_main.png:paoguan",
+        };
 
         public int BgCount
         {
@@ -124,12 +134,23 @@ namespace GameClient
         }
 
         long[] m_UserUpScore = new long[FishConfig.fish_player_count];
+        int[] m_ButtleType = new int[FishConfig.fish_player_count];
+        int[] m_BeiLv = new int[FishConfig.fish_player_count];
+        bool[] m_SupperPao = new bool[FishConfig.fish_player_count];
+        int[] m_UserLockFishID = new int[FishConfig.fish_player_count];
 
         public void Clear()
         {
             mFishScene = SceneKind.SCENE_1;
             mCanSend = false;
-            System.Array.Clear(m_UserUpScore, 0, m_UserUpScore.Length);
+            for(int i = 0; i < FishConfig.fish_player_count;++i)
+            {
+                m_UserLockFishID[i] = -1;
+                m_UserUpScore[i] = 0;
+                m_ButtleType[i] = 0;
+                m_BeiLv[i] = 1;
+                m_SupperPao[i] = false;
+            }
         }
 
         public FishData Get()
@@ -177,6 +198,7 @@ namespace GameClient
         public void Initialize()
         {
             chairId = 0;
+            Clear();
         }
 
         public int chairId
@@ -424,6 +446,40 @@ namespace GameClient
             EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, chairID);
         }
 
+        void UpDataBeiLv(int chairID, int BeiLv, bool Runaction)
+        {
+            if(chairID < 0 || chairID >= m_ButtleType.Length)
+            {
+                return;
+            }
+
+            int NowType = m_ButtleType[chairID];
+            if (Runaction)
+            {
+                AudioManager.Instance().PlaySound(2104);//ChangeWeapon.ogg
+            }
+
+            m_BeiLv[chairID] = BeiLv;
+            if (m_BeiLv[chairID] < 100)
+            {
+                m_ButtleType[chairID] = 2;
+            }
+            else if (m_BeiLv[chairID] >= 100 && m_BeiLv[chairID] < 1000)
+            {
+                m_ButtleType[chairID] = 3;
+            }
+            else
+            {
+                m_ButtleType[chairID] = 4;
+            }
+            if (m_SupperPao[chairID])
+            {
+                m_ButtleType[chairID] = m_ButtleType[chairID] + 3;
+            }
+
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, chairID);
+        }
+
         public long GetPlayerScore(int chairID)
         {
             if (chairID >= 0 && chairID < m_UserUpScore.Length)
@@ -431,6 +487,48 @@ namespace GameClient
                 return m_UserUpScore[chairID];
             }
             return 0;
+        }
+
+        public int GetBulletType(int chairID)
+        {
+            if (chairID >= 0 && chairID < m_ButtleType.Length)
+            {
+                return m_ButtleType[chairID];
+            }
+            return 0;
+        }
+
+        public int GetBulletPower(int chairID)
+        {
+            if (chairID >= 0 && chairID < m_BeiLv.Length)
+            {
+                return m_BeiLv[chairID];
+            }
+            return 0;
+        }
+        public string GetCannonPath(int cannonId)
+        {
+            if(cannonId >= 1 && cannonId <= ms_cannon_Paths.Length)
+            {
+                return ms_cannon_Paths[cannonId - 1];
+            }
+            return ms_cannon_Paths[0];
+        }
+        public int GetLockedFishId(int chairID)
+        {
+            if(chairID >= 0 && chairID < m_UserLockFishID.Length)
+            {
+                return m_UserLockFishID[chairID];
+            }
+            return -1;
+        }
+
+        public void SetLockedFishId(int chairID,int fishId)
+        {
+            if (chairID >= 0 && chairID < m_UserLockFishID.Length)
+            {
+                m_UserLockFishID[chairID] = fishId;
+            }
         }
 
         public void ExecuteCmd(CMD_S_UserFire cmd)
@@ -461,21 +559,10 @@ namespace GameClient
                 {
                     angle -= (float)FishConfig.M_PI;
                 }
-                int lock_fish_id = cmd.lock_fish_id;
-                FishKind lock_fish_kind = FishKind.FISH_KIND_COUNT;
 
-                FishActionInterval action_fish = null;
-                //m_FishCommonLayer->UpDataBeiLv(LogicChairID, cmd.bullet_mulriple, false);
+                UpDataBeiLv(LogicChairID, cmd.bullet_mulriple, false);
 
-                //if (!m_FishItemLayer->LockFishInfo(lock_fish_id, &lock_fish_kind, &action_fish))
-                //{
-                //    lock_fish_id = -1;
-                //    m_FishItemLayer->SetLockFish(LogicChairID, -1, FISH_KIND_COUNT, 0);
-                //}
-                //else
-                //{
-                //    m_FishItemLayer->SetLockFish(LogicChairID, lock_fish_id, lock_fish_kind, action_fish);
-                //}
+                EventManager.Instance().SendEvent(ClientEvent.CE_FISH_LOCK_FISH, new object[] { LogicChairID, cmd.lock_fish_id });
                 //m_FishCommonLayer->UserShoot(LogicChairID, angle, cmd.bullet_id, cmd.isAndroidUser, cmd.userAndroidCharId,
                 //    CCGameMyData::GetManager()->GetFishGameConfig().bullet_speed[bullet_kind], lock_fish_id, action_fish);
             }

@@ -102,6 +102,7 @@ namespace GameClient
 			GameObject.DontDestroyOnLoad (this);
             Application.targetFrameRate = 30;
 
+            FishDataManager.Instance().Initialize();
             //initialize global data
             if (!GlobalDataManager.Instance().Initialize(this))
             {
