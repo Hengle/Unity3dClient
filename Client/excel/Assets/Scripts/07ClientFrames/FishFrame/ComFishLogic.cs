@@ -149,6 +149,21 @@ namespace GameClient
 
         }
 
+        public void RecycleAllFish()
+        {
+            for(int i = 0; i < _actived.Count; ++i)
+            {
+                if(null != _actived[i])
+                {
+                    _actived[i].OnRecycle(recycleRoot);
+                    FishAction.ThrowActionToPoll(_actived[i].moveAction);
+                    _actived[i].moveAction = null;
+                    _recycles.Add(_actived[i]);
+                    _actived.RemoveAt(i--);
+                }
+            }
+        }
+
         // Update is called once per frame
         void Update()
         {

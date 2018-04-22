@@ -24,6 +24,7 @@ namespace GameClient
         public const double M_2_SQRTPI = 1.12837916709551257390;   // 2/sqrt(pi)
         public const double M_SQRT2 = 1.41421356237309504880;   // sqrt(2)
         public const double M_SQRT1_2 = 0.707106781186547524401;  // 1/sqrt(2)
+        public const int fish_player_count = 6;
     }
 
     class FishCommonLogic

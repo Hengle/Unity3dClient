@@ -20,6 +20,8 @@ namespace GameClient
         CE_CHANGE_SCENE,
 
         CE_CREATE_FISH,
+        CE_FISH_CHANGE_SCENE,
+        CE_FISH_PLAYER_UP_SCORE_CHANGED,
 
         CE_LUA_EVENT_START = 64,
         CE_FIXED_END = 128,
