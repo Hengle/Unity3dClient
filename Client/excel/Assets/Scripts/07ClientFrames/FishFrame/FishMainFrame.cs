@@ -41,8 +41,11 @@ namespace GameClient
 
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_CHANGE_SCENE, _OnChangeFishScene);
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED,_OnPlayerScoreChanged);
+            EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, _OnPlayerCannonChanged);
+            EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_LOCK_FISH, _OnLockFish);
 
             _InitPlayerScores();
+            _InitBeiLv();
 
             for (int i = 0; i < (int)SceneKind.SCENE_COUNT; ++i)
             {
@@ -184,6 +187,14 @@ namespace GameClient
             }
         }
 
+        protected void _InitBeiLv()
+        {
+            for (int i = 0; i < FishConfig.fish_player_count; ++i)
+            {
+                SetText("bblv_" + i, FishDataManager.Instance().GetBulletPower(i).ToString());
+            }
+        }
+
         protected void _OnPlayerScoreChanged(object argv)
         {
             int chairId = (int)argv;
@@ -196,11 +207,46 @@ namespace GameClient
             }
         }
 
+        protected void _OnPlayerCannonChanged(object argv)
+        {
+            int chairId = (int)argv;
+            int beiLv = FishDataManager.Instance().GetBulletPower(chairId);
+            int cannonId = FishDataManager.Instance().GetBulletType(chairId);
+
+            SetText("bblv_" + chairId, beiLv.ToString());
+            SetImage("cannon_" + chairId,FishDataManager.Instance().GetCannonPath(cannonId));
+        }
+
+        protected void _OnLockFish(object argv)
+        {
+            object[] argvs = argv as object[];
+            int LogicChairID = (int)argvs[0];
+            int lock_fish_id = (int)argvs[1];
+            FishKind lock_fish_kind = FishKind.FISH_KIND_COUNT;
+            FishActionInterval action_fish = null;
+            if(null == mfish_logic)
+            {
+                return;
+            }
+
+            if (mfish_logic.LockFishInfo(lock_fish_id, ref lock_fish_kind, ref action_fish))
+            {
+                lock_fish_id = -1;
+                mfish_logic.SetLockFish(LogicChairID, -1, FishKind.FISH_KIND_COUNT, null);
+            }
+            else
+            {
+                mfish_logic.SetLockFish(LogicChairID, lock_fish_id, lock_fish_kind, action_fish);
+            }
+        }
+
         protected override sealed void _OnCloseFrame()
 		{
             InvokeManager.Instance().RemoveInvoke(this);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_CHANGE_SCENE, _OnChangeFishScene);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, _OnPlayerScoreChanged);
+            EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, _OnPlayerCannonChanged);
+            EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_LOCK_FISH, _OnLockFish);
             FishDataManager.Instance().sceneAudioHandle = 0;
         }
 	}

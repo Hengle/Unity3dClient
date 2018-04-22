@@ -15,6 +15,7 @@ namespace GameClient
             public ulong guid;
             public int resId;
 
+            public int status;
             public int tag;
             public float elapsed;
             public ulong tick_count;
@@ -22,6 +23,32 @@ namespace GameClient
             public FishSprite fishSprite;
             public ProtoTable.FishTable fishItem;
             public FishActionFishMove moveAction;
+
+            public bool isVisible()
+            {
+                return null != fishSprite && null != fishSprite.self && fishSprite.self.activeSelf;
+            }
+
+            public bool inScreen()
+            {
+                if(null != fishSprite && null != fishSprite.self)
+                {
+                    RectTransform rect = fishSprite.self.transform as RectTransform;
+                    if(null != rect)
+                    {
+                        if(rect.anchoredPosition.x <= -rect.sizeDelta.x || rect.anchoredPosition.x > FishConfig.kScreenWidth)
+                        {
+                            return false;
+                        }
+
+                        if(rect.anchoredPosition.y <= -rect.sizeDelta.y || rect.anchoredPosition.y > FishConfig.kScreenHeight)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return false;
+            }
 
             public void OnCreate(GameObject root)
             {
@@ -162,6 +189,94 @@ namespace GameClient
                     _actived.RemoveAt(i--);
                 }
             }
+        }
+
+        public bool LockFishInfo(int lock_fish_id,ref FishKind lock_fish_kind,ref FishActionInterval action_fish)
+        {
+            for(int i = 0; i < _actived.Count; ++i)
+            {
+                var fishData = _actived[i];
+                if(null != fishData || null == fishData.fishItem)
+                {
+                    if((int)fishData.guid == lock_fish_id)
+                    {
+                        if(fishData.isVisible())
+                        {
+                            return false;
+                        }
+                        if(1 == fishData.status)
+                        {
+                            return false;
+                        }
+                        if(2 == fishData.status)
+                        {
+                            return false;
+                        }
+                        if(!fishData.inScreen())
+                        {
+                            return false;
+                        }
+
+                        lock_fish_kind = (FishKind)(fishData.fishItem.ID - 1);
+                        action_fish = fishData.moveAction;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public void SetLockFish(int ChairID, int Fishid, FishKind fishkind, FishActionInterval action)
+        {
+            if (action == null)
+            {
+                Fishid = -1;
+            }
+
+            if (Fishid == FishDataManager.Instance().GetLockedFishId(ChairID))
+            {
+                return;
+            }
+
+            /*
+            this->removeChildByTag(9000 + ChairID);
+            for (int j = 0; j < 20; ++j)
+            {
+                m_FishLockLinespr[ChairID][j]->setPosition(Vec2(USERPOINT[ChairID][0], USERPOINT[ChairID][1]));
+                m_FishLockLinespr[ChairID][j]->setVisible(false);
+            }
+            */
+
+            FishDataManager.Instance().SetLockedFishId(ChairID, Fishid);
+
+            //CCFishCommonLayer* fishcommonlayer = (CCFishCommonLayer*)this->getParent()->getChildByTag(998);
+
+            //fishcommonlayer->LockFishImg(ChairID, Fishid, fishkind);
+            //if (Fishid == -1)
+            //{
+            //    action_lock_fish_[ChairID] = 0;
+            //    action_lock_line_[ChairID] = 0;
+            //    this->removeChildByTag(9000 + ChairID, true);
+            //    return;
+            //}
+            //action_lock_fish_[ChairID] = action;
+            //if (action_lock_fish_[ChairID] != 0)
+            //{
+            //    hgeVector fish_pos = action_lock_fish_[ChairID]->position();
+            //    hgeVector fish_target_pos = static_cast<FishActionFishMove*>(action_lock_fish_[ChairID])->FishMoveTo(0.5f);
+            //    action_lock_line_[ChairID] = new FishActionMoveTo(0.5f, hgeVector(USERPOINT[ChairID][0], USERPOINT[ChairID][1]), fish_target_pos);
+
+            //}
+
+            //m_UserLockFishKind[ChairID] = fishkind;
+            /////////////////////////////
+            //char string[128] = { 0 };
+            //sprintf(string, "lock%d.png", ChairID + 1);
+            //SpriteFrameCache* cache = SpriteFrameCache::getInstance();
+            //Sprite* m_SuoSprite = Sprite::createWithSpriteFrame(cache->getSpriteFrameByName(string));
+            //m_SuoSprite->setPosition(Vec2(100, 100));
+            //m_SuoSprite->setTag(9000 + ChairID);
+            //this->addChild(m_SuoSprite, 10000);
         }
 
         // Update is called once per frame

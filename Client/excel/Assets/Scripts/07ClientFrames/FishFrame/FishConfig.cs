@@ -25,6 +25,15 @@ namespace GameClient
         public const double M_SQRT2 = 1.41421356237309504880;   // sqrt(2)
         public const double M_SQRT1_2 = 0.707106781186547524401;  // 1/sqrt(2)
         public const int fish_player_count = 6;
+        //玩家坐标
+        public Vector2[] USERPOINT = new Vector2[]{
+                new Vector2(1039.5f, kScreenHeight - 730.0f),
+                new Vector2(608.5f, kScreenHeight - 730.0f),
+                new Vector2(177.5f, kScreenHeight - 730.0f ),
+                new Vector2(326.5f, kScreenHeight - 38.0f),
+                new Vector2(757.5f, kScreenHeight - 38.0f),
+                new Vector2(1188.5f, kScreenHeight - 38.0f)
+        };
     }
 
     class FishCommonLogic
