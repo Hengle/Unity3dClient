@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 15c391d305389dd49bb766afe63febef
-timeCreated: 1523779566
+timeCreated: 1524388575
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -104,8 +104,8 @@ TextureImporter:
       name: btn_zjm_agent
       rect:
         serializedVersion: 2
-        x: 338
-        y: 102
+        x: 2
+        y: 2
         width: 156
         height: 81
       alignment: 9
@@ -117,8 +117,8 @@ TextureImporter:
       name: btn_zjm_announcement
       rect:
         serializedVersion: 2
-        x: 164
-        y: 4
+        x: 186
+        y: 116
         width: 160
         height: 77
       alignment: 9
@@ -130,8 +130,8 @@ TextureImporter:
       name: btn_zjm_bank
       rect:
         serializedVersion: 2
-        x: 2
-        y: 2
+        x: 164
+        y: 195
         width: 160
         height: 79
       alignment: 9
@@ -143,8 +143,8 @@ TextureImporter:
       name: btn_zjm_begin
       rect:
         serializedVersion: 2
-        x: 2
-        y: 83
+        x: 283
+        y: 887
         width: 334
         height: 92
       alignment: 0
@@ -156,8 +156,8 @@ TextureImporter:
       name: btn_zjm_duihuan
       rect:
         serializedVersion: 2
-        x: 283
-        y: 286
+        x: 418
+        y: 739
         width: 160
         height: 73
       alignment: 9
@@ -169,7 +169,7 @@ TextureImporter:
       name: btn_zjm_game_1
       rect:
         serializedVersion: 2
-        x: 2
+        x: 625
         y: 513
         width: 390
         height: 509
@@ -196,7 +196,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 283
-        y: 361
+        y: 811
         width: 53
         height: 74
       alignment: 9
@@ -208,8 +208,8 @@ TextureImporter:
       name: btn_zjm_public_num
       rect:
         serializedVersion: 2
-        x: 338
-        y: 363
+        x: 348
+        y: 813
         width: 67
         height: 72
       alignment: 9
@@ -234,8 +234,8 @@ TextureImporter:
       name: btn_zjm_tx_gold_add
       rect:
         serializedVersion: 2
-        x: 348
-        y: 214
+        x: 209
+        y: 853
         width: 71
         height: 70
       alignment: 9
@@ -247,8 +247,8 @@ TextureImporter:
       name: btn_zjm_tx_kuang
       rect:
         serializedVersion: 2
-        x: 164
-        y: 184
+        x: 2
+        y: 85
         width: 91
         height: 90
       alignment: 9
@@ -260,8 +260,8 @@ TextureImporter:
       name: btn_zjm_tx_kuang_bg
       rect:
         serializedVersion: 2
-        x: 283
-        y: 437
+        x: 341
+        y: 40
         width: 75
         height: 74
       alignment: 0
@@ -273,8 +273,8 @@ TextureImporter:
       name: btn_zjm_vip
       rect:
         serializedVersion: 2
-        x: 407
-        y: 367
+        x: 418
+        y: 666
         width: 160
         height: 71
       alignment: 9
@@ -286,8 +286,8 @@ TextureImporter:
       name: btn_zjm_vip_1
       rect:
         serializedVersion: 2
-        x: 403
-        y: 20
+        x: 160
+        y: 4
         width: 102
         height: 80
       alignment: 0
@@ -299,8 +299,8 @@ TextureImporter:
       name: img_zjm_broadcast
       rect:
         serializedVersion: 2
-        x: 569
-        y: 397
+        x: 2
+        y: 981
         width: 621
         height: 41
       alignment: 9
@@ -312,21 +312,34 @@ TextureImporter:
       name: img_zjm_di_kuang_1
       rect:
         serializedVersion: 2
-        x: 360
-        y: 440
-        width: 1366
-        height: 71
+        x: 2
+        y: 848
+        width: 205
+        height: 75
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 48, y: 14, z: 22, w: 16}
+      border: {x: 32, y: 0, z: 141, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_zjm_di_kuang_2
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 814
+        width: 162
+        height: 71
+      alignment: 9
+      pivot: {x: 0.5, y: 0.471831}
+      border: {x: 29, y: 0, z: 46, w: 0}
       outline: []
       tessellationDetail: -1
     - serializedVersion: 2
       name: img_zjm_ding_kuang
       rect:
         serializedVersion: 2
-        x: 257
-        y: 185
+        x: 95
+        y: 86
         width: 89
         height: 89
       alignment: 0
@@ -338,8 +351,8 @@ TextureImporter:
       name: img_zjm_gold
       rect:
         serializedVersion: 2
-        x: 326
-        y: 5
+        x: 264
+        y: 38
         width: 75
         height: 76
       alignment: 9
@@ -351,8 +364,8 @@ TextureImporter:
       name: img_zjm_gold_kuang
       rect:
         serializedVersion: 2
-        x: 421
-        y: 217
+        x: 326
+        y: 742
         width: 83
         height: 67
       alignment: 0
@@ -364,8 +377,8 @@ TextureImporter:
       name: img_zjm_loudspeaker
       rect:
         serializedVersion: 2
-        x: 421
-        y: 187
+        x: 240
+        y: 951
         width: 34
         height: 28
       alignment: 0
@@ -377,8 +390,8 @@ TextureImporter:
       name: img_zjm_tx_name_bg
       rect:
         serializedVersion: 2
-        x: 445
-        y: 311
+        x: 2
+        y: 925
         width: 236
         height: 54
       alignment: 0

@@ -19,6 +19,8 @@ app._FrameList = {
     PasswordRetrieveFrame = 11,
     RoomFrame = 12,
     BarFrame = 13,
+    SafeBoxFrame = 14,
+    ExchangeFrame = 15,
 }
 
 app._ErrorCode = {

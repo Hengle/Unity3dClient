@@ -18,7 +18,7 @@ local barFrame = nil
 function RoomFrame.OnOpenFrame()
     local attachNode = self.frame:GetObject('pnl_bar_frame')
     barFrame = app.FrameManager.OpenFrameLua(app._FrameList.BarFrame,nil,-1,attachNode)
-    self.frame:AddChildFrame(barFrame);
+    self.frame:AddChildFrame(barFrame)
 
     local gameConfig = RoomConfig:getGameConfig(Gameid_fish)
     dump(gameConfig, "RoomFrame.OnOpenFrame:")

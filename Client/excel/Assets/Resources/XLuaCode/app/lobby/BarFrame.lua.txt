@@ -25,9 +25,11 @@ BarFrame.onClickCharge = function()
 end
 
 BarFrame.onClickBank = function()
+    app.FrameManager.OpenFrameLua(app._FrameList.SafeBoxFrame)
 end
 
 BarFrame.onClickExchange = function()
+    app.FrameManager.OpenFrameLua(app._FrameList.ExchangeFrame)
 end
 
 BarFrame.onClickAnnounce = function()

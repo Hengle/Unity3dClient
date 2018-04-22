@@ -7,20 +7,18 @@ local roomMgr = require(".app.room.RoomManager")
 local Player = app.data.UserData.Player
 local Account = app.data.UserData.Account
 
+local barFrame = nil
+
 function LobbyFrame.OnOpenFrame()
+	local attachNode = self.frame:GetObject('pnl_bar_frame')
+	barFrame = app.FrameManager.OpenFrameLua(app._FrameList.BarFrame,nil,-1,attachNode)
+	self.frame:AddChildFrame(barFrame)
+
+	self.frame:GetObject('txt_gold').text = '13867486001'
+
 	UserMessage.send("UserInfoReq", {uid=Account.uid}, handler(self,self.UserInfoRep))
 	UserMessage.send("RoomListReq", handler(self, self.RoomListRep))
 
-	self.frame:GetObject("btn_quick_start").onClick:AddListener(LobbyFrame.onClickQuickStart)
-	self.frame:GetObject("btn_charge").onClick:AddListener(LobbyFrame.onClickCharge)
-	self.frame:GetObject("btn_bank").onClick:AddListener(LobbyFrame.onClickBank)
-	self.frame:GetObject("btn_exchange").onClick:AddListener(LobbyFrame.onClickExchange)
-	self.frame:GetObject("btn_announce").onClick:AddListener(LobbyFrame.onClickAnnounce)
-	self.frame:GetObject("btn_club").onClick:AddListener(LobbyFrame.onClickClub)
-	self.frame:GetObject("btn_agent").onClick:AddListener(LobbyFrame.onClickAgent)
-	self.frame:GetObject("btn_setting").onClick:AddListener(LobbyFrame.onClickSetting)
-	self.frame:GetObject("btn_subscription").onClick:AddListener(LobbyFrame.onClickSubscription)
-	self.frame:GetObject("btn_addgold").onClick:AddListener(LobbyFrame.onClickAddgold)
 	self.frame:GetObject('btn_fish_game').onClick:AddListener(LobbyFrame.onClickFishGame)
 end
 
@@ -28,37 +26,8 @@ LobbyFrame.onClickFishGame = function()
 	app.FrameManager.OpenFrameLua(app._FrameList.RoomFrame)
 end
 
-LobbyFrame.onClickQuickStart = function()
-end
-
-LobbyFrame.onClickCharge = function()
-end
-
-LobbyFrame.onClickBank = function()
-end
-
-LobbyFrame.onClickExchange = function()
-end
-
-LobbyFrame.onClickAnnounce = function()
-end
-
-LobbyFrame.onClickClub = function()
-end
-
-LobbyFrame.onClickAgent = function()
-end
-
-LobbyFrame.onClickSetting = function()
-end
-
-LobbyFrame.onClickSubscription = function()
-end
-
-LobbyFrame.onClickAddgold = function()
-end
-
 function LobbyFrame.OnCloseFrame()
+	barFrame = nil
 end
 
 -- ----------------------------控制代码----------------------------------------
