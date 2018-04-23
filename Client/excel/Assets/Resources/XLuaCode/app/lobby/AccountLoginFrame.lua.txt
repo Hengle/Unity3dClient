@@ -5,21 +5,38 @@
 ---
 local AccountLoginFrame = {}
 
+local GateNet = require(".net.GateNet")
+local web = require(".net.web")
+local UserMessage = require(".net.UserMessage")
+
+local roomMgr = require(".app.room.RoomManager")
+
+local Account = app.data.UserData.Account
+local AccountUtils = app.util.AccountUtils
+local json = app.util.JsonUtils
+
 function AccountLoginFrame.OnOpenFrame()
     self.frame:GetObject('btn_login').onClick:AddListener(AccountLoginFrame.onClickLogin)
     self.frame:GetObject('btn_password_Retrieve').onClick:AddListener(AccountLoginFrame.onClickPasswordRetrieve)
-    self.frame:GetObject('btn_back').onClick:AddListener(AccountLoginFrame.onclickBack)
+    self.frame:GetObject('btn_close').onClick:AddListener(AccountLoginFrame.onClickClose)
 end
 
 AccountLoginFrame.onClickLogin = function()
-    --TODO 登录逻辑实现
+    local phoneNumber = self.frame:GetObject('txt_phone_number').text
+    local phoneNumber = self.frame:GetObject('txt_password').text
+
+    self:login({
+        channel = "game",
+        account = account,
+        password = password,
+    })
 end
 
 AccountLoginFrame.onClickPasswordRetrieve = function()
     app.FrameManager.OpenFrameLua(app._FrameList.PasswordRetrieveFrame)
 end
 
-AccountLoginFrame.onclickBack = function()
+AccountLoginFrame.onClickClose = function()
     app.FrameManager.CloseFrame(self.frame)
 end
 
@@ -28,5 +45,95 @@ function AccountLoginFrame.OnCloseFrame()
 end
 
 -- ----------------------------------------控制代码--------------------------------------------------
+function AccountLoginFrame:login(params)
+
+    params.cmd = "login"
+    self:auth(params)
+end
+
+function AccountLoginFrame.loginCallback(err,res)
+    if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
+        CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
+
+        local resTable = web.FromResData(res)
+        dump(resTable, "AccountLoginFrame.loginCallback resTable:")
+
+        Account.uid = tonumber(resTable.uid)
+        Account.token = resTable.token--[[crypt.base64decode()]]--
+        Account.secret = resTable.secret
+
+        --全局保存
+        --app.userdata.Account.uid = resTable.uid
+        --app.userdata.Account.token = resTable.token
+        -- 连接gate
+        GateNet.connect(function(ok, msg)
+            if not ok then
+                --ProgressLayer.stop()
+                --ErrorLayer.new(app.lang.gate_error..(msg or ""), errorLayerCallBack):addTo(self)
+                print("connect failed:", (msg or ""))
+                return
+            end
+            -- set jpush tag and alias
+            --util.setJPushTagAndAlias(params.channel, params.account)
+            print("UserMessage.send(UserInfoReq)")
+            UserMessage.send("UserInfoReq", {uid=resTable.uid})
+
+            -- 断线重连
+            UserMessage.send("CheckReconnectReq", function(msg)
+                if msg.roomid == 0 then
+                    app.FrameManager.OpenFrameLua(app._FrameList.LobbyFrame)
+                else
+                    if msg.private then
+                        print("reconnect to private game")
+                        UserMessage.EnterPrivateReq(msg.tableid)
+                    else
+                        print("reconnect to normal game")
+                        UserMessage.send("RoomListReq", function()
+                            roomMgr:init(math.floor(msg.roomid/100), msg.roomid)
+                            UserMessage.send("EnterRoomReq", {roomid=msg.roomid}, function(m)
+                                roomMgr:EnterRoomRep(m)
+                            end)
+                        end)
+                    end
+                end
+            end)
+        end)
+    else
+        CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
+    end
+end
+
+function AccountLoginFrame:auth(params)
+    local function getServerTimeCallback(err,res)
+        if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
+            CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
+
+            --登陆服务器
+            params.client_tag = tostring(CLIENT_TAG)
+            params.platform = 'android'
+            local msg = json.encode(params)
+            --regMsg = CS.Common.DESEncrypt.MyEncode(regMsg,msg)
+            --regMsg = numeric.tohex(regMsg)
+
+            Account.account = params.account
+            Account.password = params.password
+            Account.channel = params.channel
+
+            local postValues =
+            {
+                time = res,
+                content = msg,
+            }
+            local postStr = web.ToPostData(postValues)
+            print("HTTP postStr"..postStr)
+            web.httpRequest(self.loginCallback, LOGIN_SERVER, "/login", "POST", postStr)
+        else
+            CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
+        end
+    end
+
+    --拉取服务器时间
+    web.getServerTime(getServerTimeCallback,LOGIN_SERVER)
+end
 
 return AccountLoginFrame

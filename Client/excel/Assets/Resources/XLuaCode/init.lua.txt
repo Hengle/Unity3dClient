@@ -9,7 +9,7 @@ app.Debugger = CS.UnityEngine.Debug
 
 -- ------------------CSharp Deploy---------------------------------------------
 app.FrameManager = CS.GameClient.UIFrameLua
-app.MessageBoxFrame = CS.GameClient.MessageBoxFrame
+app.MessageBox = CS.GameClient.MessageBoxFrame
 app.Logger = CS.GameClient.LogManager.Instance()
 app.FileManager = CS.GameClient.LocalSettingManager
 

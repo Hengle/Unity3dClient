@@ -10,9 +10,9 @@ local numeric=require('.utils.NumericUtils')
 local AccountRegisterFrame = {}
 
 function AccountRegisterFrame.OnOpenFrame()
-    self.frame:GetObject("btnRegister").onClick:AddListener(AccountRegisterFrame.onClickRegister)
-    self.frame:GetObject("btnClose").onClick:AddListener(AccountRegisterFrame.onClickClose)
-    self.frame:GetObject("btnGetVerifyCode").onClick:AddListener(AccountRegisterFrame.onClickGetVerifyCode)
+    self.frame:GetObject('btn_close').onClick:AddListener(AccountRegisterFrame.onClickClose)
+    self.frame:GetObject('btn_register').onClick:AddListener(AccountRegisterFrame.onClickRegister)
+    self.frame:GetObject('btn_get_verify_code').onClick:AddListener(AccountRegisterFrame.onClickGetVerifyCode)
 end
 
 AccountRegisterFrame.onClickClose = function()
@@ -20,55 +20,54 @@ AccountRegisterFrame.onClickClose = function()
 end
 
 AccountRegisterFrame.onClickRegister = function()
-    --TODO 注册逻辑实现
-    local phone = self.frame:GetObject("phoneNumber").text
-    local password = self.frame:GetObject("password").text
-    local repeat_password = self.frame:GetObject("repeat_password").text
-    local verifyCode = self.frame:GetObject("verifyCode").text
+    local phoneNumber = self.frame:GetObject("txt_phone_number").text
+    local password = self.frame:GetObject("txt_password").text
+    local passwordRepeat = self.frame:GetObject("txt_password_repeat").text
+    local verifyCode = self.frame:GetObject("txt_verify_code").text
 
     if DEVELOPMENT then
-        phone = '13867486002'
+        phoneNumber = '13867486002'
         password = 'il15958589125'
-        repeat_password = password
-        CS.UnityEngine.Debug.LogError(phone)
-        CS.UnityEngine.Debug.LogError(password)
-        CS.UnityEngine.Debug.LogError(repeat_password)
-        CS.UnityEngine.Debug.LogError(verifyCode)
+        passwordRepeat = password
+        app.Debugger.LogError(phoneNumber)
+        app.Debugger.LogError(password)
+        app.Debugger.LogError(passwordRepeat)
+        app.Debugger.LogError(verifyCode)
     end
 
-    local err = self:checkRegisterInput(phone, password, verifyCode)
+    local err = self:checkRegisterInput(phoneNumber, password, passwordRepeat, verifyCode)
 
     if err then
-        CS.UnityEngine.Debug.Log('error=' .. err)
+        app.Debugger.Log('error=' .. err)
         return
     end
 
     self:auth({
         cmd = "register",
         channel = "game",
-        account = phone,
+        account = phoneNumber,
         password = password,
         --invite_code = verifyCode,
-        phone = phone,
+        phone = phoneNumber,
         reg_code = verifyCode,
         reg_id = ""
     })
 end
 
-function AccountRegisterFrame:checkRegisterInput(account, password, inviteCode)
+function AccountRegisterFrame:checkRegisterInput(account, password, passwordRepeat, verifyCode)
     local err
     if not account or #account == 0 then
         err = app._ErrorCode.account_nil
-    elseif #account < 6 or #account > 20 or string.find(account, "[%W]") then
+    elseif #account < 6 or #account > 20 or string.find(account, "[%W%.%-_]") then
         err = app._ErrorCode.account_error
     elseif not password or #password == 0 then
         err = app._ErrorCode.password_nil
-    elseif #password < 6 or #password > 20 or string.find(password, "[%W]") then
+    elseif #password < 6 or #password > 20 or string.find(password, "[%W%.%-_]") then
         err = app._ErrorCode.password_error
-        --[[
-    elseif inviteCode and (#inviteCode == 0 or #inviteCode > 10) then
-        err = app._ErrorCode.invite_error
-        --]]
+    elseif password ~= passwordRepeat then
+        err = app._ErrorCode.password_repeat_error
+    elseif verifyCode and (#verifyCode == 0 or #verifyCode > 6) then
+        err = app._ErrorCode.reg_code_error
     end
     return err
 end
@@ -76,15 +75,15 @@ end
 function AccountRegisterFrame:auth(params)
     local function loginCallback(err,res)
         if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
-            CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
+            app.Debugger.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
         else
-            CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
+            app.Debugger.LogError('['..tostring(err)..']:'..res)
         end
     end
 
     local function getServerTimeCallback(err,res)
         if CS.NetWork.HttpRequestError.HRE_SUCCEED == err then
-            CS.UnityEngine.Debug.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
+            app.Debugger.Log('<color=#00ff00>['..tostring(err)..']:'..res..'</color>')
             --登陆服务器
             params.client_tag = tostring(CLIENT_TAG)
             params.platform = 'android'
@@ -101,7 +100,7 @@ function AccountRegisterFrame:auth(params)
 
             web.httpRequest(loginCallback,LOGIN_SERVER, "/login", "POST", postStr)
         else
-            CS.UnityEngine.Debug.LogError('['..tostring(err)..']:'..res)
+            app.Debugger.LogError('['..tostring(err)..']:'..res)
         end
     end
 
@@ -114,7 +113,8 @@ AccountRegisterFrame.onClickGetVerifyCode = function()
 end
 
 function AccountRegisterFrame.OnCloseFrame()
-
 end
+
+-- ----------------------------------------控制代码--------------------------------------------------
 
 return AccountRegisterFrame
