@@ -59,7 +59,7 @@ namespace GameClient
         public bool m_bIsBadButtle;
         public float bounding_radius_;
         public int bullet_mulriple;
-        FishAction action_bullet_move_;
+        public FishAction action_bullet_move_;
         public void ResetBulletActionMove(FishAction action)
         {
             if (null != action_bullet_move_)

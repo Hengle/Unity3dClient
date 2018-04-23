@@ -14,6 +14,7 @@ namespace GameClient
 			typeof(SoundTable),
             typeof(CommonMessageTable),
             typeof(SceneTable),
+            typeof(BulletTable),
         };
 		public static Type[] Values
 		{

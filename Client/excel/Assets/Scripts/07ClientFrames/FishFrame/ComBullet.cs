@@ -72,9 +72,35 @@ namespace GameClient
         public void SetData(BulletData data)
         {
             _data = data;
+            if(null != bulletItem)
+            {
+                _data.bullet_speed_ = bulletItem.Speed * 0.001f;
+            }
             if(null != _data)
             {
                 (transform as RectTransform).anchoredPosition = new Vector2(FishConfig.USERPOINT[_data.m_SendChairID][0], FishConfig.USERPOINT[_data.m_SendChairID][1]);
+            }
+            if(null != _data.action_bullet_move_)
+            {
+                _data.action_bullet_move_.Start();
+            }
+        }
+
+        public void SetAngle(float angle)
+        {
+            var rect = (transform as RectTransform);
+            if (null != rect)
+            {
+                rect.localEulerAngles = new Vector3(0, 0, angle * Mathf.Rad2Deg);
+            }
+        }
+
+        public void SetPosition(Vector2 pos)
+        {
+            var rect = (transform as RectTransform);
+            if (null != rect)
+            {
+                rect.anchoredPosition = pos;
             }
         }
     }

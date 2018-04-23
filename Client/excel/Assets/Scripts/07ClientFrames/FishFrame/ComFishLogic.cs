@@ -174,10 +174,18 @@ namespace GameClient
             {
                 mCannonPosition[i] = (mCannonSprites[i].transform as RectTransform).anchoredPosition;
             }
+
+            //InvokeManager.Instance().InvokeRepeate(this, 0.0f, 9999, 0.35f, _AddBulletTest, _AddBulletTest, null,false);
+        }
+
+        void _AddBulletTest()
+        {
+            AddBullet(0, 45, 10055, false, false, 1, 1, 2000, -1, null);
         }
 
         private void OnDestroy()
         {
+            InvokeManager.Instance().RemoveInvoke(this);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_CREATE_FISH, _OnCreateFish);
             _recycles.Clear();
             _actived.Clear();
@@ -377,6 +385,28 @@ namespace GameClient
                     }
                 }
             }
+
+            for (int i = 0; i < ComBullet.mActivedBullets.Count; ++i)
+            {
+                var bullet = ComBullet.mActivedBullets[i];
+                if (null == bullet)
+                {
+                    continue;
+                }
+
+                var bulletData = bullet.Value;
+                if (null == bulletData)
+                {
+                    continue;
+                }
+
+                if (null != bulletData.action_bullet_move_)
+                {
+                    bulletData.action_bullet_move_.Step(Time.deltaTime);
+                    bullet.SetAngle(bulletData.action_bullet_move_.angle());
+                    bullet.SetPosition(bulletData.action_bullet_move_.position());
+                }
+            }
         }
 
         void _RemoveLockedFishFlags(FishBody fish)
@@ -538,7 +568,10 @@ namespace GameClient
             }
 
             ComBullet comBullet = ComBullet.Create(1, bulletLayer);
-            comBullet.SetData(data);
+            if(null != comBullet)
+            {
+                comBullet.SetData(data);
+            }
 
             if(data.m_IsSupperButtle)
             {
