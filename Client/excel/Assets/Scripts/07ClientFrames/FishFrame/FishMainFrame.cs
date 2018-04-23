@@ -43,6 +43,7 @@ namespace GameClient
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED,_OnPlayerScoreChanged);
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, _OnPlayerCannonChanged);
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_LOCK_FISH, _OnLockFish);
+            EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_USER_SHOOT, _OnUserShoot);
 
             _InitPlayerScores();
             _InitBeiLv();
@@ -257,6 +258,23 @@ namespace GameClient
             }
         }
 
+        protected void _OnUserShoot(object argv)
+        {
+            object[] argvs = argv as object[];
+            int chairId = (int)argvs[0];
+            float shootAngle = (float)argvs[1];
+            long bulletId = (long)argvs[2];
+            bool isAndroid = (bool)argvs[3];
+            long userAndroidCharId = (long)argvs[4];
+            float bullet_speed = (float)argvs[5];
+            int locked_fish_id = (int)argvs[6];
+            FishActionInterval action = argvs[7] as FishActionInterval;
+            if (null != mfish_logic)
+            {
+                mfish_logic.Shoot(chairId, shootAngle, bulletId, isAndroid, userAndroidCharId, bullet_speed, locked_fish_id, action);
+            }
+        }
+
         protected override sealed void _OnCloseFrame()
 		{
             InvokeManager.Instance().RemoveInvoke(this);
@@ -264,6 +282,7 @@ namespace GameClient
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, _OnPlayerScoreChanged);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, _OnPlayerCannonChanged);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_LOCK_FISH, _OnLockFish);
+            EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_USER_SHOOT, _OnUserShoot);
             FishDataManager.Instance().sceneAudioHandle = 0;
         }
 	}

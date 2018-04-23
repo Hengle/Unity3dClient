@@ -578,6 +578,8 @@ namespace GameClient
                 UpDataBeiLv(LogicChairID, cmd.bullet_mulriple, false);
 
                 EventManager.Instance().SendEvent(ClientEvent.CE_FISH_LOCK_FISH, new object[] { LogicChairID, cmd.lock_fish_id });
+
+                EventManager.Instance().SendEvent(ClientEvent.CE_FISH_USER_SHOOT, new object[] { LogicChairID, angle,cmd.bullet_id, cmd.isAndroidUser, cmd.userAndroidCharId,500.0f, cmd.lock_fish_id ,null});
                 //m_FishCommonLayer->UserShoot(LogicChairID, angle, cmd.bullet_id, cmd.isAndroidUser, cmd.userAndroidCharId,
                 //    CCGameMyData::GetManager()->GetFishGameConfig().bullet_speed[bullet_kind], lock_fish_id, action_fish);
             }

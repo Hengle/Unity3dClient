@@ -713,8 +713,63 @@ namespace GameClient
     //------------------------------------------------------------------------------
     class FishActionSequence : FishActionInterval
     {
+        public FishActionSequence() : base(0)
+        {
+
+        }
+
+        public void Create(FishAction act1, params object[] argv)
+        {
+            duration_ = 0;
+            FishActionFinitTime prev = act1 as FishActionFinitTime;
+            if (null != prev && argv.Length > 0)
+            {
+                for (int i = 0; i < argv.Length; ++i)
+                {
+                    var now = argv[i] as FishActionFinitTime;
+                    if (null != now)
+                    {
+                        prev = new Sequence(prev, argv[i] as FishAction);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (null != prev)
+            {
+                duration_ = prev.duration();
+                sequence_ = prev as Sequence;
+                position_ = sequence_.position();
+                angle_ = sequence_.angle();
+                scale_ = sequence_.scale();
+                color_ = sequence_.color();
+            }
+        }
+
         class Sequence : FishActionInterval
         {
+            public Sequence() : base(0)
+            {
+
+            }
+
+            public void Create(FishAction act1, FishAction act2)
+            {
+                duration_ = 0;
+                last_ = -1;
+                actions_[0] = act1 as FishActionFinitTime;
+                actions_[1] = act2 as FishActionFinitTime;
+                duration_ = actions_[0].duration() + actions_[1].duration();
+                split_ = actions_[0].duration() / duration_;
+                position_ = actions_[0].position();
+                angle_ = actions_[0].angle();
+                scale_ = actions_[0].scale();
+                color_ = actions_[0].color();
+            }
+
             public Sequence(FishAction act1, FishAction act2) : base(0)
             {
                 last_ = -1;
@@ -942,6 +997,16 @@ namespace GameClient
     //------------------------------------------------------------------------------
     class FishActionFunc : FishActionInstant
     {
+        public FishActionFunc()
+        {
+
+        }
+
+        public void Create(SlotFunc slot)
+        {
+            slot_func_ = slot;
+        }
+
         public delegate void SlotFunc();
 
         public FishActionFunc(SlotFunc slot)
