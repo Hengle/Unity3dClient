@@ -36,15 +36,22 @@ namespace ProtoTable
       get { return _Prefab; }
       set { _Prefab = value; }
     }
+    private string _TraceFrame;
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"TraceFrame", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string TraceFrame
+    {
+      get { return _TraceFrame; }
+      set { _TraceFrame = value; }
+    }
     private int _Interval;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"Interval", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"Interval", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
     public int Interval
     {
       get { return _Interval; }
       set { _Interval = value; }
     }
     private int _Speed;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"Speed", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
+    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"Speed", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
     public int Speed
     {
       get { return _Speed; }
@@ -74,12 +81,16 @@ namespace ProtoTable
                     Prefab = source.ReadString();
                     break;
                     
-            case 4:   //Interval LABEL_REQUIRED TYPE_SINT32  ZigZag
+            case 4:   //TraceFrame LABEL_REQUIRED TYPE_STRING  TwosComplement
+                    TraceFrame = source.ReadString();
+                    break;
+                    
+            case 5:   //Interval LABEL_REQUIRED TYPE_SINT32  ZigZag
                     source.Hint(ProtoBuf.WireType.SignedVariant); 
                     Interval = source.ReadInt32();
                     break;
                     
-            case 5:   //Speed LABEL_REQUIRED TYPE_SINT32  ZigZag
+            case 6:   //Speed LABEL_REQUIRED TYPE_SINT32  ZigZag
                     source.Hint(ProtoBuf.WireType.SignedVariant); 
                     Speed = source.ReadInt32();
                     break;

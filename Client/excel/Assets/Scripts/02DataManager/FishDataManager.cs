@@ -138,6 +138,11 @@ namespace GameClient
         int[] m_BeiLv = new int[FishConfig.fish_player_count];
         bool[] m_SupperPao = new bool[FishConfig.fish_player_count];
         int[] m_UserLockFishID = new int[FishConfig.fish_player_count];
+        FishKind[] m_UserLockFishKind = new FishKind[FishConfig.fish_player_count];
+        Vector2[] m_UserData = new Vector2[FishConfig.fish_player_count]
+        {
+            new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),
+        };
 
         public void Clear()
         {
@@ -145,11 +150,21 @@ namespace GameClient
             mCanSend = false;
             for(int i = 0; i < FishConfig.fish_player_count;++i)
             {
+                m_UserLockFishKind[i] = FishKind.FISH_KIND_COUNT;
                 m_UserLockFishID[i] = -1;
                 m_UserUpScore[i] = 0;
                 m_ButtleType[i] = 0;
                 m_BeiLv[i] = 1;
                 m_SupperPao[i] = false;
+            }
+        }
+
+        public void ClearLockFish()
+        {
+            for (int i = 0; i < FishConfig.fish_player_count; ++i)
+            {
+                m_UserLockFishKind[i] = FishKind.FISH_KIND_COUNT;
+                m_UserLockFishID[i] = -1;
             }
         }
 
