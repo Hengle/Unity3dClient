@@ -11,7 +11,7 @@ local UserMessage = require(".net.UserMessage")
 
 local roomMgr = require(".app.room.RoomManager")
 
-local Gameid_fish = 107
+local Gameid_fish = 110
 
 local barFrame = nil
 
@@ -23,6 +23,7 @@ function RoomFrame.OnOpenFrame()
     local gameConfig = RoomConfig:getGameConfig(Gameid_fish)
     dump(gameConfig, "RoomFrame.OnOpenFrame:")
     assert(gameConfig)
+
 
     for _,config in ipairs(gameConfig.room) do
         local roomid = (config.roomid) % 100 + 1
@@ -36,7 +37,8 @@ function RoomFrame.OnOpenFrame()
 end
 
 RoomFrame.onClickRoom1 = function()
-    local roomid = 10700
+    printLog("onClickRoom1")
+    local roomid = 11000
     roomMgr:init(Gameid_fish, roomid)
     UserMessage.send("EnterRoomReq", {roomid=roomid}, function(msg)
         roomMgr:EnterRoomRep(msg)

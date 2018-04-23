@@ -132,6 +132,20 @@ local config = {
         }
     },
     {
+        gameid = 110,
+        name = "李逵劈鱼2",
+        scene = app.FrameManager.FishMainFrame,
+        icon = "LKPY",
+        popular = 2,
+        quick = true,  -- 快速坐下/站起，不展示房间桌子情况
+        rule = {
+            ios = "Rule/CatchFishRule_ios.html",
+            android = "Rule/CatchFishRule_android.html",
+        },
+        room = {
+        }
+    },
+    {
         gameid = 111,
         name = "台炮麻将",
         scene = "MaJiangScene",
