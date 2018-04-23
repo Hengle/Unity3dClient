@@ -1,5 +1,5 @@
-local scheduler = require("app.Common.LocalScheduler").new()
-local message = require("app.net.Message")
+--local scheduler = require("app.Common.LocalScheduler").new()
+local message = require(".net.Message")
 
 
 local MsgWorker = {}
@@ -18,7 +18,7 @@ end
 
 function MsgWorker.clear(name)
 	buff = {}
-	scheduler.clear()
+	--scheduler.clear()
 	message.unregisterHandle(name)
 end
 
@@ -42,7 +42,7 @@ function MsgWorker.sleep(seconds)
 	end
 	sleeping = true
 	if seconds ~= nil then
-		scheduler.performWithDelay(MsgWorker.wakeup, seconds)
+		--scheduler.performWithDelay(MsgWorker.wakeup, seconds)
 	end
 end
 

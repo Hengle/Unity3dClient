@@ -3,11 +3,17 @@
 --- Created by asus.
 --- DateTime: 2018/4/8 17:03
 ---
+local msgWorker = require(".net.MsgWorker")
+local msgMgr = require(".app.games.LKPY.msgMgr")
+
 local fishScene = {}
 
 function fishScene.OnCreate()
     app.Logger:LogFormat("<color=#00ff00> on create scene !!! name = {0} </color>",self.scene:GetName())
+
+    msgWorker.init("LKPY", handler(msgMgr, msgMgr.dispatchMessage))
 end
+
 
 function fishScene.OnDestroy()
     app.Logger:LogFormat("<color=#00ff00> on destroy scene !!! name = {0} </color>",self.scene:GetName())

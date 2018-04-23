@@ -225,6 +225,13 @@ protoIDs[10805] = "TexasPoker.GameEnd"
 protoIDs[10806] = "TexasPoker.SyncGameInfo"
 protoIDs[10807] = "TexasPoker.GameConf"
 
+-- -----------------------------------------------------------------------
+
+protoIDs[11001] = "LKPY.SceneFishSync"
+protoIDs[11002] = "LKPY.SwitchSceneSync"
+protoIDs[11003] = "LKPY.DistributeFish"
+protoIDs[11004] = "LKPY.UserFireRep"
+protoIDs[11005] = "LKPY.ExchangeFishScoreRep"
 
 -- -----------------------------------------------------------------------
 protoIDs[10901] = "Baccarat.GameStatusNtf"
@@ -271,7 +278,6 @@ protoIDs[11123] = "MaJiang.AllowCombinEx"
 protoIDs[11124] = "MaJiang.ShowCard"
 protoIDs[11125] = "MaJiang.PrivateOver"
 ----------------------------------------------------------------------------
-protoIDs[11201] = "LKPY.CreateFish"
 
 -- -----------------------------------------------------------------------
 local ret = {}

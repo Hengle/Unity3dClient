@@ -16,6 +16,12 @@ local roomScene = nil
 local player_info = {}
 local table_states = {}
 
+local TABLE_STATE = {
+    WAIT = 0x00,
+    GAME = 0x01, -- game started
+    LOCK = 0x02, -- table locked by password
+}
+
 -- message handlers
 local gameMsg = {}	-- from server
 local userMsg = {}	-- from server
@@ -147,6 +153,48 @@ function gameMsg.SitupRep(msg)
     dump(msg)
 end
 
+function gameMsg.TableStateInfo(msg)
+    dump(msg, "TableStateInfo", 8)
+    if msg.session == room_session then --TODO: remove this later
+        for i = 1, #msg.player do
+            local p = {
+                uid = msg.player[i].uid,
+                name = msg.player[i].name,
+                gold = msg.player[i].gold,
+                ready = msg.player[i].ready,
+                sex = msg.player[i].sex,
+                avatarurl = msg.player[i].avatarurl,
+            }
+            RoomMsgManager:add_seat_player(msg.table, msg.player[i].seat, p)
+        end
+        printf("set table:%d state:%d", msg.table, msg.state)
+        RoomMsgManager:set_table_state(msg.table, msg.state)
+        if roomScene then
+            for i = 1, #msg.player do
+                roomScene:playerSeat(msg.table, msg.player[i].seat, msg.player[i])
+                roomScene:SeatReady(msg.table, msg.player[i].seat, msg.player[i].ready>0)
+            end
+            roomScene:tableState(msg.table, msg.state)
+        end
+    elseif msg.session == table_session then
+        if msg.table == table_id then
+            for i = 1, #msg.player do
+                message.dispatchCurrent("room.EnterGame", {
+                    seat = msg.player[i].seat,
+                    player = {
+                        uid = msg.player[i].uid,
+                        name = msg.player[i].name,
+                        gold = msg.player[i].gold,
+                        ready = msg.player[i].ready,
+                        sex = msg.player[i].sex,
+                        avatarurl = msg.player[i].avatarurl,
+                    }
+                })
+            end
+        end
+    end
+end
+
 function gameMsg.RoomInfo(msg)
     dump(msg, "RoomMsgManager gameMsg.RoomInfo: ")
     --[[dump(msg, "gameMsg.RoomInfo !!!", 8)
@@ -200,7 +248,7 @@ function gameMsg.TableSitdown(msg)
             sex = msg.player.sex,
             avatarurl = msg.player.avatarurl,
         }
-        msgMgr:add_seat_player(msg.table, msg.seat, p)
+        RoomMsgManager:add_seat_player(msg.table, msg.seat, p)
         if roomScene then
             roomScene:playerSeat(msg.table, msg.seat, msg.player)
         end
@@ -259,6 +307,55 @@ end
 
 function RoomMsgManager:setGameKey(key)
     gamekey = key
+end
+
+function RoomMsgManager:set_table_state(tableid, state)
+    table_states[tableid] = state
+end
+
+
+function RoomMsgManager:add_table_state(tableid, state)
+    table_states[tableid] = table_states[tableid] or TABLE_STATE.WAIT
+    table_states[tableid] = bit.bor(table_states[tableid], state)
+end
+
+
+function RoomMsgManager:cls_table_state(tableid, state)
+    table_states[tableid] = table_states[tableid] or TABLE_STATE.WAIT
+    table_states[tableid] = bit.band(table_states[tableid], bit.bnot(state))
+end
+
+function RoomMsgManager:add_seat_player(table, seat, player)
+    if player_info[table] == nil then
+        player_info[table] = {}
+    end
+    player_info[table][seat] = player
+end
+
+
+function RoomMsgManager:remove_seat_player(table, seat)
+    local temp = player_info[table]
+    if temp ~= nil then
+        temp[seat] = nil
+    end
+end
+
+
+function RoomMsgManager:get_seat_players(table)
+    local temp = player_info[table]
+    if temp ~= nil then
+        return temp
+    end
+    return {}
+end
+
+
+function RoomMsgManager:get_seat_player(table, seat)
+    local temp = player_info[table]
+    if temp ~= nil then
+        return temp[seat]
+    end
+    return nil
 end
 
 --[[function msgMgr:get_room_session()
