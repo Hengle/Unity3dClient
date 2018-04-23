@@ -13,11 +13,11 @@ namespace GameClient
         public Image[] mCannonSprites = new Image[FishConfig.fish_player_count];
         public Image[] mLockedFishImages = new Image[FishConfig.fish_player_count];
         public DOTweenAnimation[] mLockedAnimations = new DOTweenAnimation[FishConfig.fish_player_count];
-        FishActionMoveTo[] action_lock_line_ = new FishActionMoveTo[FishConfig.fish_player_count];
-        FishActionInterval[] action_lock_fish_ = new FishActionInterval[FishConfig.fish_player_count];
+        public ComFishLockLine mFishLockLine;
 
-        class FishBody
+        public class FishBody
         {
+            public int locked_flag = 0;
             public ulong guid;
             public int resId;
 
@@ -141,6 +141,7 @@ namespace GameClient
 
             if (null != fishBody)
             {
+                fishBody.locked_flag = 0;
                 fishBody.guid = (ulong)data.fish_id;
                 fishBody.fishItem = data.fishItem;
                 fishBody.resId = data.fishItem.ID;
@@ -266,6 +267,18 @@ namespace GameClient
             }
         }
 
+        public FishBody GetLockedFish(int fishId)
+        {
+            for(int i = 0; i < _actived.Count; ++i)
+            {
+                if((int)_actived[i].guid == fishId)
+                {
+                    return _actived[i];
+                }
+            }
+            return null;
+        }
+
         public void SetLockFish(int ChairID, int Fishid, FishKind fishkind, FishActionInterval action)
         {
             if (action == null)
@@ -278,38 +291,38 @@ namespace GameClient
                 return;
             }
 
-            /*
-            this->removeChildByTag(9000 + ChairID);
-            for (int j = 0; j < 20; ++j)
+            int curLockedFishId = FishDataManager.Instance().GetLockedFishId(ChairID);
+            var preLockedFish = GetLockedFish(curLockedFishId);
+            if (null != mFishLockLine)
             {
-                m_FishLockLinespr[ChairID][j]->setPosition(Vec2(USERPOINT[ChairID][0], USERPOINT[ChairID][1]));
-                m_FishLockLinespr[ChairID][j]->setVisible(false);
-            }
-            */
-
-            FishDataManager.Instance().SetLockedFishId(ChairID, Fishid);
-
-            LockFishImg(ChairID, Fishid,(int)fishkind);
-
-            if (Fishid == -1)
-            {
-                action_lock_fish_[ChairID] = null;
-                if(null != action_lock_line_[ChairID])
+                if(null != preLockedFish)
                 {
-                    FishAction.ThrowActionToPoll(action_lock_line_[ChairID]);
-                    action_lock_line_[ChairID] = null;
+                    preLockedFish.locked_flag &= ~(1 << ChairID);
+                    mFishLockLine.RemoveTarget(preLockedFish.fishSprite.self.transform as RectTransform,ChairID);
                 }
-                //this->removeChildByTag(9000 + ChairID, true);
-                return;
             }
-            action_lock_fish_[ChairID] = action;
-            if (null != action)
+
+            var curTarget = GetLockedFish(Fishid);
+            if(null != curTarget)
             {
-                Vector2 fish_pos = action.position();
-                Vector2 fish_target_pos = (action as FishActionFishMove).FishMoveTo(0.50f);
-                action_lock_line_[ChairID] = FishAction.CreateActionFromPool<FishActionMoveTo>();
-                action_lock_line_[ChairID].Create(0.5f, new Vector2(FishConfig.USERPOINT[ChairID][0], FishConfig.USERPOINT[ChairID][1]), fish_target_pos);
+                curTarget.locked_flag |= (1 << ChairID);
+                FishDataManager.Instance().SetLockedFishId(ChairID, Fishid);
+                //播放锁定动画
+                LockFishImg(ChairID, Fishid, (int)fishkind);
+
+                if (null != mFishLockLine)
+                {
+                    if (null != curTarget)
+                    {
+                        mFishLockLine.AddTrace(curTarget.fishSprite.self.transform as RectTransform, new Vector2(FishConfig.USERPOINT[ChairID][0], FishConfig.USERPOINT[ChairID][1]), ChairID);
+                    }
+                }
             }
+            else
+            {
+                LockFishImg(ChairID, -1, (int)FishKind.FISH_KIND_COUNT);
+            }
+
 
             //m_UserLockFishKind[ChairID] = fishkind;
             /////////////////////////////
@@ -340,12 +353,31 @@ namespace GameClient
 
                     if(action.IsDone())
                     {
+                        _RemoveLockedFishFlags(_actived[i]);
                         _actived[i].OnRecycle(recycleRoot);
                         FishAction.ThrowActionToPoll(_actived[i].moveAction);
                         _actived[i].moveAction = null;
                         _recycles.Add(_actived[i]);
                         _actived.RemoveAt(i--);
                         continue;
+                    }
+                }
+            }
+        }
+
+        void _RemoveLockedFishFlags(FishBody fish)
+        {
+            if(null != fish && fish.locked_flag != 0)
+            {
+                if (null != mFishLockLine)
+                {
+                    for(int i = 0; i < FishConfig.fish_player_count; ++i)
+                    {
+                        if((1 << i) == (fish.locked_flag & (1 << i)))
+                        {
+                            mFishLockLine.RemoveTarget(_actived[i].fishSprite.self.transform as RectTransform,i);
+                            LockFishImg(i, -1, (int)FishKind.FISH_KIND_COUNT);
+                        }
                     }
                 }
             }

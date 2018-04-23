@@ -1,0 +1,19 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_fish_flag.png (256 x 256)
+# $TexturePacker:SmartUpdate:35fb0ae8bba8a7c68a8966fd2927373b:0ae9d4a969260716df1ec69382d49118:d0d1dd0ce0ccd13488a548d8928b9326$
+#
+
+lock_flag_1;2;194;60;60;0.5;0.5
+lock_flag_2;2;132;60;60;0.5;0.5
+lock_flag_3;2;70;60;60;0.5;0.5
+lock_flag_4;2;8;60;60;0.5;0.5
+lock_flag_5;64;194;60;60;0.5;0.5
+lock_flag_6;126;194;60;60;0.5;0.5
+lock_flag_7;188;194;60;60;0.5;0.5
+lock_flag_8;64;132;60;60;0.5;0.5
+lock_line;64;100;30;30;0.5;0.5
