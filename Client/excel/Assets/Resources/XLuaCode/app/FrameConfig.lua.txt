@@ -21,6 +21,9 @@ app._FrameList = {
     BarFrame = 13,
     SafeBoxFrame = 14,
     ExchangeFrame = 15,
+    MessageBoxFrame_002 = 16,
+
+
 }
 
 app._ErrorCode = {
@@ -30,7 +33,7 @@ app._ErrorCode = {
     password_nil = 1003,
     password_error = 1004,
     password_repeat_error = 1005,
-    invite_error = 1006,
+    reg_code_error = 1006,
 }
 
 DEVELOPMENT = true

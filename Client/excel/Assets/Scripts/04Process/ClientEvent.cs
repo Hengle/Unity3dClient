@@ -24,6 +24,7 @@ namespace GameClient
         CE_FISH_PLAYER_UP_SCORE_CHANGED,
         CE_FISH_PLAYER_CANNON_CHANGED,
         CE_FISH_LOCK_FISH,
+        CE_FISH_USER_SHOOT,
 
         CE_LUA_EVENT_START = 64,
         CE_FIXED_END = 128,

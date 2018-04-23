@@ -12,31 +12,35 @@ namespace GameClient
 
     class MessageBoxFrameData
     {
+        public int msgId = -1;
         public string title = string.Empty;
         public string ok = string.Empty;
         public string cancel = string.Empty;
         public string desc = string.Empty;
         public OnClickMessageBoxOK cbOk = null;
         public OnClickMessageBoxCancel cbCancel = null;
+        public object[] argvs = null;
     }
 
     [LuaCallCSharp]
     public class MessageBoxFrame : ClientFrame
     {
         static string ms_empty = "-";
-        public static void Open(OnClickMessageBoxOK onOk, OnClickMessageBoxCancel onCancel,int messageId,int frameTypeId = 6, int frameId = -1)
+        public static void Open(OnClickMessageBoxOK onOk, OnClickMessageBoxCancel onCancel, int messageId, int frameTypeId = 6, int frameId = -1,object[] argvs = null)
         {
             var messageTable = TableManager.Instance().GetTableItem<ProtoTable.CommonMessageTable>(messageId);
             if(null != messageTable)
             {
                 MessageBoxFrameData data = new MessageBoxFrameData
                 {
+                    msgId = messageId,
                     title = messageTable.TitleText,
                     ok = messageTable.OkText,
                     cancel = messageTable.CancelText,
                     desc = messageTable.Descs,
                     cbOk = onOk,
                     cbCancel = onCancel,
+                    argvs = argvs,
                 };
                 UIManager.Instance().OpenFrame<MessageBoxFrame>(frameTypeId, data, frameId);
             }
@@ -89,7 +93,22 @@ namespace GameClient
             {
                 if (null != mDesc)
                 {
-                    mDesc.text = data.desc;
+                    if(null != data.argvs && data.argvs.Length > 0 && null != data.argvs[0])
+                    {
+                        var messageItem = TableManager.Instance().GetTableItem<ProtoTable.CommonMessageTable>(data.msgId);
+                        if(null != messageItem)
+                        {
+                            mDesc.text = string.Format(messageItem.Descs, data.argvs[0]);
+                        }
+                        else
+                        {
+                            mDesc.text = data.desc;
+                        }
+                    }
+                    else
+                    {
+                        mDesc.text = data.desc;
+                    }
                 }
                 if(null != mOkText)
                 {
@@ -139,6 +158,7 @@ namespace GameClient
 
         protected override void _OnCloseFrame()
         {
+            data.argvs = null;
             data = null;
         }
     }

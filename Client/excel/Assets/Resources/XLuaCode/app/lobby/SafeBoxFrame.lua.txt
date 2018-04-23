@@ -6,10 +6,10 @@
 local SafeBoxFrame = {}
 
 function SafeBoxFrame.OnOpenFrame()
-    self.frame:GetObject('btn_back').onClick:AddListener(SafeBoxFrame.onClickBack)
+    self.frame:GetObject('btn_close').onClick:AddListener(SafeBoxFrame.onClickClose)
 end
 
-SafeBoxFrame.onClickBack = function()
+SafeBoxFrame.onClickClose = function()
     app.FrameManager.CloseFrame(self.frame)
 end
 

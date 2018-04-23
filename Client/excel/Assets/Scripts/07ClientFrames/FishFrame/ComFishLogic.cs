@@ -10,14 +10,24 @@ namespace GameClient
     {
         public GameObject recycleRoot = null;
         public GameObject fishLayer = null;
+        public GameObject fishLockNumberRoot = null;
+        public GameObject bulletLayer = null;
+        public GameObject recycled_bulletLayer = null;
         public Image[] mCannonSprites = new Image[FishConfig.fish_player_count];
         public Image[] mLockedFishImages = new Image[FishConfig.fish_player_count];
         public DOTweenAnimation[] mLockedAnimations = new DOTweenAnimation[FishConfig.fish_player_count];
         public ComFishLockLine mFishLockLine;
+        public ComUINumber[] mLockedNumber = new ComUINumber[FishConfig.fish_player_count];
+        public Ease fire_forwardEase = Ease.Linear;
+        public Ease fire_backforwardEase = Ease.Linear;
+        public float fire_interval = 0.18f;
+        public float fire_distance = 15.0f;
+
+        Vector2[] mCannonPosition = new Vector2[FishConfig.fish_player_count];
 
         public class FishBody
         {
-            public int locked_flag = 0;
+            public int locked_flag;
             public ulong guid;
             public int resId;
 
@@ -159,10 +169,23 @@ namespace GameClient
         void Awake()
         {
             EventManager.Instance().RegisterEvent(ClientEvent.CE_CREATE_FISH, _OnCreateFish);
+
+            for(int i = 0; i < mCannonPosition.Length; ++i)
+            {
+                mCannonPosition[i] = (mCannonSprites[i].transform as RectTransform).anchoredPosition;
+            }
+
+            //InvokeManager.Instance().InvokeRepeate(this, 0.0f, 9999, 0.35f, _AddBulletTest, _AddBulletTest, null,false);
+        }
+
+        void _AddBulletTest()
+        {
+            AddBullet(0, 45, 10055, false, false, 1, 1, 2000, -1, null);
         }
 
         private void OnDestroy()
         {
+            InvokeManager.Instance().RemoveInvoke(this);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_CREATE_FISH, _OnCreateFish);
             _recycles.Clear();
             _actived.Clear();
@@ -298,6 +321,8 @@ namespace GameClient
                 if(null != preLockedFish)
                 {
                     preLockedFish.locked_flag &= ~(1 << ChairID);
+                    mLockedNumber[ChairID].CustomActive(false);
+                    Utility.AttachTo(mLockedNumber[ChairID].gameObject, fishLockNumberRoot);
                     mFishLockLine.RemoveTarget(preLockedFish.fishSprite.self.transform as RectTransform,ChairID);
                 }
             }
@@ -310,6 +335,12 @@ namespace GameClient
                 //播放锁定动画
                 LockFishImg(ChairID, Fishid, (int)fishkind);
 
+                Utility.AttachTo(mLockedNumber[ChairID].gameObject, curTarget.fishSprite.self);
+                mLockedNumber[ChairID].Value = ChairID + 1;
+                (mLockedNumber[ChairID].transform as RectTransform).anchoredPosition = Vector2.zero;
+                mLockedNumber[ChairID].transform.SetAsLastSibling();
+                mLockedNumber[ChairID].CustomActive(true);
+
                 if (null != mFishLockLine)
                 {
                     if (null != curTarget)
@@ -321,18 +352,9 @@ namespace GameClient
             else
             {
                 LockFishImg(ChairID, -1, (int)FishKind.FISH_KIND_COUNT);
+                Utility.AttachTo(mLockedNumber[ChairID].gameObject, fishLockNumberRoot);
+                mLockedNumber[ChairID].CustomActive(false);
             }
-
-
-            //m_UserLockFishKind[ChairID] = fishkind;
-            /////////////////////////////
-            //char string[128] = { 0 };
-            //sprintf(string, "lock%d.png", ChairID + 1);
-            //SpriteFrameCache* cache = SpriteFrameCache::getInstance();
-            //Sprite* m_SuoSprite = Sprite::createWithSpriteFrame(cache->getSpriteFrameByName(string));
-            //m_SuoSprite->setPosition(Vec2(100, 100));
-            //m_SuoSprite->setTag(9000 + ChairID);
-            //this->addChild(m_SuoSprite, 10000);
         }
 
         // Update is called once per frame
@@ -363,6 +385,28 @@ namespace GameClient
                     }
                 }
             }
+
+            for (int i = 0; i < ComBullet.mActivedBullets.Count; ++i)
+            {
+                var bullet = ComBullet.mActivedBullets[i];
+                if (null == bullet)
+                {
+                    continue;
+                }
+
+                var bulletData = bullet.Value;
+                if (null == bulletData)
+                {
+                    continue;
+                }
+
+                if (null != bulletData.action_bullet_move_)
+                {
+                    bulletData.action_bullet_move_.Step(Time.deltaTime);
+                    bullet.SetAngle(bulletData.action_bullet_move_.angle());
+                    bullet.SetPosition(bulletData.action_bullet_move_.position());
+                }
+            }
         }
 
         void _RemoveLockedFishFlags(FishBody fish)
@@ -375,11 +419,167 @@ namespace GameClient
                     {
                         if((1 << i) == (fish.locked_flag & (1 << i)))
                         {
-                            mFishLockLine.RemoveTarget(_actived[i].fishSprite.self.transform as RectTransform,i);
-                            LockFishImg(i, -1, (int)FishKind.FISH_KIND_COUNT);
+                            SetLockFish(i, -1,FishKind.FISH_KIND_COUNT, null);
                         }
                     }
                 }
+            }
+        }
+
+        void _OnMoveForward(int nChairID, float angle)
+        {
+            Vector2 localPosition = mCannonPosition[nChairID];
+            Vector2 dir = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
+            dir = dir.normalized;
+            Vector2 p1 = localPosition + dir * fire_distance;
+            mCannonSprites[nChairID].transform.DOLocalMove(p1, fire_interval).SetEase(fire_forwardEase).OnComplete(() => { _OnMoveBackward(nChairID, angle); });
+        }
+
+        void _OnMoveBackward(int nChairID, float angle)
+        {
+            Vector2 localPosition = mCannonPosition[nChairID];
+            Vector2 dir = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
+            dir = dir.normalized;
+            Vector2 p1 = localPosition - dir * fire_distance;
+            mCannonSprites[nChairID].transform.DOLocalMove(p1, fire_interval).SetEase(fire_backforwardEase).OnComplete(() => { _OnMoveForward(nChairID, angle); });
+        }
+
+        public void Shoot(int nChairID, float nRotation, long nBulletID, bool IsAndroid, long userAndroidCharId,float bullet_speed, int lock_fish_id, FishActionInterval action_fish_move)
+        {
+            mCannonSprites[nChairID].transform.localScale = Vector3.one;
+            float ro = (float)(nRotation * Mathf.Rad2Deg);
+            mCannonSprites[nChairID].transform.eulerAngles = new Vector3(0.0f, 0.0f, nRotation + 270.0f);
+
+            _OnMoveBackward(nChairID, ro);
+
+            if (nChairID == FishDataManager.Instance().chairId && !IsAndroid)
+            {
+                AddBullet(nChairID, nRotation, nBulletID, IsAndroid, false, FishDataManager.Instance().GetBulletType(nChairID), FishDataManager.Instance().GetBulletPower(nChairID), bullet_speed, lock_fish_id, action_fish_move);
+            }
+            else
+            {
+                if (IsAndroid && (userAndroidCharId == FishDataManager.Instance().chairId))
+                {
+                    int fire = UnityEngine.Random.Range(0, 2);
+                    if (fire == 1)
+                    {
+                        AddBullet(nChairID, nRotation, nBulletID, IsAndroid, false, FishDataManager.Instance().GetBulletType(nChairID), FishDataManager.Instance().GetBulletPower(nChairID), bullet_speed, lock_fish_id, action_fish_move);
+                    }
+                }
+                else
+                {
+                    AddBullet(nChairID, nRotation, nBulletID, IsAndroid, true, FishDataManager.Instance().GetBulletType(nChairID), FishDataManager.Instance().GetBulletPower(nChairID), bullet_speed, lock_fish_id, action_fish_move);
+                }
+            }
+        }
+
+        float BulletMoveDuration(Vector2 start, Vector2 end, float bullet_speed)
+        {
+            Vector2 delta = new Vector2(end.x - start.x, start.x - start.y);
+            float length = Mathf.Sqrt(delta.x * delta.x + delta.y * delta.y);
+            return length / bullet_speed;
+        }
+
+        public void AddBullet(int nChairID, float fRotation, long nBulletID, bool IsAndroid, bool bBadBullet,int m_ButtleType, int bullet_mulriple, float bullet_speed, int lock_fish_id = -1, FishActionInterval action_fish_move = null)
+        {
+            BulletData data = BulletData.Create();
+            data.m_SendChairID = nChairID;
+
+            if (lock_fish_id != -1 && action_fish_move != null)
+            {
+                Vector2 fish_pos = action_fish_move.position();
+                float elapsed = BulletMoveDuration(new Vector2(FishConfig.USERPOINT[nChairID][0], FishConfig.USERPOINT[nChairID][1]), fish_pos, bullet_speed);
+                Vector2 fish_target_pos1 = (action_fish_move as FishActionFishMove).FishMoveTo(elapsed);
+                Vector2 fish_target_pos = new Vector2(fish_target_pos1.x, fish_target_pos1.y);
+                if (fish_target_pos.x >= 0 && fish_target_pos.x <= FishConfig.kScreenWidth && fish_target_pos.y >= 0 && fish_target_pos.y <= FishConfig.kScreenHeight)
+                {
+                    FishActionFunc func = FishAction.CreateActionFromPool<FishActionFunc>();
+                    func.Create(data.CancelLock);
+                    func.set_position(fish_target_pos);
+                    func.set_angle(fRotation);
+
+                    var action1 = FishAction.CreateActionFromPool<FishActionBulletMoveTo>();
+                    action1.Create(new Vector2(FishConfig.USERPOINT[nChairID][0], FishConfig.kScreenHeight - FishConfig.USERPOINT[nChairID][1]), fish_target_pos, fRotation, bullet_speed);
+
+                    var action = FishAction.CreateActionFromPool<FishActionSequence>();
+                    action.Create(action1, func, 0);
+                    data.ResetBulletActionMove(action);
+                }
+                else
+                {
+                    if (fish_pos.x >= 0 && fish_pos.x <= FishConfig.kScreenWidth && FishConfig.kScreenHeight - fish_pos.y >= 0 && FishConfig.kScreenHeight - fish_pos.y <= FishConfig.kScreenHeight)
+                    {
+                        FishActionFunc func = FishAction.CreateActionFromPool<FishActionFunc>();
+                        func.Create(data.CancelLock);
+                        func.set_position(fish_pos);
+                        func.set_angle(fRotation);
+
+                        var action1 = FishAction.CreateActionFromPool<FishActionBulletMoveTo>();
+                        action1.Create(new Vector2(FishConfig.USERPOINT[nChairID][0], FishConfig.kScreenHeight - FishConfig.USERPOINT[nChairID][1]), fish_pos, fRotation, bullet_speed);
+                        
+                        var action = FishAction.CreateActionFromPool<FishActionSequence>();
+                        action.Create(action1, func, 0);
+
+                        data.ResetBulletActionMove(action);
+                    }
+                    else
+                    {
+                        lock_fish_id = -1;
+                        var action = FishAction.CreateActionFromPool<FishActionBulletMove>();
+                        action.Create(new Vector2(FishConfig.USERPOINT[nChairID][0], FishConfig.kScreenHeight - FishConfig.USERPOINT[nChairID][1]), fRotation, bullet_speed);
+                        data.ResetBulletActionMove(action);
+                    }
+                }
+            }
+            else
+            {
+                var action = FishAction.CreateActionFromPool<FishActionBulletMove>();
+                action.Create(new Vector2(FishConfig.USERPOINT[nChairID][0], FishConfig.kScreenHeight - FishConfig.USERPOINT[nChairID][1]), fRotation, bullet_speed);
+                data.ResetBulletActionMove(action);
+            }
+
+            //CCdsnhFishBaseLayer* fishbaselayer = (CCdsnhFishBaseLayer*)this->getParent();
+            data.bounding_radius_ = 5.0f;
+            //m_Bullet->bounding_radius_ = CCGameMyData::GetManager()->GetFishGameConfig().bullet_bounding_radius[m_ButtleType - 2];
+            data.bullet_mulriple = bullet_mulriple;
+            data.bullet_speed_ = bullet_speed;
+            data.m_lockfish = lock_fish_id;
+            /*
+            char str[100] = { 0 };
+            if (m_ButtleType > 4)
+                sprintf(str, "Supperbullet%d_%d.png", m_ButtleType, 1);
+            else sprintf(str, "bullet%d_%d_%d.png", nChairID, m_ButtleType, 1);
+
+            m_Bullet->m_Buttleimg0 = Sprite::createWithSpriteFrame(cache->getSpriteFrameByName(str));
+            this->addChild(m_Bullet->m_Buttleimg0);
+            */
+
+            data.m_sendtime = 0;
+            data.m_HitFishID = 0;
+            data.m_SendChairID = nChairID;
+            data.m_ButtleID = nBulletID;
+            data.m_IsAndroid = IsAndroid;
+            data.m_Status = 0;
+            data.m_ButtleType = m_ButtleType;
+            data.m_IsSupperButtle = m_ButtleType > 4;
+            if (bBadBullet)
+            {
+                data.m_bIsBadButtle = true;
+            }
+
+            ComBullet comBullet = ComBullet.Create(1, bulletLayer);
+            if(null != comBullet)
+            {
+                comBullet.SetData(data);
+            }
+
+            if(data.m_IsSupperButtle)
+            {
+                AudioManager.Instance().PlaySound(2105);
+            }
+            else
+            {
+                AudioManager.Instance().PlaySound(2106);
             }
         }
     }
