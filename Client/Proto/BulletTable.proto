@@ -1,0 +1,7 @@
+package ProtoTable;
+message BulletTable
+{
+required sint32 ID = 1;
+required string Prefab = 2;
+required sint32 Speed = 3;
+};

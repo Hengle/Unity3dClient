@@ -11,6 +11,8 @@ namespace GameClient
         public GameObject recycleRoot = null;
         public GameObject fishLayer = null;
         public GameObject fishLockNumberRoot = null;
+        public GameObject bulletLayer = null;
+        public GameObject recycled_bulletLayer = null;
         public Image[] mCannonSprites = new Image[FishConfig.fish_player_count];
         public Image[] mLockedFishImages = new Image[FishConfig.fish_player_count];
         public DOTweenAnimation[] mLockedAnimations = new DOTweenAnimation[FishConfig.fish_player_count];
@@ -111,86 +113,6 @@ namespace GameClient
         }
         List<FishBody> _recycles = new List<FishBody>(16);
         List<FishBody> _actived = new List<FishBody>(16);
-
-        public class BulletData
-        {
-            public static List<BulletData> _recycled = new List<BulletData>(150);
-            public static List<BulletData> _actived = new List<BulletData>(150);
-
-            public void OnCreate()
-            {
-                m_Buttleimg0 = null;
-                m_bIsBadButtle = false;
-            }
-
-            public void OnRecycle()
-            {
-
-            }
-
-            public static BulletData Create()
-            {
-                BulletData data = null;
-                if (_recycled.Count == 0)
-                {
-                    data = new BulletData();
-                    _actived.Add(data);
-                }
-                else
-                {
-                    data = _recycled[0];
-                    _recycled.RemoveAt(0);
-                    _actived.Add(data);
-                }
-
-                data.OnCreate();
-                return data;
-            }
-
-            public static void ThrowBulletToPool(BulletData data)
-            {
-                if(null != data)
-                {
-                    _actived.Remove(data);
-                    data.OnRecycle();
-                    _recycled.Add(data);
-                }
-            }
-
-            public Image m_Buttleimg0;
-            public bool m_IsAndroid;
-            public long m_ButtleID;
-            public int m_SendChairID;
-            public int m_Status;
-            public int m_ButtleType;
-            public bool m_IsSupperButtle;
-            public int m_sendtime;
-            public float m_lockfish;
-            public long m_HitFishID;
-            public float bullet_speed_;
-            public bool m_bIsBadButtle;
-            public float bounding_radius_;
-            public int bullet_mulriple;
-            FishAction action_bullet_move_;
-            public void ResetBulletActionMove(FishAction action)
-            {
-                if(null != action_bullet_move_)
-                {
-                    FishAction.ThrowActionToPoll(action_bullet_move_);
-                    action_bullet_move_ = null;
-                }
-                action_bullet_move_ = action;
-            }
-
-            public void CancelLock()
-            {
-                m_lockfish = -1;
-                ResetBulletActionMove(null);
-                //FishActionBulletMove action = new FishActionBulletMove(action_bullet_move_->position(), action_bullet_move_->angle(), bullet_speed_);
-                //action_bullet_move_delay_delete_.reset(action);
-                //action_bullet_move_delay_delete_.swap(action_bullet_move_);
-            }
-        };
 
         public void createFish(FishData data)
         {
@@ -592,7 +514,6 @@ namespace GameClient
             data.bullet_mulriple = bullet_mulriple;
             data.bullet_speed_ = bullet_speed;
             data.m_lockfish = lock_fish_id;
-
             /*
             char str[100] = { 0 };
             if (m_ButtleType > 4)
@@ -602,35 +523,31 @@ namespace GameClient
             m_Bullet->m_Buttleimg0 = Sprite::createWithSpriteFrame(cache->getSpriteFrameByName(str));
             this->addChild(m_Bullet->m_Buttleimg0);
             */
-            data.m_Buttleimg0.sprite = AssetLoader.Instance().LoadRes("", typeof(Sprite)).obj as Sprite;
 
-            //m_Bullet->m_Buttleimg0->setPosition(Vec2(USERPOINT[nChairID][0], USERPOINT[nChairID][1]));
-            //m_Bullet->m_sendtime = 0;
-            //m_Bullet->m_HitFishID = 0;
-            //m_Bullet->m_Buttleimg0->setAnchorPoint(Vec2(0.5, 0.5));
-            //m_Bullet->m_SendChairID = nChairID;
-            //m_Bullet->m_ButtleID = nBulletID;
-            //m_Bullet->m_IsAndroid = IsAndroid;
-            //m_Bullet->m_Status = 0;
-            //m_Bullet->m_ButtleType = m_ButtleType;
+            data.m_sendtime = 0;
+            data.m_HitFishID = 0;
+            data.m_SendChairID = nChairID;
+            data.m_ButtleID = nBulletID;
+            data.m_IsAndroid = IsAndroid;
+            data.m_Status = 0;
+            data.m_ButtleType = m_ButtleType;
+            data.m_IsSupperButtle = m_ButtleType > 4;
+            if (bBadBullet)
+            {
+                data.m_bIsBadButtle = true;
+            }
 
-            //if (bBadBullet)
-            //{
-            //    m_Bullet->m_bIsBadButtle = true;
-            //}
+            ComBullet comBullet = ComBullet.Create(1, bulletLayer);
+            comBullet.SetData(data);
 
-            //if (m_ButtleType > 4)
-            //{
-            //    m_Bullet->m_IsSupperButtle = true;
-            //    PlayEffect("FishGame/Fish/Sound/Effect/PowerFire.ogg", 0);
-            //}
-            //else
-            //{
-            //    m_Bullet->m_IsSupperButtle = false;
-            //    AudioEngine::play2d("FishGame/Fish/Sound/Effect/NormalFire.mp3");
-            //}
-            ////
-            //m_ButtleArray->addObject(m_Bullet);
+            if(data.m_IsSupperButtle)
+            {
+                AudioManager.Instance().PlaySound(2105);
+            }
+            else
+            {
+                AudioManager.Instance().PlaySound(2106);
+            }
         }
     }
 }
