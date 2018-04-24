@@ -93,6 +93,7 @@ namespace GameClient
                 {
                     FishDataManager.Instance().CreateSwitchScene(_scene);
                 });
+                break;
             }
 
             //FishDataManager.Instance().CreateCatchChainCmd();
