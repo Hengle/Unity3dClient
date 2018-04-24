@@ -47,6 +47,18 @@ namespace GameClient
         public ulong userAndroidCharId;
     };
 
+    public struct CMD_S_BulletDoubleTimeout
+    {
+        public short chair_id;
+    };
+
+    public struct CMD_S_ExchangeFishScore
+    {
+        public short chair_id;
+        public long swap_fish_score;
+        public long exchange_fish_score;
+    };
+
     public class FishData
     {
         public int fish_id;
@@ -133,6 +145,7 @@ namespace GameClient
             }
         }
 
+        long[] m_UserScore = new long[FishConfig.fish_player_count];
         long[] m_UserUpScore = new long[FishConfig.fish_player_count];
         int[] m_ButtleType = new int[FishConfig.fish_player_count];
         int[] m_BeiLv = new int[FishConfig.fish_player_count];
@@ -153,6 +166,7 @@ namespace GameClient
                 m_UserLockFishKind[i] = FishKind.FISH_KIND_COUNT;
                 m_UserLockFishID[i] = -1;
                 m_UserUpScore[i] = 0;
+                m_UserScore[i] = 0;
                 m_ButtleType[i] = 0;
                 m_BeiLv[i] = 1;
                 m_SupperPao[i] = false;
@@ -451,7 +465,7 @@ namespace GameClient
             mCanSend = false;
         }
 
-        void _UpDataUpScoreHitFish(int chairID, long UpScore)
+        public void UpDataUpScoreHitFish(int chairID, long UpScore)
         {
             if(chairID >= 0 && chairID < m_UserUpScore.Length)
             {
@@ -461,7 +475,23 @@ namespace GameClient
             EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, chairID);
         }
 
-        void UpDataBeiLv(int chairID, int BeiLv, bool Runaction)
+        public void SetSuperPao(int chairID,bool bSuperPao)
+        {
+            if(chairID >= 0 && chairID < m_SupperPao.Length)
+            {
+                m_SupperPao[chairID] = bSuperPao;
+            }
+        }
+
+        public void SetUserScore(int chairID,long userScore)
+        {
+            if(chairID >= 0 && chairID < m_UserScore.Length)
+            {
+                m_UserScore[chairID] = userScore;
+            }
+        }
+
+        public void UpDataBeiLv(int chairID, int BeiLv, bool Runaction)
         {
             if(chairID < 0 || chairID >= m_ButtleType.Length)
             {
@@ -567,7 +597,7 @@ namespace GameClient
 
             if (cmd.chair_id != FishDataManager.Instance().chairId)
             {
-                _UpDataUpScoreHitFish(LogicChairID, -cmd.bullet_mulriple);
+                UpDataUpScoreHitFish(LogicChairID, -cmd.bullet_mulriple);
 
                 float angle = cmd.angle;
                 if (FishDataManager.Instance().chairId < 3)
@@ -588,6 +618,19 @@ namespace GameClient
                 //TODO:
                 //m_TimeOverCount = 120;
             }
+        }
+
+        public void ExecuteCmd(CMD_S_BulletDoubleTimeout cmd)
+        {
+            int chairID = SwitchChairID(cmd.chair_id);
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_UPPER_SUPER_CANNON, new object[] { chairID,false });
+        }
+
+        public void ExecuteCmd(CMD_S_ExchangeFishScore cmd)
+        {
+            int chairID = SwitchChairID(cmd.chair_id);
+            FishDataManager.Instance().UpDataUpScoreHitFish(chairID, cmd.swap_fish_score);
+            FishDataManager.Instance().SetUserScore(chairID,cmd.exchange_fish_score);
         }
 
         public void CreateSwitchScene(SceneKind scene)
