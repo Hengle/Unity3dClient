@@ -44,6 +44,7 @@ namespace GameClient
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, _OnPlayerCannonChanged);
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_LOCK_FISH, _OnLockFish);
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_USER_SHOOT, _OnUserShoot);
+            EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_UPPER_SUPER_CANNON, _OnSetSupperCannon);
 
             _InitPlayerScores();
             _InitBeiLv();
@@ -275,6 +276,28 @@ namespace GameClient
             }
         }
 
+        protected void _OnSetSupperCannon(object argv)
+        {
+            object[] argvs = argv as object[];
+            int chairId = (int)argvs[0];
+            bool bSupperCannon = (bool)argvs[1];
+
+            FishDataManager.Instance().SetSuperPao(chairId, bSupperCannon);
+            var bulletType = FishDataManager.Instance().GetBulletType(chairId);
+
+            if (bSupperCannon && bulletType <= 4)
+            {
+                AudioManager.Instance().PlaySound(2017);
+            }
+            else if (!bSupperCannon && bulletType > 4)
+            {
+                AudioManager.Instance().PlaySound(2018);
+            }
+
+            int cannonPower = FishDataManager.Instance().GetBulletPower(chairId);
+            FishDataManager.Instance().UpDataBeiLv(chairId, cannonPower, false);
+        }
+
         protected override sealed void _OnCloseFrame()
 		{
             InvokeManager.Instance().RemoveInvoke(this);
@@ -283,6 +306,7 @@ namespace GameClient
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, _OnPlayerCannonChanged);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_LOCK_FISH, _OnLockFish);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_USER_SHOOT, _OnUserShoot);
+            EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_UPPER_SUPER_CANNON, _OnSetSupperCannon);
             FishDataManager.Instance().sceneAudioHandle = 0;
         }
 	}

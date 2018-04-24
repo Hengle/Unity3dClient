@@ -47,6 +47,11 @@ namespace GameClient
         public ulong userAndroidCharId;
     };
 
+    public struct CMD_S_BulletDoubleTimeout
+    {
+        public short chair_id;
+    };
+
     public class FishData
     {
         public int fish_id;
@@ -461,7 +466,15 @@ namespace GameClient
             EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, chairID);
         }
 
-        void UpDataBeiLv(int chairID, int BeiLv, bool Runaction)
+        public void SetSuperPao(int chairID,bool bSuperPao)
+        {
+            if(chairID >= 0 && chairID < m_SupperPao.Length)
+            {
+                m_SupperPao[chairID] = bSuperPao;
+            }
+        }
+
+        public void UpDataBeiLv(int chairID, int BeiLv, bool Runaction)
         {
             if(chairID < 0 || chairID >= m_ButtleType.Length)
             {
@@ -588,6 +601,12 @@ namespace GameClient
                 //TODO:
                 //m_TimeOverCount = 120;
             }
+        }
+
+        public void ExecuteCmd(CMD_S_BulletDoubleTimeout cmd)
+        {
+            int chairID = SwitchChairID(cmd.chair_id);
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_UPPER_SUPER_CANNON, new object[] { chairID,false });
         }
 
         public void CreateSwitchScene(SceneKind scene)
