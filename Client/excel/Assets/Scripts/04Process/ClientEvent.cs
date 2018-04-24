@@ -26,6 +26,8 @@ namespace GameClient
         CE_FISH_LOCK_FISH,
         CE_FISH_USER_SHOOT,
         CE_FISH_UPPER_SUPER_CANNON,
+        CE_FISH_CATCH_CHAIN,
+        CE_FISH_CATCH_FISH_GROUP,
 
         CE_LUA_EVENT_START = 64,
         CE_FIXED_END = 128,

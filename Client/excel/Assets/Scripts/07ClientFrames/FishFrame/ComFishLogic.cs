@@ -22,6 +22,54 @@ namespace GameClient
         public Ease fire_backforwardEase = Ease.Linear;
         public float fire_interval = 0.18f;
         public float fire_distance = 15.0f;
+        public GameObject coin_prefab = null;
+        public GameObject coin_active_layer = null;
+        public GameObject coin_recycle_layer = null;
+
+        class CoinItem
+        {
+            public ComSpriteItems coinSprite;
+        }
+        List<CoinItem> actived_coins = new List<CoinItem>();
+        List<CoinItem> recycle_coins = new List<CoinItem>();
+        CoinItem CreateCoin()
+        {
+            if(recycle_coins.Count > 0)
+            {
+                CoinItem coinItem = recycle_coins[0];
+                Utility.AttachTo(coinItem.coinSprite.gameObject, coin_active_layer);
+                recycle_coins.RemoveAt(0);
+                actived_coins.Add(coinItem);
+                return coinItem;
+            }
+            else
+            {
+                GameObject coin = AssetLoader.Instance().LoadRes("UI/Prefabs/Bullets/Coin_001").obj as GameObject;
+                if(null == coin)
+                {
+                    return null;
+                }
+                ComSpriteItems coinSprite = coin.GetComponent<ComSpriteItems>();
+                if(null == coinSprite)
+                {
+                    return null;
+                }
+                CoinItem coinItem = new CoinItem { coinSprite = coinSprite };
+                Utility.AttachTo(coinItem.coinSprite.gameObject, coin_active_layer);
+                actived_coins.Add(coinItem);
+                return coinItem;
+            }
+        }
+
+        void Recycle(CoinItem coin)
+        {
+            if(null != coin && actived_coins.Contains(coin))
+            {
+                actived_coins.Remove(coin);
+                recycle_coins.Add(coin);
+                Utility.AttachTo(coin.coinSprite.gameObject, coin_recycle_layer);
+            }
+        }
 
         Vector2[] mCannonPosition = new Vector2[FishConfig.fish_player_count];
 
@@ -81,10 +129,19 @@ namespace GameClient
 
             public void SetPosition(Vector2 pos)
             {
-                if(null != fishSprite.self && null != fishSprite.self.transform)
+                if(null != fishSprite && null != fishSprite.self && null != fishSprite.self.transform)
                 {
                     (fishSprite.self.transform as RectTransform).anchoredPosition = pos;
                 }
+            }
+
+            public Vector2 GetPosition()
+            {
+                if (null != fishSprite && null != fishSprite.self && null != fishSprite.self.transform)
+                {
+                    return (fishSprite.self.transform as RectTransform).anchoredPosition;
+                }
+                return Vector2.zero;
             }
 
             public void SetAngle(float angle)
@@ -355,6 +412,132 @@ namespace GameClient
                 Utility.AttachTo(mLockedNumber[ChairID].gameObject, fishLockNumberRoot);
                 mLockedNumber[ChairID].CustomActive(false);
             }
+        }
+
+        public void SetDeadFish(int fishID, int KillChairid, int Winscore, int fishKindScore)
+        {
+            for (int i = 0; i < _actived.Count; ++i)
+            {
+                var fishData = _actived[i];
+                if(null != fishData && (int)fishData.guid == fishID && fishData.status != 1)
+                {
+                    fishData.status = 1;
+                    int FishScore = Winscore;
+                    int CoinNum = fishKindScore;
+                    Vector2 position = fishData.GetPosition();
+
+                    AddDeadFishScroe(position.x, position.y, FishScore, CoinNum, KillChairid);
+                    //TODO:
+                    //要有个鱼爆炸的特效
+                    //AddParticle(m_FishData->m_FishImg->getPositionX(), m_FishData->m_FishImg->getPositionY(), m_FishData->m_FishType);
+                    break;
+                }
+            }
+        }
+
+        public void AddDeadFishScroe(float Xpos, float Ypos, int fishScore, int fishKindScore, int ChairID)
+        {
+            //CCdsnhFishNumberLayer* m_UpScore = new CCdsnhFishNumberLayer();
+            //m_UpScore->setPosition(Vec2(Xpos, Ypos));
+            //if (ChairID >= 3)
+                //m_UpScore->setRotation(180);
+            //m_UpScore->Render(fishScore, "FishGame/Fish/Union/Num/SceneScoreNum.png", 1);
+            //m_UpScore->setTag(ChairID);
+            //m_UpScore->setLocalZOrder(fishKindScore);
+            //this->addChild(m_UpScore);
+            //1 加载金币翻动的图片
+            //2 设置起始位置在鱼死亡的位置
+            //3 若座位号4 5 6则设置旋转角度为180
+            //4 向上移动
+            //ActionInterval* moveToActionUp = MoveTo::create(0.13f, Vec2(m_UpScore->getPositionX(), m_UpScore->getPositionY() + 30));
+            //5 向下移动
+            //ActionInterval* moveToActionDown = MoveTo::create(0.13f, Vec2(m_UpScore->getPositionX(), m_UpScore->getPositionY() - 30));
+            //6 设置透明度 1.5
+            //ActionInterval* FadeOut = FadeOut::create(1.5f);
+            //7 回收硬币精灵
+            //FiniteTimeAction* AlphaScroeLayerChild = CallFuncN::create(CC_CALLBACK_1(CCdsnhFishButtleLayer::AlphaScroeLayerChild, this));
+            //FiniteTimeAction* RemoveScroeLayerChild = CallFuncN::create(CC_CALLBACK_1(CCdsnhFishButtleLayer::RemoveScroeLayerChild, this));
+            //m_UpScore->runAction(Sequence::create(moveToActionUp, moveToActionDown, DelayTime::create(0.4f), AlphaScroeLayerChild, DelayTime::create(0.25f), RemoveScroeLayerChild, NULL));
+            //8 播放金币获得音效
+            //PlayEffect("FishGame/Fish/Sound/Effect/GetMoney.ogg", 3);
+        }
+
+        public void AddWinCoin(int CoinNum, int m_FishScore_, int chairID)
+        {
+            //1 加载金币翻滚动画
+            float Xops = 250.0f;
+            AddCoin(CoinNum, m_FishScore_, chairID);
+            //tempCoinLayer->AddCoin(CoinNum, m_FishScore_, chairID);
+            //float Xdes = 31 * 0.9f;
+            //if (chairID >= 3) Xdes = -31 * 0.9f;
+            //ActionInterval* moveToActionOver = MoveTo::create(0.3f, Vec2(tempCoinLayer->getPositionX() + Xdes, tempCoinLayer->getPositionY()));
+            //FiniteTimeAction* MoveChild = CallFuncN::create(CC_CALLBACK_1(CCFishCommonLayer::MoveChild, this));
+            //FiniteTimeAction* RemoveMoveChild = CallFuncN::create(CC_CALLBACK_1(CCFishCommonLayer::RemoveMoveChild, this));
+            //if (canMove)
+            //{
+            //for (int i = 0; i < 4; i++)
+            //{
+            //m_CoinLayer[chairID][i]->stopAllActions();
+            //}
+            //tempCoinLayer->runAction(Sequence::create(DelayTime::create(2.0), MoveChild, RemoveMoveChild, NULL));
+            //}
+        }
+
+        public void AddCoin(int CoinNum, int m_FishScore_, int chairID)
+        {
+            int NumDesc = 5;
+            List<CoinItem> cachedCoins = GamePool.ListPool<CoinItem>.Get();
+            for (int i = 0; i < CoinNum + 1; i++)
+            {
+                CoinItem coinItem = CreateCoin();
+                RectTransform rectTransform = (coinItem.coinSprite.transform as RectTransform);
+                cachedCoins.Add(coinItem);
+
+                if (i == CoinNum)
+                {
+                    rectTransform.localScale = new Vector2(0.75f, 0.75f);
+                    rectTransform.anchoredPosition = new Vector2(0, 20);
+                    coinItem.coinSprite.Play();
+                    rectTransform.DOLocalMove(new Vector2(0, 20 + i * NumDesc), 0.02f * i).OnComplete(() =>
+                     {
+                         for(int j = 0; j < cachedCoins.Count; ++j)
+                         {
+                             Recycle(cachedCoins[j]);
+                         }
+                         GamePool.ListPool<CoinItem>.Release(cachedCoins);
+                     });
+                }
+                else
+                {
+                    coinItem.coinSprite.Reset();
+                    rectTransform.anchoredPosition = Vector2.zero;
+                    rectTransform.localScale = new Vector2(0.9f, 0.9f);
+                    rectTransform.DOLocalMove(new Vector2(0, i * NumDesc), 0.02f * i);
+                }
+            }
+        }
+
+        void ReomveScreenCoin()
+        {
+            //1 张数字背景
+            //char str[100] = { 0 };
+            //sprintf(str, "numberbg%d.png", (((this->getTag() - 800) % 10) % 3) + 1);
+            //SpriteFrameCache* cache = SpriteFrameCache::getInstance();
+            //Sprite* m_NumBgimg = Sprite::createWithSpriteFrame(cache->getSpriteFrameByName(str));
+            //sprintf(str, "%d", m_FishScore);
+            //2 创建数字文字集 UINumber组件
+            //LabelAtlas* m_AddScore = LabelAtlas::create(str, "FishGame/Fish/Union/Num/BulletNum.png", 12, 16, '0');
+            //m_AddScore->setAnchorPoint(Vec2(0.5, 1.0));
+            int NumDesc = 13;
+            //m_AddScore->setPosition(0, pSender->getPositionY() - 4);
+            //m_NumBgimg->setPosition(Vec2(pSender->getPositionX(), pSender->getPositionY() - NumDesc));
+            //float xBili = m_NumBgimg->getContentSize().width;
+            //m_NumBgimg->setScaleY(1.4f);
+            //this->addChild(m_NumBgimg);
+            //float NumWidth = m_AddScore->getContentSize().width;
+            //m_NumBgimg->setScaleX(NumWidth / (xBili - 1));
+            //this->addChild(m_AddScore);
+            //this->removeChild(pSender, true);
         }
 
         // Update is called once per frame
