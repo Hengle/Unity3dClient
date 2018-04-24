@@ -93,17 +93,16 @@ namespace GameClient
                 {
                     FishDataManager.Instance().CreateSwitchScene(_scene);
                 });
-                break;
             }
 
-            FishDataManager.Instance().CreateCatchChainCmd();
+            //FishDataManager.Instance().CreateCatchChainCmd();
 
             //InvokeManager.Instance().InvokeRepeate(this, 0.0f, 1, 10.0f, null, FishDataManager.Instance().CreateSwitchScene, null, false);
 
-            InvokeManager.Instance().Invoke(this, 15.0f, () =>
-            {
-                EventManager.Instance().SendEvent(ClientEvent.CE_FISH_LOCK_FISH, new object[] { 0,1 });
-            });
+            //InvokeManager.Instance().Invoke(this, 15.0f, () =>
+            //{
+            //    EventManager.Instance().SendEvent(ClientEvent.CE_FISH_LOCK_FISH, new object[] { 0,1 });
+            //});
         }
 
         void _BuildFishScene1()

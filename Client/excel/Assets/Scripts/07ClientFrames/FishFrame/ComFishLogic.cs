@@ -25,6 +25,7 @@ namespace GameClient
         public GameObject coin_prefab = null;
         public GameObject coin_active_layer = null;
         public GameObject coin_recycle_layer = null;
+        public RectTransform wave_transform;
 
         class CoinItem
         {
@@ -83,6 +84,19 @@ namespace GameClient
             public int tag;
             public float elapsed;
             public ulong tick_count;
+            public ulong build_time;
+            public bool pause;
+
+            public float bounding_radius_;
+            public int bounding_count_;
+
+            public FishKind fish_kind
+            {
+                get
+                {
+                    return (FishKind)(resId - 1);
+                }
+            }
 
             public FishSprite fishSprite;
             public ProtoTable.FishTable fishItem;
@@ -93,22 +107,25 @@ namespace GameClient
                 return null != fishSprite && null != fishSprite.self && fishSprite.self.activeSelf;
             }
 
-            public bool inScreen()
+            public bool InsideScreen()
             {
-                if(null != fishSprite && null != fishSprite.self)
+                if (null != fishSprite && null != fishSprite.self)
                 {
                     RectTransform rect = fishSprite.self.transform as RectTransform;
                     if(null != rect)
                     {
-                        if(rect.anchoredPosition.x <= -rect.sizeDelta.x || rect.anchoredPosition.x > FishConfig.kScreenWidth)
+                        Vector2 position = rect.anchoredPosition;
+
+                        if (position.x < 0 || position.x > FishConfig.kScreenWidth)
                         {
                             return false;
                         }
 
-                        if(rect.anchoredPosition.y <= -rect.sizeDelta.y || rect.anchoredPosition.y > FishConfig.kScreenHeight)
+                        if(position.y < 0 || position.y > FishConfig.kScreenHeight)
                         {
                             return false;
                         }
+
                         return true;
                     }
                 }
@@ -218,6 +235,8 @@ namespace GameClient
                 fishBody.tick_count = data.tick_count;
                 fishBody.elapsed = data.elapsed;
                 fishBody.moveAction = data.action;
+                fishBody.build_time = FishDataManager.Instance().getCurrentTime();
+                fishBody.pause = false;
                 fishBody.moveAction.Start();
                 _actived.Add(fishBody);
             }
@@ -301,7 +320,7 @@ namespace GameClient
                         {
                             return false;
                         }
-                        if(!fishData.inScreen())
+                        if(!fishData.InsideScreen())
                         {
                             return false;
                         }
@@ -540,56 +559,256 @@ namespace GameClient
             //this->removeChild(pSender, true);
         }
 
+        bool m_Waving = false;
+        public void OnWaveStart()
+        {
+            m_Waving = true;
+        }
+
+        public void OnWaveEnd()
+        {
+            m_Waving = false;
+        }
+
+        void _UpdateAllFishes()
+        {
+            for (int i = 0; i < _actived.Count; ++i)
+            {
+                var fishBody = _actived[i];
+                if (null == fishBody)
+                {
+                    _actived.RemoveAt(i--);
+                    continue;
+                }
+
+                var action = fishBody.moveAction;
+                if (null == action)
+                {
+                    fishBody.build_time = 0;
+                    continue;
+                }
+
+                //1 means a death fish
+                if (fishBody.status == 1)
+                {
+                    // tag = 0 means can delete it now
+                    if (fishBody.tag == 0)
+                    {
+                        //will done after this travel
+                    }
+                    else if (fishBody.tag != 1 && fishBody.tag != 0)
+                    {
+                        _RemoveLockedFishFlags(fishBody);
+                        _DeadFish(fishBody);
+                    }
+                    continue;
+                }
+
+                if (FishDataManager.Instance().getCurrentTime() - fishBody.build_time > 25000 && !fishBody.InsideScreen())
+                {
+                    fishBody.status = 1;
+                    _RemoveLockedFishFlags(fishBody);
+                    fishBody.tag = 0;
+                    continue;
+                }
+
+                if (fishBody.moveAction != null && fishBody.moveAction.IsDone() && fishBody.status == 0)
+                {
+                    fishBody.status = 1;
+                    _RemoveLockedFishFlags(fishBody);
+                    fishBody.tag = 0;
+                    continue;
+                }
+
+                float xpp = fishBody.moveAction.position().x;
+                if (m_Waving)
+                {
+                    if (null != wave_transform && null != wave_transform.gameObject)
+                    {
+                        bool visiable = wave_transform.gameObject.activeSelf;
+                        float seaXpos = wave_transform.anchoredPosition.x;
+                        if (seaXpos + 900 > xpp)
+                        {
+                            fishBody.status = 1;
+                            fishBody.tag = 0;
+                            continue;
+                        }
+                    }
+                }
+
+                if (!fishBody.pause)
+                {
+                    action.Step(Time.deltaTime);
+                }
+                //Vector2 position = action.FishMoveTo(action.elapsed());
+                _actived[i].SetPosition(action.position());
+                _actived[i].SetAngle(action.angle());
+            }
+
+            for (int i = 0; i < _actived.Count; ++i)
+            {
+                if (_actived[i].status == 1 && _actived[i].tag == 0)
+                {
+                    _RemoveLockedFishFlags(_actived[i]);
+                    _actived[i].OnRecycle(recycleRoot);
+                    FishAction.ThrowActionToPoll(_actived[i].moveAction);
+                    _actived[i].moveAction = null;
+                    _recycles.Add(_actived[i]);
+                    _actived.RemoveAt(i--);
+                }
+            }
+        }
+        void _UpdateAllBullets()
+        {
+            int haveUpdaeButtleid = -1;
+            for (int i = 0; i < ComBullet.mActivedBullets.Count; ++i)
+            {
+                var comBullet = ComBullet.mActivedBullets[i];
+                if (null == comBullet || null == comBullet.Value || null == comBullet.Value.action_bullet_move_)
+                {
+                    continue;
+                }
+
+                if (comBullet.Value.m_Status == 1)
+                {
+                    continue;
+                }
+
+                if (haveUpdaeButtleid == comBullet.Value.m_Status)
+                {
+                    continue;
+                }
+
+                comBullet.Value.action_bullet_move_.Stepbut(Time.deltaTime, (int)comBullet.Value.m_ButtleID, (long)FishDataManager.Instance().getCurrentTime(), 0);
+                haveUpdaeButtleid = (int)comBullet.Value.m_ButtleID;
+                Vector2 pos = comBullet.Value.action_bullet_move_.position();
+                comBullet.SetPosition(pos);
+                float angle = comBullet.Value.action_bullet_move_.angle();
+                comBullet.SetAngle(angle);
+                ++comBullet.Value.m_sendtime;
+
+                if (comBullet.Value.m_sendtime < 5)
+                    continue;
+                var HitedFish = CheckHitFish(comBullet.Value);
+                var m_Bullet = comBullet.Value;
+                if (null != HitedFish)
+                {
+                    //发送击中鱼儿消息
+                    if (!m_Bullet.m_bIsBadButtle)
+                    {
+                        //CMD_C_CatchFish catch_fish;
+                        //catch_fish.chair_id = CCGameMyData::GetManager()->GetRealChairID(m_Bullet->m_SendChairID);
+                        //catch_fish.fish_id = fishData->m_FishID;
+                        //catch_fish.isDouble = m_Bullet->m_IsSupperButtle;
+                        //catch_fish.bullet_mulriple = m_Bullet->bullet_mulriple;
+                        //catch_fish.byFishKind = fishData->m_FishType;
+                        //CCGameRoomTcpSocket::GetManager()->Send((const char*)&catch_fish, sizeof(catch_fish), SUB_C_CATCH_FISH, MDM_GF_GAME);
+                    }
+
+                    m_Bullet.m_Status = 1;
+
+                    // 变色
+                    //auto actionColor = TintTo::create(0.05f, 204, 0, 0);
+                    //auto actionColorBack = TintTo::create(0.05f, 255, 255, 255);
+                    //fishData->m_FishImg->runAction(Sequence::create(actionColor, DelayTime::create(0.7f), actionColorBack, nullptr));
+
+                    if (m_Bullet.m_IsSupperButtle)
+                        AudioManager.Instance().PlaySound(2020);
+                    else
+                        AudioManager.Instance().PlaySound(2021);
+
+                    //char str[100] = { 0 };
+                    //sprintf(str, "Net_%d.png", m_Bullet->m_ButtleType);
+                    //m_Bullet->m_Buttleimg0->initWithSpriteFrameName(str);
+                    //ActionInterval* ScaleTo = ScaleTo::create(0.1f, 0.9f);
+                    //FiniteTimeAction* RemoveChild = CallFuncN::create(CC_CALLBACK_1(CCFishButtleLayer::VisiableChild, this));
+                    //震动鱼网
+                    //ActionInterval* a1 = MoveBy::create(0.02f, Vec2(2, 0));
+                    //ActionInterval* a2 = MoveBy::create(0.02f, Vec2(0, 2));
+                    //ActionInterval* a3 = MoveBy::create(0.02f, Vec2(-2, 0));
+                    //ActionInterval* a4 = MoveBy::create(0.02f, Vec2(0, -2));
+                    //ActionInterval* action1 = Repeat::create(Sequence::create(a1, a2, a3, a4, nullptr), 8);
+                    //m_Bullet->m_Buttleimg0->runAction(Sequence::create(ScaleTo, action1, RemoveChild, nullptr));
+                    //删除子弹对象
+                    //m_ButtleArray->removeObject(_object, true);
+                    ComBullet.mActivedBullets.RemoveAt(i--);
+                    ComBullet.ThrowToPool(comBullet);
+                }
+            }
+        }
+
+        FishBody CheckHitFish(BulletData bullet)
+        {
+            Vector2 bullet_pos = bullet.action_bullet_move_.position(); // 子弹位
+            for(int i = 0; i < _actived.Count; ++i)
+            {
+                if(null == _actived[i] || _actived[i].status > 0)
+                {
+                    continue;
+                }
+
+                var fishBody = _actived[i];
+                if(fishBody.guid != bullet.m_lockfish && bullet.m_lockfish != -1)
+                {
+                    continue;
+                }
+
+                if(!fishBody.InsideScreen())
+                {
+                    continue;
+                }
+
+                float center_distance = fishBody.bounding_radius_ + bullet.bounding_radius_; // 子弹半径 + 鱼半径
+                float distance = 0.0f;
+                if (null == fishBody.moveAction)
+                {
+                    break;
+                }
+
+                Vector2 pos = fishBody.moveAction.position(); // 鱼的位置
+                float offset = 0;
+                if (fishBody.bounding_count_ > 1)
+                    offset = (fishBody.bounding_count_ - 1) * fishBody.bounding_radius_;
+                float center_x, center_y;
+
+                float angle = fishBody.moveAction.angle(); // 鱼偏转角
+                if (fishBody.fish_kind ==  FishKind.FISH_SHENXIANCHUAN)
+                {
+                    angle = (float)(angle + FishConfig.M_PI_2);
+                }
+                for (int j = 0; j < fishBody.bounding_count_; ++j)
+                {
+                    center_x = pos.x + offset * Mathf.Cos(angle);
+                    center_y = pos.y + offset * Mathf.Sin(angle);
+
+                    distance = MathAide.CalcDistance(bullet_pos.x, bullet_pos.y, center_x, center_y);
+                    if (distance <= center_distance)
+                    {
+                        return fishBody;
+                    }
+                    offset -= fishBody.bounding_radius_ * 2;
+                }
+            }
+            return null;
+        }
+
         // Update is called once per frame
         void Update()
         {
-            for(int i = 0; i < _actived.Count; ++i)
-            {
-                if(null != _actived[i])
-                {
-                    var action = _actived[i].moveAction;
-                    if(null != action)
-                    {
-                        action.Step(Time.deltaTime);
-                        //Vector2 position = action.FishMoveTo(action.elapsed());
-                        _actived[i].SetPosition(action.position());
-                        _actived[i].SetAngle(action.angle());
-                    }
+            _UpdateAllFishes();
+            _UpdateAllBullets();
+        }
 
-                    if(action.IsDone())
-                    {
-                        _RemoveLockedFishFlags(_actived[i]);
-                        _actived[i].OnRecycle(recycleRoot);
-                        FishAction.ThrowActionToPoll(_actived[i].moveAction);
-                        _actived[i].moveAction = null;
-                        _recycles.Add(_actived[i]);
-                        _actived.RemoveAt(i--);
-                        continue;
-                    }
-                }
+        void _DeadFish(FishBody fishData)
+        {
+            if(null == fishData)
+            {
+                return;
             }
 
-            for (int i = 0; i < ComBullet.mActivedBullets.Count; ++i)
-            {
-                var bullet = ComBullet.mActivedBullets[i];
-                if (null == bullet)
-                {
-                    continue;
-                }
-
-                var bulletData = bullet.Value;
-                if (null == bulletData)
-                {
-                    continue;
-                }
-
-                if (null != bulletData.action_bullet_move_)
-                {
-                    bulletData.action_bullet_move_.Step(Time.deltaTime);
-                    bullet.SetAngle(bulletData.action_bullet_move_.angle());
-                    bullet.SetPosition(bulletData.action_bullet_move_.position());
-                }
-            }
+            fishData.tag = 1;
+            //InvokeManager.Instance().Invoke(this, 1.0f, () => { fishData.tag = 0; });
+            fishData.tag = 0;
         }
 
         void _RemoveLockedFishFlags(FishBody fish)
@@ -606,6 +825,7 @@ namespace GameClient
                         }
                     }
                 }
+                fish.locked_flag = 0;
             }
         }
 
