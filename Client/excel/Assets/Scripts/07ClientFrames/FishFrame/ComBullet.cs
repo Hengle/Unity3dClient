@@ -28,16 +28,20 @@ namespace GameClient
             {
                 ComBullet comBullet = mRecycledBullets[0];
                 mRecycledBullets.RemoveAt(0);
+                if(null != comBullet)
+                {
+                    Utility.AttachTo(comBullet.gameObject, goAlive);
+                }
                 return comBullet;
             }
             return null;
         }
 
-        public static void ThrowToPool(ComBullet comBullet)
+        public static void ThrowToPool(ComBullet comBullet,GameObject goRecycle)
         {
             if(null != comBullet)
             {
-                comBullet.CustomActive(false);
+                Utility.AttachTo(comBullet.gameObject, goRecycle);
                 mActivedBullets.Remove(comBullet);
                 mRecycledBullets.Add(comBullet);
             }

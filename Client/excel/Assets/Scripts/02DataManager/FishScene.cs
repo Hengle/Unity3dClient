@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 namespace GameClient
 {
@@ -9,6 +10,61 @@ namespace GameClient
         public int kind_id;
         public GameObject self;
         public ComSpriteItems action;
+
+        bool bFlash = false;
+        Tweener tween1 = null;
+        Tweener tween2 = null;
+
+        void StartTween2()
+        {
+            tween2 = action.sprite.DOColor(new Color32 { r = 255, g = 255, b = 255, a = 255 }, 0.05f).OnComplete(EndColorFlash);
+            tween2.Play();
+        }
+
+        public void BeginColorFlash()
+        {
+            if (bFlash)
+            {
+                return;
+            }
+            if (null == action || null == action.sprite)
+            {
+                return;
+            }
+            bFlash = true;
+            tween1 = action.sprite.DOColor(new Color32 { r = 204, g = 0, b = 0, a = 255 }, 0.05f).SetDelay(0.70f).OnComplete(StartTween2);
+            tween1.Play();
+        }
+
+        void EndColorFlash()
+        {
+            if (null != tween1)
+            {
+                tween1.Kill();
+                tween1 = null;
+            }
+            if (null != tween2)
+            {
+                tween2.Kill();
+                tween2 = null;
+            }
+            bFlash = false;
+        }
+
+        public void DoKillFade()
+        {
+            if (null != tween1)
+            {
+                tween1.Kill();
+                tween1 = null;
+            }
+            if (null != tween2)
+            {
+                tween2.Kill();
+                tween2 = null;
+            }
+            bFlash = false;
+        }
     }
     public class FishScene
     {

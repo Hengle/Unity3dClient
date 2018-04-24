@@ -140,6 +140,10 @@ namespace GameClient
 
             public void OnRecycle(GameObject root)
             {
+                if(null != fishSprite)
+                {
+                    fishSprite.DoKillFade();
+                }
                 Utility.AttachTo(fishSprite.self, root);
                 fishSprite.self.CustomActive(false);
             }
@@ -643,6 +647,7 @@ namespace GameClient
                 //Vector2 position = action.FishMoveTo(action.elapsed());
                 _actived[i].SetPosition(action.position());
                 _actived[i].SetAngle(action.angle());
+                _actived[i].fishSprite.BeginColorFlash();
             }
 
             for (int i = 0; i < _actived.Count; ++i)
@@ -696,26 +701,27 @@ namespace GameClient
                     //发送击中鱼儿消息
                     if (!m_Bullet.m_bIsBadButtle)
                     {
-                        //CMD_C_CatchFish catch_fish;
-                        //catch_fish.chair_id = CCGameMyData::GetManager()->GetRealChairID(m_Bullet->m_SendChairID);
-                        //catch_fish.fish_id = fishData->m_FishID;
-                        //catch_fish.isDouble = m_Bullet->m_IsSupperButtle;
-                        //catch_fish.bullet_mulriple = m_Bullet->bullet_mulriple;
-                        //catch_fish.byFishKind = fishData->m_FishType;
-                        //CCGameRoomTcpSocket::GetManager()->Send((const char*)&catch_fish, sizeof(catch_fish), SUB_C_CATCH_FISH, MDM_GF_GAME);
+                        CMD_C_CatchFish catch_fish;
+                        catch_fish.chair_id =(short)FishDataManager.Instance().GetRealChairID(m_Bullet.m_SendChairID);
+                        catch_fish.fish_id = (int)HitedFish.guid;
+                        catch_fish.isDouble = m_Bullet.m_IsSupperButtle;
+                        catch_fish.bullet_mulriple = m_Bullet.bullet_mulriple;
+                        catch_fish.byFishKind = (byte)HitedFish.fish_kind;
+                        FishDataManager.Instance().SendCmdCatchFish(catch_fish);
                     }
 
                     m_Bullet.m_Status = 1;
-
-                    // 变色
-                    //auto actionColor = TintTo::create(0.05f, 204, 0, 0);
-                    //auto actionColorBack = TintTo::create(0.05f, 255, 255, 255);
-                    //fishData->m_FishImg->runAction(Sequence::create(actionColor, DelayTime::create(0.7f), actionColorBack, nullptr));
-
+                    //变色
+                    HitedFish.fishSprite.BeginColorFlash();
+                    //播放音效
                     if (m_Bullet.m_IsSupperButtle)
+                    {
                         AudioManager.Instance().PlaySound(2020);
+                    }
                     else
+                    {
                         AudioManager.Instance().PlaySound(2021);
+                    }
 
                     //char str[100] = { 0 };
                     //sprintf(str, "Net_%d.png", m_Bullet->m_ButtleType);
@@ -730,9 +736,8 @@ namespace GameClient
                     //ActionInterval* action1 = Repeat::create(Sequence::create(a1, a2, a3, a4, nullptr), 8);
                     //m_Bullet->m_Buttleimg0->runAction(Sequence::create(ScaleTo, action1, RemoveChild, nullptr));
                     //删除子弹对象
-                    //m_ButtleArray->removeObject(_object, true);
                     ComBullet.mActivedBullets.RemoveAt(i--);
-                    ComBullet.ThrowToPool(comBullet);
+                    ComBullet.ThrowToPool(comBullet, recycled_bulletLayer);
                 }
             }
         }

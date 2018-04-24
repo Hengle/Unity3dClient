@@ -91,6 +91,28 @@ namespace GameClient
         public ulong tick_count;
     }
 
+    public struct CMD_C_ExchangeFishScore
+    {
+        public long exchange_score;
+    };
+
+    struct CMD_C_UserFire
+    {
+        public int bullet_id_temp;
+        public int tick_count;
+        public float angle;
+        public int lock_fish_id;
+        public int bullet_mulriple;
+    };
+    public struct CMD_C_CatchFish
+    {
+        public int fish_id;                                  // 鱼的编号
+        public int bullet_mulriple;                            // 子弹倍数
+        public short chair_id;                                    // 椅子编号
+        public bool isDouble;                                   // 是否双倍
+        public byte byFishKind;                                   // 鱼类型
+    };
+
     class FishDataPool : GamePool.ObjectPool<FishData>
     {
         public static void OnGet(FishData x)
@@ -174,6 +196,7 @@ namespace GameClient
         bool[] m_SupperPao = new bool[FishConfig.fish_player_count];
         int[] m_UserLockFishID = new int[FishConfig.fish_player_count];
         FishKind[] m_UserLockFishKind = new FishKind[FishConfig.fish_player_count];
+        int[] m_RealChairID = new int[FishConfig.fish_player_count];
         Vector2[] m_UserData = new Vector2[FishConfig.fish_player_count]
         {
             new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),
@@ -192,7 +215,17 @@ namespace GameClient
                 m_ButtleType[i] = 0;
                 m_BeiLv[i] = 1;
                 m_SupperPao[i] = false;
+                m_RealChairID[i] = i;
             }
+        }
+
+        public int GetRealChairID(int local)
+        {
+            if(local >= 0 && local < m_RealChairID.Length)
+            {
+                return m_RealChairID[local];
+            }
+            return 0;
         }
 
         public void ClearLockFish()
@@ -207,6 +240,12 @@ namespace GameClient
         public FishData Get()
         {
             return mFishDataPool.Get();
+        }
+
+        public void SendCmdCatchFish(CMD_C_CatchFish cmd)
+        {
+            LogManager.Instance().LogErrorFormat("SendCmdCatchFish TO DO!");
+            //CCGameRoomTcpSocket::GetManager()->Send((const char*)&catch_fish, sizeof(catch_fish), SUB_C_CATCH_FISH, MDM_GF_GAME);
         }
 
         public void CreateFish(FishKind kind,int fish_id, FishActionFishMove action)
