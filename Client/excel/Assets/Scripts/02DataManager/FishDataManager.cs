@@ -252,6 +252,19 @@ namespace GameClient
             Clear();
         }
 
+        ulong _current_time = 0;
+        ulong _recieve_tick = 0;
+        public ulong getCurrentTime()
+        {
+            return _current_time + ((ulong)(Time.time * 1000.0f) - _recieve_tick);
+        }
+
+        public void fixCurrentTime(ulong current)
+        {
+            _current_time = current;
+            _recieve_tick = (ulong)(Time.time * 1000.0f);
+        }
+
         public int chairId
         {
             get;set;

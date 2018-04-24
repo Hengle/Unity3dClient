@@ -33,6 +33,16 @@ namespace GameClient
             return null;
         }
 
+        public static void ThrowToPool(ComBullet comBullet)
+        {
+            if(null != comBullet)
+            {
+                comBullet.CustomActive(false);
+                mActivedBullets.Remove(comBullet);
+                mRecycledBullets.Add(comBullet);
+            }
+        }
+
         public static ComBullet Create(int kind_id,GameObject goAlive)
         {
             ProtoTable.BulletTable bulletItem = TableManager.Instance().GetTableItem<ProtoTable.BulletTable>(kind_id);
