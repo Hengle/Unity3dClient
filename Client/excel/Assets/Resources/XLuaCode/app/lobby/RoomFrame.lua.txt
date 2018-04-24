@@ -24,8 +24,14 @@ function RoomFrame.OnOpenFrame()
     dump(gameConfig, "RoomFrame.OnOpenFrame:")
     assert(gameConfig)
 
+    local roomid = 11000
+    roomMgr:init(Gameid_fish, roomid)
+    UserMessage.send("EnterRoomReq", {roomid=roomid}, function(msg)
+        roomMgr:EnterRoomRep(msg)
+    end)
 
     for _,config in ipairs(gameConfig.room) do
+        dump(config, "config")
         local roomid = (config.roomid) % 100 + 1
         self.frame:GetObject("btn_room_"..roomid).onClick:AddListener(function()
         roomMgr:init(Gameid_fish,config.roomid)
@@ -37,7 +43,6 @@ function RoomFrame.OnOpenFrame()
 end
 
 RoomFrame.onClickRoom1 = function()
-    printLog("onClickRoom1")
     local roomid = 11000
     roomMgr:init(Gameid_fish, roomid)
     UserMessage.send("EnterRoomReq", {roomid=roomid}, function(msg)
