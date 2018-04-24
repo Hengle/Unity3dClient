@@ -47,6 +47,40 @@ namespace GameClient
         public ulong userAndroidCharId;
     };
 
+    public struct CMD_S_BulletDoubleTimeout
+    {
+        public short chair_id;
+    };
+
+    public struct CMD_S_ExchangeFishScore
+    {
+        public short chair_id;
+        public long swap_fish_score;
+        public long exchange_fish_score;
+    };
+
+    public struct CatchFish
+    {
+        public int fish_id;
+        public FishKind fish_kind;
+        public long fish_score;
+        public bool bullet_double;
+        public int link_fish_id;
+    };
+
+    public struct CMD_S_CatchChain
+    {
+        public short chair_id;
+        public CatchFish[] catch_fish;
+    };
+
+    public struct CMD_S_CatchFishGroup
+    {
+        public long tick_count;
+        public short chair_id;
+        public CatchFish[] catch_fish;
+    };
+
     public class FishData
     {
         public int fish_id;
@@ -133,6 +167,7 @@ namespace GameClient
             }
         }
 
+        long[] m_UserScore = new long[FishConfig.fish_player_count];
         long[] m_UserUpScore = new long[FishConfig.fish_player_count];
         int[] m_ButtleType = new int[FishConfig.fish_player_count];
         int[] m_BeiLv = new int[FishConfig.fish_player_count];
@@ -153,6 +188,7 @@ namespace GameClient
                 m_UserLockFishKind[i] = FishKind.FISH_KIND_COUNT;
                 m_UserLockFishID[i] = -1;
                 m_UserUpScore[i] = 0;
+                m_UserScore[i] = 0;
                 m_ButtleType[i] = 0;
                 m_BeiLv[i] = 1;
                 m_SupperPao[i] = false;
@@ -235,7 +271,270 @@ namespace GameClient
                 _bg_audio_handle = value;
             }
         }
+        public void UpDataUpScoreHitFish(int chairID, long UpScore)
+        {
+            if(chairID >= 0 && chairID < m_UserUpScore.Length)
+            {
+                m_UserUpScore[chairID] += UpScore;
+            }
 
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, chairID);
+        }
+
+        public void SetSuperPao(int chairID,bool bSuperPao)
+        {
+            if(chairID >= 0 && chairID < m_SupperPao.Length)
+            {
+                m_SupperPao[chairID] = bSuperPao;
+            }
+        }
+
+        public void SetUserScore(int chairID,long userScore)
+        {
+            if(chairID >= 0 && chairID < m_UserScore.Length)
+            {
+                m_UserScore[chairID] = userScore;
+            }
+        }
+
+        public void UpDataBeiLv(int chairID, int BeiLv, bool Runaction)
+        {
+            if(chairID < 0 || chairID >= m_ButtleType.Length)
+            {
+                return;
+            }
+
+            int NowType = m_ButtleType[chairID];
+            if (Runaction)
+            {
+                AudioManager.Instance().PlaySound(2104);//ChangeWeapon.ogg
+            }
+
+            m_BeiLv[chairID] = BeiLv;
+            if (m_BeiLv[chairID] < 100)
+            {
+                m_ButtleType[chairID] = 2;
+            }
+            else if (m_BeiLv[chairID] >= 100 && m_BeiLv[chairID] < 1000)
+            {
+                m_ButtleType[chairID] = 3;
+            }
+            else
+            {
+                m_ButtleType[chairID] = 4;
+            }
+            if (m_SupperPao[chairID])
+            {
+                m_ButtleType[chairID] = m_ButtleType[chairID] + 3;
+            }
+
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, chairID);
+        }
+
+        public long GetPlayerScore(int chairID)
+        {
+            if (chairID >= 0 && chairID < m_UserUpScore.Length)
+            {
+                return m_UserUpScore[chairID];
+            }
+            return 0;
+        }
+
+        public int GetBulletType(int chairID)
+        {
+            if (chairID >= 0 && chairID < m_ButtleType.Length)
+            {
+                return m_ButtleType[chairID];
+            }
+            return 0;
+        }
+
+        public int GetBulletPower(int chairID)
+        {
+            if (chairID >= 0 && chairID < m_BeiLv.Length)
+            {
+                return m_BeiLv[chairID];
+            }
+            return 0;
+        }
+        public string GetCannonPath(int cannonId)
+        {
+            if(cannonId >= 1 && cannonId <= ms_cannon_Paths.Length)
+            {
+                return ms_cannon_Paths[cannonId - 1];
+            }
+            return ms_cannon_Paths[0];
+        }
+        public int GetLockedFishId(int chairID)
+        {
+            if(chairID >= 0 && chairID < m_UserLockFishID.Length)
+            {
+                return m_UserLockFishID[chairID];
+            }
+            return -1;
+        }
+
+        public void SetLockedFishId(int chairID,int fishId)
+        {
+            if (chairID >= 0 && chairID < m_UserLockFishID.Length)
+            {
+                m_UserLockFishID[chairID] = fishId;
+            }
+        }
+
+        public void CreateCatchChainCmd()
+        {
+            var cmd = new CMD_S_CatchChain();
+            cmd.chair_id = 0;
+            cmd.catch_fish = new CatchFish[3];
+            for (int i = 0; i < cmd.catch_fish.Length; ++i)
+            {
+                cmd.catch_fish[i].fish_id = 199 + i;
+                cmd.catch_fish[i].fish_kind = (FishKind.FISH_WONIUYU + i);
+                cmd.catch_fish[i].fish_score = 100 + i * 1000;
+                cmd.catch_fish[i].bullet_double = (i & 1) == 0;
+                if (i > 0)
+                {
+                    cmd.catch_fish[i].link_fish_id = cmd.catch_fish[i - 1].fish_id;
+                }
+                else
+                {
+                    cmd.catch_fish[i].fish_id = 0;
+                }
+            }
+            ExecuteCmd(cmd);
+        }
+
+        public void CreateSwitchScene(SceneKind scene)
+        {
+            CMD_S_SwitchScene kCmd = new CMD_S_SwitchScene();
+            kCmd.next_scene = scene;
+            kCmd.tick_count = 0;
+            ExecuteCmd(kCmd);
+        }
+
+        public int SwitchChairID(short nCurChairId)
+        {
+            int changChairID = nCurChairId;
+            switch (chairId)
+            {
+                case 0:
+                case 1:
+                case 2:
+                    {
+                        switch (nCurChairId)
+                        {
+                            case 0: return 0;
+                            case 1: return 1;
+                            case 2: return 2;
+                            case 3: return 3;
+                            case 4: return 4;
+                            case 5: return 5;
+                        }
+                        break;
+                    }
+                case 3:
+                case 4:
+                case 5:
+                    {
+                        switch (nCurChairId)
+                        {
+                            case 0: return 3;
+                            case 1: return 4;
+                            case 2: return 5;
+                            case 3: return 0;
+                            case 4: return 1;
+                            case 5: return 2;
+                        }
+                        break;
+                    }
+            }
+            return changChairID;
+        }
+
+        #region execute_server_cmd
+        public void ExecuteCmd(CMD_S_SwitchScene cmd)
+        {
+            mFishScene = cmd.next_scene;
+
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_CHANGE_SCENE);
+
+            mCanSend = false;
+        }
+
+        public void ExecuteCmd(CMD_S_UserFire cmd)
+        {
+            int LogicChairID = SwitchChairID(cmd.chair_id);
+            BulletKind bullet_kind;
+            if (cmd.bullet_mulriple < 100)
+            {
+                bullet_kind = cmd.bullet_double ? BulletKind.BULLET_2_DOUBLE : BulletKind.BULLET_2_NORMAL;
+            }
+            else if (cmd.bullet_mulriple >= 100 && cmd.bullet_mulriple < 1000)
+            {
+                bullet_kind = cmd.bullet_double ? BulletKind.BULLET_3_DOUBLE : BulletKind.BULLET_3_NORMAL;
+            }
+            else if (cmd.bullet_mulriple >= 1000)
+            {
+                bullet_kind = cmd.bullet_double ? BulletKind.BULLET_4_DOUBLE : BulletKind.BULLET_4_NORMAL;
+            }
+            else
+                bullet_kind = BulletKind.BULLET_2_DOUBLE;
+
+            if (cmd.chair_id != FishDataManager.Instance().chairId)
+            {
+                UpDataUpScoreHitFish(LogicChairID, -cmd.bullet_mulriple);
+
+                float angle = cmd.angle;
+                if (FishDataManager.Instance().chairId < 3)
+                {
+                    angle -= (float)FishConfig.M_PI;
+                }
+
+                UpDataBeiLv(LogicChairID, cmd.bullet_mulriple, false);
+
+                EventManager.Instance().SendEvent(ClientEvent.CE_FISH_LOCK_FISH, new object[] { LogicChairID, cmd.lock_fish_id });
+
+                EventManager.Instance().SendEvent(ClientEvent.CE_FISH_USER_SHOOT, new object[] { LogicChairID, angle,cmd.bullet_id, cmd.isAndroidUser, cmd.userAndroidCharId,500.0f, cmd.lock_fish_id ,null});
+                //m_FishCommonLayer->UserShoot(LogicChairID, angle, cmd.bullet_id, cmd.isAndroidUser, cmd.userAndroidCharId,
+                //    CCGameMyData::GetManager()->GetFishGameConfig().bullet_speed[bullet_kind], lock_fish_id, action_fish);
+            }
+            else
+            {
+                //TODO:
+                //m_TimeOverCount = 120;
+            }
+        }
+
+        public void ExecuteCmd(CMD_S_BulletDoubleTimeout cmd)
+        {
+            int chairID = SwitchChairID(cmd.chair_id);
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_UPPER_SUPER_CANNON, new object[] { chairID,false });
+        }
+
+        public void ExecuteCmd(CMD_S_ExchangeFishScore cmd)
+        {
+            int chairID = SwitchChairID(cmd.chair_id);
+            FishDataManager.Instance().UpDataUpScoreHitFish(chairID, cmd.swap_fish_score);
+            FishDataManager.Instance().SetUserScore(chairID,cmd.exchange_fish_score);
+        }
+
+        public void ExecuteCmd(CMD_S_CatchChain cmd)
+        {
+            int chairID = SwitchChairID(cmd.chair_id);
+            cmd.chair_id = (short)chairID;
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_CATCH_CHAIN, cmd);
+        }
+
+        public void ExecuteCmd(CMD_S_CatchFishGroup catch_fish_group)
+        {
+            if(catch_fish_group.catch_fish.Length <= 0)
+            {
+                return;
+            }
+
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_CATCH_FISH_GROUP, catch_fish_group);
+        }
         public void ExecuteCmd(CMD_S_SceneFish cmd)
         {
             /*
@@ -257,7 +556,7 @@ namespace GameClient
             }
 
             var fishItem = TableManager.Instance().GetTableItem<ProtoTable.FishTable>((int)cmd.fish_kind);
-            if(null == fishItem)
+            if (null == fishItem)
             {
                 LogManager.Instance().LogErrorFormat("create fish failed !! which kind={0}:[id={1}] can not be found in fishtable !!!", cmd.fish_kind, (int)cmd.fish_kind);
                 return;
@@ -441,200 +740,6 @@ namespace GameClient
 
             }
         }
-
-        public void ExecuteCmd(CMD_S_SwitchScene cmd)
-        {
-            mFishScene = cmd.next_scene;
-
-            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_CHANGE_SCENE);
-
-            mCanSend = false;
-        }
-
-        void _UpDataUpScoreHitFish(int chairID, long UpScore)
-        {
-            if(chairID >= 0 && chairID < m_UserUpScore.Length)
-            {
-                m_UserUpScore[chairID] += UpScore;
-            }
-
-            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, chairID);
-        }
-
-        void UpDataBeiLv(int chairID, int BeiLv, bool Runaction)
-        {
-            if(chairID < 0 || chairID >= m_ButtleType.Length)
-            {
-                return;
-            }
-
-            int NowType = m_ButtleType[chairID];
-            if (Runaction)
-            {
-                AudioManager.Instance().PlaySound(2104);//ChangeWeapon.ogg
-            }
-
-            m_BeiLv[chairID] = BeiLv;
-            if (m_BeiLv[chairID] < 100)
-            {
-                m_ButtleType[chairID] = 2;
-            }
-            else if (m_BeiLv[chairID] >= 100 && m_BeiLv[chairID] < 1000)
-            {
-                m_ButtleType[chairID] = 3;
-            }
-            else
-            {
-                m_ButtleType[chairID] = 4;
-            }
-            if (m_SupperPao[chairID])
-            {
-                m_ButtleType[chairID] = m_ButtleType[chairID] + 3;
-            }
-
-            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, chairID);
-        }
-
-        public long GetPlayerScore(int chairID)
-        {
-            if (chairID >= 0 && chairID < m_UserUpScore.Length)
-            {
-                return m_UserUpScore[chairID];
-            }
-            return 0;
-        }
-
-        public int GetBulletType(int chairID)
-        {
-            if (chairID >= 0 && chairID < m_ButtleType.Length)
-            {
-                return m_ButtleType[chairID];
-            }
-            return 0;
-        }
-
-        public int GetBulletPower(int chairID)
-        {
-            if (chairID >= 0 && chairID < m_BeiLv.Length)
-            {
-                return m_BeiLv[chairID];
-            }
-            return 0;
-        }
-        public string GetCannonPath(int cannonId)
-        {
-            if(cannonId >= 1 && cannonId <= ms_cannon_Paths.Length)
-            {
-                return ms_cannon_Paths[cannonId - 1];
-            }
-            return ms_cannon_Paths[0];
-        }
-        public int GetLockedFishId(int chairID)
-        {
-            if(chairID >= 0 && chairID < m_UserLockFishID.Length)
-            {
-                return m_UserLockFishID[chairID];
-            }
-            return -1;
-        }
-
-        public void SetLockedFishId(int chairID,int fishId)
-        {
-            if (chairID >= 0 && chairID < m_UserLockFishID.Length)
-            {
-                m_UserLockFishID[chairID] = fishId;
-            }
-        }
-
-        public void ExecuteCmd(CMD_S_UserFire cmd)
-        {
-            int LogicChairID = SwitchChairID(cmd.chair_id);
-            BulletKind bullet_kind;
-            if (cmd.bullet_mulriple < 100)
-            {
-                bullet_kind = cmd.bullet_double ? BulletKind.BULLET_2_DOUBLE : BulletKind.BULLET_2_NORMAL;
-            }
-            else if (cmd.bullet_mulriple >= 100 && cmd.bullet_mulriple < 1000)
-            {
-                bullet_kind = cmd.bullet_double ? BulletKind.BULLET_3_DOUBLE : BulletKind.BULLET_3_NORMAL;
-            }
-            else if (cmd.bullet_mulriple >= 1000)
-            {
-                bullet_kind = cmd.bullet_double ? BulletKind.BULLET_4_DOUBLE : BulletKind.BULLET_4_NORMAL;
-            }
-            else
-                bullet_kind = BulletKind.BULLET_2_DOUBLE;
-
-            if (cmd.chair_id != FishDataManager.Instance().chairId)
-            {
-                _UpDataUpScoreHitFish(LogicChairID, -cmd.bullet_mulriple);
-
-                float angle = cmd.angle;
-                if (FishDataManager.Instance().chairId < 3)
-                {
-                    angle -= (float)FishConfig.M_PI;
-                }
-
-                UpDataBeiLv(LogicChairID, cmd.bullet_mulriple, false);
-
-                EventManager.Instance().SendEvent(ClientEvent.CE_FISH_LOCK_FISH, new object[] { LogicChairID, cmd.lock_fish_id });
-
-                EventManager.Instance().SendEvent(ClientEvent.CE_FISH_USER_SHOOT, new object[] { LogicChairID, angle,cmd.bullet_id, cmd.isAndroidUser, cmd.userAndroidCharId,500.0f, cmd.lock_fish_id ,null});
-                //m_FishCommonLayer->UserShoot(LogicChairID, angle, cmd.bullet_id, cmd.isAndroidUser, cmd.userAndroidCharId,
-                //    CCGameMyData::GetManager()->GetFishGameConfig().bullet_speed[bullet_kind], lock_fish_id, action_fish);
-            }
-            else
-            {
-                //TODO:
-                //m_TimeOverCount = 120;
-            }
-        }
-
-        public void CreateSwitchScene(SceneKind scene)
-        {
-            CMD_S_SwitchScene kCmd = new CMD_S_SwitchScene();
-            kCmd.next_scene = scene;
-            kCmd.tick_count = 0;
-            ExecuteCmd(kCmd);
-        }
-
-        int SwitchChairID(short nCurChairId)
-        {
-            int changChairID = nCurChairId;
-            switch (chairId)
-            {
-                case 0:
-                case 1:
-                case 2:
-                    {
-                        switch (nCurChairId)
-                        {
-                            case 0: return 0;
-                            case 1: return 1;
-                            case 2: return 2;
-                            case 3: return 3;
-                            case 4: return 4;
-                            case 5: return 5;
-                        }
-                        break;
-                    }
-                case 3:
-                case 4:
-                case 5:
-                    {
-                        switch (nCurChairId)
-                        {
-                            case 0: return 3;
-                            case 1: return 4;
-                            case 2: return 5;
-                            case 3: return 0;
-                            case 4: return 1;
-                            case 5: return 2;
-                        }
-                        break;
-                    }
-            }
-            return changChairID;
-        }
+        #endregion
     }
 }

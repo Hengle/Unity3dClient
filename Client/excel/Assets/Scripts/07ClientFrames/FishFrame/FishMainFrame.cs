@@ -14,6 +14,19 @@ namespace GameClient
         UnityEngine.UI.Image mbg_cur;
         DG.Tweening.DOTweenAnimation mwave_action;
         GameClient.ComFishLogic mfish_logic;
+        GameClient.ComUINumber mnum_0;
+        GameClient.ComUINumber mnum_1;
+        GameClient.ComUINumber mnum_2;
+        GameClient.ComUINumber mnum_3;
+        GameClient.ComUINumber mnum_4;
+        GameClient.ComUINumber mnum_5;
+        UnityEngine.UI.Text mbblv_0;
+        UnityEngine.UI.Text mbblv_1;
+        UnityEngine.UI.Text mbblv_2;
+        UnityEngine.UI.Text mbblv_3;
+        UnityEngine.UI.Text mbblv_4;
+        UnityEngine.UI.Text mbblv_5;
+        UnityEngine.UI.Button mbtnAdd;
         PathNormalList path = null;
 
         protected override void _InitScriptBinder()
@@ -25,13 +38,35 @@ namespace GameClient
             mbg_cur = mScriptBinder.GetObject("bg_cur") as UnityEngine.UI.Image;
             mwave_action = mScriptBinder.GetObject("wave_action") as DG.Tweening.DOTweenAnimation;
             mfish_logic = mScriptBinder.GetObject("fish_logic") as GameClient.ComFishLogic;
+            mnum_0 = mScriptBinder.GetObject("num_0") as GameClient.ComUINumber;
+            mnum_1 = mScriptBinder.GetObject("num_1") as GameClient.ComUINumber;
+            mnum_2 = mScriptBinder.GetObject("num_2") as GameClient.ComUINumber;
+            mnum_3 = mScriptBinder.GetObject("num_3") as GameClient.ComUINumber;
+            mnum_4 = mScriptBinder.GetObject("num_4") as GameClient.ComUINumber;
+            mnum_5 = mScriptBinder.GetObject("num_5") as GameClient.ComUINumber;
+            mbblv_0 = mScriptBinder.GetObject("bblv_0") as UnityEngine.UI.Text;
+            mbblv_1 = mScriptBinder.GetObject("bblv_1") as UnityEngine.UI.Text;
+            mbblv_2 = mScriptBinder.GetObject("bblv_2") as UnityEngine.UI.Text;
+            mbblv_3 = mScriptBinder.GetObject("bblv_3") as UnityEngine.UI.Text;
+            mbblv_4 = mScriptBinder.GetObject("bblv_4") as UnityEngine.UI.Text;
+            mbblv_5 = mScriptBinder.GetObject("bblv_5") as UnityEngine.UI.Text;
+            mbtnAdd = mScriptBinder.GetObject("btnAdd") as UnityEngine.UI.Button;
         }
+
 
         protected override sealed void _OnOpenFrame()
 		{
 			if(null != mbtnQuit)
             {
                 mbtnQuit.onClick.AddListener(_OnClickClose);
+            }
+
+            if(null != mbtnAdd)
+            {
+                mbtnAdd.onClick.AddListener(() => 
+                {
+                    AddWinCoin(25, 10000, 0);
+                });
             }
 
             path = AssetLoader.Instance().LoadRes("Xml/path", typeof(PathNormalList)).obj as PathNormalList;
@@ -44,6 +79,9 @@ namespace GameClient
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, _OnPlayerCannonChanged);
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_LOCK_FISH, _OnLockFish);
             EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_USER_SHOOT, _OnUserShoot);
+            EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_UPPER_SUPER_CANNON, _OnSetSupperCannon);
+            EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_CATCH_CHAIN, _OnCatchFishChain);
+            EventManager.Instance().RegisterEvent(ClientEvent.CE_FISH_CATCH_FISH_GROUP, _OnCatchFishGroup);
 
             _InitPlayerScores();
             _InitBeiLv();
@@ -57,6 +95,8 @@ namespace GameClient
                 });
                 break;
             }
+
+            FishDataManager.Instance().CreateCatchChainCmd();
 
             //InvokeManager.Instance().InvokeRepeate(this, 0.0f, 1, 10.0f, null, FishDataManager.Instance().CreateSwitchScene, null, false);
 
@@ -275,6 +315,150 @@ namespace GameClient
             }
         }
 
+        protected void _OnSetSupperCannon(object argv)
+        {
+            object[] argvs = argv as object[];
+            int chairId = (int)argvs[0];
+            bool bSupperCannon = (bool)argvs[1];
+
+            FishDataManager.Instance().SetSuperPao(chairId, bSupperCannon);
+            var bulletType = FishDataManager.Instance().GetBulletType(chairId);
+
+            if (bSupperCannon && bulletType <= 4)
+            {
+                AudioManager.Instance().PlaySound(2017);
+            }
+            else if (!bSupperCannon && bulletType > 4)
+            {
+                AudioManager.Instance().PlaySound(2018);
+            }
+
+            int cannonPower = FishDataManager.Instance().GetBulletPower(chairId);
+            FishDataManager.Instance().UpDataBeiLv(chairId, cannonPower, false);
+        }
+
+        protected void _OnCatchFishChain(object argv)
+        {
+            CMD_S_CatchChain cmd = (CMD_S_CatchChain)argv;
+
+            int total_score = 0;
+            var powerLv = FishDataManager.Instance().GetBulletPower(cmd.chair_id);
+            for (int i = 0; i < cmd.catch_fish.Length; ++i)
+            {
+                total_score += (int)cmd.catch_fish[i].fish_score;
+                SetDeadFish(cmd.catch_fish[i].fish_id, cmd.chair_id, total_score, total_score / powerLv);
+            }
+
+            AddWinCoin(total_score / powerLv, total_score, cmd.chair_id);
+            FishDataManager.Instance().UpDataUpScoreHitFish(cmd.chair_id, total_score);
+        }
+
+        protected void _OnCatchFishGroup(object argv)
+        {
+            CMD_S_CatchFishGroup catch_fish_group = (CMD_S_CatchFishGroup)argv;
+
+            bool same_kind_fish = catch_fish_group.catch_fish[0].link_fish_id == -1 && catch_fish_group.catch_fish[0].fish_kind >= FishKind.FISH_DNTG && catch_fish_group.catch_fish[0].fish_kind <= FishKind.FISH_QJF;
+            bool bomb = catch_fish_group.catch_fish[0].link_fish_id == -1 && (catch_fish_group.catch_fish[0].fish_kind == FishKind.FISH_FOSHOU || catch_fish_group.catch_fish[0].fish_kind == FishKind.FISH_BGLU);
+            long total_score = 0;
+            if (bomb)
+                total_score = catch_fish_group.catch_fish[0].fish_score;
+
+            int view_chair_id = FishDataManager.Instance().SwitchChairID(catch_fish_group.chair_id);
+
+            for (int i = 0; i < catch_fish_group.catch_fish.Length; ++i)
+            {
+                if (catch_fish_group.catch_fish[i].bullet_double)
+                {
+                    EventManager.Instance().SendEvent(ClientEvent.CE_FISH_UPPER_SUPER_CANNON, new object[] { view_chair_id, true });
+                }
+                if (!bomb)
+                {
+                    FishDataManager.Instance().UpDataUpScoreHitFish(view_chair_id, catch_fish_group.catch_fish[i].fish_score);
+                }
+                if (!same_kind_fish)
+                {
+                    bool bingo = false;
+                    bool bPlayWav = false;
+
+                    bingo = catch_fish_group.catch_fish[i].fish_kind >= FishKind.FISH_YINSHA && (catch_fish_group.catch_fish[i].link_fish_id == -1);
+                    if (catch_fish_group.catch_fish[i].fish_kind == FishKind.FISH_JINCHAN || catch_fish_group.catch_fish[i].fish_kind == FishKind.FISH_SHENXIANCHUAN)
+                    {
+                        bingo = false;
+                    }
+
+                    FishKind fish_kind = catch_fish_group.catch_fish[i].fish_kind;
+                    bPlayWav = (fish_kind == FishKind.FISH_BAWANGJING || fish_kind == FishKind.FISH_XIAOJINLONG
+                        || fish_kind == FishKind.FISH_SWK || fish_kind == FishKind.FISH_YUWANGDADI
+                        || fish_kind == FishKind.FISH_YINSHA || fish_kind == FishKind.FISH_JINSHA);
+
+                    if (bingo)
+                    {
+                        AddSqueeeScore(view_chair_id,(int)catch_fish_group.catch_fish[i].fish_score);
+                    }
+
+                    if (bingo || bomb)
+                    {
+                        AudioManager.Instance().PlaySound(2019);//bingo.ogg
+                    }
+
+                    var powerLv = FishDataManager.Instance().GetBulletPower(view_chair_id);
+
+                    SetDeadFish(catch_fish_group.catch_fish[i].fish_id, view_chair_id, (int)catch_fish_group.catch_fish[i].fish_score,(int)(catch_fish_group.catch_fish[i].fish_score / powerLv));
+                    AddWinCoin((int)catch_fish_group.catch_fish[i].fish_score / powerLv,(int)catch_fish_group.catch_fish[i].fish_score, view_chair_id);
+                }
+            }
+
+            if (bomb)
+            {
+                FishDataManager.Instance().UpDataUpScoreHitFish(view_chair_id, total_score);
+            }
+        }
+
+        //添加大鱼死后玩家前面的滚圈数字显示
+        void AddSqueeeScore(int chairID, int FishScore)
+        {
+            //if (this->getChildByTag(chairID * 10 + 8) != NULL) return;
+            if (FishScore <= 0) return;
+            //SpriteFrameCache* cache = SpriteFrameCache::getInstance();
+            //CCFishRewardLayer* m_SqueeBgimg = new CCFishRewardLayer();
+            //float BeginPosY = m_UserData[chairID].m_PointY - 240;
+            //float EndPosY = m_UserData[chairID].m_PointY + 200;
+            if (chairID >= 3)
+            {
+                //BeginPosY = m_UserData[chairID].m_PointY + 240;
+                //EndPosY = m_UserData[chairID].m_PointY - 200;
+                //m_SqueeBgimg->setRotation(180);
+            }
+            //m_SqueeBgimg->Render(0, FishScore);
+            //m_SqueeBgimg->setPosition(Vec2(m_UserData[chairID].m_PointX, BeginPosY));
+            //m_SqueeBgimg->setAnchorPoint(Vec2(0.5, 0.5));
+            //m_SqueeBgimg->setTag(chairID * 10 + 8);
+            //this->addChild(m_SqueeBgimg, -1);
+            //ActionInterval* moveToAction = MoveTo::create(0.2f, Vec2(m_UserData[chairID].m_PointX, EndPosY));
+            //ActionInterval* moveToAction1 = MoveTo::create(0.2f, Vec2(m_UserData[chairID].m_PointX, BeginPosY));
+            //FiniteTimeAction* RemoveChild = CallFuncN::create(CC_CALLBACK_1(CCFishCommonLayer::RemoveChild, this));
+            //m_SqueeBgimg->runAction(Sequence::create(moveToAction, DelayTime::create(5.5), moveToAction1, RemoveChild, NULL));
+            //
+        }
+
+        protected void SetDeadFish(int fishID, int KillChairid, int Winscore, int fishKindScore)
+        {
+            if (null != mfish_logic)
+            {
+                mfish_logic.SetDeadFish(fishID, KillChairid, Winscore, fishKindScore);
+            }
+        }
+
+        protected void AddWinCoin(int CoinNum, int m_FishScore_, int chairID)
+        {
+            if (CoinNum > 50) CoinNum = 50;
+
+            if (null != mfish_logic)
+            {
+                mfish_logic.AddWinCoin(CoinNum, m_FishScore_, chairID);
+            }
+        }
+
         protected override sealed void _OnCloseFrame()
 		{
             InvokeManager.Instance().RemoveInvoke(this);
@@ -283,6 +467,9 @@ namespace GameClient
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_PLAYER_CANNON_CHANGED, _OnPlayerCannonChanged);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_LOCK_FISH, _OnLockFish);
             EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_USER_SHOOT, _OnUserShoot);
+            EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_UPPER_SUPER_CANNON, _OnSetSupperCannon);
+            EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_CATCH_CHAIN, _OnCatchFishChain);
+            EventManager.Instance().UnRegisterEvent(ClientEvent.CE_FISH_CATCH_FISH_GROUP, _OnCatchFishGroup);
             FishDataManager.Instance().sceneAudioHandle = 0;
         }
 	}

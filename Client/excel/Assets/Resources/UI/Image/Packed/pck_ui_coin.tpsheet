@@ -1,0 +1,16 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_coin.png (256 x 256)
+# $TexturePacker:SmartUpdate:d8ac14edd6330bf7b1952d24b40b93d0:66a07898d08b096f5190a79a55683a5f:5cd6cd76a9fc58c2aacce528aa850ae0$
+#
+
+action_01;173;239;81;15;0.5;0.5
+action_02;2;81;81;83;0.5;0.5
+action_03;87;197;84;57;0.5;0.5
+action_04;85;151;83;44;0.5;0.4772727272727273
+action_05;2;3;83;76;0.4879518072289157;0.5
+action_06;2;166;81;88;0.5;0.5
