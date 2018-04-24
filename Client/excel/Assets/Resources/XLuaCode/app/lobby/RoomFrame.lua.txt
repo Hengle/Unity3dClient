@@ -24,12 +24,6 @@ function RoomFrame.OnOpenFrame()
     dump(gameConfig, "RoomFrame.OnOpenFrame:")
     assert(gameConfig)
 
-    local roomid = 11000
-    roomMgr:init(Gameid_fish, roomid)
-    UserMessage.send("EnterRoomReq", {roomid=roomid}, function(msg)
-        roomMgr:EnterRoomRep(msg)
-    end)
-
     for _,config in ipairs(gameConfig.room) do
         dump(config, "config")
         local roomid = (config.roomid) % 100 + 1

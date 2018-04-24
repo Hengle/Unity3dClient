@@ -29,12 +29,14 @@ function AccountSelectFrame.OnOpenFrame()
                             table.remove(accountArray, index + 1)
                             self.accountList:SetElementAmount(#accountArray)
                         else
+                            app.MessageBox.Open(function()
 
+                            end, nil, 1008, nil, nil)
                         end
                     end,
                     function()
                         print("OnClickMessageBoxCancel")
-                    end, 1007, 16, -1, {accountArray[index + 1]})
+                    end, 1007, nil, nil, {accountArray[index + 1]})
                 end)
             end
         end

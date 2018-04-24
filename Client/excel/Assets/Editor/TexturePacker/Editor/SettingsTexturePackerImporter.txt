@@ -28,6 +28,9 @@ tpsheetFileNames:
 - Assets/Resources/UI/Image/Packed/p_UI_Common00.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_lobby.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_bank.tpsheet
+- Assets/Resources/UI/Image/Packed/pck_ui_cards_1.tpsheet
+- Assets/Resources/UI/Image/Packed/pck_ui_cards_2.tpsheet
+- Assets/Resources/UI/Image/Packed/pck_ui_coin.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_common00.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_fish_flag.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_fish_main.tpsheet
@@ -36,6 +39,7 @@ tpsheetFileNames:
 - Assets/Resources/UI/Image/Packed/pck_ui_number00.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_personal.tpsheet
 - Assets/Resources/UI/Image/Packed/pck_ui_room.tpsheet
+- Assets/Resources/UI/Image/Packed/pck_ui_tb_niuniu.tpsheet
 textureFileNames:
 - Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_0.png
 - Assets/Resources/UI/Image/FishPacked/pck_ui_fish_action_1.png
@@ -64,6 +68,9 @@ textureFileNames:
 - Assets/Resources/UI/Image/Packed/p_UI_Common00.png
 - Assets/Resources/UI/Image/Packed/pck_lobby.png
 - Assets/Resources/UI/Image/Packed/pck_ui_bank.png
+- Assets/Resources/UI/Image/Packed/pck_ui_cards_1.png
+- Assets/Resources/UI/Image/Packed/pck_ui_cards_2.png
+- Assets/Resources/UI/Image/Packed/pck_ui_coin.png
 - Assets/Resources/UI/Image/Packed/pck_ui_common00.png
 - Assets/Resources/UI/Image/Packed/pck_ui_fish_flag.png
 - Assets/Resources/UI/Image/Packed/pck_ui_fish_main.png
@@ -72,7 +79,12 @@ textureFileNames:
 - Assets/Resources/UI/Image/Packed/pck_ui_number00.png
 - Assets/Resources/UI/Image/Packed/pck_ui_personal.png
 - Assets/Resources/UI/Image/Packed/pck_ui_room.png
+- Assets/Resources/UI/Image/Packed/pck_ui_tb_niuniu.png
 normalmapFileNames:
+- 
+- 
+- 
+- 
 - 
 - 
 - 

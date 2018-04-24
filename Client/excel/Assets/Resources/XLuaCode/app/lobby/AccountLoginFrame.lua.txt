@@ -41,7 +41,6 @@ AccountLoginFrame.onClickClose = function()
 end
 
 function AccountLoginFrame.OnCloseFrame()
-
 end
 
 -- ----------------------------------------控制代码--------------------------------------------------

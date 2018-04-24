@@ -22,8 +22,7 @@ app._FrameList = {
     SafeBoxFrame = 14,
     ExchangeFrame = 15,
     MessageBoxFrame_002 = 16,
-
-
+    PersonalFrame = 17,
 }
 
 app._ErrorCode = {

@@ -1,0 +1,49 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_cards_1.png (1024 x 1024)
+# $TexturePacker:SmartUpdate:0e806056fdb6083e8034ae5bdb890dbb:e9ee0c6cae791c4c5a0b17a83bc02da4:c1c4ec3ac52f093dcfdfc05ce6a18d5b$
+#
+
+fknn_poker_caohua_1;2;873;114;149;0.5;0.5
+fknn_poker_caohua_10;2;722;114;149;0.5;0.5
+fknn_poker_caohua_11;2;571;114;149;0.5;0.5
+fknn_poker_caohua_12;2;420;114;149;0.5;0.5
+fknn_poker_caohua_13;2;269;114;149;0.5;0.5
+fknn_poker_caohua_2;2;118;114;149;0.5;0.5
+fknn_poker_caohua_3;118;873;114;149;0.5;0.5
+fknn_poker_caohua_4;234;873;114;149;0.5;0.5
+fknn_poker_caohua_5;350;873;114;149;0.5;0.5
+fknn_poker_caohua_6;466;873;114;149;0.5;0.5
+fknn_poker_caohua_7;582;873;114;149;0.5;0.5
+fknn_poker_caohua_8;698;873;114;149;0.5;0.5
+fknn_poker_caohua_9;814;873;114;149;0.5;0.5
+fknn_poker_fangpian_1;118;722;114;149;0.5;0.5
+fknn_poker_fangpian_10;118;571;114;149;0.5;0.5
+fknn_poker_fangpian_11;118;420;114;149;0.5;0.5
+fknn_poker_fangpian_12;118;269;114;149;0.5;0.5
+fknn_poker_fangpian_13;118;118;114;149;0.5;0.5
+fknn_poker_fangpian_2;234;722;114;149;0.5;0.5
+fknn_poker_fangpian_3;350;722;114;149;0.5;0.5
+fknn_poker_fangpian_4;466;722;114;149;0.5;0.5
+fknn_poker_fangpian_5;582;722;114;149;0.5;0.5
+fknn_poker_fangpian_6;698;722;114;149;0.5;0.5
+fknn_poker_fangpian_7;814;722;114;149;0.5;0.5
+fknn_poker_fangpian_8;234;571;114;149;0.5;0.5
+fknn_poker_fangpian_9;234;420;114;149;0.5;0.5
+fknn_poker_heitao_1;234;269;114;149;0.5;0.5
+fknn_poker_heitao_10;234;118;114;149;0.5;0.5
+fknn_poker_heitao_11;350;571;114;149;0.5;0.5
+fknn_poker_heitao_12;350;420;114;149;0.5;0.5
+fknn_poker_heitao_13;350;269;114;149;0.5;0.5
+fknn_poker_heitao_2;350;118;114;149;0.5;0.5
+fknn_poker_heitao_3;466;571;114;149;0.5;0.5
+fknn_poker_heitao_4;582;571;114;149;0.5;0.5
+fknn_poker_heitao_5;698;571;114;149;0.5;0.5
+fknn_poker_heitao_6;814;571;114;149;0.5;0.5
+fknn_poker_heitao_7;466;420;114;149;0.5;0.5
+fknn_poker_heitao_8;466;269;114;149;0.5;0.5
+fknn_poker_heitao_9;466;118;114;149;0.5;0.5

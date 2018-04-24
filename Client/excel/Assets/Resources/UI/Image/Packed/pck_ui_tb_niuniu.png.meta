@@ -1,0 +1,460 @@
+fileFormatVersion: 2
+guid: 7d9bfce4e00922c4ca1138bb2a1a9dd6
+timeCreated: 1524548697
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: btn_niuniu_begin_1
+    21300002: btn_niuniu_begin_2
+    21300004: btn_niuniu_tanpai_1
+    21300006: btn_niuniu_tanpai_2
+    21300008: btn_niuniu_vip
+    21300010: btn_niuniu_wuniu
+    21300012: img_niuniu_niu_1
+    21300014: img_niuniu_niu_2
+    21300016: img_niuniu_niu_3
+    21300018: img_niuniu_niu_4
+    21300020: img_niuniu_niu_5
+    21300022: img_niuniu_niu_6
+    21300024: img_niuniu_niu_7
+    21300026: img_niuniu_niu_8
+    21300028: img_niuniu_niu_9
+    21300030: img_niuniu_niuniu
+    21300032: img_niuniu_num_bg
+    21300034: img_niuniu_player_kuang
+    21300036: img_niuniu_player_txk
+    21300038: img_niuniu_trusteeship
+    21300040: niuniu_ReversalCard_0
+    21300042: niuniu_ReversalCard_1
+    21300044: niuniu_ReversalCard_2
+    21300046: niuniu_ReversalCard_3
+    21300048: tbn_niuniu_back
+    21300050: tbn_niuniu_ship_btn
+    21300052: tbn_niuniu_ship_switch
+    21300054: img_niuniu_player_time
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: btn_niuniu_begin_1
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 117
+        width: 239
+        height: 105
+      alignment: 9
+      pivot: {x: 0.5041841, y: 0.4904762}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_niuniu_begin_2
+      rect:
+        serializedVersion: 2
+        x: 804
+        y: 323
+        width: 217
+        height: 97
+      alignment: 9
+      pivot: {x: 0.5046083, y: 0.47938144}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_niuniu_tanpai_1
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 10
+        width: 239
+        height: 105
+      alignment: 9
+      pivot: {x: 0.5041841, y: 0.4904762}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_niuniu_tanpai_2
+      rect:
+        serializedVersion: 2
+        x: 804
+        y: 224
+        width: 217
+        height: 97
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48969072}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_niuniu_vip
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 480
+        width: 74
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5135135, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: btn_niuniu_wuniu
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 296
+        width: 398
+        height: 124
+      alignment: 9
+      pivot: {x: 0.49748743, y: 0.57258064}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_niu_1
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 904
+        width: 402
+        height: 118
+      alignment: 9
+      pivot: {x: 0.50497514, y: 0.720339}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_niu_2
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 784
+        width: 402
+        height: 118
+      alignment: 9
+      pivot: {x: 0.50497514, y: 0.720339}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_niu_3
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 722
+        width: 402
+        height: 118
+      alignment: 9
+      pivot: {x: 0.50497514, y: 0.720339}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_niu_4
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 664
+        width: 402
+        height: 118
+      alignment: 9
+      pivot: {x: 0.50497514, y: 0.720339}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_niu_5
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 602
+        width: 402
+        height: 118
+      alignment: 9
+      pivot: {x: 0.50497514, y: 0.720339}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_niu_6
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 544
+        width: 402
+        height: 118
+      alignment: 9
+      pivot: {x: 0.50497514, y: 0.720339}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_niu_7
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 480
+        width: 400
+        height: 120
+      alignment: 9
+      pivot: {x: 0.5025, y: 0.7083333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_niu_8
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 422
+        width: 400
+        height: 120
+      alignment: 9
+      pivot: {x: 0.5025, y: 0.7083333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_niu_9
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 358
+        width: 400
+        height: 120
+      alignment: 9
+      pivot: {x: 0.5025, y: 0.7083333}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_niuniu
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 842
+        width: 410
+        height: 180
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48333332}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_num_bg
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 216
+        width: 261
+        height: 78
+      alignment: 9
+      pivot: {x: 0.48467433, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_player_kuang
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 833
+        width: 143
+        height: 189
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_player_time
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 666
+        width: 119
+        height: 165
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_player_txk
+      rect:
+        serializedVersion: 2
+        x: 939
+        y: 605
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: img_niuniu_trusteeship
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 46
+        width: 238
+        height: 310
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: niuniu_ReversalCard_0
+      rect:
+        serializedVersion: 2
+        x: 810
+        y: 520
+        width: 104
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: niuniu_ReversalCard_1
+      rect:
+        serializedVersion: 2
+        x: 939
+        y: 687
+        width: 80
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: niuniu_ReversalCard_2
+      rect:
+        serializedVersion: 2
+        x: 963
+        y: 884
+        width: 40
+        height: 138
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49275362}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: niuniu_ReversalCard_3
+      rect:
+        serializedVersion: 2
+        x: 1005
+        y: 884
+        width: 8
+        height: 138
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49275362}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: tbn_niuniu_back
+      rect:
+        serializedVersion: 2
+        x: 882
+        y: 458
+        width: 62
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: tbn_niuniu_ship_btn
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 138
+        width: 224
+        height: 84
+      alignment: 9
+      pivot: {x: 0.49107143, y: 0.53571427}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: tbn_niuniu_ship_switch
+      rect:
+        serializedVersion: 2
+        x: 916
+        y: 515
+        width: 94
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48863637}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

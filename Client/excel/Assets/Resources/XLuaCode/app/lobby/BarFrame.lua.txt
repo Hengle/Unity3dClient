@@ -23,6 +23,12 @@ function BarFrame.OnOpenFrame()
     self.frame:GetObject("btn_setting").onClick:AddListener(BarFrame.onClickSetting)
     self.frame:GetObject("btn_subscription").onClick:AddListener(BarFrame.onClickSubscription)
     self.frame:GetObject("btn_addgold").onClick:AddListener(BarFrame.onClickAddgold)
+
+    self.frame:GetObject("icon_head").onClick:AddListener(BarFrame.onClickHeadIcon)
+end
+
+BarFrame.onClickHeadIcon = function()
+    app.FrameManager.OpenFrameLua(app._FrameList.PersonalFrame)
 end
 
 BarFrame.onClickQuickStart = function()

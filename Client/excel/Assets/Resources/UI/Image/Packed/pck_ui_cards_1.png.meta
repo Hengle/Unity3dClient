@@ -1,0 +1,627 @@
+fileFormatVersion: 2
+guid: 03bcf41de6662bf4490fb439eb5f3612
+timeCreated: 1524548481
+licenseType: Pro
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: fknn_poker_caohua_1
+    21300002: fknn_poker_caohua_10
+    21300004: fknn_poker_caohua_11
+    21300006: fknn_poker_caohua_12
+    21300008: fknn_poker_caohua_13
+    21300010: fknn_poker_caohua_2
+    21300012: fknn_poker_caohua_3
+    21300014: fknn_poker_caohua_4
+    21300016: fknn_poker_caohua_5
+    21300018: fknn_poker_caohua_6
+    21300020: fknn_poker_caohua_7
+    21300022: fknn_poker_caohua_8
+    21300024: fknn_poker_caohua_9
+    21300026: fknn_poker_heitao_1
+    21300028: fknn_poker_heitao_10
+    21300030: fknn_poker_heitao_11
+    21300032: fknn_poker_heitao_12
+    21300034: fknn_poker_heitao_13
+    21300036: fknn_poker_heitao_2
+    21300038: fknn_poker_heitao_3
+    21300040: fknn_poker_heitao_4
+    21300042: fknn_poker_heitao_5
+    21300044: fknn_poker_heitao_6
+    21300046: fknn_poker_heitao_7
+    21300048: fknn_poker_heitao_8
+    21300050: fknn_poker_heitao_9
+    21300052: fknn_poker_hongxin_1
+    21300054: fknn_poker_hongxin_10
+    21300056: fknn_poker_hongxin_11
+    21300058: fknn_poker_hongxin_12
+    21300060: fknn_poker_hongxin_13
+    21300062: fknn_poker_hongxin_2
+    21300064: fknn_poker_hongxin_3
+    21300066: fknn_poker_hongxin_4
+    21300068: fknn_poker_hongxin_5
+    21300070: fknn_poker_hongxin_6
+    21300072: fknn_poker_hongxin_7
+    21300074: fknn_poker_hongxin_8
+    21300076: fknn_poker_hongxin_9
+    21300078: fknn_poker_fangpian_1
+    21300080: fknn_poker_fangpian_10
+    21300082: fknn_poker_fangpian_11
+    21300084: fknn_poker_fangpian_12
+    21300086: fknn_poker_fangpian_13
+    21300088: fknn_poker_fangpian_2
+    21300090: fknn_poker_fangpian_3
+    21300092: fknn_poker_fangpian_4
+    21300094: fknn_poker_fangpian_5
+    21300096: fknn_poker_fangpian_6
+    21300098: fknn_poker_fangpian_7
+    21300100: fknn_poker_fangpian_8
+    21300102: fknn_poker_fangpian_9
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapMode: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: fknn_poker_caohua_1
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 873
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_10
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 722
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_11
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 571
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_12
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 420
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_13
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 269
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_2
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 118
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_3
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 873
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_4
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 873
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_5
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 873
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_6
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 873
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_7
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 873
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_8
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 873
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_caohua_9
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 873
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_1
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 722
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_10
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 571
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_11
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 420
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_12
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 269
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_13
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 118
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_2
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 722
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_3
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 722
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_4
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 722
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_5
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 722
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_6
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 722
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_7
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 722
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_8
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 571
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_fangpian_9
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 420
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_1
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 269
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_10
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 118
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_11
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 571
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_12
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 420
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_13
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 269
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_2
+      rect:
+        serializedVersion: 2
+        x: 350
+        y: 118
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_3
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 571
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_4
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 571
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_5
+      rect:
+        serializedVersion: 2
+        x: 698
+        y: 571
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_6
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 571
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_7
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 420
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_8
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 269
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: fknn_poker_heitao_9
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 118
+        width: 114
+        height: 149
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

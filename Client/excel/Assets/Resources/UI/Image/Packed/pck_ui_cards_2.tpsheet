@@ -1,0 +1,23 @@
+#
+# Sprite sheet data for Unity.
+#
+# To import these sprites into your Unity project, download "TexturePackerImporter":
+# http://www.codeandweb.com/texturepacker/unity
+#
+# Sprite sheet: pck_ui_cards_2.png (512 x 1024)
+# $TexturePacker:SmartUpdate:379f644b14669d5ee188e2fd01c2d7dc:391792aa15c28f441311b2718f5698b6:1384d1b6ab230b704ca3c8c71c18497e$
+#
+
+fknn_poker_hongxin_1;2;873;114;149;0.5;0.5
+fknn_poker_hongxin_10;118;873;114;149;0.5;0.5
+fknn_poker_hongxin_11;234;873;114;149;0.5;0.5
+fknn_poker_hongxin_12;350;873;114;149;0.5;0.5
+fknn_poker_hongxin_13;2;722;114;149;0.5;0.5
+fknn_poker_hongxin_2;118;722;114;149;0.5;0.5
+fknn_poker_hongxin_3;234;722;114;149;0.5;0.5
+fknn_poker_hongxin_4;350;722;114;149;0.5;0.5
+fknn_poker_hongxin_5;2;571;114;149;0.5;0.5
+fknn_poker_hongxin_6;118;571;114;149;0.5;0.5
+fknn_poker_hongxin_7;234;571;114;149;0.5;0.5
+fknn_poker_hongxin_8;350;571;114;149;0.5;0.5
+fknn_poker_hongxin_9;2;420;114;149;0.5;0.5
