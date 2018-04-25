@@ -5,8 +5,28 @@
 ---
 local PersonalFrame = {}
 
-function PersonalFrame.OnOpenFrame()
+local Player = app.data.UserData.Player
 
+function PersonalFrame.OnOpenFrame()
+    self.frame:GetObject('btn_close').onClick:AddListener(PersonalFrame.onClickClose)
+
+    self.frame:GetObject('tab_personal_info').onValueChanged:AddListener(function(bOn)
+        self.frame:GetObject('state_personal_info').Key = (bOn and {1} or {0})[1]
+    end)
+    self.frame:GetObject('tab_wechat').onValueChanged:AddListener(function(bOn)
+        self.frame:GetObject('state_wechat').Key = (bOn and {1} or {0})[1]
+    end)
+    self.frame:GetObject('tab_customer_service').onValueChanged:AddListener(function(bOn)
+        self.frame:GetObject('state_customer_service').Key = (bOn and {1} or {0})[1]
+    end)
+
+    self.frame:GetObject('txt_name').text = Player.nickname
+    self.frame:GetObject('txt_account_id').text = '账号ID:'..Player.uid
+    self.frame:GetObject('txt_gold').text = Player.gold
+end
+
+PersonalFrame.onClickClose = function()
+    app.FrameManager.CloseFrame(self.frame)
 end
 
 function PersonalFrame.OnCloseFrame()
