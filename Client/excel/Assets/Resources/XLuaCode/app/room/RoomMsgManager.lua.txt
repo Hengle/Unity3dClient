@@ -40,7 +40,7 @@ local game_config = {}
 
 local room_session = 0
 local table_session = 0
-local game_scene = nil
+local game_scene_id = nil
 local max_player = nil
 local max_seats = nil
 
@@ -104,11 +104,6 @@ function gameMsg.SitdownRep(msg)
         end
         local error_str = app.util.ToolUtils.error(msg.result)
         printError("gameMsg.SitdownRep Error:",error_str)
-        --[[local scene = display.getRunningScene()
-        local error_str = util.error(msg.result)
-        if error_str and string.len(error_str) > 0 then
-            errorLayer.new(error_str):addTo(scene)
-        end]]--
         return
     end
 
@@ -116,35 +111,40 @@ function gameMsg.SitdownRep(msg)
     seat_id = msg.seat
     watching = (msg.watching == 1)
     local userData = {name="room.InitGameScenes"}
-
-    if max_seats ~= nil then
-        local pos = (table_id-1) % (#max_seats) + 1
-        userData.msg =
-        {
-            session = table_session,
-            seat = seat_id,
-            watching = watching,
-            max_player = max_seats[pos],
-            roomid = roomid,
-            gameid = gameid,
-            gamekey = gamekey,
-            config = game_config
-        }
+    if game_scene_id ~= nil and type(game_scene_id) ~= "number" then
+        if max_seats ~= nil then
+            local pos = (table_id-1) % (#max_seats) + 1
+            userData.msg =
+            {
+                session = table_session,
+                seat = seat_id,
+                watching = watching,
+                max_player = max_seats[pos],
+                roomid = roomid,
+                gameid = gameid,
+                gamekey = gamekey,
+                config = game_config
+            }
+        else
+            userData.msg =
+            {
+                session = table_session,
+                seat = seat_id,
+                max_player = max_player,
+                watching = watching,
+                roomid = roomid,
+                gameid = gameid,
+                gamekey = gamekey,
+                config = game_config
+            }
+        end
+        app.SceneManager:SwitchScene(game_scene_id,userData)
     else
-        userData.msg =
-        {
-            session = table_session,
-            seat = seat_id,
-            max_player = max_player,
-            watching = watching,
-            roomid = roomid,
-            gameid = gameid,
-            gamekey = gamekey,
-            config = game_config
-        }
+        printError("game_scene_id is nil!")
+        if roomScene then
+            errorLayer.new("坐到桌子成功"):addTo(roomScene)
+        end
     end
-
-    app.SceneManager:SwitchScene(2,userData)
 end
 
 function gameMsg.SitupRep(msg)
@@ -268,6 +268,14 @@ function gameMsg.TableSitdown(msg)
 end
 
 -- ------------------------------ message manager ------------------------------
+function msgMgr:setRoomScene(scene)
+    roomScene = scene
+    if scene then
+        print("set room scene succeed.")
+        -- errorLayer.new("进入房间成功"):addTo(roomScene)
+    end
+end
+
 function RoomMsgManager:dispatch(name, msg)
     local clsName, funcName = name:match "([^.]*).(.*)"
     assert(handlers[clsName], clsName .. " handler not exist!")
@@ -278,45 +286,15 @@ function RoomMsgManager:dispatch(name, msg)
     return true
 end
 
----------------------------------room data visit------------------------------------------
-function RoomMsgManager:setRoomId(gid, rid)
-    gameid = gid
-    roomid = rid
-    player_info = {}
-    table_states = {}
-    print("setRoomId gameid:" .. gameid .. " roomid:" .. roomid)
-end
-
-function RoomMsgManager:setGameName(name)
-    game_scene = name
-end
-
-function RoomMsgManager:setMaxPlayer(max, seats)
-    max_player = max
-    if seats ~= nil then
-        max_seats = {}
-        for i = 1, #seats do
-            max_seats[i] = #seats[i]
-        end
-    else
-        max_seats = nil
-    end
-end
-
-function RoomMsgManager:setGameKey(key)
-    gamekey = key
-end
-
+---------------------------------- room table state manage -------------------------------------
 function RoomMsgManager:set_table_state(tableid, state)
     table_states[tableid] = state
 end
-
 
 function RoomMsgManager:add_table_state(tableid, state)
     table_states[tableid] = table_states[tableid] or TABLE_STATE.WAIT
     table_states[tableid] = bit.bor(table_states[tableid], state)
 end
-
 
 function RoomMsgManager:cls_table_state(tableid, state)
     table_states[tableid] = table_states[tableid] or TABLE_STATE.WAIT
@@ -356,14 +334,54 @@ function RoomMsgManager:get_seat_player(table, seat)
     return nil
 end
 
---[[function msgMgr:get_room_session()
-    return room_session
+function msgMgr:get_table_info()
+    return player_info
 end
 
 
+function msgMgr:get_table_state(tid)
+    if tid then
+        return table_states[tid]
+    end
+    return table_states
+end
+
+---------------------------------room data visit------------------------------------------
+function RoomMsgManager:setRoomId(gid, rid)
+    gameid = gid
+    roomid = rid
+    player_info = {}
+    table_states = {}
+    print("setRoomId gameid:" .. gameid .. " roomid:" .. roomid)
+end
+
+function RoomMsgManager:setGameSceneId(sceneId)
+    game_scene_id = sceneId
+end
+
+function RoomMsgManager:setMaxPlayer(max, seats)
+    max_player = max
+    if seats ~= nil then
+        max_seats = {}
+        for i = 1, #seats do
+            max_seats[i] = #seats[i]
+        end
+    else
+        max_seats = nil
+    end
+end
+
+function RoomMsgManager:setGameKey(key)
+    gamekey = key
+end
+
+function msgMgr:get_room_session()
+    return room_session
+end
+
 function msgMgr:setGameConfig(conf)
     game_config = conf
-end]]--
+end
 
 return RoomMsgManager
 

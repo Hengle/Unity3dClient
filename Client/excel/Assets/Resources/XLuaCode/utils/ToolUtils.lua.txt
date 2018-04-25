@@ -5,11 +5,14 @@
 ---
 local ToolUtils = {}
 
+local errors = require(".errors")
+local lang = require(".language.zh")
+
 function ToolUtils.error(err_code)
     -- dump(errors)
     local err_str = errors.str(err_code)
     if err_str then
-        return app.lang.errors[err_str]
+        return lang.errors[err_str]
     end
     return "unknown error."
 end

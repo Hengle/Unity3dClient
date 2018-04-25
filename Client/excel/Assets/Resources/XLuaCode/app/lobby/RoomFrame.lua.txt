@@ -36,16 +36,9 @@ function RoomFrame.OnOpenFrame()
     end
 end
 
-RoomFrame.onClickRoom1 = function()
-    local roomid = 11000
-    roomMgr:init(Gameid_fish, roomid)
-    UserMessage.send("EnterRoomReq", {roomid=roomid}, function(msg)
-        roomMgr:EnterRoomRep(msg)
-    end)
-end
-
 function RoomFrame.OnCloseFrame()
     barFrame = nil
 end
+-- ----------------------------控制代码----------------------------------------
 
 return RoomFrame
