@@ -3,8 +3,12 @@ message FishTable
 {
 required sint32 ID = 1;
 required string Desc = 2;
-required string Prefab = 3;
-required string TraceFrame = 4;
-required sint32 Interval = 5;
-required sint32 Speed = 6;
+required sint32 Mulriple = 3;
+required sint32 Layer = 4;
+required sint32 Speed = 5;
+required sint32 Radio = 6;
+required sint32 BoundingCount = 7;
+required string Prefab = 8;
+required string TraceFrame = 9;
+required sint32 Interval = 10;
 };

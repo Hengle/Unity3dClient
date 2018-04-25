@@ -614,7 +614,7 @@ namespace GameClient
                 return;
             }
 
-            float speed = fishItem.Speed * 0.001f;
+            float speed = fishItem.Speed;
 
             FishActionFishMove action = null;
             if (cmd.fish_kind == FishKind.FISH_FOSHOU)

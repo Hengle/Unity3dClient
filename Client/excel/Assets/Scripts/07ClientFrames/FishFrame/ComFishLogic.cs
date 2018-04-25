@@ -9,7 +9,7 @@ namespace GameClient
     public class ComFishLogic : MonoBehaviour
     {
         public GameObject recycleRoot = null;
-        public GameObject fishLayer = null;
+        public GameObject[] fishLayers = new GameObject[0];
         public GameObject fishLockNumberRoot = null;
         public GameObject bulletLayer = null;
         public GameObject recycled_bulletLayer = null;
@@ -87,6 +87,7 @@ namespace GameClient
             public ulong build_time;
             public bool pause;
 
+            public int Mulriple;
             public float bounding_radius_;
             public int bounding_count_;
 
@@ -194,6 +195,12 @@ namespace GameClient
 
         public void createFish(FishData data)
         {
+            if (data.fishItem == null)
+            {
+                LogManager.Instance().LogErrorFormat("createFish failed fishItem is null !");
+                return;
+            }
+
             int findIndex = -1;
             for (int i = 0; i < _recycles.Count; ++i)
             {
@@ -205,6 +212,12 @@ namespace GameClient
             }
 
             FishBody fishBody = null;
+            GameObject fishLayer = gameObject;
+            if(data.fishItem.Layer >= 0 && data.fishItem.Layer < fishLayers.Length)
+            {
+                fishLayer = fishLayers[data.fishItem.Layer];
+            }
+
             if (-1 == findIndex)
             {
                 var fishSprite = FishScene.createFishFromPool(data.fishItem.ID);
@@ -241,6 +254,9 @@ namespace GameClient
                 fishBody.moveAction = data.action;
                 fishBody.build_time = FishDataManager.Instance().getCurrentTime();
                 fishBody.pause = false;
+                fishBody.bounding_radius_ = data.fishItem.Radio;
+                fishBody.bounding_count_ = data.fishItem.BoundingCount;
+                fishBody.Mulriple = data.fishItem.Mulriple;
                 fishBody.moveAction.Start();
                 _actived.Add(fishBody);
             }
@@ -647,7 +663,6 @@ namespace GameClient
                 //Vector2 position = action.FishMoveTo(action.elapsed());
                 _actived[i].SetPosition(action.position());
                 _actived[i].SetAngle(action.angle());
-                _actived[i].fishSprite.BeginColorFlash();
             }
 
             for (int i = 0; i < _actived.Count; ++i)
