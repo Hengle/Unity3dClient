@@ -5,9 +5,11 @@
 ---
 local TBNNScene = {}
 
+local msgWorker = require(".net.MsgWorker")
+
 function TBNNScene.OnCreate(userData)
     app.Logger:LogFormat("<color=#00ff00> on create scene !!! name = {0} </color>",self.scene:GetName())
-    
+    app.FrameManager.OpenFrameLua(app._FrameList.TBNNFrame)
 end
 
 function TBNNScene.OnDestroy()
