@@ -71,6 +71,20 @@ namespace GameClient
             return frame;
         }
 
+        public bool IsFrameOpen(int frameTypeId,int frameId = -1)
+        {
+            int iKey = MakeFrameHashCode(frameId, frameTypeId);
+            if (mActiveFrames.ContainsKey(iKey))
+            {
+                IFrame frame = mActiveFrames[iKey];
+                if(null != frame && frame.getFrameState() == FrameState.FS_OPEN)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void CloseFrame(int frameTypeId, int frameId = -1)
         {
             int iHashCode = MakeFrameHashCode(frameId, frameTypeId);

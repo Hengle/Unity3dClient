@@ -44,6 +44,8 @@
 		<type fullname="GameClient.TraceType" preserve="all"/>
 		<type fullname="GameClient.FishKind" preserve="all"/>
 		<type fullname="GameClient.MessageBoxFrame" preserve="all"/>
+		<type fullname="GameClient.NoticeType" preserve="all"/>
+		<type fullname="GameClient.NoticeData" preserve="all"/>
 		<type fullname="LuaBehaviour" preserve="all"/>
 		<type fullname="LuaSceneBehavior" preserve="all"/>
 		<type fullname="GameClient.UIFrameLua" preserve="all"/>
