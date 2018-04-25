@@ -704,4 +704,62 @@ namespace XLua.CSObjectWrap
 		}
 	}
     
+    public class GameClientNoticeTypeWrap
+    {
+		public static void __Register(RealStatePtr L)
+        {
+		    ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+		    Utils.BeginObjectRegister(typeof(GameClient.NoticeType), L, translator, 0, 0, 0, 0);
+			Utils.EndObjectRegister(typeof(GameClient.NoticeType), L, translator, null, null, null, null, null);
+			
+			Utils.BeginClassRegister(typeof(GameClient.NoticeType), L, null, 4, 0, 0);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "NT_STEP_MSG", GameClient.NoticeType.NT_STEP_MSG);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "NT_POP_MSG", GameClient.NoticeType.NT_POP_MSG);
+            
+            Utils.RegisterObject(L, translator, Utils.CLS_IDX, "NT_POP_MSG_IMMEDIATELY", GameClient.NoticeType.NT_POP_MSG_IMMEDIATELY);
+            
+			Utils.RegisterFunc(L, Utils.CLS_IDX, "__CastFrom", __CastFrom);
+            
+            Utils.EndClassRegister(typeof(GameClient.NoticeType), L, translator);
+        }
+		
+		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int __CastFrom(RealStatePtr L)
+		{
+			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			LuaTypes lua_type = LuaAPI.lua_type(L, 1);
+            if (lua_type == LuaTypes.LUA_TNUMBER)
+            {
+                translator.PushGameClientNoticeType(L, (GameClient.NoticeType)LuaAPI.xlua_tointeger(L, 1));
+            }
+            else if(lua_type == LuaTypes.LUA_TSTRING)
+            {
+			    if (LuaAPI.xlua_is_eq_str(L, 1, "NT_STEP_MSG"))
+                {
+                    translator.PushGameClientNoticeType(L, GameClient.NoticeType.NT_STEP_MSG);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "NT_POP_MSG"))
+                {
+                    translator.PushGameClientNoticeType(L, GameClient.NoticeType.NT_POP_MSG);
+                }
+				else if (LuaAPI.xlua_is_eq_str(L, 1, "NT_POP_MSG_IMMEDIATELY"))
+                {
+                    translator.PushGameClientNoticeType(L, GameClient.NoticeType.NT_POP_MSG_IMMEDIATELY);
+                }
+				else
+                {
+                    return LuaAPI.luaL_error(L, "invalid string for GameClient.NoticeType!");
+                }
+            }
+            else
+            {
+                return LuaAPI.luaL_error(L, "invalid lua type for GameClient.NoticeType! Expect number or string, got + " + lua_type);
+            }
+
+            return 1;
+		}
+	}
+    
 }

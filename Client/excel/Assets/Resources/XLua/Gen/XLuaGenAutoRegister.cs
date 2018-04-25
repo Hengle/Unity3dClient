@@ -103,6 +103,10 @@ namespace XLua.CSObjectWrap
 				
 				translator.DelayWrapLoader(typeof(GameClient.MessageBoxFrame), GameClientMessageBoxFrameWrap.__Register);
 				
+				translator.DelayWrapLoader(typeof(GameClient.NoticeType), GameClientNoticeTypeWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.NoticeData), GameClientNoticeDataWrap.__Register);
+				
 				translator.DelayWrapLoader(typeof(LuaBehaviour), LuaBehaviourWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(LuaSceneBehavior), LuaSceneBehaviorWrap.__Register);

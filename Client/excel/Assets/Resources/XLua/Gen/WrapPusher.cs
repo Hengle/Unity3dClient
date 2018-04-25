@@ -41,6 +41,7 @@ namespace XLua
 				translator.RegisterPushAndGetAndUpdate<GameClient.FrameState>(translator.PushGameClientFrameState, translator.Get, translator.UpdateGameClientFrameState);
 				translator.RegisterPushAndGetAndUpdate<GameClient.TraceType>(translator.PushGameClientTraceType, translator.Get, translator.UpdateGameClientTraceType);
 				translator.RegisterPushAndGetAndUpdate<GameClient.FishKind>(translator.PushGameClientFishKind, translator.Get, translator.UpdateGameClientFishKind);
+				translator.RegisterPushAndGetAndUpdate<GameClient.NoticeType>(translator.PushGameClientNoticeType, translator.Get, translator.UpdateGameClientNoticeType);
 			
 			}
         }
@@ -1165,6 +1166,90 @@ namespace XLua
             }
         }
         
+        int GameClientNoticeType_TypeID = -1;
+		int GameClientNoticeType_EnumRef = -1;
+        
+        public void PushGameClientNoticeType(RealStatePtr L, GameClient.NoticeType val)
+        {
+            if (GameClientNoticeType_TypeID == -1)
+            {
+			    bool is_first;
+                GameClientNoticeType_TypeID = getTypeId(L, typeof(GameClient.NoticeType), out is_first);
+				
+				if (GameClientNoticeType_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(GameClient.NoticeType));
+				    GameClientNoticeType_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, GameClientNoticeType_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, GameClientNoticeType_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for GameClient.NoticeType ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, GameClientNoticeType_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out GameClient.NoticeType val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != GameClientNoticeType_TypeID)
+				{
+				    throw new Exception("invalid userdata for GameClient.NoticeType");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for GameClient.NoticeType");
+                }
+				val = (GameClient.NoticeType)e;
+                
+            }
+            else
+            {
+                val = (GameClient.NoticeType)objectCasters.GetCaster(typeof(GameClient.NoticeType))(L, index, null);
+            }
+        }
+		
+        public void UpdateGameClientNoticeType(RealStatePtr L, int index, GameClient.NoticeType val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != GameClientNoticeType_TypeID)
+				{
+				    throw new Exception("invalid userdata for GameClient.NoticeType");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for GameClient.NoticeType ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
         
 		// table cast optimze
 		
@@ -1266,6 +1351,12 @@ namespace XLua
 				translator.PushGameClientFishKind(L, array[index]);
 				return true;
 			}
+			else if (type == typeof(GameClient.NoticeType[]))
+			{
+			    GameClient.NoticeType[] array = obj as GameClient.NoticeType[];
+				translator.PushGameClientNoticeType(L, array[index]);
+				return true;
+			}
             return false;
 		}
 		
@@ -1359,6 +1450,12 @@ namespace XLua
 			else if (type == typeof(GameClient.FishKind[]))
 			{
 			    GameClient.FishKind[] array = obj as GameClient.FishKind[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(GameClient.NoticeType[]))
+			{
+			    GameClient.NoticeType[] array = obj as GameClient.NoticeType[];
 				translator.Get(L, obj_idx, out array[array_idx]);
 				return true;
 			}
