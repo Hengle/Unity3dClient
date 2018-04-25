@@ -268,7 +268,7 @@ function gameMsg.TableSitdown(msg)
 end
 
 -- ------------------------------ message manager ------------------------------
-function msgMgr:setRoomScene(scene)
+function RoomMsgManager:setRoomScene(scene)
     roomScene = scene
     if scene then
         print("set room scene succeed.")
@@ -334,12 +334,12 @@ function RoomMsgManager:get_seat_player(table, seat)
     return nil
 end
 
-function msgMgr:get_table_info()
+function RoomMsgManager:get_table_info()
     return player_info
 end
 
 
-function msgMgr:get_table_state(tid)
+function RoomMsgManager:get_table_state(tid)
     if tid then
         return table_states[tid]
     end
@@ -375,11 +375,11 @@ function RoomMsgManager:setGameKey(key)
     gamekey = key
 end
 
-function msgMgr:get_room_session()
+function RoomMsgManager:get_room_session()
     return room_session
 end
 
-function msgMgr:setGameConfig(conf)
+function RoomMsgManager:setGameConfig(conf)
     game_config = conf
 end
 
