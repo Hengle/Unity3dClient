@@ -7,13 +7,15 @@ local msgWorker = require(".net.MsgWorker")
 local msgMgr = require(".app.games.LKPY.msgMgr")
 
 local fishScene = {}
+local gameData = nil
 
-function fishScene.OnCreate()
-    app.Logger:LogFormat("<color=#00ff00> on create scene !!! name = {0} </color>",self.scene:GetName())
-
+function fishScene.OnCreate(userData)
     msgWorker.init("LKPY", handler(msgMgr, msgMgr.dispatchMessage))
+    gameData = userData.msg
+    app.Logger:LogFormat("<color=#00ff00> on create scene !!! name = {0} </color>",self.scene:GetName())
+    app.Logger:LogFormat("<color=#00ff00> {0} </color>",userData.name)
+    dump(userData.msg)
 end
-
 
 function fishScene.OnDestroy()
     app.Logger:LogFormat("<color=#00ff00> on destroy scene !!! name = {0} </color>",self.scene:GetName())
