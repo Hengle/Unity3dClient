@@ -34,7 +34,7 @@ local config = {
     {
         gameid = 103,
         name = "通比牛牛",
-        scene = "TBNNScene",
+        scene = app._SceneList.TBNNScene,
         icon = "TBNN",
         popular = 2,
         rule = {
@@ -134,7 +134,7 @@ local config = {
     {
         gameid = 110,
         name = "李逵劈鱼2",
-        scene = app.FrameManager.FishMainFrame,
+        scene = app._SceneList.FishScene,
         icon = "LKPY",
         popular = 2,
         quick = true,  -- 快速坐下/站起，不展示房间桌子情况

@@ -5,6 +5,12 @@
 ---
 app = app or {}
 
+app._SceneList = {
+    LoginScene = 1,
+    FishScene = 2,
+    TBNNScene = 3,
+}
+
 app._FrameList = {
     LoginFrame = 1,
     HotFixFrame = 2,
