@@ -225,13 +225,15 @@ protoIDs[10805] = "TexasPoker.GameEnd"
 protoIDs[10806] = "TexasPoker.SyncGameInfo"
 protoIDs[10807] = "TexasPoker.GameConf"
 
--- -----------------------------------------------------------------------
 
-protoIDs[11001] = "LKPY.SceneFishSync"
-protoIDs[11002] = "LKPY.SwitchSceneSync"
-protoIDs[11003] = "LKPY.DistributeFish"
+--------------------------------------------------------------------------
+protoIDs[11001] = "LKPY.SwitchSceneSync"
+protoIDs[11002] = "LKPY.DistributeFish"
+protoIDs[11003] = "LKPY.UserFireReq"
 protoIDs[11004] = "LKPY.UserFireRep"
-protoIDs[11005] = "LKPY.ExchangeFishScoreRep"
+protoIDs[11005] = "LKPY.ExchangeFishScoreReq"
+protoIDs[11006] = "LKPY.ExchangeFishScoreRep"
+protoIDs[11007] = "LKPY.SceneFishSync"
 
 -- -----------------------------------------------------------------------
 protoIDs[10901] = "Baccarat.GameStatusNtf"
@@ -240,7 +242,6 @@ protoIDs[10903] = "Baccarat.AskBet"
 protoIDs[10904] = "Baccarat.UpdateBetInfo"
 protoIDs[10905] = "Baccarat.ShowCard"
 protoIDs[10906] = "Baccarat.GameEnd"
-
 
 -- -----------------------------------------------------------------------
 protoIDs[11301] = "ShiSanShui.GameConf"
