@@ -138,7 +138,9 @@ function gameMsg.SitdownRep(msg)
                 config = game_config
             }
         end
-        app.SceneManager:SwitchScene(game_scene_id,userData)
+        app.SceneManager:SwitchScene(2,userData)
+        --TODO:
+        --app.SceneManager:SwitchScene(game_scene_id,userData)
     else
         printError("game_scene_id is nil!")
         if roomScene then
