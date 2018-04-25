@@ -71,18 +71,18 @@ message Position {
 
 message SwitchSceneSync {
     required int32 session = 1;
-    required SceneKind nextscene = 2;
+    required int32 nextscene = 2; //SceneKind
     required int32 curtick = 3;
 }
 
 message DistributeFish {
     required int32 session = 1;
-    required FishKind fishkind = 2;
+    required int32 fishkind = 2; //FishKind
     required int32 fishid = 3;
     required int32 tickcount = 4;
     required int32 poscount = 5;
     repeated Position pos = 6;
-    required TraceType tracetype = 7;
+    required int32 tracetype = 7;  //TraceType
     required int32 fishorder = 8;
 }
 
@@ -125,7 +125,7 @@ message SceneFishSync {
 
 	required int32 session = 1;
 	required int32 fishid = 2;
-	required FishKind fishkind = 3;
+	required int32 fishkind = 3;  //FishKind
 	repeated Position position = 4;
 	required int32 poscount = 5;
 	required int32 tag = 6;
