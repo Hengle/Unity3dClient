@@ -22,7 +22,7 @@ local function loadGameScene(gameid, roomid)
             for j = 1, #config[i].room do
                 if config[i].room[j].roomid == roomid then
                     print("set game scene:", config[i].scene)
-                    msgMgr:setGameName(config[i].scene)
+                    msgMgr:setGameSceneId(config[i].scene)
                     msgMgr:setMaxPlayer(config[i].room[j].seats, config[i].room[j].seatslayout)
                     if config[i].room[j].gamekey ~= nil then
                         msgMgr:setGameKey(config[i].room[j].gamekey)

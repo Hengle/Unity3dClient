@@ -37,7 +37,6 @@ function CMD.UserInfoRep(msg)
 	end
 end
 
-
 function CMD.RoomListRep(msg)
 	local newConfig = assert(load(msg.config))()
     newConfig = checktable(newConfig)
@@ -59,7 +58,6 @@ function CMD.RoomListRep(msg)
         end)
     end
 end
-
 
 --[[function CMD.NoticeInfo(msg)
 	local notice_pack = app.userdata.notice_pack
