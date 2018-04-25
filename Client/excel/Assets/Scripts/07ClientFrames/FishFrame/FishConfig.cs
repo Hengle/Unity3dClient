@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XLua;
 
 namespace GameClient
 {
@@ -491,6 +492,7 @@ namespace GameClient
 
         BULLET_KIND_COUNT
     };
+    [LuaCallCSharp]
     public enum TraceType
     {
         TRACE_SPPEND_CHANGE_ONE = 0,
@@ -523,6 +525,7 @@ namespace GameClient
 
         SCENE_COUNT
     };
+    [LuaCallCSharp]
     public enum FishKind
     {
         FISH_WONIUYU = 0,         // 蜗牛鱼

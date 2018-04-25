@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using XLua;
 
 namespace GameClient
 {
+    [LuaCallCSharp]
     public struct CMD_S_SceneFish
     {
         public int fish_id;
@@ -15,7 +17,7 @@ namespace GameClient
         public float elapsed;
         public ulong tick_count;
     };
-
+    [LuaCallCSharp]
     public struct CMD_S_DistributeFish
     {
         public FishKind fish_kind;
@@ -27,13 +29,13 @@ namespace GameClient
         public TraceType trace_type;
         public int fish_order;
     };
-
+    [LuaCallCSharp]
     public struct CMD_S_SwitchScene
     {
         public SceneKind next_scene;
         public ulong tick_count;
     };
-
+    [LuaCallCSharp]
     public struct CMD_S_UserFire
     {
         public ulong tick_count;
@@ -46,19 +48,19 @@ namespace GameClient
         public bool isAndroidUser;
         public ulong userAndroidCharId;
     };
-
+    [LuaCallCSharp]
     public struct CMD_S_BulletDoubleTimeout
     {
         public short chair_id;
     };
-
+    [LuaCallCSharp]
     public struct CMD_S_ExchangeFishScore
     {
         public short chair_id;
         public long swap_fish_score;
         public long exchange_fish_score;
     };
-
+    [LuaCallCSharp]
     public struct CatchFish
     {
         public int fish_id;
@@ -67,13 +69,13 @@ namespace GameClient
         public bool bullet_double;
         public int link_fish_id;
     };
-
+    [LuaCallCSharp]
     public struct CMD_S_CatchChain
     {
         public short chair_id;
         public CatchFish[] catch_fish;
     };
-
+    [LuaCallCSharp]
     public struct CMD_S_CatchFishGroup
     {
         public long tick_count;
@@ -90,12 +92,12 @@ namespace GameClient
         public float elapsed;
         public ulong tick_count;
     }
-
+    [LuaCallCSharp]
     public struct CMD_C_ExchangeFishScore
     {
         public long exchange_score;
     };
-
+    [LuaCallCSharp]
     struct CMD_C_UserFire
     {
         public int bullet_id_temp;
@@ -104,6 +106,7 @@ namespace GameClient
         public int lock_fish_id;
         public int bullet_mulriple;
     };
+    [LuaCallCSharp]
     public struct CMD_C_CatchFish
     {
         public int fish_id;                                  // 鱼的编号
@@ -111,6 +114,59 @@ namespace GameClient
         public short chair_id;                                    // 椅子编号
         public bool isDouble;                                   // 是否双倍
         public byte byFishKind;                                   // 鱼类型
+    };
+    [LuaCallCSharp]
+    public class ClientGameConfig
+    {
+        public int exchange_ratio_userscore;
+        public int exchange_ratio_fishscore;
+        public int exchange_count;
+        public int min_bullet_multiple;
+        public int max_bullet_multiple;
+        public float[] fish_speed = new float[(int)FishKind.FISH_KIND_COUNT];
+        public float[] fish_bounding_radius = new float[(int)FishKind.FISH_KIND_COUNT];
+        public int[] fish_bounding_count = new int[(int)FishKind.FISH_KIND_COUNT];
+        public float[] bullet_speed = new float[(int)BulletKind.BULLET_KIND_COUNT];
+        public float[] bullet_bounding_radius = new float[(int)BulletKind.BULLET_KIND_COUNT];
+        public void Clear()
+        {
+            exchange_ratio_userscore = 0;
+            exchange_ratio_fishscore = 0;
+            exchange_count = 0;
+            min_bullet_multiple = 1;
+            max_bullet_multiple = 1;
+            for(int i = 0; i < (int)FishKind.FISH_KIND_COUNT; ++i)
+            {
+                fish_speed[i] = 0.0f;
+                fish_bounding_radius[i] = 0.0f;
+                fish_bounding_count[i] = 1;
+            }
+            for (int i = 0; i < (int)BulletKind.BULLET_KIND_COUNT; ++i)
+            {
+                bullet_speed[i] = 0;
+                bullet_bounding_radius[i] = 0;
+            }
+        }
+    };
+    [LuaCallCSharp]
+    public class CMD_S_GameStatus
+    {
+        public int tick_count;
+        public ClientGameConfig game_config = new ClientGameConfig();
+        public long[] fish_score = new long[FishConfig.fish_player_count];
+        public long[] exchange_fish_score = new long[FishConfig.fish_player_count];
+        public string szGameRoomName;// 房间名称
+        public void Clear()
+        {
+            tick_count = 0;
+            game_config.Clear();
+            for(int i = 0; i < fish_score.Length; ++i)
+            {
+                fish_score[i] = 0;
+                exchange_fish_score[i] = 0;
+            }
+            szGameRoomName = string.Empty;
+        }
     };
 
     class FishDataPool : GamePool.ObjectPool<FishData>
@@ -201,6 +257,14 @@ namespace GameClient
         {
             new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),new Vector2(0.0f,0.0f),
         };
+        ClientGameConfig m_clientGameConfig = new ClientGameConfig();
+        public ClientGameConfig GameConfig
+        {
+            get
+            {
+                return m_clientGameConfig;
+            }
+        }
 
         public void Clear()
         {
@@ -328,6 +392,16 @@ namespace GameClient
             if(chairID >= 0 && chairID < m_UserUpScore.Length)
             {
                 m_UserUpScore[chairID] += UpScore;
+            }
+
+            EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, chairID);
+        }
+
+        public void UpDataUpScore(int chairID,long UpScore)
+        {
+            if (chairID >= 0 && chairID < m_UserUpScore.Length)
+            {
+                m_UserUpScore[chairID] = UpScore;
             }
 
             EventManager.Instance().SendEvent(ClientEvent.CE_FISH_PLAYER_UP_SCORE_CHANGED, chairID);
@@ -505,6 +579,7 @@ namespace GameClient
         }
 
         #region execute_server_cmd
+        [LuaCallCSharp]
         public void ExecuteCmd(CMD_S_SwitchScene cmd)
         {
             mFishScene = cmd.next_scene;
@@ -513,7 +588,7 @@ namespace GameClient
 
             mCanSend = false;
         }
-
+        [LuaCallCSharp]
         public void ExecuteCmd(CMD_S_UserFire cmd)
         {
             int LogicChairID = SwitchChairID(cmd.chair_id);
@@ -557,27 +632,27 @@ namespace GameClient
                 //m_TimeOverCount = 120;
             }
         }
-
+        [LuaCallCSharp]
         public void ExecuteCmd(CMD_S_BulletDoubleTimeout cmd)
         {
             int chairID = SwitchChairID(cmd.chair_id);
             EventManager.Instance().SendEvent(ClientEvent.CE_FISH_UPPER_SUPER_CANNON, new object[] { chairID,false });
         }
-
+        [LuaCallCSharp]
         public void ExecuteCmd(CMD_S_ExchangeFishScore cmd)
         {
             int chairID = SwitchChairID(cmd.chair_id);
             FishDataManager.Instance().UpDataUpScoreHitFish(chairID, cmd.swap_fish_score);
             FishDataManager.Instance().SetUserScore(chairID,cmd.exchange_fish_score);
         }
-
+        [LuaCallCSharp]
         public void ExecuteCmd(CMD_S_CatchChain cmd)
         {
             int chairID = SwitchChairID(cmd.chair_id);
             cmd.chair_id = (short)chairID;
             EventManager.Instance().SendEvent(ClientEvent.CE_FISH_CATCH_CHAIN, cmd);
         }
-
+        [LuaCallCSharp]
         public void ExecuteCmd(CMD_S_CatchFishGroup catch_fish_group)
         {
             if(catch_fish_group.catch_fish.Length <= 0)
@@ -587,6 +662,7 @@ namespace GameClient
 
             EventManager.Instance().SendEvent(ClientEvent.CE_FISH_CATCH_FISH_GROUP, catch_fish_group);
         }
+        [LuaCallCSharp]
         public void ExecuteCmd(CMD_S_SceneFish cmd)
         {
             /*
@@ -659,7 +735,7 @@ namespace GameClient
 
             EventManager.Instance().SendEvent(ClientEvent.CE_CREATE_FISH, data);
         }
-
+        [LuaCallCSharp]
         public void ExecuteCmd(CMD_S_DistributeFish cmd)
         {
             if (chairId < 3)
@@ -790,6 +866,19 @@ namespace GameClient
                 //TODO: delay 3.0f 隐藏掉
                 //m_FishTipimg->runAction(Sequence::create(CCDelayTime::create(3.0f), FadeOut, nullptr));
 
+            }
+        }
+        [LuaCallCSharp]
+        public void ExecuteCmd(CMD_S_GameStatus cmd)
+        {
+            m_clientGameConfig = cmd.game_config;
+            //初始化个人信息
+            for(int i = 0; i < FishConfig.fish_player_count; ++i)
+            {
+                int LogicChairID = SwitchChairID((short)i);
+                UpDataUpScore(LogicChairID, cmd.fish_score[i]);
+                SetUserScore(LogicChairID, cmd.exchange_fish_score[i]);
+                UpDataBeiLv(LogicChairID, cmd.game_config.min_bullet_multiple, false);
             }
         }
         #endregion
