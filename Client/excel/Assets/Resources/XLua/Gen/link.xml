@@ -25,6 +25,7 @@
 		<type fullname="GameClient.CMD_C_CatchFish" preserve="all"/>
 		<type fullname="GameClient.ClientGameConfig" preserve="all"/>
 		<type fullname="GameClient.CMD_S_GameStatus" preserve="all"/>
+		<type fullname="GameClient.FishDataManager" preserve="all"/>
 		<type fullname="GameClient.InvokeManager" preserve="all"/>
 		<type fullname="GameClient.LocalSettingManager" preserve="all"/>
 		<type fullname="GameClient.LogManager" preserve="all"/>

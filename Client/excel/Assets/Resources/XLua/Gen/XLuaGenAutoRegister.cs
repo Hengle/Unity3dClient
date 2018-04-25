@@ -65,6 +65,8 @@ namespace XLua.CSObjectWrap
 				
 				translator.DelayWrapLoader(typeof(GameClient.CMD_S_GameStatus), GameClientCMD_S_GameStatusWrap.__Register);
 				
+				translator.DelayWrapLoader(typeof(GameClient.FishDataManager), GameClientFishDataManagerWrap.__Register);
+				
 				translator.DelayWrapLoader(typeof(GameClient.InvokeManager), GameClientInvokeManagerWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(GameClient.LocalSettingManager), GameClientLocalSettingManagerWrap.__Register);

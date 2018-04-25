@@ -187,7 +187,7 @@ namespace GameClient
 
         }
     }
-
+    [LuaCallCSharp]
     public class FishDataManager
     {
         protected static FishDataManager ms_handle = null;
@@ -861,7 +861,7 @@ namespace GameClient
                 }
                 //m_FishTipimg->stopAllActions();
                 //m_FishTipimg->setOpacity(255);
-                //TODO: 5s alpha
+                //TODO: 0.5s alpha
                 //ActionInterval* FadeOut = CCFadeOut::create(0.5f);
                 //TODO: delay 3.0f 隐藏掉
                 //m_FishTipimg->runAction(Sequence::create(CCDelayTime::create(3.0f), FadeOut, nullptr));
