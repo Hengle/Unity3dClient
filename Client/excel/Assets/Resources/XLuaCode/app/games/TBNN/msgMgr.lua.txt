@@ -3,11 +3,10 @@
 --- Created by asus.
 --- DateTime: 2018/4/25 18:36
 ---
-local msgMgr = {}
+local BaseMsgMgr = require(".app.BaseMsgMgr")
+local msgMgr = class("msgMgr", BaseMsgMgr)
 
 local message = require(".net.Message")
-
-local _session = nil
 
 local msgMgr = {}
 local roomMsg = {}
@@ -23,15 +22,17 @@ end
 
 -- ------------------------------ TBNN msg ------------------------------
 function tbnnMsg.GameConf(msg)
-    dump(msg, "tbnnMsg.GameConf")
+    dump(msg, "tbnnMsg.GameConf: ")
+    --[[dump(msg, "tbnnMsg.GameConf")
     vars.room_gold = msg.roomgold
     vars.op_time_cd = msg.optimecd
-    vars.tax_rate = msg.taxrate
+    vars.tax_rate = msg.taxrate]]--
 end
 
 
 function tbnnMsg.GameStart(msg)
-    util.playSound(PATH.WAV_GAME_START)
+    dump(msg, "tbnnMsg.GameStart: ")
+    --[[util.playSound(PATH.WAV_GAME_START)
     local delay = 0
 
     cardMgr:clearAllCards()
@@ -56,12 +57,13 @@ function tbnnMsg.GameStart(msg)
         uiOperates:showConfirmAndAuto(true)
     end, delay)
 
-    msgWorker.sleep(delay)
+    msgWorker.sleep(delay)]]--
 end
 
 
 function tbnnMsg.FinishedSync(msg)
-    local delay = 0
+    dump(msg, "tbnnMsg.FinishedSync: ")
+    --[[local delay = 0
     local seatId = _toSubSeatId(msg.seat)
     local player = vars.players[seatId]
     player.finished = true
@@ -73,12 +75,13 @@ function tbnnMsg.FinishedSync(msg)
         uiOperates:showConfirmAndAuto(false)
     end
 
-    msgWorker.sleep(delay)
+    msgWorker.sleep(delay)]]--
 end
 
 
 function tbnnMsg.GameEnd(msg)
-    local delay = 0
+    dump(msg, "tbnnMsg.GameEnd: ")
+    --[[local delay = 0
     local winseat = nil
     local youwin = false
 
@@ -136,12 +139,13 @@ function tbnnMsg.GameEnd(msg)
     end, delay)
     delay = delay + TIME_GAP.POOL_TO_PLAYER + 1
 
-    msgWorker.sleep(delay)
+    msgWorker.sleep(delay)]]--
 end
 
 
 function tbnnMsg.SyncGameInfo(msg)
-    local delay = 0
+    dump(msg, "tbnnMsg.SyncGameInfo: ")
+    --[[local delay = 0
 
     playerMgr:playerActive(1, false)
     uiOperates:showReadyBtn(false)
@@ -164,7 +168,7 @@ function tbnnMsg.SyncGameInfo(msg)
         end
     end
 
-    msgWorker.sleep(delay)
+    msgWorker.sleep(delay)]]--
 end
 
 -- ------------------------------ msg manager ------------------------------
