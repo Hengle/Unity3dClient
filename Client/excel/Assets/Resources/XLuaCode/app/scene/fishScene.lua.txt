@@ -25,6 +25,11 @@ function fishScene.OnCreate(userData)
     --dump(userData.msg)
     --testCommand
     fishScene.ExecuteCmd_GameStatus()
+    CS.GameClient.NoticeFrame.AddSystemNotice("cao ni ma bu hua qian AA",CS.GameClient.NoticeType.NT_POP_MSG)
+    CS.GameClient.NoticeFrame.AddSystemNotice("cao ni ma bu hua qian BB",CS.GameClient.NoticeType.NT_POP_MSG)
+    CS.GameClient.NoticeFrame.AddSystemNotice("cao ni ma bu hua qian CC",CS.GameClient.NoticeType.NT_POP_MSG)
+    CS.GameClient.NoticeFrame.AddSystemNotice("cao ni ma bu hua qian DD",CS.GameClient.NoticeType.NT_POP_MSG)
+    CS.GameClient.NoticeFrame.AddSystemNotice("cao ni ma bu hua qian EE",CS.GameClient.NoticeType.NT_POP_MSG)
 end
 
 function fishScene.OnDestroy()
