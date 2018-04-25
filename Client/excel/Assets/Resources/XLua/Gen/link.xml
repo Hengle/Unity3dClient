@@ -11,6 +11,20 @@
 		<type fullname="NetWork.HttpNet" preserve="all"/>
 		<type fullname="NetWork.RecvEvent" preserve="all"/>
 		<type fullname="NetWork.NetSocket" preserve="all"/>
+		<type fullname="GameClient.CMD_S_SceneFish" preserve="all"/>
+		<type fullname="GameClient.CMD_S_DistributeFish" preserve="all"/>
+		<type fullname="GameClient.CMD_S_SwitchScene" preserve="all"/>
+		<type fullname="GameClient.CMD_S_UserFire" preserve="all"/>
+		<type fullname="GameClient.CMD_S_BulletDoubleTimeout" preserve="all"/>
+		<type fullname="GameClient.CMD_S_ExchangeFishScore" preserve="all"/>
+		<type fullname="GameClient.CatchFish" preserve="all"/>
+		<type fullname="GameClient.CMD_S_CatchChain" preserve="all"/>
+		<type fullname="GameClient.CMD_S_CatchFishGroup" preserve="all"/>
+		<type fullname="GameClient.CMD_C_ExchangeFishScore" preserve="all"/>
+		<type fullname="GameClient.CMD_C_UserFire" preserve="all"/>
+		<type fullname="GameClient.CMD_C_CatchFish" preserve="all"/>
+		<type fullname="GameClient.ClientGameConfig" preserve="all"/>
+		<type fullname="GameClient.CMD_S_GameStatus" preserve="all"/>
 		<type fullname="GameClient.InvokeManager" preserve="all"/>
 		<type fullname="GameClient.LocalSettingManager" preserve="all"/>
 		<type fullname="GameClient.LogManager" preserve="all"/>
@@ -26,6 +40,8 @@
 		<type fullname="GameClient.FrameState" preserve="all"/>
 		<type fullname="GameClient.ComUIListBinderItems" preserve="all"/>
 		<type fullname="Scripts.UI.ComUIListScript" preserve="all"/>
+		<type fullname="GameClient.TraceType" preserve="all"/>
+		<type fullname="GameClient.FishKind" preserve="all"/>
 		<type fullname="GameClient.MessageBoxFrame" preserve="all"/>
 		<type fullname="LuaBehaviour" preserve="all"/>
 		<type fullname="LuaSceneBehavior" preserve="all"/>

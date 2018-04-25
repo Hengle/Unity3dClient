@@ -115,38 +115,36 @@ function gameMsg.SitdownRep(msg)
     table_id = msg.table
     seat_id = msg.seat
     watching = (msg.watching == 1)
+    local userData = {name="room.InitGameScenes"}
 
-    CS.GameClient.SceneManager.Instance():SwitchScene(2)
-
-    if game_scene ~= nil then
-        print("loading game scene:", game_scene)
-        --TODO: 拉起捕鱼界面
-        -- add send room id and game id
-        if max_seats ~= nil then
-            local pos = (table_id-1) % (#max_seats) + 1
-            message.dispatchCurrent("room.InitGameScenes", {
-                session = table_session,
-                seat = seat_id,
-                max_player = max_seats[pos],
-                watching = watching,
-                roomid = roomid,
-                gameid = gameid,
-                gamekey = gamekey,
-                config = game_config
-            })
-        else
-            message.dispatchCurrent("room.InitGameScenes", {
-                session = table_session,
-                seat = seat_id,
-                max_player = max_player,
-                watching = watching,
-                roomid = roomid,
-                gameid = gameid,
-                gamekey = gamekey,
-                config = game_config
-            })
-        end
+    if max_seats ~= nil then
+        local pos = (table_id-1) % (#max_seats) + 1
+        userData.msg =
+        {
+            session = table_session,
+            seat = seat_id,
+            watching = watching,
+            max_player = max_seats[pos],
+            roomid = roomid,
+            gameid = gameid,
+            gamekey = gamekey,
+            config = game_config
+        }
+    else
+        userData.msg =
+        {
+            session = table_session,
+            seat = seat_id,
+            max_player = max_player,
+            watching = watching,
+            roomid = roomid,
+            gameid = gameid,
+            gamekey = gamekey,
+            config = game_config
+        }
     end
+
+    app.SceneManager:SwitchScene(2,userData)
 end
 
 function gameMsg.SitupRep(msg)
