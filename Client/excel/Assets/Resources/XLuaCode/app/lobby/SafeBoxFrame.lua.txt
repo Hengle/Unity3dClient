@@ -7,6 +7,14 @@ local SafeBoxFrame = {}
 
 function SafeBoxFrame.OnOpenFrame()
     self.frame:GetObject('btn_close').onClick:AddListener(SafeBoxFrame.onClickClose)
+
+    self.frame:GetObject('tab_deposit').onValueChanged:AddListener(function(bOn)
+        self.frame:GetObject('state_deposit').Key = (bOn and {1} or {0})[1]
+    end)
+
+    self.frame:GetObject('btn_withdraw').onValueChanged:AddListener(function(bOn)
+        self.frame:GetObject('state_withdraw').Key = (bOn and {1} or {0})[1]
+    end)
 end
 
 SafeBoxFrame.onClickClose = function()
