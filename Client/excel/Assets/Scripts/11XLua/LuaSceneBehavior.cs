@@ -17,8 +17,8 @@ using GameClient;
 public class LuaSceneBehavior : MonoBehaviour
 {
     public TextAsset luaScript;
-
-    private EAction luaOpenScene;
+    public object luaParam = null;
+    private ELuaOpenAction luaOpenScene;
     private EAction luaUpdateScene;
     private EAction luaCloseScene;
 
@@ -44,6 +44,7 @@ public class LuaSceneBehavior : MonoBehaviour
 
     public void DestroyWithScene()
     {
+        luaParam = null;
         luaCloseScene = null;
         luaUpdateScene = null;
         luaOpenScene = null;
@@ -91,13 +92,14 @@ public class LuaSceneBehavior : MonoBehaviour
 
         scriptEnv.Set("self", luaTable);
         luaTable.Set("scene", scene);
-        luaOpenScene = luaTable.Get<EAction>("OnCreate");
+        luaOpenScene = luaTable.Get<ELuaOpenAction>("OnCreate");
         luaUpdateScene = luaTable.Get<EAction>("OnUpdate");
         luaCloseScene = luaTable.Get<EAction>("OnDestroy");
 
         if (null != luaOpenScene)
         {
-            luaOpenScene();
+            luaOpenScene(luaParam);
+            luaParam = null;
         }
     }
 	

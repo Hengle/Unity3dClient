@@ -5,11 +5,22 @@
 ---
 local TBNNScene = {}
 
-function TBNNScene.OnCreate()
+local msgWorker = require(".net.MsgWorker")
+local msgMgr = require(".app.games.TBNN.msgMgr")
+
+function TBNNScene.OnCreate(userData)
+    msgWorker.init("TBNN", handler(msgMgr, msgMgr.dispatch))
+
+    gameData = userData.msg
     app.Logger:LogFormat("<color=#00ff00> on create scene !!! name = {0} </color>",self.scene:GetName())
+    app.Logger:LogFormat("<color=#00ff00> {0} </color>",userData.name)
+    dump(userData.msg)
+
+    app.FrameManager.OpenFrameLua(app._FrameList.TBNNFrame)
 end
 
 function TBNNScene.OnDestroy()
+    msgWorker.clear()
     app.Logger:LogFormat("<color=#00ff00> on create scene !!! name = {0} </color>",self.scene:GetName())
 end
 return TBNNScene

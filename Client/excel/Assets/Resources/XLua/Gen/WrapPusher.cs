@@ -39,6 +39,8 @@ namespace XLua
 				translator.RegisterPushAndGetAndUpdate<GameClient.FrameTypeID>(translator.PushGameClientFrameTypeID, translator.Get, translator.UpdateGameClientFrameTypeID);
 				translator.RegisterPushAndGetAndUpdate<GameClient.FrameLayer>(translator.PushGameClientFrameLayer, translator.Get, translator.UpdateGameClientFrameLayer);
 				translator.RegisterPushAndGetAndUpdate<GameClient.FrameState>(translator.PushGameClientFrameState, translator.Get, translator.UpdateGameClientFrameState);
+				translator.RegisterPushAndGetAndUpdate<GameClient.TraceType>(translator.PushGameClientTraceType, translator.Get, translator.UpdateGameClientTraceType);
+				translator.RegisterPushAndGetAndUpdate<GameClient.FishKind>(translator.PushGameClientFishKind, translator.Get, translator.UpdateGameClientFishKind);
 			
 			}
         }
@@ -995,6 +997,174 @@ namespace XLua
             }
         }
         
+        int GameClientTraceType_TypeID = -1;
+		int GameClientTraceType_EnumRef = -1;
+        
+        public void PushGameClientTraceType(RealStatePtr L, GameClient.TraceType val)
+        {
+            if (GameClientTraceType_TypeID == -1)
+            {
+			    bool is_first;
+                GameClientTraceType_TypeID = getTypeId(L, typeof(GameClient.TraceType), out is_first);
+				
+				if (GameClientTraceType_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(GameClient.TraceType));
+				    GameClientTraceType_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, GameClientTraceType_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, GameClientTraceType_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for GameClient.TraceType ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, GameClientTraceType_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out GameClient.TraceType val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != GameClientTraceType_TypeID)
+				{
+				    throw new Exception("invalid userdata for GameClient.TraceType");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for GameClient.TraceType");
+                }
+				val = (GameClient.TraceType)e;
+                
+            }
+            else
+            {
+                val = (GameClient.TraceType)objectCasters.GetCaster(typeof(GameClient.TraceType))(L, index, null);
+            }
+        }
+		
+        public void UpdateGameClientTraceType(RealStatePtr L, int index, GameClient.TraceType val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != GameClientTraceType_TypeID)
+				{
+				    throw new Exception("invalid userdata for GameClient.TraceType");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for GameClient.TraceType ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
+        int GameClientFishKind_TypeID = -1;
+		int GameClientFishKind_EnumRef = -1;
+        
+        public void PushGameClientFishKind(RealStatePtr L, GameClient.FishKind val)
+        {
+            if (GameClientFishKind_TypeID == -1)
+            {
+			    bool is_first;
+                GameClientFishKind_TypeID = getTypeId(L, typeof(GameClient.FishKind), out is_first);
+				
+				if (GameClientFishKind_EnumRef == -1)
+				{
+				    Utils.LoadCSTable(L, typeof(GameClient.FishKind));
+				    GameClientFishKind_EnumRef = LuaAPI.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX);
+				}
+				
+            }
+			
+			if (LuaAPI.xlua_tryget_cachedud(L, (int)val, GameClientFishKind_EnumRef) == 1)
+            {
+			    return;
+			}
+			
+            IntPtr buff = LuaAPI.xlua_pushstruct(L, 4, GameClientFishKind_TypeID);
+            if (!CopyByValue.Pack(buff, 0, (int)val))
+            {
+                throw new Exception("pack fail fail for GameClient.FishKind ,value="+val);
+            }
+			
+			LuaAPI.lua_getref(L, GameClientFishKind_EnumRef);
+			LuaAPI.lua_pushvalue(L, -2);
+			LuaAPI.xlua_rawseti(L, -2, (int)val);
+			LuaAPI.lua_pop(L, 1);
+			
+        }
+		
+        public void Get(RealStatePtr L, int index, out GameClient.FishKind val)
+        {
+		    LuaTypes type = LuaAPI.lua_type(L, index);
+            if (type == LuaTypes.LUA_TUSERDATA )
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != GameClientFishKind_TypeID)
+				{
+				    throw new Exception("invalid userdata for GameClient.FishKind");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+				int e;
+                if (!CopyByValue.UnPack(buff, 0, out e))
+                {
+                    throw new Exception("unpack fail for GameClient.FishKind");
+                }
+				val = (GameClient.FishKind)e;
+                
+            }
+            else
+            {
+                val = (GameClient.FishKind)objectCasters.GetCaster(typeof(GameClient.FishKind))(L, index, null);
+            }
+        }
+		
+        public void UpdateGameClientFishKind(RealStatePtr L, int index, GameClient.FishKind val)
+        {
+		    
+            if (LuaAPI.lua_type(L, index) == LuaTypes.LUA_TUSERDATA)
+            {
+			    if (LuaAPI.xlua_gettypeid(L, index) != GameClientFishKind_TypeID)
+				{
+				    throw new Exception("invalid userdata for GameClient.FishKind");
+				}
+				
+                IntPtr buff = LuaAPI.lua_touserdata(L, index);
+                if (!CopyByValue.Pack(buff, 0,  (int)val))
+                {
+                    throw new Exception("pack fail for GameClient.FishKind ,value="+val);
+                }
+            }
+			
+            else
+            {
+                throw new Exception("try to update a data with lua type:" + LuaAPI.lua_type(L, index));
+            }
+        }
+        
         
 		// table cast optimze
 		
@@ -1084,6 +1254,18 @@ namespace XLua
 				translator.PushGameClientFrameState(L, array[index]);
 				return true;
 			}
+			else if (type == typeof(GameClient.TraceType[]))
+			{
+			    GameClient.TraceType[] array = obj as GameClient.TraceType[];
+				translator.PushGameClientTraceType(L, array[index]);
+				return true;
+			}
+			else if (type == typeof(GameClient.FishKind[]))
+			{
+			    GameClient.FishKind[] array = obj as GameClient.FishKind[];
+				translator.PushGameClientFishKind(L, array[index]);
+				return true;
+			}
             return false;
 		}
 		
@@ -1165,6 +1347,18 @@ namespace XLua
 			else if (type == typeof(GameClient.FrameState[]))
 			{
 			    GameClient.FrameState[] array = obj as GameClient.FrameState[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(GameClient.TraceType[]))
+			{
+			    GameClient.TraceType[] array = obj as GameClient.TraceType[];
+				translator.Get(L, obj_idx, out array[array_idx]);
+				return true;
+			}
+			else if (type == typeof(GameClient.FishKind[]))
+			{
+			    GameClient.FishKind[] array = obj as GameClient.FishKind[];
 				translator.Get(L, obj_idx, out array[array_idx]);
 				return true;
 			}

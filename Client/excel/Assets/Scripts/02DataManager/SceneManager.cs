@@ -61,14 +61,14 @@ namespace GameClient
         }
 
         [LuaCallCSharp]
-        public void SwitchScene(int iSceneId)
+        public void SwitchScene(int iSceneId,object luaParam)
         {
-            SwitchScene((SceneType)iSceneId);
+            SwitchScene((SceneType)iSceneId, luaParam);
         }
 
         Scene mScene = null;
         Coroutine coSwith = null;
-        public void SwitchScene(SceneType eSceneType)
+        public void SwitchScene(SceneType eSceneType,object luaParam = null)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace GameClient
                     GameFrameWork.FrameWorkHandle.StopCoroutine(coSwith);
                     coSwith = null;
                 }
-                coSwith = GameFrameWork.FrameWorkHandle.StartCoroutine(AnsySwitchScene(eSceneType));
+                coSwith = GameFrameWork.FrameWorkHandle.StartCoroutine(AnsySwitchScene(eSceneType, luaParam));
             }
             catch (System.Exception e)
             {
@@ -89,7 +89,7 @@ namespace GameClient
             }
         }
 
-        public IEnumerator AnsySwitchScene(SceneType eSceneType)
+        public IEnumerator AnsySwitchScene(SceneType eSceneType,object luaParam = null)
         {
             if (null != mScene)
             {
@@ -131,10 +131,12 @@ namespace GameClient
             {
                 LogManager.Instance().LogProcessFormat(8888, "<color=#ff00ff>load scene {0} failed !!! missing LuaSceneBehavior script !!!</color>", sceneItem.Desc, sceneId);
                 coSwith = null;
+                luaParam = null;
                 yield break;
             }
+            sceneBehavior.luaParam = luaParam;
 
-            if(null != mActions[(int)eSceneType])
+            if (null != mActions[(int)eSceneType])
             {
                 mScenes[(int)eSceneType] = mActions[(int)eSceneType].Invoke() as Scene;
             }

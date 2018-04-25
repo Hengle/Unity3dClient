@@ -7,6 +7,14 @@ local ExchangeFrame = {}
 
 function ExchangeFrame.OnOpenFrame()
     self.frame:GetObject('btn_close').onClick:AddListener(ExchangeFrame.onClickClose)
+
+    self.frame:GetObject('tab_alipay').onValueChanged:AddListener(function(bOn)
+        self.frame:GetObject('state_alipay').Key = (bOn and {1} or {0})[1]
+    end)
+
+    self.frame:GetObject('tab_bank_card').onValueChanged:AddListener(function(bOn)
+        self.frame:GetObject('state_bank_card').Key = (bOn and {1} or {0})[1]
+    end)
 end
 
 ExchangeFrame.onClickClose = function()

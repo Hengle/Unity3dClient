@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(LuaSceneBehavior);
-			Utils.BeginObjectRegister(type, L, translator, 0, 3, 1, 1);
+			Utils.BeginObjectRegister(type, L, translator, 0, 3, 2, 2);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "OnCloseScene", _m_OnCloseScene);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "DestroyWithScene", _m_DestroyWithScene);
@@ -29,8 +29,10 @@ namespace XLua.CSObjectWrap
 			
 			
 			Utils.RegisterFunc(L, Utils.GETTER_IDX, "luaScript", _g_get_luaScript);
+            Utils.RegisterFunc(L, Utils.GETTER_IDX, "luaParam", _g_get_luaParam);
             
 			Utils.RegisterFunc(L, Utils.SETTER_IDX, "luaScript", _s_set_luaScript);
+            Utils.RegisterFunc(L, Utils.SETTER_IDX, "luaParam", _s_set_luaParam);
             
 			
 			Utils.EndObjectRegister(type, L, translator, null, null,
@@ -175,6 +177,20 @@ namespace XLua.CSObjectWrap
             return 1;
         }
         
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _g_get_luaParam(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                LuaSceneBehavior __cl_gen_to_be_invoked = (LuaSceneBehavior)translator.FastGetCSObj(L, 1);
+                translator.PushAny(L, __cl_gen_to_be_invoked.luaParam);
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 1;
+        }
+        
         
         
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -185,6 +201,21 @@ namespace XLua.CSObjectWrap
 			
                 LuaSceneBehavior __cl_gen_to_be_invoked = (LuaSceneBehavior)translator.FastGetCSObj(L, 1);
                 __cl_gen_to_be_invoked.luaScript = (UnityEngine.TextAsset)translator.GetObject(L, 2, typeof(UnityEngine.TextAsset));
+            
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            return 0;
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _s_set_luaParam(RealStatePtr L)
+        {
+		    try {
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+			
+                LuaSceneBehavior __cl_gen_to_be_invoked = (LuaSceneBehavior)translator.FastGetCSObj(L, 1);
+                __cl_gen_to_be_invoked.luaParam = translator.GetObject(L, 2, typeof(object));
             
             } catch(System.Exception __gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);

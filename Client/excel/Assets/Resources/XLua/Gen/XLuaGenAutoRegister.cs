@@ -37,6 +37,36 @@ namespace XLua.CSObjectWrap
 				
 				translator.DelayWrapLoader(typeof(NetWork.NetSocket), NetWorkNetSocketWrap.__Register);
 				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_S_SceneFish), GameClientCMD_S_SceneFishWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_S_DistributeFish), GameClientCMD_S_DistributeFishWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_S_SwitchScene), GameClientCMD_S_SwitchSceneWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_S_UserFire), GameClientCMD_S_UserFireWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_S_BulletDoubleTimeout), GameClientCMD_S_BulletDoubleTimeoutWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_S_ExchangeFishScore), GameClientCMD_S_ExchangeFishScoreWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CatchFish), GameClientCatchFishWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_S_CatchChain), GameClientCMD_S_CatchChainWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_S_CatchFishGroup), GameClientCMD_S_CatchFishGroupWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_C_ExchangeFishScore), GameClientCMD_C_ExchangeFishScoreWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_C_UserFire), GameClientCMD_C_UserFireWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_C_CatchFish), GameClientCMD_C_CatchFishWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.ClientGameConfig), GameClientClientGameConfigWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.CMD_S_GameStatus), GameClientCMD_S_GameStatusWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.FishDataManager), GameClientFishDataManagerWrap.__Register);
+				
 				translator.DelayWrapLoader(typeof(GameClient.InvokeManager), GameClientInvokeManagerWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(GameClient.LocalSettingManager), GameClientLocalSettingManagerWrap.__Register);
@@ -66,6 +96,10 @@ namespace XLua.CSObjectWrap
 				translator.DelayWrapLoader(typeof(GameClient.ComUIListBinderItems), GameClientComUIListBinderItemsWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(Scripts.UI.ComUIListScript), ScriptsUIComUIListScriptWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.TraceType), GameClientTraceTypeWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(GameClient.FishKind), GameClientFishKindWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(GameClient.MessageBoxFrame), GameClientMessageBoxFrameWrap.__Register);
 				

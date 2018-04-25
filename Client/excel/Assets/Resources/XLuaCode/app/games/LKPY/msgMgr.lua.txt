@@ -10,12 +10,28 @@ local handlers = {game=gameMsg, room=roomMsg, LKPY=lkpyMsg}
 
 local _session = nil
 local _scene = nil
+local _seat = 0
+local _max_player = 6
+local _watching = false
+local _room_id = 0
+local _gameId = 0
+local _gameKey = nil
+local _game_config = {}
 
 -- ------------------------------ room msg ------------------------------
 function roomMsg.InitGameScenes(msg)
 	dump(msg, "LKPY roomMsg.InitGameScenes:", 8)
-
 	_session = msg.session
+	_seat = msg.seat
+	_max_player = msg.max_player
+	_watching = msg.watching
+	_room_id = msg.roomid
+	_gameId = msg.gameid
+	_gameKey = msg.gamekey
+	_game_config = msg.config
+
+	app.Logger.LogFormat("<color=#00ff00>_session = {0} _seat = {1}  mp={2} watching={3} room_id={4} gameid={5} _gameKey={6}</color>",
+			_session,_seat,_max_player,_watching,_room_id,_gameId,_gameKey)
 end
 
 function roomMsg.EnterGame(msg)
