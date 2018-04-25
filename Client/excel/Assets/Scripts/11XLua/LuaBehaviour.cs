@@ -15,6 +15,8 @@ using GameClient;
 
 [CSharpCallLua]
 public delegate void EAction();
+[CSharpCallLua]
+public delegate void EToggleAction(bool isOn);
 
 [LuaCallCSharp]
 public class LuaBehaviour : MonoBehaviour
