@@ -12,6 +12,7 @@ app.FrameManager = CS.GameClient.UIFrameLua
 app.MessageBox = CS.GameClient.MessageBoxFrame
 app.Logger = CS.GameClient.LogManager.Instance()
 app.FileManager = CS.GameClient.LocalSettingManager
+app.SceneManager = CS.GameClient.SceneManager.Instance()
 
 require(".initUtils")
 require(".initData")

@@ -5,7 +5,7 @@
 ---
 local TBNNScene = {}
 
-function TBNNScene.OnCreate()
+function TBNNScene.OnCreate(userData)
     app.Logger:LogFormat("<color=#00ff00> on create scene !!! name = {0} </color>",self.scene:GetName())
     
 end

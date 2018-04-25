@@ -123,7 +123,7 @@ local function heartbeat()
 			param.scheduler = nil
 		end
 
-		print("hb, not param.isAuth or not param.isConnected, isAuth:"..param.isAuth.."isConnected:"..param.isConnected)
+		print("hb, not param.isAuth or not param.isConnected, isAuth:"..tostring(param.isAuth).."isConnected:"..tostring(param.isConnected))
 		return
 	end
 

@@ -320,6 +320,11 @@ namespace XLua
 			    return new GameClient.LuaSocketEvent(__Gen_Delegate_Imp2);
 			}
 		
+		    if (type == typeof(ELuaOpenAction))
+			{
+			    return new ELuaOpenAction(__Gen_Delegate_Imp2);
+			}
+		
 		    if (type == typeof(GameClient.ComUIListBinderItems.OnListElementVisible))
 			{
 			    return new GameClient.ComUIListBinderItems.OnListElementVisible(__Gen_Delegate_Imp3);
