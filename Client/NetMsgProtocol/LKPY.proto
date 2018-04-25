@@ -2,43 +2,7 @@ syntax = "proto2";
 package LKPY;
 
 //所有的game包协议必须带有session字段
-
-message UserFireReq {
-	required int32 session = 1;
-    required int32 bulletIdTemp = 2;
-    required int32 tickCount = 3;
-    required int32 angle = 4;
-    required int32 lockFishId = 5;
-    required int32 bulletMulriple = 6;
-}
-
-message UserFireRep {
-	required int32 session = 1;
-    required int32 tickCount = 2;
-    required bytes chairId = 3;
-    required int32 bulletId = 4;
-    required int32 angle = 5;
-    required bool bulletDouble = 6;
-    required int32 bulletMulriple = 7;
-    required int32 lockFishId = 8;
-    required bool isRobot = 9;
-    required int32 userRobotCharId = 10;
-}
-
-message ExchangeFishScoreReq {
-	required int32 session = 1;
-    required int64 score = 2;
-}
-
-message ExchangeFishScoreRep {
-	required int32 session = 1;
-    required int32 chairId = 2;
-    required int64 swapFishScore = 3;
-    required int64 exchangeFishScore = 4;
-}
-
-message SceneFishSync {
-	enum FishKind {
+enum FishKind {
 		FISH_WONIUYU = 0;         // 蜗牛鱼
 		FISH_LVCAOYU = 1;             // 绿草鱼
 		FISH_HUANGCAOYU = 2;          // 黄草鱼
@@ -75,20 +39,98 @@ message SceneFishSync {
 		FISH_CHAIN = 33;               // 闪电鱼 (FISH_WONIUYU-FISH_LANYU) 连 (FISH_WONIUYU-FISH_DENGLONGYU)
 
 		FISH_KIND_COUNT = 34;
-	}
+}
 
-	message Position {
+enum SceneKind {
+         SCENE_1 = 0;
+         SCENE_2 = 1;
+         SCENE_3 = 2;
+         SCENE_4 = 3;
+         SCENE_5 = 4;
+         SCENE_6 = 5;
+         SCENE_COUNT = 6;
+}
+
+enum TraceType
+{
+	TRACE_SPPEND_CHANGE_ONE=0;
+	TRACE_SPPEND_CHANGE_TWO=1;
+	TRACE_SPPEND_CHANGE_THREE=2;
+	TRACE_SPPEND_CHANGE_FOUR=3;
+	TRACE_SPPEND_CHANGE_FIVE=4;
+	TRACE_SPPEND_CHANGE_SIX=5;
+	TRACE_SPPEND_CHANGE_SEVEN=6;
+	TRACE_SPPEND_CHANGE_EIGHT=7;
+	TRACE_SPPEND_CHANGE_NINE=8;
+}
+
+message Position {
 		required int32 x = 1;
 		required int32 y = 2;
-	}
+}
+
+message SwitchSceneSync {
+    required int32 session = 1;
+    required int32 nextscene = 2; //SceneKind
+    required int32 curtick = 3;
+}
+
+message DistributeFish {
+    required int32 session = 1;
+    required int32 fishkind = 2; //FishKind
+    required int32 fishid = 3;
+    required int32 tickcount = 4;
+    required int32 poscount = 5;
+    repeated Position pos = 6;
+    required int32 tracetype = 7;  //TraceType
+    required int32 fishorder = 8;
+}
+
+message UserFireReq {
+	required int32 session = 1;
+    required int32 bulletIdTemp = 2;
+    required int32 tickCount = 3;
+    required int32 angle = 4;
+    required int32 lockFishId = 5;
+    required int32 bulletMulriple = 6;
+}
+
+message UserFireRep {
+	required int32 session = 1;
+    required int32 tickCount = 2;
+    required bytes chairId = 3;
+    required int32 bulletId = 4;
+    required int32 angle = 5;
+    required bool bulletDouble = 6;
+    required int32 bulletMulriple = 7;
+    required int32 lockFishId = 8;
+    required bool isRobot = 9;
+    required int32 userRobotCharId = 10;
+}
+
+message ExchangeFishScoreReq {
+	required int32 session = 1;
+    required int64 score = 2;
+}
+
+message ExchangeFishScoreRep {
+	required int32 session = 1;
+    required int32 chairId = 2;
+    required int64 swapFishScore = 3;
+    required int64 exchangeFishScore = 4;
+}
+
+message SceneFishSync {
+
 
 	required int32 session = 1;
-	required int32 fishId = 2;
-	required FishKind fishKind = 3;
+	required int32 fishid = 2;
+	required int32 fishkind = 3;  //FishKind
 	repeated Position position = 4;
-	required int32 tag = 5;
-	required int32 elapsed = 6;
-	required uint32 tick_count = 7;
+	required int32 poscount = 5;
+	required int32 tag = 6;
+	required int32 elapsed = 7;
+	required uint32 tickcount = 8;
 }
 
 
